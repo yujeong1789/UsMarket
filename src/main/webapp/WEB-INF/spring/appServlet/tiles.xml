@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE tiles-definitions PUBLIC
+       "-//Apache Software Foundation//DTD Tiles Configuration 3.0//EN"
+       "http://tiles.apache.org/dtds/tiles-config_3_0.dtd">
+<tiles-definitions>
+	
+	<!-- root에 있는 페이지는 root.를 붙여야 함 -->
+	<definition name="root.*" template="/WEB-INF/view/inc/layout.jsp">
+		<put-attribute name="title" value="우리의 지구를 위해, 어스마켓" />
+		<put-attribute name="header" value="/WEB-INF/views/inc/header.jsp" />
+		<put-attribute name="body" value="/WEB-INF/views/{1}.jsp" /> <!-- n번째 와일드카드 값을 value로 쓸 수 있다 -->
+		<put-attribute name="footer" value="/WEB-INF/views/inc/footer.jsp" />
+	</definition>
+	
+</tiles-definitions>
