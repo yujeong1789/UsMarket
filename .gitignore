@@ -6,8 +6,8 @@ log4j.xml
 
 lecture
 target
-pom.properties
-fileUpload.properties
+props/
+*.properties
 .classpath
 MANIFEST.MF
 
