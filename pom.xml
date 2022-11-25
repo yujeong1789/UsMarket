@@ -46,6 +46,20 @@
 			<version>${org.springframework-version}</version>
 			<scope>test</scope>
 		</dependency>
+		<!-- https://mvnrepository.com/artifact/org.springframework/spring-tx -->
+		<dependency>
+		    <groupId>org.springframework</groupId>
+		    <artifactId>spring-tx</artifactId>
+		    <version>${org.springframework-version}</version>
+		</dependency>
+		<!-- https://mvnrepository.com/artifact/org.springframework/spring-jdbc -->
+		<dependency>
+		    <groupId>org.springframework</groupId>
+		    <artifactId>spring-jdbc</artifactId>
+		    <version>${org.springframework-version}</version>
+		</dependency>
+
+
 
 
 		<!-- https://mvnrepository.com/artifact/org.mybatis/mybatis -->
@@ -219,40 +233,20 @@
 		<!-- ojdbc 관련 라이브러리 -->
 		<!-- https://mvnrepository.com/artifact/com.oracle.ojdbc/ojdbc8 -->
 		<dependency>
-		    <groupId>com.oracle.ojdbc</groupId>
+		    <groupId>com.oracle.database.jdbc</groupId>
 		    <artifactId>ojdbc8</artifactId>
 		    <version>19.3.0.0</version>
-		</dependency>
-		<!-- https://mvnrepository.com/artifact/com.oracle.database.security/osdt_cert -->
-		<dependency>
-		    <groupId>com.oracle.database.security</groupId>
-		    <artifactId>osdt_cert</artifactId>
-		    <version>21.7.0.0</version>
-		</dependency>
-		<!-- https://mvnrepository.com/artifact/com.oracle.database.security/osdt_core -->
-		<dependency>
-		    <groupId>com.oracle.database.security</groupId>
-		    <artifactId>osdt_core</artifactId>
-		    <version>21.7.0.0</version>
-		</dependency>
-		<!-- https://mvnrepository.com/artifact/com.oracle.database.jdbc/ucp -->
-		<dependency>
-		    <groupId>com.oracle.database.jdbc</groupId>
-		    <artifactId>ucp</artifactId>
-		    <version>21.7.0.0</version>
-		</dependency>
-		<!-- https://mvnrepository.com/artifact/com.oracle.database.security/oraclepki -->
-		<dependency>
-		    <groupId>com.oracle.database.security</groupId>
-		    <artifactId>oraclepki</artifactId>
-		    <version>21.7.0.0</version>
-		</dependency>
-		<!-- https://mvnrepository.com/artifact/com.oracle.database.ha/ons -->
-		<dependency>
-		    <groupId>com.oracle.database.ha</groupId>
-		    <artifactId>ons</artifactId>
-		    <version>21.7.0.0</version>
-		</dependency>
+			<exclusions>
+					<exclusion>
+						<groupId>com.oracle.database.ha</groupId>
+						<artifactId>simplefan</artifactId>
+					</exclusion>
+					<exclusion>
+						<groupId>com.oracle.database.ha</groupId>
+						<artifactId>ons</artifactId>
+					</exclusion>
+				</exclusions>
+			</dependency>
 	</dependencies>
 	
 	
