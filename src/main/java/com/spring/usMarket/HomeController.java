@@ -31,8 +31,8 @@ public class HomeController {
 	/**
 	 * Simply selects the home view to render by returning its name.
 	 */
-	@RequestMapping(value = "/", method = RequestMethod.GET)
-	public String home(Locale locale, HttpServletRequest request, Model model) {
+	@RequestMapping(value = "/home", method = RequestMethod.GET)
+	public void home(Locale locale, HttpServletRequest request, Model model) {
 		// 원래는 request.getServletContext()지만, 컨트롤러는 HttpServlet을 상속받지 않아서 아래와 같이 해야함.
 		
 		ServletContext sc = request.getSession().getServletContext(); // ApplicationContextFacade에 접근하는 법
@@ -57,8 +57,6 @@ public class HomeController {
 		String formattedDate = dateFormat.format(date);
 		
 		model.addAttribute("serverTime", formattedDate );
-		
-		return "index";
 	}
 	
 }

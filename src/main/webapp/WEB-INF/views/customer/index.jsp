@@ -1,10 +1,17 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+
 <section class="featured spad">
+
         <div class="container">
             <div class="row">
                 <div class="col-lg-12">
+					<div class="hero__item set-bg" data-setbg="<c:url value='/customer/img/hero/banner.png'/>">
+						<div class="hero__text">
+							<a href="#"><img src="<c:url value='/customer/img/hero/visual-icon.png'/>" /></a>
+						</div>
+					</div> <!-- hero__item set-bg -->
                     <div class="section-title">
                         <h2>Featured Product</h2>
                     </div>
