@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mybatis.mapper.productCategory">
+
+	<select id="searchProductCategory1" resultType="productCategoryDto">
+		SELECT*FROM product_category1
+		ORDER BY PRODUCT_CATEGORY1_NO
+	</select>
+	
+	<select id="searchProductCategory2" parameterType="int" resultType="productCategoryDto">
+		SELECT*FROM product_category2
+		WHERE PRODUCT_CATEGORY1_NO=#{PRODUCT_CATEGORY1_NO}
+		ORDER BY PRODUCT_CATEGORY2_NO
+	</select>
+</mapper>
