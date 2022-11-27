@@ -16,7 +16,7 @@
                     <div class="col-lg-6 col-md-6">
                         <div class="header__top__left">
                             <div class="header__top__left__favorite">
-                            	<a class="favorite" href="#">즐겨찾기</a>
+                            	<a class="favorite" href="#"><img src="<c:url value='/customer/img/favorite.png' />">즐겨찾기</a>
                             </div>
                         </div>
                     </div>
