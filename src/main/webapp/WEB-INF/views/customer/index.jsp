@@ -13,7 +13,7 @@
 						</div>
 					</div> <!-- hero__item set-bg -->
                     <div class="section-title">
-                        <h2>Featured Product</h2>
+                        <h2>오늘의 추천 상품</h2>
                     </div>
                     <div class="featured__controls">
                         <ul>

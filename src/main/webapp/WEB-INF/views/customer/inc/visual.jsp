@@ -6,7 +6,7 @@
             <div class="row">
                 <div class="col-lg-3">
                     <div class="header__logo">
-                        <a href="<c:url value='/'/>"><img src="<c:url value='/customer/img/logo.png'/>" alt=""></a>
+                        <a href="<c:url value=''/>"><img src="<c:url value='/customer/img/logo.png'/>" alt=""></a>
                     </div>
                 </div>
                 <div class="col-lg-9">
@@ -39,8 +39,8 @@
 	            	<div class="col-lg-3">
 	                    <div class="hero__categories">
 							<div class="hero__categories__all">
-	                        	<i class="fa fa-bars"></i>
-	                            <span>All category</span>
+	                        	<img src="<c:url value='/customer/img/categories/line1.png' />">
+	                            <span>전체 카테고리</span>
 	                        </div>
 	                        <ul>
 	                        <c:forEach var="productCategoryDto" items="${productCategory }">
