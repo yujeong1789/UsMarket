@@ -7,9 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.spring.usMarket.common.SearchCondition;
-import com.spring.usMarket.product.domain.ProductCategoryDto;
 import com.spring.usMarket.product.domain.ProductDto;
-import com.spring.usMarket.product.domain.ProductPageHandler;
 
 @Repository
 public class ProductDaoImpl implements ProductDao {
@@ -23,8 +21,13 @@ public class ProductDaoImpl implements ProductDao {
 	}
 
 	@Override
-	public List<ProductDto> searchProductByCategory(ProductPageHandler ph) throws Exception {
-		return session.selectList(namespace+"searchProductByCategory", ph);
+	public List<ProductDto> searchProductByCategory(SearchCondition sc) throws Exception {
+		return session.selectList(namespace+"searchProductByCategory", sc);
+	}
+
+	@Override
+	public int searchProductCount(SearchCondition sc) throws Exception {
+		return session.selectOne(namespace+"searchProductCount", sc);
 	}
 
 }
