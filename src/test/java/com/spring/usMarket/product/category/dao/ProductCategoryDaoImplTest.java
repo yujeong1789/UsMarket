@@ -11,8 +11,8 @@ import org.springframework.test.context.*;
 import org.springframework.test.context.junit4.*;
 import org.springframework.test.context.web.WebAppConfiguration;
 
-import com.spring.usMarket.product.category.dao.ProductCategoryDao;
-import com.spring.usMarket.product.category.domain.ProductCategoryDto;
+import com.spring.usMarket.product.dao.ProductCategoryDao;
+import com.spring.usMarket.product.domain.ProductCategoryDto;
 
 @WebAppConfiguration
 @RunWith(SpringJUnit4ClassRunner.class)

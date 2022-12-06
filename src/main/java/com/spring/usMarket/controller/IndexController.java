@@ -9,23 +9,27 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
-import com.spring.usMarket.product.category.domain.ProductCategoryDto;
-import com.spring.usMarket.product.category.service.ProductCategoryService;
+import com.spring.usMarket.product.domain.ProductCategoryDto;
+import com.spring.usMarket.product.domain.ProductDto;
+import com.spring.usMarket.product.service.ProductService;
 
 @Controller
 public class IndexController { // 메인 페이지 출력
-	private static final Logger logger=LoggerFactory.getLogger(IndexController.class);
-	
+	private static final Logger logger = LoggerFactory.getLogger(IndexController.class);
 	@Autowired
-	private ProductCategoryService productCategoryService;
-	
+	private ProductService productService;
+
 	@GetMapping("/")
 	public String main(Model m) throws Exception {
-		List<ProductCategoryDto>list=productCategoryService.searchProductCategory1();
-		System.out.println("productCategory.size= "+list.size());
-		m.addAttribute("productCategory", list);
-		
+		List<ProductCategoryDto> categoryList = productService.getProductCategory1();
+		logger.info("categoryList.size()= "+categoryList.size());
+
+		List<ProductDto> mainProductList = productService.getMainProduct();
+		logger.info("mainProductList.size()= " + mainProductList.size());
+
+		m.addAttribute("categoryList", categoryList);
+		m.addAttribute("mainProductList", mainProductList);
+
 		return "index";
-		
 	}
 }

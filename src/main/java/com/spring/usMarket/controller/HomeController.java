@@ -1,4 +1,4 @@
-package com.spring.usMarket;
+package com.spring.usMarket.controller;
 
 import java.text.DateFormat;
 import java.util.Arrays;

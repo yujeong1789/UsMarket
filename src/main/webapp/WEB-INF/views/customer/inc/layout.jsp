@@ -17,14 +17,14 @@
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@200;300;400;600;900&display=swap" rel="stylesheet">
 
     <!-- Css Styles -->
-    <link rel="stylesheet" href="<c:url value='/customer/css/bootstrap.min.css'/>" type="text/css">
-    <link rel="stylesheet" href="<c:url value='/customer/css/font-awesome.min.css'/>" type="text/css">
-    <link rel="stylesheet" href="<c:url value='/customer/css/elegant-icons.css'/>" type="text/css">
-    <link rel="stylesheet" href="<c:url value='/customer/css/nice-select.css'/>" type="text/css">
-    <link rel="stylesheet" href="<c:url value='/customer/css/jquery-ui.min.css'/>" type="text/css">
-    <link rel="stylesheet" href="<c:url value='/customer/css/owl.carousel.min.css'/>" type="text/css">
-    <link rel="stylesheet" href="<c:url value='/customer/css/slicknav.min.css'/>" type="text/css">
-    <link rel="stylesheet" href="<c:url value='/customer/css/style.css'/>" type="text/css">
+    <link rel="stylesheet" href="<c:url value='/resources/customer/css/bootstrap.min.css'/>" type="text/css">
+    <link rel="stylesheet" href="<c:url value='/resources/customer/css/font-awesome.min.css'/>" type="text/css">
+    <link rel="stylesheet" href="<c:url value='/resources/customer/css/elegant-icons.css'/>" type="text/css">
+    <link rel="stylesheet" href="<c:url value='/resources/customer/css/nice-select.css'/>" type="text/css">
+    <link rel="stylesheet" href="<c:url value='/resources/customer/css/jquery-ui.min.css'/>" type="text/css">
+    <link rel="stylesheet" href="<c:url value='/resources/customer/css/owl.carousel.min.css'/>" type="text/css">
+    <link rel="stylesheet" href="<c:url value='/resources/customer/css/slicknav.min.css'/>" type="text/css">
+    <link rel="stylesheet" href="<c:url value='/resources/customer/css/style.css'/>" type="text/css">
 </head>
 
 <body>
@@ -51,14 +51,14 @@
 
 
     <!-- Js Plugins -->
-    <script src="<c:url value='/customer/js/jquery-3.3.1.min.js'/>"></script>
-    <script src="<c:url value='/customer/js/bootstrap.min.js'/>"></script>
-    <script src="<c:url value='/customer/js/jquery.nice-select.min.js'/>"></script>
-    <script src="<c:url value='/customer/js/jquery-ui.min.js'/>"></script>
-    <script src="<c:url value='/customer/js/jquery.slicknav.js'/>"></script>
-    <script src="<c:url value='/customer/js/mixitup.min.js'/>"></script>
-    <script src="<c:url value='/customer/js/owl.carousel.min.js'/>"></script>
-    <script src="<c:url value='/customer/js/main.js'/>"></script>
+    <script src="<c:url value='/resources/customer/js/jquery-3.3.1.min.js'/>"></script>
+    <script src="<c:url value='/resources/customer/js/bootstrap.min.js'/>"></script>
+    <script src="<c:url value='/resources/customer/js/jquery.nice-select.min.js'/>"></script>
+    <script src="<c:url value='/resources/customer/js/jquery-ui.min.js'/>"></script>
+    <script src="<c:url value='/resources/customer/js/jquery.slicknav.js'/>"></script>
+    <script src="<c:url value='/resources/customer/js/mixitup.min.js'/>"></script>
+    <script src="<c:url value='/resources/customer/js/owl.carousel.min.js'/>"></script>
+    <script src="<c:url value='/resources/customer/js/main.js'/>"></script>
 
 </body>
 
