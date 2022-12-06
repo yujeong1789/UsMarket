@@ -5,8 +5,14 @@
 <configuration>
 
 	<typeAliases>
-		<typeAlias type="com.spring.usMarket.product.category.domain.ProductCategoryDto"
+		<typeAlias type="com.spring.usMarket.product.domain.ProductCategoryDto"
 		 alias="productCategoryDto"/>
+		 
+		<typeAlias type="com.spring.usMarket.product.domain.ProductDto"
+		 alias="productDto"/>
+		 
+		<typeAlias type="com.spring.usMarket.product.domain.ProductPageHandler"
+		 alias="productPageHandler"/>
 		 	
 	</typeAliases>
 </configuration>

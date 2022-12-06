@@ -13,4 +13,12 @@
 		<put-attribute name="footer" value="/WEB-INF/views/customer/inc/footer.jsp" />
 	</definition>
 	
+	<definition name="product.*" template="/WEB-INF/views/customer/inc/layout.jsp">
+		<put-attribute name="title" value="우리의 지구를 위해, 어스마켓" />
+		<put-attribute name="header" value="/WEB-INF/views/customer/inc/header.jsp" />
+		<put-attribute name="visual" value="/WEB-INF/views/customer/inc/visual.jsp" />
+		<put-attribute name="body" value="/WEB-INF/views/customer/product/{1}.jsp" /> <!-- n번째 와일드카드 값을 value로 쓸 수 있다 -->
+		<put-attribute name="footer" value="/WEB-INF/views/customer/inc/footer.jsp" />
+	</definition>
+	
 </tiles-definitions>

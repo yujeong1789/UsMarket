@@ -1,4 +1,4 @@
-package com.spring.usMarket.product.category.domain;
+package com.spring.usMarket.product.domain;
 
 
 public class ProductCategoryDto {

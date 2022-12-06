@@ -6,14 +6,14 @@
             <div class="row">
                 <div class="col-lg-3">
                     <div class="header__logo">
-                        <a href="<c:url value=''/>"><img src="<c:url value='/customer/img/logo.png'/>" alt=""></a>
+                        <a href="<c:url value='/'/>"><img src="<c:url value='/resources/customer/img/logo.png'/>" alt=""></a>
                     </div>
                 </div>
                 <div class="col-lg-9">
 					<div class="hero__search">
 						<div class="hero__search__form">
 							<form action="#">
-								<input type="text" placeholder="What do yo u need?">
+								<input type="text" placeholder="상품명 입력">
 								<button type="submit" class="site-btn">SEARCH</button>
 							</form>
 						</div>
@@ -27,9 +27,6 @@
 					</div> <!-- hero__search -->
 				</div>
             </div>
-            <div class="humberger__open">
-                <i class="fa fa-bars"></i>
-            </div>
         </div>
         
         
@@ -39,11 +36,11 @@
 	            	<div class="col-lg-3">
 	                    <div class="hero__categories">
 							<div class="hero__categories__all">
-	                        	<img src="<c:url value='/customer/img/categories/line1.png' />">
+	                        	<img src="<c:url value='/resources/customer/img/categories/line1.png' />">
 	                            <span>전체 카테고리</span>
 	                        </div>
 	                        <ul>
-	                        <c:forEach var="productCategoryDto" items="${productCategory }">
+	                        <c:forEach var="productCategoryDto" items="${categoryList }">
 	                            <li>
 	                            	<a href='<c:url value="/product/list?category1=${productCategoryDto.product_category1_no}" />'>
 	                            		${productCategoryDto.product_category1_name }

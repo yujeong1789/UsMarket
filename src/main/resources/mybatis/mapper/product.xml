@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mybatis.mapper.product">
+
+	<!-- 메인 상품 전체 출력 -->
+	<select id="searchMainProduct" resultType="productDto">
+		<![CDATA[
+		SELECT product_no, product_name, product_price, product_img_uuid, product_regdate FROM product_view
+		WHERE rownum <= 30
+		]]>
+	</select>
+
+	<!-- 상품 대분류 출력 -->
+	<select id="searchProductCategory1" resultType="productCategoryDto">
+		SELECT*FROM product_category1
+		ORDER BY PRODUCT_CATEGORY1_NO
+	</select>
+	
+	<!-- 상품 소분류 출력 -->
+	<select id="searchProductCategory2" parameterType="int" resultType="productCategoryDto">
+		SELECT*FROM product_category2
+		WHERE PRODUCT_CATEGORY1_NO=#{PRODUCT_CATEGORY1_NO}
+		ORDER BY PRODUCT_CATEGORY2_NO
+	</select>
+	
+	<!-- 분류별 상품 출력 -->
+	<select id="searchProductByCategory" parameterType="productPageHandler" resultType="productDto">
+		SELECT product_no, product_name, product_price, product_img_uuid, product_regdate from product_view
+		WHERE PRODUCT_CATEGORY1_NO=#{category1}
+		<if test='category2!=null and category2!=""'>
+			AND PRODUCT_CATEGORY2_NO=#{category2}
+		</if>
+		
+		<!-- 
+		SELECT*from
+		(
+			SELECT rownum, product_no, product_name, product_price, product_img_uuid, product_regdate from product_view
+			WHERE PRODUCT_CATEGORY1_NO=#{product_category1_no}
+			<if test='product_category2_no!=null and product_category2_no!=""'>
+			AND PRODUCT_CATEGORY2_NO=#{product_category2_no}
+		</if>
+		)
+		WHERE rownum BETWEEN 1 AND 30
+		 -->
+	</select>
+</mapper>

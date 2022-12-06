@@ -40,5 +40,6 @@
   
   	<session-config>
 		<session-timeout>30</session-timeout> <!-- 모든 세션은 30분 후 타임아웃 되도록 설정 -->
+		<tracking-mode>COOKIE</tracking-mode> <!-- jsessionid 비활성화 -->
 	</session-config>
 </web-app>
