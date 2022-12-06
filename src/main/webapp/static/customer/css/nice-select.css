@@ -55,8 +55,7 @@
         -ms-transform: rotate(-135deg);
             transform: rotate(-135deg); }
   .nice-select.open .list {
-  	border-right: 1px solid #e8e8e8;
-  	border-bottom: 1px solid #e8e8e8;
+  	width: 100%;
     opacity: 1;
     pointer-events: auto;
     -webkit-transform: scale(1) translateY(0);
@@ -92,7 +91,7 @@
     background-color: #fff;
     box-shadow: 0 0 0 1px rgba(68, 68, 68, 0.11);
     box-sizing: border-box;
-    margin-top: 4px;
+    margin-top: 2px;
     opacity: 0;
     overflow: hidden;
     padding: 0;
