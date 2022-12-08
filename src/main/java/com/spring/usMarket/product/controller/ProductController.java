@@ -29,7 +29,7 @@ public class ProductController {
 	public String list(SearchCondition sc, Model model){
 		sc.setPageSize(30);
 		logger.info("SearchCondition= "+sc.toString());
-		
+		logger.info("queryString= "+sc.getQueryString(sc.getPage()));
 		
 		try {
 			// 1. 전체 카테고리 뽑기
@@ -40,6 +40,7 @@ public class ProductController {
 			// 2. 선택된 카테고리의 하위 카테고리 뽑기
 			List<ProductCategoryDto>categoryList2=productService.getProductCategory2(sc.getCategory1());
 			model.addAttribute("categoryList2", categoryList2);
+			
 			
 			// 3. 해당 분류에 속하는 상품 뽑기
 			List<ProductDto> productList=productService.getProductByCategory(sc);
@@ -60,7 +61,7 @@ public class ProductController {
 		
 		
 		
-		return "product.list";
+		return "product/list";
 		
 	}
 }
