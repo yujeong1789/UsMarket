@@ -3,6 +3,8 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 
+<c:set var="option" value="${param.option }"/>
+
 <section class="products__section">
 	<div class="container">
 		<div class="row">
@@ -13,7 +15,7 @@
 					<select id="selectList">
 						<c:forEach var="category" items="${categoryList }">
 							<option ${param.category1 eq category.product_category1_no ? 'selected' : ''} value="${category.product_category1_no }" ${selected}>
-								${category.product_category1_name }
+								<c:out value="${category.product_category1_name }" />
 							</option>
 						</c:forEach>
 					</select>
@@ -28,8 +30,8 @@
 					<c:set var="selectedList" value="${param.category2 eq category2.product_category2_no ? 'selectedList' : '' }"/>
 				</c:if>
 					<div>
-						<a id="${selectedList }" href="<c:url value="/product/list?category1=${param.category1}&category2=${category2.product_category2_no }" />">
-							<span>${category2.product_category2_name }</span>
+						<a id="${selectedList }" href="<c:url value="/product/list${ph.sc.getQueryString(param.category1, category2.product_category2_no)}" />">
+							<span><c:out value="${category2.product_category2_name }" /></span>
 						</a>
 					</div>
 				</c:forEach>
@@ -38,10 +40,16 @@
 					<div class="category__name">
 						<h3 id="category__name"></h3>
 					</div>
+					
 					<div class="product__order">
-						<a href="#">판매완료 포함</a>
-						<a href="#">예약중 포함</a>
+						<%-- <a id="C" href="<c:url value='/product/list${ph.sc.getQueryString("C")}'/>">판매완료 포함</a>
+						<a id="R" href="<c:url value='/product/list${ph.sc.getQueryString("R")}'/>">예약중 포함</a> --%>
+						<ul class="order__ul">
+							<li id="option__R" value="2">예약중 포함</li>
+							<li id="option__C" value="3">판매완료 포함</li>
+						</ul>
 					</div>
+					
 				</div>
 				
 				<div class="product__area">
@@ -55,7 +63,7 @@
 						</div>
 						<div class="product__info__1">
 							<div class="product__title">
-								<a href="#">${product.product_no} ${product.product_name }</a> <!-- 상품명 -->
+								<a href="#"><c:out value="${product.product_no} ${product.product_name }" /> </a> <!-- 상품명 -->
 							</div>
 							<div class="product__info__2">
 								<div class="product__price">
@@ -78,7 +86,7 @@
 						<c:if test="${ph.totalCnt != null || ph.totalCnt != 0 }">
 							<c:if test="${ph.showPrev }">
 								<div class="paging__box">
-									<a class="paging__href" href="#">&lt;</a>								
+									<a class="paging__href" href="<c:url value='/product/list${ph.sc.getQueryString(ph.beginPage-1)}'/>">&lt;</a>								
 								</div>
 							</c:if>
 							<c:forEach var="i" begin="${ph.beginPage }" end="${ph.endPage }">
@@ -90,7 +98,7 @@
 							</c:forEach>
 							<c:if test="${ph.showNext }">
 								<div class="paging__box">
-									<a class="paging__href" href="#">&gt;</a>								
+									<a class="paging__href" href="<c:url value='/product/list${ph.sc.getQueryString(ph.endPage+1)}'/>">&gt;</a>								
 								</div>
 							</c:if>
 						</c:if>
@@ -103,24 +111,17 @@
 </section>
 
 <script type="text/javascript">
-	selectList.onchange=function(){
-		const selectList=document.getElementById("selectList");
-		const categoryNo=selectList.options[selectList.selectedIndex].value;
-		
-		location.href="${pageContext.request.contextPath}/product/list?category1="+categoryNo;
-	};
 	
-	function addCategory(){
+	document.addEventListener('DOMContentLoaded', function(){
+		// 동적으로 자식 요소 추가
 		const productCategory=document.getElementById("product__category");
 		const addCount=(Math.ceil(productCategory.childElementCount/5)*5)-productCategory.childElementCount;
 		
-		// 동적으로 자식 요소 추가
 		for(let i=0; i<addCount; i++){
 			productCategory.appendChild(document.createElement('div'));
 		}
-	};
-	
-	function addTextNode(){
+		
+		// 하위 카테고리 출력
 		let textNode=selectList.options[selectList.selectedIndex].innerText.trim();
 		
 		if(document.getElementById("selectedList") != null && document.getElementById("selectedList") != ""){
@@ -129,8 +130,16 @@
 		
 		let headerTag=document.getElementById("category__name");
 		headerTag.innerText=textNode;
-	};
+		
+	});
 	
-	addCategory();
-	addTextNode();
+	
+	// 프로퍼티 방식
+	document.getElementById("selectList").onchange = function(){
+		const selectList=document.getElementById("selectList");
+		const categoryNo=selectList.options[selectList.selectedIndex].value;
+		
+		location.href="${pageContext.request.contextPath}/product/list?category1="+categoryNo;
+	};
+
 </script>
