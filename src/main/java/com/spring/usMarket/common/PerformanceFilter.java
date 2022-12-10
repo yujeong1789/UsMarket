@@ -17,13 +17,11 @@ import javax.servlet.http.HttpServletResponse;
 @WebFilter(urlPatterns={"/*"})
 public class PerformanceFilter implements Filter {
 	private static final String excludeUrls= "/resources";
-	long startTime = 0;
 	
 	@Override
 	public void init(FilterConfig filterConfig) throws ServletException {
 		// 초기화 작업
 		System.out.println("PerformanceFilter called()");
-		startTime = System.currentTimeMillis();
 	}
 
 	@Override
@@ -38,7 +36,7 @@ public class PerformanceFilter implements Filter {
 		chain.doFilter(request, response);
 		
 		String path=request.getRequestURI().substring(request.getContextPath().length());
-		if (!path.contains(excludeUrls)) {
+		if (!path.startsWith(excludeUrls)) {
 			
 			String referer=request.getHeader("referer"); //어디서 요청했는지 알 수 있음
 			String method=request.getMethod();
