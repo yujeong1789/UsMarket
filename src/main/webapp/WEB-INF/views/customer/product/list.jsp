@@ -42,11 +42,9 @@
 					</div>
 					
 					<div class="product__order">
-						<%-- <a id="C" href="<c:url value='/product/list${ph.sc.getQueryString("C")}'/>">판매완료 포함</a>
-						<a id="R" href="<c:url value='/product/list${ph.sc.getQueryString("R")}'/>">예약중 포함</a> --%>
-						<ul class="order__ul">
-							<li id="option__R" value="2">예약중 포함</li>
-							<li id="option__C" value="3">판매완료 포함</li>
+						<ul class="order__ul" id="order__ul">
+							<li id="2" value="2">예약중 포함</li>
+							<li id="3" value="3">판매완료 포함</li>
 						</ul>
 					</div>
 					
@@ -90,6 +88,7 @@
 								</div>
 							</c:if>
 							<c:forEach var="i" begin="${ph.beginPage }" end="${ph.endPage }">
+							<input id="pageValue" type="hidden" value="${i }">
 								<div class="paging__box">
 									<a class="paging__href ${i==ph.sc.page ? 'paging-active' : ''}" href="<c:url value="/product/list${ph.sc.getQueryString(i)} " />">
 										${i}
@@ -113,6 +112,7 @@
 <script type="text/javascript">
 	
 	document.addEventListener('DOMContentLoaded', function(){
+		
 		// 동적으로 자식 요소 추가
 		const productCategory=document.getElementById("product__category");
 		const addCount=(Math.ceil(productCategory.childElementCount/5)*5)-productCategory.childElementCount;
@@ -121,25 +121,92 @@
 			productCategory.appendChild(document.createElement('div'));
 		}
 		
-		// 하위 카테고리 출력
+		
+		// 선택 카테고리 강조
 		let textNode=selectList.options[selectList.selectedIndex].innerText.trim();
 		
 		if(document.getElementById("selectedList") != null && document.getElementById("selectedList") != ""){
 			textNode=document.getElementById("selectedList").innerText.trim();
 		}
 		
-		let headerTag=document.getElementById("category__name");
-		headerTag.innerText=textNode;
+		const headerTag=document.getElementById("category__name");
+		headerTag.innerText = textNode;
 		
+	
+	
+		// 프로퍼티 방식
+		document.getElementById("selectList").onchange = function(){
+			const selectList=document.getElementById("selectList");
+			const categoryNo=selectList.options[selectList.selectedIndex].value;
+			
+			location.href="${pageContext.request.contextPath}/product/list?category1="+categoryNo;
+		};
+		
+		
+		// 선택 옵션 강조
+		const url = new URLSearchParams(window.location.search);
+		const optionParam = url.get('option');
+		
+		setStyle(optionParam);
+		
+		
+		// 포함 option 추가
+		document.getElementById("order__ul").addEventListener('click', function(e) { // 매개변수는 이벤트가 발생한 태그를 의미
+			
+			console.log("e.target.value= " + e.target.value);
+	
+			if(optionParam == e.target.value){ // option과 value가 일치하면 파라미터 삭제 (같은 옵션 재클릭했다는 뜻)
+				url.delete('option');
+				console.log("같은 곳에서 클릭 발생, option delete");
+			}else{
+				let setOption = getOption(optionParam, e.target.value);
+				url.set('option', setOption);
+				console.log("option set");
+			} // if-else end
+			
+			console.log("queryString= " + url);
+			
+			location.href = "${pageContext.request.contextPath}/product/list?" + url;
+		});
+	
 	});
 	
-	
-	// 프로퍼티 방식
-	document.getElementById("selectList").onchange = function(){
-		const selectList=document.getElementById("selectList");
-		const categoryNo=selectList.options[selectList.selectedIndex].value;
-		
-		location.href="${pageContext.request.contextPath}/product/list?category1="+categoryNo;
+	function getOption(value, targetValue){ // parameter option, e.target.value
+		switch (value) {
+			case "5":
+				return parseInt(value)-targetValue;
+				break;
+			case "2":
+			case "3":
+				return parseInt(value)+targetValue;
+				break;
+			default:
+				return targetValue;
+		}
 	};
-
+	
+	
+	function setStyle(optionParam){
+		switch (optionParam) {
+			case "5":
+				const ul = document.querySelectorAll('.order__ul li');
+				ul.forEach(el => el.className = 'selectedOption');
+				break;
+			case "2":
+			case "3":
+				document.getElementById(optionParam).className='selectedOption';
+				break;
+			default:
+				break;
+		}
+	};
+	
+	
+	function isEmpty(value){
+		if( value == "" || value == null || value == undefined || ( value != null && typeof value == "object" && !Object.keys(value).length ) ){
+			return true
+		}else{
+			return false
+		}
+	};
 </script>

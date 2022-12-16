@@ -3,7 +3,26 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.mybatis.mapper.product">
 
-	<sql id="searchCategory2">
+	<sql id="searchProductState">
+		<choose>
+			<when test='option=="2"'>
+				AND PRODUCT_STATE_NO IN(1, 2)
+			</when>
+			<when test='option=="3"'>
+				AND PRODUCT_STATE_NO IN(1, 3)
+			</when>
+			<when test='option=="5"'>
+				AND PRODUCT_STATE_NO IN(1, 2, 3)
+			</when>
+			<otherwise>
+				AND PRODUCT_STATE_NO = 1
+			</otherwise>
+		</choose>
+	</sql>
+
+
+	<sql id="searchCategory">
+		AND PRODUCT_CATEGORY1_NO = #{category1} 
 		<if test='category2!=null and category2!=""'>
 			AND PRODUCT_CATEGORY2_NO = #{category2} 
 		</if>
@@ -44,9 +63,9 @@
 			(
 				SELECT product_no, product_state_no, product_name, product_price, product_img_uuid, product_regdate 
 				FROM product_view
-				WHERE MEMBER_STATE_NO=1 
-				AND PRODUCT_CATEGORY1_NO = #{category1} 
-				<include refid="searchCategory2" />
+				WHERE MEMBER_STATE_NO=1
+				<include refid="searchCategory" />
+				<include refid="searchProductState" />
 				ORDER BY product_regdate DESC, product_no DESC	
 			)A
 		)
@@ -58,7 +77,7 @@
 		SELECT COUNT(*)
 		FROM product_view
 		WHERE MEMBER_STATE_NO=1 
-		AND PRODUCT_CATEGORY1_NO = #{category1}
-		<include refid="searchCategory2" />
+		<include refid="searchCategory" />
+		<include refid="searchProductState" />
 	</select>
 </mapper>
