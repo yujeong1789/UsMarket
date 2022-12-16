@@ -26,7 +26,7 @@ public class ProductController {
 	
 	
 	@GetMapping("/list")
-	public String list(SearchCondition sc, Model model){
+	public void list(SearchCondition sc, Model model){
 		sc.setPageSize(30);
 		logger.info("SearchCondition= "+sc.toString());
 		logger.info("queryString= "+sc.getQueryString(sc.getPage()));
@@ -58,10 +58,9 @@ public class ProductController {
 		} catch (Exception e) {
 			e.printStackTrace();
 		} // try-catch
+			
 		
-		
-		
-		return "product/list";
+		//return "product/list";
 		
 	}
 }

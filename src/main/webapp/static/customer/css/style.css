@@ -781,6 +781,11 @@ ol {
 	color: #3366fd;
 }
 
+.selectedOption{
+	font-weight: 600;
+	color: #3366fd;
+}
+
 .paging__container{
 	height: 30px;
 	display: flex;
@@ -839,17 +844,27 @@ ol {
 	padding-right: 15px;
 }
 
-.product__order>a{
-	font-size: 13pt;
-	color: #1c1c1c;	
+.product__order ul{
+	list-style: none;
+	float: right;
 }
 
-.product__order>a:first-child::after{
-	content: "|";
-	color: #b2b2b2;
-	float: center;
-	padding-right: 5px;
-	padding-left: 9px;
+.order__ul li{
+	float: left;
+	font-size: 12pt;
+}
+
+.order__ul li:last-child{
+	margin-left: 13px;
+}
+
+.order__ul li:first-child::after {
+	padding-left: 10px;
+    display: inline-block;
+    text-align: center;
+    content: '|';
+    color: #989898;
+    width: 1px;
 }
 
 .no__item{
