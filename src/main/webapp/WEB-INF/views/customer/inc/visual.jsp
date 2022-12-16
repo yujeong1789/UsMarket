@@ -12,9 +12,9 @@
                 <div class="col-lg-9">
 					<div class="hero__search">
 						<div class="hero__search__form">
-							<form action="#">
-								<input type="text" placeholder="상품명 입력">
-								<button type="submit" class="site-btn">SEARCH</button>
+							<form action="<c:url value='/product/list'/>" id="searchForm">
+								<input type="text" name="keyword" id="searchKeyword" placeholder="상품명 또는 태그로 원하는 상품을 검색하세요">
+								<button type="submit" id="submit" class="site-btn">SEARCH</button>
 							</form>
 						</div>
 						<div class="hero__search__mypage">
@@ -32,7 +32,7 @@
         
         <div class="container">
             <div class="row">
-        <div class="index__visual">
+        		<div class="index__visual">
 	            	<div class="col-lg-3">
 	                    <div class="hero__categories">
 							<div class="hero__categories__all">
@@ -50,10 +50,19 @@
 	                        </ul>
 	                    </div> <!-- hero__categories__all -->
 					</div>
-					
-		</div>
-		</div>
+				</div>
+			</div>
 		</div>
 		
 		
     </section>
+    
+<script type="text/javascript">
+	const searchForm = document.getElementById('searchForm');
+	searchForm.addEventListener('submit', function(e){
+		if(document.getElementById('searchKeyword').value.length < 2){
+			alert("검색어는 두 글자 이상 입력해 주세요.");
+			e.preventDefault();
+		};
+	});
+</script>
