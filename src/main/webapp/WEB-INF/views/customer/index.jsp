@@ -49,7 +49,7 @@
 					</div>
 				</div>
 			</div> <!-- product__box -->
-		</c:forEach>
+			</c:forEach>
 		</div> <!-- product__area -->
 		
 	</div> <!-- container -->

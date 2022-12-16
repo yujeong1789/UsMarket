@@ -31,25 +31,27 @@ public class ProductController {
 		logger.info("SearchCondition= "+sc.toString());
 		logger.info("queryString= "+sc.getQueryString(sc.getPage()));
 		
-		try {
+		try {					
 			// 1. 전체 카테고리 뽑기
 			List<ProductCategoryDto> categoryList = productService.getProductCategory1();
 			model.addAttribute("categoryList", categoryList);
-		
 			
-			// 2. 선택된 카테고리의 하위 카테고리 뽑기
-			List<ProductCategoryDto>categoryList2=productService.getProductCategory2(sc.getCategory1());
-			model.addAttribute("categoryList2", categoryList2);
+			if(sc.getKeyword()==null || sc.getKeyword()=="") {
+				// 2. 선택된 카테고리의 하위 카테고리 뽑기
+				List<ProductCategoryDto>categoryList2=productService.getProductCategory2(sc.getCategory1());
+				model.addAttribute("categoryList2", categoryList2);
+			}
 			
-			
-			// 3. 해당 분류에 속하는 상품 뽑기
+			// 검색어 존재할 경우 카테고리별 상품 출력 x
 			List<ProductDto> productList=productService.getProductByCategory(sc);
+			
 			int totalCnt=productService.getProductCount(sc);
+			
 			logger.info("productList.size()= "+productList.size());
 			logger.info("totalCnt= "+totalCnt);
 			PageHandler pageHandler=new PageHandler(totalCnt, sc);
 			
-			
+			model.addAttribute("totalCnt", totalCnt);
 			model.addAttribute("productList", productList);
 			model.addAttribute("page", sc.getPage());
 			model.addAttribute("pageSize", sc.getPageSize());

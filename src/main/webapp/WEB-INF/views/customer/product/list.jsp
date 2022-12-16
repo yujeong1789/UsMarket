@@ -4,11 +4,13 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 
 <c:set var="option" value="${param.option }"/>
+<c:set var="keyword" value="${param.keyword }"/>
+<c:set var="list" value="${productList }"/>
 
 <section class="products__section">
 	<div class="container">
 		<div class="row">
-		
+		<c:if test="${empty param.keyword }">
 			<div class="col-lg-12">
 				<a class="home" href="<c:url value='/'/>">홈</a>
 				<div class="category__selectBox">
@@ -22,20 +24,22 @@
 				</div>
 			</div>
 			
+			<div class="product__category" id="product__category">
+			<c:forEach var="category2" items="${categoryList2 }">
+			<c:if test="${!empty param.category2 }">
+				<c:set var="selectedList" value="${param.category2 eq category2.product_category2_no ? 'selectedList' : '' }"/>
+			</c:if>
+				<div>
+					<a id="${selectedList }" href="<c:url value="/product/list${ph.sc.getQueryString(param.category1, category2.product_category2_no)}" />">
+						<span><c:out value="${category2.product_category2_name }" /></span>
+					</a>
+				</div>
+			</c:forEach>
+			</div>
+		</c:if>
+		
 			<div class="product__list">
 			
-				<div class="product__category" id="product__category">
-				<c:forEach var="category2" items="${categoryList2 }">
-				<c:if test="${!empty param.category2 }">
-					<c:set var="selectedList" value="${param.category2 eq category2.product_category2_no ? 'selectedList' : '' }"/>
-				</c:if>
-					<div>
-						<a id="${selectedList }" href="<c:url value="/product/list${ph.sc.getQueryString(param.category1, category2.product_category2_no)}" />">
-							<span><c:out value="${category2.product_category2_name }" /></span>
-						</a>
-					</div>
-				</c:forEach>
-				</div>
 				<div class="product__bar">
 					<div class="category__name">
 						<h3 id="category__name"></h3>
@@ -50,6 +54,7 @@
 					
 				</div>
 				
+				<c:if test="${! empty productList }">
 				<div class="product__area">
 				<c:forEach var="product" items="${productList }">
 					<div class="product__box">
@@ -75,12 +80,12 @@
 					</div> <!-- product__box -->
 				</c:forEach>
 				</div> <!-- product__area -->
+				</c:if>
+				<c:if test="${empty productList }">
+					<div class="no__item">등록된 상품이 없습니다.</div> <!-- 이미지 만들 것 -->				
+				</c:if>
 				
 				<div class="paging__container">
-						<c:if test="${ph.totalCnt == null || ph.totalCnt == 0 }">
-							<div class="no__item">등록된 상품이 없습니다.</div> <!-- 이미지 만들 것 -->
-						</c:if>
-						
 						<c:if test="${ph.totalCnt != null || ph.totalCnt != 0 }">
 							<c:if test="${ph.showPrev }">
 								<div class="paging__box">
@@ -113,63 +118,75 @@
 	
 	document.addEventListener('DOMContentLoaded', function(){
 		
-		// 동적으로 자식 요소 추가
-		const productCategory=document.getElementById("product__category");
-		const addCount=(Math.ceil(productCategory.childElementCount/5)*5)-productCategory.childElementCount;
-		
-		for(let i=0; i<addCount; i++){
-			productCategory.appendChild(document.createElement('div'));
-		}
-		
-		
-		// 선택 카테고리 강조
-		let textNode=selectList.options[selectList.selectedIndex].innerText.trim();
-		
-		if(document.getElementById("selectedList") != null && document.getElementById("selectedList") != ""){
-			textNode=document.getElementById("selectedList").innerText.trim();
-		}
-		
+		const keyword=`${ph.sc.getKeyword()}`;
 		const headerTag=document.getElementById("category__name");
-		headerTag.innerText = textNode;
 		
+		if(isEmpty(keyword)){
+			// 동적으로 자식 요소 추가
+			const productCategory=document.getElementById("product__category");
+			const addCount=(Math.ceil(productCategory.childElementCount/5)*5)-productCategory.childElementCount;
+			
+			for(let i=0; i<addCount; i++){
+				productCategory.appendChild(document.createElement('div'));
+			}
+			
+			
+			// 프로퍼티 방식
+			document.getElementById("selectList").onchange = function(){
+				const selectList=document.getElementById("selectList");
+				const categoryNo=selectList.options[selectList.selectedIndex].value;
+				
+				location.href="${pageContext.request.contextPath}/product/list?category1="+categoryNo;
+			};
+			
+			// 선택 카테고리 강조
+			let textNode=selectList.options[selectList.selectedIndex].innerText.trim();
+			
+			if(document.getElementById("selectedList") != null && document.getElementById("selectedList") != ""){
+				textNode=document.getElementById("selectedList").innerText.trim();
+			}
+			
+			headerTag.innerText = textNode;
+			
+		}else if(! isEmpty(keyword)){
+			headerTag.innerText = keyword;
+			document.getElementById("searchKeyword").value = keyword;
+			
+		} // if
+		
+		
+		const list = `${list}`
+		if(! isEmpty(list)){
+			// 선택 옵션 강조
+			const url = new URLSearchParams(window.location.search);
+			const optionParam = url.get('option');
+			
+			setStyle(optionParam);
+			
+			
+			// 포함 option 추가
+			document.getElementById("order__ul").addEventListener('click', function(e) { // 매개변수는 이벤트가 발생한 태그를 의미
+				
+				url.set('page', 1);
+				console.log("e.target.value= " + e.target.value);
 	
-	
-		// 프로퍼티 방식
-		document.getElementById("selectList").onchange = function(){
-			const selectList=document.getElementById("selectList");
-			const categoryNo=selectList.options[selectList.selectedIndex].value;
-			
-			location.href="${pageContext.request.contextPath}/product/list?category1="+categoryNo;
-		};
-		
-		
-		// 선택 옵션 강조
-		const url = new URLSearchParams(window.location.search);
-		const optionParam = url.get('option');
-		
-		setStyle(optionParam);
-		
-		
-		// 포함 option 추가
-		document.getElementById("order__ul").addEventListener('click', function(e) { // 매개변수는 이벤트가 발생한 태그를 의미
-			
-			console.log("e.target.value= " + e.target.value);
-	
-			if(optionParam == e.target.value){ // option과 value가 일치하면 파라미터 삭제 (같은 옵션 재클릭했다는 뜻)
-				url.delete('option');
-				console.log("같은 곳에서 클릭 발생, option delete");
-			}else{
-				let setOption = getOption(optionParam, e.target.value);
-				url.set('option', setOption);
-				console.log("option set");
-			} // if-else end
-			
-			console.log("queryString= " + url);
-			
-			location.href = "${pageContext.request.contextPath}/product/list?" + url;
-		});
+				if(optionParam == e.target.value){ // option과 value가 일치하면 파라미터 삭제 (같은 옵션 재클릭했다는 뜻)
+					url.delete('option');
+					console.log("같은 곳에서 클릭 발생, option delete");
+				}else{
+					let setOption = getOption(optionParam, e.target.value);
+					url.set('option', setOption);
+					console.log("option set");
+				} // if-else end
+				
+				console.log("queryString= " + url);
+				
+				location.href = "${pageContext.request.contextPath}/product/list?" + url;
+			});
+		} // if
 	
 	});
+	
 	
 	function getOption(value, targetValue){ // parameter option, e.target.value
 		switch (value) {
