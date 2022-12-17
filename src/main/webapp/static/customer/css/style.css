@@ -706,6 +706,11 @@ ol {
 	margin-bottom: 15px;
 }
 
+.product__img__top{
+	z-index: 1;
+	position: absolute;
+}
+
 .product__img img{
 	width: 198px;
 	height: 198px;
