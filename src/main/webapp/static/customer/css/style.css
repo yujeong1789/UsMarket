@@ -156,7 +156,7 @@ ol {
 	color: #ffffff;
 	text-transform: uppercase;
 	font-weight: 700;
-	background: #3366fd;
+	background: #16A7F1;
 	letter-spacing: 2px;
 }
 
@@ -167,7 +167,7 @@ ol {
 	text-transform: uppercase;
 	display: inline-block;
 	padding: 13px 30px 12px;
-	background: #3366fd;
+	background: #16A7F1;
 	border: none;
 }
 
@@ -267,7 +267,6 @@ ol {
 .header__top__right {
 	text-align: right;
 	padding-top: 10px;
-	padding-right: 30px;
 	padding-bottom: 13px;
 }
 
@@ -326,7 +325,7 @@ ol {
 }
 
 .header__menu ul li .header__menu__dropdown li:hover>a {
-	color: #3366fd;
+	color: #16A7F1;
 }
 
 .header__menu ul li .header__menu__dropdown li a {
@@ -337,7 +336,7 @@ ol {
 }
 
 .header__menu ul li.active a {
-	color: #3366fd;
+	color: #16A7F1;
 }
 
 .header__menu ul li:hover .header__menu__dropdown {
@@ -347,7 +346,7 @@ ol {
 }
 
 .header__menu ul li:hover>a {
-	color: #3366fd;
+	color: #16A7F1;
 }
 
 .header__menu ul li:last-child {
@@ -401,7 +400,7 @@ ol {
 .header__cart ul li a span {
 	height: 13px;
 	width: 13px;
-	background: #3366fd;
+	background: #16A7F1;
 	font-size: 10px;
 	color: #ffffff;
 	line-height: 13px;
@@ -496,7 +495,7 @@ ol {
 	content: "3";
 	font-family: "ElegantIcons";
 	font-size: 18px;
-	color: #3366fd;
+	color: #16A7F1;
 } */
 
 .hero__categories ul {
@@ -707,7 +706,6 @@ ol {
 }
 
 .product__img__top{
-	z-index: 1;
 	position: absolute;
 }
 
@@ -784,12 +782,12 @@ ol {
 
 #selectedList{
 	font-weight: 800;
-	color: #3366fd;
+	color: #16A7F1;
 }
 
 .selectedOption{
 	font-weight: 600;
-	color: #3366fd;
+	color: #16A7F1;
 }
 
 .paging__container{
@@ -834,7 +832,7 @@ ol {
 }
 
 .category__name>h3{
-	color: #3366fd;
+	color: #16A7F1;
 	font-weight: 600;
 }
 
@@ -858,6 +856,7 @@ ol {
 .order__ul li{
 	float: left;
 	font-size: 12pt;
+	cursor: pointer;
 }
 
 .order__ul li:last-child{
@@ -882,7 +881,7 @@ ol {
 }
 
 .paging__href.paging-active{
-	color: #3366fd;
+	color: #16A7F1;
 }
 /*---------------------
   Latest Product
@@ -960,6 +959,11 @@ ol {
 
 .products__section{
 	background-color: #f8f8f8;
+	padding-top: 50px;
+	padding-bottom: 100px;
+}
+
+.product__info__section{
 	padding-top: 50px;
 	padding-bottom: 100px;
 }
@@ -1293,8 +1297,8 @@ ol {
 }
 
 .product__item__pic__hover li:hover a {
-	background: #3366fd;
-	border-color: #3366fd;
+	background: #16A7F1;
+	border-color: #16A7F1;
 }
 
 .product__item__pic__hover li:hover a i {
@@ -1492,7 +1496,7 @@ ol {
 }
 
 .filter__option span:hover {
-	color: #3366fd;
+	color: #16A7F1;
 }
 
 .product__item {
@@ -1533,8 +1537,8 @@ ol {
 }
 
 .product__item__pic__hover li:hover a {
-	background: #3366fd;
-	border-color: #3366fd;
+	background: #16A7F1;
+	border-color: #16A7F1;
 }
 
 .product__item__pic__hover li:hover a i {
@@ -1614,8 +1618,8 @@ ol {
 
 .product__pagination a:hover,
 .blog__pagination a:hover {
-	background: #3366fd;
-	border-color: #3366fd;
+	background: #16A7F1;
+	border-color: #16A7F1;
 	color: #ffffff;
 }
 
@@ -2123,8 +2127,8 @@ ol {
 }
 
 .checkout__input__checkbox label input:checked~.checkmark {
-	background: #3366fd;
-	border-color: #3366fd;
+	background: #16A7F1;
+	border-color: #16A7F1;
 }
 
 .checkout__input__checkbox label input:checked~.checkmark:after {
@@ -2351,7 +2355,7 @@ ol {
 }
 
 .blog__sidebar__item ul li a:hover {
-	color: #3366fd;
+	color: #16A7F1;
 }
 
 .blog__sidebar__search {
@@ -2571,7 +2575,7 @@ ol {
 }
 
 .blog__details__widget .blog__details__social a:hover {
-	color: #3366fd;
+	color: #16A7F1;
 }
 
 .blog__details__widget .blog__details__social a:last-child {
@@ -2691,7 +2695,7 @@ ol {
 }
 
 .footer__widget .footer__widget__social a:hover {
-	background: #3366fd;
+	background: #16A7F1;
 	color: #ffffff;
 	border-color: #ffffff;
 }
@@ -2730,7 +2734,7 @@ ol {
 
 .contact__widget span {
 	font-size: 36px;
-	color: #3366fd;
+	color: #16A7F1;
 }
 
 .contact__widget h4 {
@@ -2769,7 +2773,7 @@ ol {
 
 .map .map-inside i {
 	font-size: 48px;
-	color: #3366fd;
+	color: #16A7F1;
 	position: absolute;
 	bottom: -75px;
 	left: 50%;
@@ -3026,7 +3030,7 @@ ol {
 	.humberger__menu__cart ul li a span {
 		height: 13px;
 		width: 13px;
-		background: #3366fd;
+		background: #16A7F1;
 		font-size: 10px;
 		color: #ffffff;
 		line-height: 13px;
@@ -3092,7 +3096,7 @@ ol {
 		-webkit-border-radius: 0;
 		border-radius: 0;
 		background: transparent;
-		color: #3366fd;
+		color: #16A7F1;
 	}
 	.humberger__menu__wrapper .slicknav_nav .slicknav_row,
 	.humberger__menu__wrapper .slicknav_nav a {
@@ -3284,7 +3288,7 @@ ol {
 	.humberger__menu__cart ul li a span {
 		height: 13px;
 		width: 13px;
-		background: #3366fd;
+		background: #16A7F1;
 		font-size: 10px;
 		color: #ffffff;
 		line-height: 13px;
@@ -3350,7 +3354,7 @@ ol {
 		-webkit-border-radius: 0;
 		border-radius: 0;
 		background: transparent;
-		color: #3366fd;
+		color: #16A7F1;
 	}
 	.humberger__menu__wrapper .slicknav_nav .slicknav_row,
 	.humberger__menu__wrapper .slicknav_nav a {
