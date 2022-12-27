@@ -30,14 +30,16 @@
 			<c:forEach var="productDto" items="${mainProductList }">
 			<div class="product__box">
 				<div class="product__img">
-					<a href="#"> 
+					<a href="<c:url value='/product/info?product_no=${productDto.product_no}' />">
 						<img src="${pageContext.request.contextPath}/resources/productImgUpload/2022/11/29/IMG_5403.PNG">
 						<!-- 임시 이미지 출력 (수정 예정) -->
 					</a>
 				</div>
 				<div class="product__info__1">
 					<div class="product__title">
-						<a href="#">${productDto.product_name }</a> <!-- 상품명 -->
+						<a href="<c:url value='/product/info?product_no=${productDto.product_no}' />">
+							${productDto.product_name }
+						</a> <!-- 상품명 -->
 					</div>
 					<div class="product__info__2">
 						<div class="product__price">

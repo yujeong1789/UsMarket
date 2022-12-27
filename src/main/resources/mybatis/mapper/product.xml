@@ -96,4 +96,16 @@
 		<include refid="searchProductState" />
 		<include refid="searchKeyword" />
 	</select>
+	
+	<select id="searchProductInfo" parameterType="int" resultType="productDto">
+		SELECT*FROM PRODUCT_VIEW
+		WHERE PRODUCT_NO = #{PRODUCT_NO}
+	</select>
+	
+	
+	<update id="updateProductView" parameterType="int">
+		UPDATE PRODUCT
+		SET PRODUCT_VIEW = PRODUCT_VIEW+1
+		WHERE PRODUCT_NO = #{PRODUCT_NO}
+	</update>
 </mapper>

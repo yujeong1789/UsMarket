@@ -9,5 +9,6 @@ public interface ProductDao {
 	List<ProductDto> searchMainProduct() throws Exception;
 	List<ProductDto> searchProductByCategory(SearchCondition sc) throws Exception;
 	int searchProductCount(SearchCondition sc) throws Exception;
-
+	ProductDto searchProductInfo(Integer product_no) throws Exception;
+	int updateProductView(Integer product_no) throws Exception;
 }

@@ -16,4 +16,6 @@ public interface ProductService {
 	List<ProductDto> getProductByCategory(SearchCondition sc) throws Exception;
 	
 	int getProductCount(SearchCondition sc) throws Exception;
+	
+	ProductDto getProductInfo(Integer product_no) throws Exception;
 }
