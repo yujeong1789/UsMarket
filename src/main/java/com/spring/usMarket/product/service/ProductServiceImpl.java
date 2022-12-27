@@ -1,9 +1,11 @@
 package com.spring.usMarket.product.service;
 
+import java.sql.SQLException;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.spring.usMarket.common.SearchCondition;
 import com.spring.usMarket.product.dao.ProductCategoryDao;
@@ -40,6 +42,14 @@ public class ProductServiceImpl implements ProductService {
 	@Override
 	public int getProductCount(SearchCondition sc) throws Exception {
 		return productDao.searchProductCount(sc);
+	}
+
+	@Override
+	@Transactional(rollbackFor = SQLException.class)
+	public ProductDto getProductInfo(Integer product_no) throws Exception {
+		productDao.updateProductView(product_no);
+		
+		return productDao.searchProductInfo(product_no);
 	}
 
 }

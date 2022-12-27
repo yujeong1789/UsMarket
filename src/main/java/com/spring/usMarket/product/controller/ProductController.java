@@ -59,8 +59,19 @@ public class ProductController {
 		} catch (Exception e) {
 			e.printStackTrace();
 		} // try-catch
-		
-		//return "product/list";
-		
+	}
+	
+	
+	@GetMapping("/info")
+	public void info(Integer product_no, Model model) {
+		try {
+			ProductDto productInfo = productService.getProductInfo(product_no);
+			logger.info("productInfo= "+productInfo.toString());
+			
+			model.addAttribute("productInfo", productInfo);
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 }

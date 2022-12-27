@@ -30,4 +30,14 @@ public class ProductDaoImpl implements ProductDao {
 		return session.selectOne(namespace+"searchProductCount", sc);
 	}
 
+	@Override
+	public ProductDto searchProductInfo(Integer product_no) throws Exception {
+		return session.selectOne(namespace+"searchProductInfo", product_no);
+	}
+
+	@Override
+	public int updateProductView(Integer product_no) throws Exception {
+		return session.update(namespace+"updateProductView", product_no);
+	}
+
 }
