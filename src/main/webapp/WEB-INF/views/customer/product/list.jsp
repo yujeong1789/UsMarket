@@ -59,7 +59,7 @@
 				<c:forEach var="product" items="${productList }">
 					<div class="product__box">
 						<div class="product__img">
-							<a href="#"> 
+							<a href="<c:url value='/product/info?product_no=${product.product_no}' />"> 
 								<c:if test="${product.product_state_no == 2}">
 									<img class="product__img__top" src="${pageContext.request.contextPath}/resources/customer/img/product/reserve.png">
 								</c:if>
@@ -72,7 +72,9 @@
 						</div>
 						<div class="product__info__1">
 							<div class="product__title">
-								<a href="#"><c:out value="${product.product_no} ${product.product_name }" /> </a> <!-- 상품명 -->
+								<a href="<c:url value='/product/info?product_no=${product.product_no}' />">
+									<c:out value="${product.product_no} ${product.product_name }" />
+								</a> <!-- 상품명 -->
 							</div>
 							<div class="product__info__2">
 								<div class="product__price">
