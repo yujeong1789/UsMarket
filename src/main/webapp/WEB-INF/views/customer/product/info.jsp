@@ -11,6 +11,10 @@
 			<div class="col-lg-12">
 				<!-- 카테고리 영역 -->
 				<a class="home" href="<c:url value='/'/>">홈</a>
+				<span class="home__span"></span>
+				<a id="info__category1" href="<c:url value='/product/list?category1=${productInfo.PRODUCT_CATEGORY1_NO }'/>">${productInfo.PRODUCT_CATEGORY1_NAME }</a>
+				<span class="before__span"></span>
+				<a id="info__category2" href="<c:url value='/product/list?category1=${productInfo.PRODUCT_CATEGORY1_NO }&category2=${productInfo.PRODUCT_CATEGORY2_NO }'/>">${productInfo.PRODUCT_CATEGORY2_NAME}</a>
 			</div>
 			
 			<div class="product__info">

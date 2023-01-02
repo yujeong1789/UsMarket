@@ -1,5 +1,15 @@
 @charset "UTF-8";
 
+#info__category1{
+	color: #1c1c1c;
+	font-weight: 500;
+}
+
+#info__category2{
+	color: #1c1c1c;
+	font-weight: 500;
+}
+
 .product__info{
 	width: 100%;
 	margin: 50px 15px 0px 15px;
