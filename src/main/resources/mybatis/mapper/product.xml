@@ -55,7 +55,7 @@
 
 
 	<!-- 상품 대분류 출력 -->
-	<select id="searchProductCategory1" resultType="productCategoryDto">
+	<select id="searchProductCategory1" resultType="map">
 		SELECT*FROM product_category1
 		ORDER BY PRODUCT_CATEGORY1_NO
 	</select>
@@ -63,7 +63,7 @@
 	
 	<!-- 상품 소분류 출력 -->
 	<select id="searchProductCategory2" parameterType="int" resultType="productCategoryDto">
-		SELECT*FROM product_category2
+		SELECT*FROM CATEGORY_VIEW
 		WHERE PRODUCT_CATEGORY1_NO=#{PRODUCT_CATEGORY1_NO}
 		ORDER BY PRODUCT_CATEGORY2_NO
 	</select>
@@ -96,10 +96,41 @@
 		<include refid="searchProductState" />
 		<include refid="searchKeyword" />
 	</select>
+    
 	
-	<select id="searchProductInfo" parameterType="int" resultType="productDto">
-		SELECT*FROM PRODUCT_VIEW
-		WHERE PRODUCT_NO = #{PRODUCT_NO}
+                                                                                                                                                                                          
+	<resultMap type="HashMap" id="productInfo">
+		<result property="BOOKMARK_COUNT" column="BOOKMARK_COUNT" />
+		<result property="PRODUCT_COUNT" column="PRODUCT_COUNT" />
+		<result property="MEMBER_NAME" column="MEMBER_NAME" />
+		<result property="PRODUCT_NO" column="PRODUCT_NO" />
+		<result property="SELLER_NO" column="SELLER_NO" />
+		<result property="PRODUCT_CATEGORY1_NO" column="PRODUCT_CATEGORY1_NO" />
+		<result property="PRODUCT_CATEGORY2_NO" column="PRODUCT_CATEGORY2_NO" />
+		<result property="PRODUCT_STATE_NO" column="PRODUCT_STATE_NO" />
+		<result property="PRODUCT_NAME" column="PRODUCT_NAME" />
+		<result property="PRODUCT_CHANGE" column="PRODUCT_CHANGE" />
+		<result property="PRODUCT_PRICE" column="PRODUCT_PRICE" />
+		<result property="PRODUCT_EXPLANATION" column="PRODUCT_EXPLANATION" jdbcType="CLOB" javaType="java.lang.String"/>
+		<result property="PRODUCT_TAG" column="PRODUCT_TAG" />
+		<result property="PRODUCT_VIEW" column="PRODUCT_VIEW" />
+		<result property="PRODUCT_REGDATE" column="PRODUCT_REGDATE"/>
+		<result property="PRODUCT_PAY_KIND" column="PRODUCT_PAY_KIND" />
+		<result property="PRODUCT_USED" column="PRODUCT_USED" />
+		<result property="PRODUCT_CATEGORY1_NAME" column="PRODUCT_CATEGORY1_NAME" />
+		<result property="PRODUCT_CATEGORY2_NAME" column="PRODUCT_CATEGORY2_NAME" />
+	</resultMap>
+	
+	
+	
+	<select id="searchProductInfo" parameterType="int" resultMap="productInfo">
+		SELECT (SELECT COUNT(b.MEMBER_NO) FROM BOOKMARK b WHERE p.PRODUCT_NO = b.PRODUCT_NO) AS BOOKMARK_COUNT 
+			, (SELECT COUNT(p2.PRODUCT_NO) FROM PRODUCT p2 WHERE p2.PRODUCT_STATE_NO = 1 AND p2.SELLER_NO = m.MEMBER_NO ) AS PRODUCT_COUNT
+			, m.MEMBER_NAME, p.*, c.PRODUCT_CATEGORY1_NAME, c.PRODUCT_CATEGORY2_NAME
+		FROM PRODUCT p, MEMBER m, CATEGORY_VIEW c
+		WHERE p.SELLER_NO = m.MEMBER_NO
+			AND p.PRODUCT_NO = #{PRODUCT_NO}
+			AND (c.PRODUCT_CATEGORY1_NO = p.PRODUCT_CATEGORY1_NO AND c.PRODUCT_CATEGORY2_NO = p.PRODUCT_CATEGORY2_NO)
 	</select>
 	
 	

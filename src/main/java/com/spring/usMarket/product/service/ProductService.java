@@ -1,13 +1,14 @@
 package com.spring.usMarket.product.service;
 
 import java.util.List;
+import java.util.Map;
 
 import com.spring.usMarket.common.SearchCondition;
 import com.spring.usMarket.product.domain.ProductCategoryDto;
 import com.spring.usMarket.product.domain.ProductDto;
 
 public interface ProductService {
-	List<ProductCategoryDto> getProductCategory1() throws Exception;
+	List<Map<String, Object>> getProductCategory1() throws Exception;
 	
 	List<ProductCategoryDto> getProductCategory2(Integer product_category1_no) throws Exception;
 	
@@ -17,5 +18,5 @@ public interface ProductService {
 	
 	int getProductCount(SearchCondition sc) throws Exception;
 	
-	ProductDto getProductInfo(Integer product_no) throws Exception;
+	Map<String, Object> getProductInfo(Integer product_no) throws Exception;
 }

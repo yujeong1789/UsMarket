@@ -1,6 +1,7 @@
 package com.spring.usMarket.product.dao;
 
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +16,7 @@ public class ProductCategoryDaoImpl implements ProductCategoryDao{
 	private static String namespace="com.mybatis.mapper.product.";
 	
 	@Override
-	public List<ProductCategoryDto> searchProductCategory1() throws Exception {
+	public List<Map<String, Object>> searchProductCategory1() throws Exception {
 		return session.selectList(namespace+"searchProductCategory1");
 	}
 

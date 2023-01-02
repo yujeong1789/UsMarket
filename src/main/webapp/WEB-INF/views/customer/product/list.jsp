@@ -13,14 +13,10 @@
 		<c:if test="${empty param.keyword }">
 			<div class="col-lg-12">
 				<a class="home" href="<c:url value='/'/>">홈</a>
-				<div class="category__selectBox">
-					<select id="selectList">
-						<c:forEach var="category" items="${categoryList }">
-							<option ${param.category1 eq category.product_category1_no ? 'selected' : ''} value="${category.product_category1_no }" ${selected}>
-								<c:out value="${category.product_category1_name }" />
-							</option>
-						</c:forEach>
-					</select>
+				<div class="category__selected" id="category__selected">
+					<a id="category1" href="<c:url value='/product/list?category1=${param.category1 }'/>">
+						<c:out value="${category1_name }"/>
+					</a>
 				</div>
 			</div>
 			
@@ -81,7 +77,7 @@
 									<span><fmt:formatNumber value="${product.product_price }" pattern="#,###"/></span> <!-- 가격 -->
 								</div>
 								<div class="product__regdate">
-									<fmt:formatDate value="${product.product_regdate}" pattern="yyyy.MM.dd"/>
+									<c:out value="${product.product_regdate}" />
 								</div> <!-- regdate -->
 							</div>
 						</div>
@@ -123,35 +119,31 @@
 </section>
 
 <script type="text/javascript">
-	
 	document.addEventListener('DOMContentLoaded', function(){
+		const url = new URLSearchParams(window.location.search);
 		
-		const keyword=`${ph.sc.getKeyword()}`;
-		const headerTag=document.getElementById("category__name");
+		const keyword = `${ph.sc.getKeyword()}`;
+		const headerTag = document.getElementById("category__name");
+
 		
 		if(isEmpty(keyword)){
+			
 			// 동적으로 자식 요소 추가
-			const productCategory=document.getElementById("product__category");
-			const addCount=(Math.ceil(productCategory.childElementCount/5)*5)-productCategory.childElementCount;
+			const productCategory = document.getElementById("product__category");
+			const addCount = (Math.ceil(productCategory.childElementCount/5)*5)-productCategory.childElementCount;
 			
 			for(let i=0; i<addCount; i++){
 				productCategory.appendChild(document.createElement('div'));
 			}
 			
-			
-			// 프로퍼티 방식
-			document.getElementById("selectList").onchange = function(){
-				const selectList=document.getElementById("selectList");
-				const categoryNo=selectList.options[selectList.selectedIndex].value;
-				
-				location.href="${pageContext.request.contextPath}/product/list?category1="+categoryNo;
-			};
-			
 			// 선택 카테고리 강조
-			let textNode=selectList.options[selectList.selectedIndex].innerText.trim();
+			let textNode =  document.getElementById('category1').innerText.trim();
 			
-			if(document.getElementById("selectedList") != null && document.getElementById("selectedList") != ""){
-				textNode=document.getElementById("selectedList").innerText.trim();
+ 			if(document.getElementById("selectedList") != null && document.getElementById("selectedList") != ""){
+ 				const category2TextNode = document.getElementById("selectedList").innerText.trim();
+				textNode = category2TextNode;
+				const category2InnerHtml = '<span id = category2>'+category2TextNode+'</span>';
+				document.getElementById('category__selected').innerHTML+=category2InnerHtml;
 			}
 			
 			headerTag.innerText = textNode;
@@ -163,17 +155,17 @@
 		} // if
 		
 		
+			
 		const list = `${list}`
 		if(! isEmpty(list)){
 			// 선택 옵션 강조
-			const url = new URLSearchParams(window.location.search);
 			const optionParam = url.get('option');
 			
 			setStyle(optionParam);
 			
 			
 			// 포함 option 추가
-			document.getElementById("order__ul").addEventListener('click', function(e) { // 매개변수는 이벤트가 발생한 태그를 의미
+			document.getElementById("order__ul").addEventListener('click', (e) => { // 매개변수는 이벤트가 발생한 태그를 의미
 				
 				url.set('page', 1);
 				console.log("e.target.value= " + e.target.value);

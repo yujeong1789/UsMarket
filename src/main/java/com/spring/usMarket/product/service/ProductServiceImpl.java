@@ -1,13 +1,16 @@
 package com.spring.usMarket.product.service;
 
 import java.sql.SQLException;
+import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.spring.usMarket.common.SearchCondition;
+import com.spring.usMarket.common.TimeConvert;
 import com.spring.usMarket.product.dao.ProductCategoryDao;
 import com.spring.usMarket.product.dao.ProductDao;
 import com.spring.usMarket.product.domain.ProductCategoryDto;
@@ -20,7 +23,7 @@ public class ProductServiceImpl implements ProductService {
 
 	
 	@Override
-	public List<ProductCategoryDto> getProductCategory1() throws Exception {
+	public List<Map<String, Object>> getProductCategory1() throws Exception {
 		return productCategoryDao.searchProductCategory1();
 	}
 
@@ -46,10 +49,12 @@ public class ProductServiceImpl implements ProductService {
 
 	@Override
 	@Transactional(rollbackFor = SQLException.class)
-	public ProductDto getProductInfo(Integer product_no) throws Exception {
+	public Map<String, Object> getProductInfo(Integer product_no) throws Exception {
 		productDao.updateProductView(product_no);
+		Map<String, Object> resultMap = productDao.searchProductInfo(product_no);
+		resultMap.put("PRODUCT_REGDATE", TimeConvert.calculateTime((Date)resultMap.get("PRODUCT_REGDATE")));
 		
-		return productDao.searchProductInfo(product_no);
+		return resultMap;
 	}
 
 }
