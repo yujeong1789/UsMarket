@@ -164,7 +164,6 @@
 .product__buttons img{
 	width: 20px;
 	object-fit: cover;
-	margin-right: 10px;
 	margin-bottom: 2px;
 }
 
@@ -180,6 +179,7 @@
 }
 .btn__wish span{
 	color: #ffffff;
+	margin-left: 10px;
 }
 
 

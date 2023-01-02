@@ -753,6 +753,22 @@ ol {
 	color: #888888;
 }
 
+.category__selected > #category1{
+	color: #1c1c1c;
+}
+
+.category__selected > #category2{
+	color: #1c1c1c;
+}
+
+.category__selected > #category2::before{
+	content: ">";
+	color: #989898;
+	font-weight: 800;
+	margin-left: 10px;
+	margin-right: 10px;
+}
+
 .product__category{
 	display: flex;
 	flex-wrap: wrap;

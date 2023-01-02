@@ -2,6 +2,8 @@ package com.spring.usMarket.product.dao;
 
 import java.util.List;
 
+import java.util.Map;
+
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -31,13 +33,13 @@ public class ProductDaoImpl implements ProductDao {
 	}
 
 	@Override
-	public ProductDto searchProductInfo(Integer product_no) throws Exception {
+	public Map<String, Object> searchProductInfo(Integer product_no) throws Exception {
 		return session.selectOne(namespace+"searchProductInfo", product_no);
 	}
 
 	@Override
-	public int updateProductView(Integer product_no) throws Exception {
-		return session.update(namespace+"updateProductView", product_no);
+	public void updateProductView(Integer product_no) throws Exception {
+		session.update(namespace+"updateProductView", product_no);
 	}
 
 }

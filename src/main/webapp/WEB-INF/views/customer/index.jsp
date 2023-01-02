@@ -46,7 +46,7 @@
 							<span><fmt:formatNumber value="${productDto.product_price }" pattern="#,###"/></span> <!-- 가격 -->
 						</div>
 						<div class="product__regdate">
-							<fmt:formatDate value="${productDto.product_regdate}" pattern="yyyy.MM.dd"/>
+							${productDto.product_regdate}
 						</div> <!-- regdate -->
 					</div>
 				</div>

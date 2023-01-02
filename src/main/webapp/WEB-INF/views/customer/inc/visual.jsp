@@ -13,7 +13,7 @@
 					<div class="hero__search">
 						<div class="hero__search__form">
 							<form action="<c:url value='/product/list'/>" id="searchForm">
-								<input type="text" name="keyword" id="searchKeyword" placeholder="상품명 또는 태그로 원하는 상품을 검색하세요">
+								<input type="text" name="keyword" id="searchKeyword" placeholder="상품명 또는 태그로 원하는 상품을 검색하세요.">
 								<button type="submit" id="submit" class="site-btn">SEARCH</button>
 							</form>
 						</div>
@@ -35,19 +35,11 @@
         		<div class="index__visual">
 	            	<div class="col-lg-3">
 	                    <div class="hero__categories">
-							<div class="hero__categories__all">
+							<div class="hero__categories__all" id="hero__categories__all">
 	                        	<img src="<c:url value='/resources/customer/img/categories/line1.png' />">
 	                            <span>전체 카테고리</span>
 	                        </div>
-	                        <ul>
-	                        <c:forEach var="productCategoryDto" items="${categoryList }">
-	                            <li>
-	                            	<a href='<c:url value="/product/list?category1=${productCategoryDto.product_category1_no}" />'>
-	                            		${productCategoryDto.product_category1_name }
-	                            	</a>
-	                            </li>
-	                        </c:forEach>
-	                        </ul>
+	                        <ul id="ul__allCategory"></ul>
 	                    </div> <!-- hero__categories__all -->
 					</div>
 				</div>
@@ -58,11 +50,31 @@
     </section>
     
 <script type="text/javascript">
-	const searchForm = document.getElementById('searchForm');
-	searchForm.addEventListener('submit', function(e){
-		if(document.getElementById('searchKeyword').value.length < 2){
-			alert("검색어는 두 글자 이상 입력해 주세요.");
-			e.preventDefault();
-		};
+	document.addEventListener('DOMContentLoaded', () => {
+		
+		const div__allCategory = document.getElementById('hero__categories__all');
+		const ul__allCategory = document.getElementById('ul__allCategory');
+			
+		fetch("/usMarket/product/printAllCategory")
+			.then((response) => response.json())
+			.then((json) => {
+				console.log(json.length);
+			
+				json.forEach((el, i) => {
+					const li = document.createElement('li');
+					const innerHTML_ = '<a id='+el.PRODUCT_CATEGORY1_NO+' href=${pageContext.request.contextPath}/product/list?category1='+el.PRODUCT_CATEGORY1_NO+'>'+el.PRODUCT_CATEGORY1_NAME+'</a>'; 
+					li.innerHTML+=innerHTML_;
+					ul__allCategory.appendChild(li);
+				});
+			}).catch((error) => console.log("error: "+error)); // fetch
+			
+		const searchForm = document.getElementById('searchForm');
+		searchForm.addEventListener('submit', function(e){
+			if(document.getElementById('searchKeyword').value.length < 2){
+				alert("검색어는 두 글자 이상 입력해 주세요.");
+				e.preventDefault();
+			};
+		});
+		
 	});
 </script>
