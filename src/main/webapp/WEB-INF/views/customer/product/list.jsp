@@ -13,6 +13,7 @@
 		<c:if test="${empty param.keyword }">
 			<div class="col-lg-12">
 				<a class="home" href="<c:url value='/'/>">홈</a>
+				<span class="home__span"></span>
 				<div class="category__selected" id="category__selected">
 					<a id="category1" href="<c:url value='/product/list?category1=${param.category1 }'/>">
 						<c:out value="${category1_name }"/>
@@ -142,7 +143,7 @@
  			if(document.getElementById("selectedList") != null && document.getElementById("selectedList") != ""){
  				const category2TextNode = document.getElementById("selectedList").innerText.trim();
 				textNode = category2TextNode;
-				const category2InnerHtml = '<span id = category2>'+category2TextNode+'</span>';
+				const category2InnerHtml = '<span class="before__span"></span><a id = category2 href=${pageContext.request.contextPath}/product/list?category1='+url.get('category1')+'&category2='+url.get('category2')+'>'+category2TextNode+'</a>';
 				document.getElementById('category__selected').innerHTML+=category2InnerHtml;
 			}
 			
