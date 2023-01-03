@@ -6,7 +6,7 @@
 <html>
 
 <head>
-    <meta charset="UTF-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <meta name="description" content="Ogani Template">
     <meta name="keywords" content="Ogani, unica, creative, html">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -25,6 +25,7 @@
     <link rel="stylesheet" href="<c:url value='/resources/customer/css/owl.carousel.min.css'/>" type="text/css">
     <link rel="stylesheet" href="<c:url value='/resources/customer/css/slicknav.min.css'/>" type="text/css">
     <link rel="stylesheet" href="<c:url value='/resources/customer/css/style.css'/>" type="text/css">
+    <link rel="short icon" href="#">
 </head>
 
 <body>
