@@ -90,13 +90,12 @@
 						<c:out value="${productInfo.PRODUCT_EXPLANATION }"/>
 					</div>
 					<div class="product__tag">
-						<c:if test="${!empty productInfo.product_tag}">
+						<c:if test="${!empty productInfo.PRODUCT_TAG}">
 							<div class="product__tag__icon">
 								<img alt="태그" src="<c:url value='/resources/customer/img/tag_icon.png' />">
 							</div>
-							<div class="product__tag__content">
+							<div class="product__tag__content" id="product__tag__content">
 								<!-- 해당 태그 클릭시 태그 search 요청 로직 추가할 것 -->
-								<span><c:out value="${productInfo.PRODUCT_TAG }"/></span>
 							</div>
 						</c:if>
 					</div>
@@ -127,4 +126,17 @@
 			
 		</div>
 	</div>
-</section>	
+</section>
+
+<script type="text/javascript">
+	document.addEventListener('DOMContentLoaded', function(){
+		const tagElement = document.getElementById('product__tag__content');
+		const tag = `${productInfo.PRODUCT_TAG}`;
+		const tagArr = tag.split(',');
+		
+		tagArr.forEach((el) => {
+			let appendTag = "<a href='${pageContext.request.contextPath}/product/list?keyword="+el+"'>"+el+"</a>";
+			tagElement.innerHTML += appendTag;
+		});
+	});
+</script>

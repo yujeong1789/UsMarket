@@ -49,7 +49,8 @@
 	<select id="searchMainProduct" resultType="productDto">
 		<![CDATA[
 		SELECT product_no, product_name, product_price, product_img_uuid, product_regdate FROM product_view
-		WHERE PRODUCT_STATE_NO = 1 AND MEMBER_STATE_NO = 1 AND rownum <= 30
+		WHERE PRODUCT_STATE_NO = 1 AND MEMBER_STATE_NO = 1 AND rownum <= 30 
+		ORDER BY PRODUCT_NO DESC
 		]]>
 	</select>
 
