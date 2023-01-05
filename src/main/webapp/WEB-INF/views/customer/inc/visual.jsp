@@ -55,7 +55,7 @@
 		const div__allCategory = document.getElementById('hero__categories__all');
 		const ul__allCategory = document.getElementById('ul__allCategory');
 			
-		fetch("/usMarket/product/printAllCategory")
+		fetch("/usMarket/fetch/category")
 			.then((response) => response.json())
 			.then((json) => {
 				console.log(json.length);

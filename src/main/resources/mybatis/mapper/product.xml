@@ -49,8 +49,7 @@
 	<select id="searchMainProduct" resultType="productDto">
 		<![CDATA[
 		SELECT product_no, product_name, product_price, product_img_uuid, product_regdate FROM product_view
-		WHERE PRODUCT_STATE_NO = 1 AND MEMBER_STATE_NO = 1 AND rownum <= 30 
-		ORDER BY PRODUCT_NO DESC
+		WHERE PRODUCT_STATE_NO = 1 AND MEMBER_STATE_NO = 1 AND rownum <= 30
 		]]>
 	</select>
 
@@ -90,6 +89,7 @@
 	</select>
 	
 	
+	<!-- 판매 중인 상품 수 출력 -->
 	<select id="searchProductCount" parameterType="searchCondition" resultType="int">
 		SELECT COUNT(*)
 		FROM product_view
@@ -101,9 +101,6 @@
 	
                                                                                                                                                                                           
 	<resultMap type="HashMap" id="productInfo">
-		<result property="BOOKMARK_COUNT" column="BOOKMARK_COUNT" />
-		<result property="PRODUCT_COUNT" column="PRODUCT_COUNT" />
-		<result property="MEMBER_NAME" column="MEMBER_NAME" />
 		<result property="PRODUCT_NO" column="PRODUCT_NO" />
 		<result property="SELLER_NO" column="SELLER_NO" />
 		<result property="PRODUCT_CATEGORY1_NO" column="PRODUCT_CATEGORY1_NO" />
@@ -120,24 +117,34 @@
 		<result property="PRODUCT_USED" column="PRODUCT_USED" />
 		<result property="PRODUCT_CATEGORY1_NAME" column="PRODUCT_CATEGORY1_NAME" />
 		<result property="PRODUCT_CATEGORY2_NAME" column="PRODUCT_CATEGORY2_NAME" />
+		<result property="BOOKMARK_COUNT" column="BOOKMARK_COUNT" />
 	</resultMap>
 	
-	
-	
+	<!-- 상품 상세보기 출력 -->
 	<select id="searchProductInfo" parameterType="int" resultMap="productInfo">
-		SELECT (SELECT COUNT(b.MEMBER_NO) FROM BOOKMARK b WHERE p.PRODUCT_NO = b.PRODUCT_NO) AS BOOKMARK_COUNT 
-			, (SELECT COUNT(p2.PRODUCT_NO) FROM PRODUCT p2 WHERE p2.PRODUCT_STATE_NO = 1 AND p2.SELLER_NO = m.MEMBER_NO ) AS PRODUCT_COUNT
-			, m.MEMBER_NAME, p.*, c.PRODUCT_CATEGORY1_NAME, c.PRODUCT_CATEGORY2_NAME
-		FROM PRODUCT p, MEMBER m, CATEGORY_VIEW c
+		SELECT p.*, c.PRODUCT_CATEGORY1_NAME, c.PRODUCT_CATEGORY2_NAME
+			, (SELECT COUNT(b.MEMBER_NO) FROM BOOKMARK b WHERE p.PRODUCT_NO = b.PRODUCT_NO) AS "BOOKMARK_COUNT"
+		FROM PRODUCT p, "MEMBER" m, CATEGORY_VIEW c
 		WHERE p.SELLER_NO = m.MEMBER_NO
 			AND p.PRODUCT_NO = #{PRODUCT_NO}
 			AND (c.PRODUCT_CATEGORY1_NO = p.PRODUCT_CATEGORY1_NO AND c.PRODUCT_CATEGORY2_NO = p.PRODUCT_CATEGORY2_NO)
 	</select>
 	
 	
+	<!-- 상품 조회수 증가 -->
 	<update id="updateProductView" parameterType="int">
 		UPDATE PRODUCT
 		SET PRODUCT_VIEW = PRODUCT_VIEW+1
 		WHERE PRODUCT_NO = #{PRODUCT_NO}
 	</update>
+	
+	
+	<!-- 판매자 정보 출력 -->
+	<select id="searchSellerInfo" parameterType="int" resultType="map">
+		SELECT MEMBER_NO, MEMBER_NICKNAME, MEMBER_IMAGE
+		, (SELECT COUNT(*) FROM PRODUCT WHERE SELLER_NO = m.MEMBER_NO AND PRODUCT_STATE_NO = 1) AS "PRODUCT_COUNT"
+		, (SELECT COUNT(*) FROM DEAL WHERE SELLER_NO = m.MEMBER_NO AND DEAL_REVIEW = 'Y') AS "REVIEW_COUNT"
+		FROM "MEMBER" m 
+		WHERE m.MEMBER_NO = #{SELLER_NO}
+	</select>
 </mapper>

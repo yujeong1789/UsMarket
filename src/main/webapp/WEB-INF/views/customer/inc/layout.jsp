@@ -25,7 +25,7 @@
     <link rel="stylesheet" href="<c:url value='/resources/customer/css/owl.carousel.min.css'/>" type="text/css">
     <link rel="stylesheet" href="<c:url value='/resources/customer/css/slicknav.min.css'/>" type="text/css">
     <link rel="stylesheet" href="<c:url value='/resources/customer/css/style.css'/>" type="text/css">
-    <link rel="short icon" href="#">
+    <link rel="shortcut icon" type="image/x-icon" href="data:image/x-icon;," >
 </head>
 
 <body>

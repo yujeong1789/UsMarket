@@ -43,7 +43,7 @@ public class PerformanceFilter implements Filter {
 			
 			// 요청 흐름 print
 			System.out.print("["+referer+"] -> "+method+"["+request.getRequestURI()+"]");
-			System.out.println(" 소요시간="+(System.currentTimeMillis()-startTime)+"ms");
+			System.out.println(" 소요시간="+(System.currentTimeMillis()-startTime)+"ms\n");
 		}
 	}
 
