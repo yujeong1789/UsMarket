@@ -38,8 +38,18 @@ public class ProductDaoImpl implements ProductDao {
 	}
 
 	@Override
-	public void updateProductView(Integer product_no) throws Exception {
-		session.update(namespace+"updateProductView", product_no);
+	public int updateProductView(Integer product_no) throws Exception {
+		return session.update(namespace+"updateProductView", product_no);
+	}
+
+	@Override
+	public Map<String, Object> searchSellerInfo(Integer seller_no) throws Exception {
+		return session.selectOne(namespace+"searchSellerInfo", seller_no);
+	}
+
+	@Override
+	public List<Map<String, Object>> searchReviewByInfo(Integer seller_no) throws Exception {
+		return session.selectList(namespace+"searchReviewByInfo", seller_no);
 	}
 
 }

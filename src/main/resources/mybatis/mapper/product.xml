@@ -6,13 +6,13 @@
 	<sql id="searchKeyword">
 		<choose>
 			<when test='keyword!=null and keyword!=""'>
-				AND PRODUCT_NAME LIKE '%'||#{keyword}||'%'
-				OR PRODUCT_TAG LIKE '%'||#{keyword}||'%'
+				 AND PRODUCT_NAME LIKE '%'||#{keyword}||'%'
+				 OR PRODUCT_TAG LIKE '%'||#{keyword}||'%'
 			</when>
 			<otherwise>
-				AND PRODUCT_CATEGORY1_NO = #{category1}
+				 AND PRODUCT_CATEGORY1_NO = #{category1}
 				<if test='category2!=null and category2!=""'>
-					AND PRODUCT_CATEGORY2_NO = #{category2} 
+					 AND PRODUCT_CATEGORY2_NO = #{category2} 
 				</if>
 			</otherwise>
 		</choose>
@@ -22,16 +22,16 @@
 	<sql id="searchProductState">
 		<choose>
 			<when test='option=="2"'>
-				AND PRODUCT_STATE_NO IN(1, 2)
+				 AND PRODUCT_STATE_NO IN(1, 2)
 			</when>
 			<when test='option=="3"'>
-				AND PRODUCT_STATE_NO IN(1, 3)
+				 AND PRODUCT_STATE_NO IN(1, 3)
 			</when>
 			<when test='option=="5"'>
-				AND PRODUCT_STATE_NO IN(1, 2, 3)
+				 AND PRODUCT_STATE_NO IN(1, 2, 3)
 			</when>
 			<otherwise>
-				AND PRODUCT_STATE_NO = 1
+				 AND PRODUCT_STATE_NO = 1
 			</otherwise>
 		</choose>
 	</sql>
@@ -47,8 +47,9 @@
 
 	<!-- 메인 상품 전체 출력 -->
 	<select id="searchMainProduct" resultType="productDto">
-		<![CDATA[
-		SELECT product_no, product_name, product_price, product_img_uuid, product_regdate FROM product_view
+		<![CDATA[ 
+		SELECT PRODUCT_NO, PRODUCT_NAME, PRODUCT_PRICE, PRODUCT_IMG_UUID, PRODUCT_REGDATE 
+		FROM PRODUCT_VIEW
 		WHERE PRODUCT_STATE_NO = 1 AND MEMBER_STATE_NO = 1 AND rownum <= 30
 		]]>
 	</select>
@@ -64,7 +65,7 @@
 	<!-- 상품 소분류 출력 -->
 	<select id="searchProductCategory2" parameterType="int" resultType="productCategoryDto">
 		SELECT*FROM CATEGORY_VIEW
-		WHERE PRODUCT_CATEGORY1_NO=#{PRODUCT_CATEGORY1_NO}
+		WHERE PRODUCT_CATEGORY1_NO = #{PRODUCT_CATEGORY1_NO}
 		ORDER BY PRODUCT_CATEGORY2_NO
 	</select>
 	
@@ -72,19 +73,17 @@
 	<!-- 분류별 상품 출력 -->
 	<select id="searchProductByCategory" parameterType="searchCondition" resultType="productDto">
 		SELECT product_no, product_state_no, product_name, product_price, product_img_uuid, product_regdate 
-		FROM
-		(
-			SELECT ROWNUM NUM, A.* 
-			FROM
-			(
-				SELECT product_no, product_state_no, product_name, product_price, product_img_uuid, product_regdate 
-				FROM product_view
-				WHERE MEMBER_STATE_NO=1
-				<include refid="searchProductState" />
-				<include refid="searchKeyword" />
-				ORDER BY product_regdate DESC, product_no DESC	
-			)A
-		)
+		FROM (
+				SELECT ROWNUM NUM, A.* 
+				FROM (
+						SELECT product_no, product_state_no, product_name, product_price, product_img_uuid, product_regdate 
+						FROM product_view
+						WHERE MEMBER_STATE_NO = 1 
+						<include refid="searchProductState" />
+						<include refid="searchKeyword" />
+						ORDER BY product_regdate DESC, product_no DESC	
+					)A
+			)
 		WHERE NUM BETWEEN #{startPage} AND #{endPage}
 	</select>
 	
@@ -142,9 +141,28 @@
 	<!-- 판매자 정보 출력 -->
 	<select id="searchSellerInfo" parameterType="int" resultType="map">
 		SELECT MEMBER_NO, MEMBER_NICKNAME, MEMBER_IMAGE
-		, (SELECT COUNT(*) FROM PRODUCT WHERE SELLER_NO = m.MEMBER_NO AND PRODUCT_STATE_NO = 1) AS "PRODUCT_COUNT"
-		, (SELECT COUNT(*) FROM DEAL WHERE SELLER_NO = m.MEMBER_NO AND DEAL_REVIEW = 'Y') AS "REVIEW_COUNT"
+			, (SELECT COUNT(*) FROM PRODUCT WHERE SELLER_NO = m.MEMBER_NO AND PRODUCT_STATE_NO = 1) AS "PRODUCT_COUNT"
+			, (SELECT COUNT(*) FROM DEAL WHERE SELLER_NO = m.MEMBER_NO AND DEAL_REVIEW = 'Y') AS "REVIEW_COUNT"
 		FROM "MEMBER" m 
 		WHERE m.MEMBER_NO = #{SELLER_NO}
+	</select>
+	
+	
+	<select id="searchReviewByInfo" parameterType="int" resultType="map">
+		<![CDATA[
+		SELECT a.CUSTOMER_NO, a.REVIEW_CONTENT, a.REVIEW_SCORE, a.DEAL_COMPLETE_DATE, m.MEMBER_NICKNAME, m.MEMBER_IMAGE
+		FROM "MEMBER" m, (
+							SELECT *
+							FROM (
+									SELECT ROWNUM, d.CUSTOMER_NO, r.REVIEW_CONTENT, r.REVIEW_SCORE, d.DEAL_COMPLETE_DATE
+									FROM REVIEW r, DEAL d
+									WHERE r.DEAL_NO = d.DEAL_NO
+									AND d.SELLER_NO = #{SELLER_NO}
+									ORDER BY REIVIEW_REGDATE DESC
+								)
+							WHERE ROWNUM <= 2
+							) a
+		WHERE m.MEMBER_NO = a.CUSTOMER_NO		
+		]]>
 	</select>
 </mapper>
