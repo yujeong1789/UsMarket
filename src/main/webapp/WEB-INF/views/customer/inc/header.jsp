@@ -23,7 +23,8 @@
                     <div class="col-lg-6 col-md-6">
                         <div class="header__top__right">
                             <div class="header__top__right__auth">
-                            	<div><a href="#">로그인</a></div>
+                            	<div class="header__top__right__auth__login"><a href=<c:url value='/member/login' />>로그인</a></div>
+                            	<div class="header__top__right__auth__logout"><a href=<c:url value='/member/logout.do' />>로그아웃</a></div>
                             	<div><a href="#">고객센터</a></div>
                             </div>
                         </div>
