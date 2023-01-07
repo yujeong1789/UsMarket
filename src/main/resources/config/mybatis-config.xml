@@ -3,7 +3,7 @@
         PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-config.dtd">
 <configuration>
-
+	
 	<typeAliases>
 		<typeAlias type="com.spring.usMarket.product.domain.ProductCategoryDto"
 		 alias="productCategoryDto"/>
@@ -14,5 +14,7 @@
 		<typeAlias type="com.spring.usMarket.common.SearchCondition"
 		 alias="searchCondition"/>
 		 	
+		<typeAlias type="com.spring.usMarket.member.domain.MemberDto"
+		 alias="memberDto"/>
 	</typeAliases>
 </configuration>
