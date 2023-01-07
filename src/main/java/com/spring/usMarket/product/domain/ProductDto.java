@@ -1,6 +1,5 @@
 package com.spring.usMarket.product.domain;
 
-import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import com.spring.usMarket.common.TimeConvert;

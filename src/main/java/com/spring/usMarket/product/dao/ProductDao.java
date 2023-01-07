@@ -11,5 +11,7 @@ public interface ProductDao {
 	List<ProductDto> searchProductByCategory(SearchCondition sc) throws Exception;
 	int searchProductCount(SearchCondition sc) throws Exception;
 	Map<String, Object> searchProductInfo(Integer product_no) throws Exception;
-	void updateProductView(Integer product_no) throws Exception;
+	int updateProductView(Integer product_no) throws Exception;
+	Map<String, Object> searchSellerInfo(Integer seller_no) throws Exception;
+	List<Map<String, Object>> searchReviewByInfo(Integer seller_no) throws Exception;
 }

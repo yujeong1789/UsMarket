@@ -49,4 +49,18 @@ public class FetchController {
 		
 		return sellerInfo;
 	}
+	
+	@GetMapping("/fetch/topReview/{seller_no}")
+	public List<Map<String, Object>> topReview(@PathVariable Integer seller_no){
+		
+		List<Map<String, Object>> topReview = new ArrayList<>();
+		
+		try {
+			topReview = productService.getReviewByInfo(seller_no);
+		} catch (Exception e) {
+			e.printStackTrace();
+		} // try-catch
+		
+		return topReview;
+	}
 }
