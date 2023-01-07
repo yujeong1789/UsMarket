@@ -13,18 +13,18 @@
 <body>
 <div class="login-body">
 	<section class="login-form">
-		<h1>Login</h1>
+		<h1>로그인</h1>
 		<form name="loginForm">
 			<div class="int-area">
 				<input type="text" name="memberId" id="id" autocomplete="off" required>
-				<label for="id">USER ID</label>
+				<label for="id">아이디</label>
 			</div>
 			<div class="int-area">
 				<input type="password" name="memberPassword" id="pw" autocomplete="off" required>
-				<label for="pw">PASSWORD</label>
+				<label for="pw">비밀번호</label>
 			</div>
 			<div class="btn-area">
-				<button type="button" name="btn" id="btn">LOGIN</button>
+				<button type="button" name="btn" id="btn">로그인</button>
 			</div>
 		</form>
 		<div class="caption">
@@ -53,7 +53,7 @@
 			loginForm.method='POST';
 			loginForm.action="${pageContext.request.contextPath}/member/login";
 			loginForm.submit();
-		})
+		});
 	</script>
 </body>
 </html>
