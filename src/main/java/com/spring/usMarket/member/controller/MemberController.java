@@ -59,6 +59,7 @@ public class MemberController {
 		logger.info("logout메서드 진입");
 		HttpSession session = request.getSession();
 		session.invalidate();
+		
 		return "redirect:/";
 	}
 	
