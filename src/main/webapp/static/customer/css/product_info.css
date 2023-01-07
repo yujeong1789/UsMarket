@@ -263,9 +263,10 @@
 }
 
 
-.product__tag__content{
+.product__tag__content a{
 	font-size: 13px;
-	padding: 1px 5px 1px 5px;
+	padding: 3px 5px 1px 5px;
+	color: #1c1c1c;
 	background-color: #eeeeee;
 	margin-right: 10px;
 	cursor: pointer;
@@ -280,7 +281,7 @@
 }
 
 
-.product__tag__content span::before{
+.product__tag__content > a::before{
 	content: "#";
 	margin-right: 1px;
 }
@@ -288,7 +289,7 @@
 
 .product__seller__profile{
 	display: flex;
-	width: 60px;
+	width: 20%;
 	height: 60px;
 	justify-content: center;
 	align-items: center;
@@ -319,7 +320,94 @@
 	color: #666666
 }
 
+
 .product__seller__info__2 span::before{
 	content: "판매상품";
 	margin-right: 5px;
+}
+
+
+#fetch__review__count{
+	color: #16A7F1;
+	font-size: 18px;
+}
+
+
+.product__review > div{
+	display: flex;
+	padding: 20px 15px 20px 15px;
+	border-bottom: 1px solid #eeeeee;
+}
+
+
+.product__review__1{
+	width: 20%;
+}
+
+
+.product__review div .product__review__1 img{
+	object-fit: cover;
+}
+
+.product__review__2{
+	padding-left: 20px;
+	padding: 0px 20px 0px 20px;
+	width: 80%;
+}
+
+
+.product__review__2 .review__info__1{
+	width: 100%;
+	display: flex;
+	justify-content: space-between;
+	font-size: 15px;
+	color: #666666;
+}
+
+
+.product__review__2 .review__info__1 #review__nickname{
+	font-weight: 500;
+	color: #666666;
+}
+
+
+.product__review div .review__info__2 #review__score{
+	margin-bottom: 10px;
+}
+
+
+.product__review div .review__info__2 #review__score img{
+	margin-right: 2px;
+	height: 15px;
+}
+
+
+.product__review__2 .review__info__2 #review__content{
+	font-size: 15px;
+	color: #666666;
+}
+
+
+.product__review__empty{
+	width: 100%;
+	height: 100px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	color: #999999;
+	display: none;
+}
+
+
+.product__review__more{
+	width: 100%;
+	height: 60px;
+	justify-content: center;
+	align-items: center;
+	display: none;
+}
+
+
+.product__review__more a{
+	color: #212529;
 }
