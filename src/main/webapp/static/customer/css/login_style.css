@@ -1,5 +1,6 @@
 
 .login-body {
+	margin: 100px 0px 100px 0px;
 	display: flex;
 	justify-content: center;
 	align-items: center;
@@ -19,13 +20,14 @@
 	padding: 20px 10px 10px;
 	background-color: transparent;
 	border: none;
-	border-bottom: 1px solid #999;
+	border-bottom: 1px solid #999999;
 	font-size: 18px;
 	outline: none;
 }
 .int-area label {
 	position: absolute; left: 10px; top: 15px;
-	font-size: 18px; collor: black;
+	font-size: 18px; 
+	color: #999999;
 	transition: all .5s ease;
 }
 .int-area label.warning {
@@ -95,17 +97,20 @@
 .btn-area {margin-top: 30px;}
 .btn-area button {
 	width: 100%; height: 50px;
-	background: #3366fd;
+	background: #16A7F1;
 	color: #fff;
 	font-size: 20px;
 	border: none;
-	border-radius: 25px;
+	border-radius: 100px;
 	cursor: pointer; 
+	font-weight: 600;
 }
 .caption {
 	margin-top: 20px;
 	text-align: center;
-	display: grid;
+	display: flex;
+	justify-content: space-between;
+	padding: 0px 5px 0px 5px;
 }
 .caption a {
 	font-size: 15px; color: #999;
