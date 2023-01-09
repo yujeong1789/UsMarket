@@ -1,6 +1,16 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ page session="false"%>
+
+<c:set var="req" value="${pageContext.request }" />
+
+<%-- <c:set var="loginId" value="${req.getSession(false) == null ? '' : pageContext.request.session.getAttribute('userId')}"/> --%>
+<c:set var="loginId" value="${req.getSession(false) == null ? '' : pageContext.request.session.getAttribute('userId').member_id}"/>
+<c:set var="loginOutLink" value="${empty loginId ? '/member/login' : '/member/logout.do'}"/>
+<%-- <c:set var="loginOutLink" value="${empty loginId ? '/member/login' : '/member/logout'}"/> --%>
+<c:set var="loginOut" value="${empty loginId ? '로그인' : '로그아웃'}"/>
+
 <script src="https://code.jquery.com/jquery-1.11.3.js"></script>
 
 	<!-- Page Preloder -->
@@ -23,8 +33,10 @@
                     <div class="col-lg-6 col-md-6">
                         <div class="header__top__right">
                             <div class="header__top__right__auth">
-                            	<div class="header__top__right__auth__login"><a href=<c:url value='/member/login' />>로그인</a></div>
-                            	<div class="header__top__right__auth__logout"><a href=<c:url value='/member/logout.do' />>로그아웃</a></div>
+                            	loginId = ${empty loginId ? '없음' : loginId} <!-- 확인용, 추후 삭제 -->
+                            	<div class="header__top__right__auth__login">
+                            		<a href="<c:url value='${loginOutLink}' />">${loginOut }</a>
+                            	</div>
                             	<div><a href="#">고객센터</a></div>
                             </div>
                         </div>
@@ -35,7 +47,7 @@
     </header>
 	<!-- Header Section End -->
 	
-<script>
+<script type="text/javascript">
 	// 즐겨찾기 추가 스크립트
 	$(document).ready(function(){
 		$('.favorite').on('click', function(e) {
