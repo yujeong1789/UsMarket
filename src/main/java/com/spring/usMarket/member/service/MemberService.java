@@ -1,5 +1,7 @@
 package com.spring.usMarket.member.service;
 
+import java.util.Map;
+
 import com.spring.usMarket.member.domain.MemberDto;
 
 public interface MemberService {
@@ -7,6 +9,6 @@ public interface MemberService {
 	int checkID(String member_id);
 	int checkNick(String member_nick);
 	int checkEmail(String member_email);
-	int checkOvelap(String joinMember);
-	MemberDto loginCheckID(String member_id) throws Exception;
+	void checkOvelap(String joinMember);
+	Map<String, Object> loginCheckID(String member_id) throws Exception;
 }

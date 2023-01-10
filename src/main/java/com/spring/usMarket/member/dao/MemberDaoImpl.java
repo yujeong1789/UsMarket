@@ -1,5 +1,7 @@
 package com.spring.usMarket.member.dao;
 
+import java.util.Map;
+
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.stereotype.Repository;
 
@@ -34,14 +36,14 @@ public class MemberDaoImpl implements MemberDao{
 	}
 	
 	@Override
-	public int overlapped(String joinMember) {
-		System.out.println(joinMember);
-		return session.selectOne(namespace+"overlapped", joinMember);
+	public void overlapped(String joinMember) {
+		System.out.println("DaoImpl = "+joinMember);
+		session.selectOne(namespace+"overlapped", joinMember);
 	}
 	
 	@Override
-	public MemberDto idLogin(String memberId) throws Exception {
-		return session.selectOne(namespace+"idLogin", memberId);
+	public Map<String, Object> idLogin(String member_id) throws Exception {
+		return session.selectOne(namespace+"idLogin", member_id);
 	}
 
 }

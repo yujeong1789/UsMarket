@@ -5,10 +5,10 @@
 
 <c:set var="req" value="${pageContext.request }" />
 
-<%-- <c:set var="loginId" value="${req.getSession(false) == null ? '' : pageContext.request.session.getAttribute('userId')}"/> --%>
-<c:set var="loginId" value="${req.getSession(false) == null ? '' : pageContext.request.session.getAttribute('userId').member_id}"/>
-<c:set var="loginOutLink" value="${empty loginId ? '/member/login' : '/member/logout.do'}"/>
-<%-- <c:set var="loginOutLink" value="${empty loginId ? '/member/login' : '/member/logout'}"/> --%>
+<c:set var="loginId" value="${req.getSession(false) == null ? '' : pageContext.request.session.getAttribute('userId')}"/>
+<%-- <c:set var="loginId" value="${req.getSession(false) == null ? '' : pageContext.request.session.getAttribute('userId').member_id}"/>--%>
+<%-- <c:set var="loginOutLink" value="${empty loginId ? '/member/login' : '/member/logout.do'}"/> --%>
+<c:set var="loginOutLink" value="${empty loginId ? '/member/login' : '/member/logout'}"/>
 <c:set var="loginOut" value="${empty loginId ? '로그인' : '로그아웃'}"/>
 
 <script src="https://code.jquery.com/jquery-1.11.3.js"></script>

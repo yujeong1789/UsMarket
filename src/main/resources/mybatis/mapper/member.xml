@@ -13,15 +13,15 @@
 	</insert>
 
 	<select id="overlapped" parameterType="String" resultType="int">
-		select count(*) From member where MEMBER_ID=#{member_id} or MEMBER_NICKNAME=#{member_nick} or MEMBER_email=#{member_email}
+		select count(*) From member where MEMBER_ID=#{member_id} or MEMBER_NICKNAME=#{member_nick} or MEMBER_EMAIL=#{member_email}
 	</select>
 	
 	<select id="overlappedID" parameterType="String" resultType="int">
 		select count(MEMBER_ID) From member where MEMBER_ID=#{memberId}
 	</select>
 
-	<select id="idLogin" parameterType="String" resultType="memberDto">
-		SELECT * FROM MEMBER WHERE MEMBER_ID = #{memberId}
+	<select id="idLogin" parameterType="String" resultType="map">
+		SELECT MEMBER_ID,MEMBER_PASSWORD FROM MEMBER WHERE MEMBER_ID = #{member_id}
 	</select>
 	
 	<select id="PwLogin" parameterType="String" resultType="int">
