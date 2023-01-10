@@ -26,6 +26,8 @@
     <link rel="stylesheet" href="<c:url value='/resources/customer/css/slicknav.min.css'/>" type="text/css">
     <link rel="stylesheet" href="<c:url value='/resources/customer/css/style.css'/>" type="text/css">
     <link rel="shortcut icon" type="image/x-icon" href="data:image/x-icon;," >
+    
+    
 </head>
 
 <body>
@@ -60,7 +62,7 @@
     <script src="<c:url value='/resources/customer/js/mixitup.min.js'/>"></script>
     <script src="<c:url value='/resources/customer/js/owl.carousel.min.js'/>"></script>
     <script src="<c:url value='/resources/customer/js/main.js'/>"></script>
-
+	<script src="<c:url value='/resources/customer/js/common.js'/>"></script>
 </body>
 
 </html>

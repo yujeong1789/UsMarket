@@ -67,20 +67,34 @@
 						</div>							
 					</div>
 					
-					<div class="product__buttons">
-						<div class="btn__wish">
-							<img alt="찜" src="<c:url value='/resources/customer/img/wish_icon.png' />">
-							<span>찜</span>
-							<span><c:out value="${productInfo.BOOKMARK_COUNT }"/></span>
-						</div>
-						<div class="btn__chat">
-							<span>채팅하기</span>
-						</div>
-						<div class="btn__buy">
-							<span>바로구매</span>
-						</div>
-					</div>
-					
+					<c:choose>
+						<c:when test="${productInfo.PRODUCT_STATE_NO != 1 }"> <!-- 판매 중이 아닌 상품일 경우 -->
+							<div class="product__not__sale">
+								<span>현재 판매 중인 상품이 아닙니다.</span>
+							</div>
+						</c:when>
+						<c:otherwise>
+							<div class="product__buttons" id="product__buttons">
+								<div id="btn__wish" class="product__loginCheck" data-url="/product/like">
+									<img alt="찜" src="<c:url value='/resources/customer/img/wish_icon.png' />">
+									<span>찜</span>
+									<span><c:out value="${productInfo.BOOKMARK_COUNT }"/></span>
+								</div>
+								<div id="btn__chat" class="product__loginCheck" data-url="/chat/list">
+									<span>채팅하기</span>
+								</div>
+								<div id="btn__buy" class="product__loginCheck" data-url="/product/buy">
+									<span>바로구매</span>
+								</div>
+							</div>
+							
+							<div class="product__my__buttons" id="product__my__buttons">
+								<div class="btn__my__store">
+									<span>내 상점 관리하기</span>
+								</div>
+							</div>	
+						</c:otherwise>
+					</c:choose>
 				</div>
 			</div> <!-- product__info -->
 			
@@ -143,6 +157,16 @@
 <script type="text/javascript">
 	document.addEventListener('DOMContentLoaded', function(){
 		
+		const seller_id = `${productInfo.MEMBER_ID}`;
+		const current_id = document.getElementById('loginId').getAttribute('data-id');
+
+		
+		if(seller_id == current_id){
+			document.getElementById('product__buttons').style.display = 'none';
+			document.getElementById('product__my__buttons').style.display = 'flex';			
+		}
+		
+		
 		const seller_no = `${productInfo.SELLER_NO}`;
 		const product__review = document.getElementById('product__review');
 		
@@ -175,7 +199,7 @@
 			if(reviewCount > 2){
 				document.getElementById('product__review__more').style.display = 'flex';
 			}
-		}
+		}; // getTopReview
 		
 		
 		
@@ -191,6 +215,15 @@
 				tagElement.innerHTML += appendTag;
 			});			
 		}
+		
+		
+		const loginElements = document.querySelectorAll('.product__loginCheck');
+		loginElements.forEach((el) => {
+			el.addEventListener('click', function() {
+				console.log('clicked');
+				location.href = "${pageContext.request.contextPath}"+el.getAttribute('data-url');
+			});
+		});
 		
 	});
 	

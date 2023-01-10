@@ -35,7 +35,7 @@ public class ProductController {
 		logger.info("queryString = "+sc.getQueryString(sc.getPage()));
 		
 		try {
-			if(sc.getKeyword()==null || sc.getKeyword()=="") {
+			if(sc.getKeyword() == null || sc.getKeyword() == "") {
 				// 검색 아닐시 하위 카테고리 출력
 				List<ProductCategoryDto>categoryList2 = productService.getProductCategory2(sc.getCategory1());
 				String category1_name = categoryList2.get(0).getProduct_category1_name();
@@ -73,10 +73,17 @@ public class ProductController {
 	}
 	
 	
+	@GetMapping("/buy")
+	public void buy() {
+		logger.info("product/buy");
+	}
+	
+	
+	
     private boolean loginCheck(HttpServletRequest request) {
         // 1. 세션을 얻어서
         HttpSession session = request.getSession();
         // 2. 세션에 id가 있는지 확인, 있으면 true를 반환
-        return session.getAttribute("id") != null;
+        return session.getAttribute("userId") != null;
     }
 }

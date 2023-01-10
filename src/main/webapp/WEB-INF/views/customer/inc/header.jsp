@@ -6,8 +6,6 @@
 <c:set var="req" value="${pageContext.request }" />
 
 <c:set var="loginId" value="${req.getSession(false) == null ? '' : pageContext.request.session.getAttribute('userId')}"/>
-<%-- <c:set var="loginId" value="${req.getSession(false) == null ? '' : pageContext.request.session.getAttribute('userId').member_id}"/>--%>
-<%-- <c:set var="loginOutLink" value="${empty loginId ? '/member/login' : '/member/logout.do'}"/> --%>
 <c:set var="loginOutLink" value="${empty loginId ? '/member/login' : '/member/logout'}"/>
 <c:set var="loginOut" value="${empty loginId ? '로그인' : '로그아웃'}"/>
 
@@ -33,6 +31,7 @@
                     <div class="col-lg-6 col-md-6">
                         <div class="header__top__right">
                             <div class="header__top__right__auth">
+                            	<input type="hidden" id="loginId" data-id="${loginId }" />
                             	loginId = ${empty loginId ? '없음' : loginId} <!-- 확인용, 추후 삭제 -->
                             	<div class="header__top__right__auth__login">
                             		<a href="<c:url value='${loginOutLink}' />">${loginOut }</a>
