@@ -159,6 +159,39 @@
 	justify-content: space-between;
 }
 
+.product__my__buttons{
+	display: none;
+	justify-content: space-around;
+}
+
+.product__my__buttons div{
+	width: 100%;
+	height: 56px;
+	cursor: pointer;
+	display: flex;
+	justify-content: center;
+	border: 1px solid #eeeeee;
+	align-items: center;
+}
+
+.product__my__buttons span{
+	font-size: 19px;
+	font-weight: 600;
+	color: #666666;
+}
+
+
+.product__not__sale span{
+	width: 100%;
+	height: 56px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	font-size: 19px;
+	font-weight: 600;
+	color: #1c1c1c;	
+}
+
 
 .product__buttons div{
 	width: 165px;
@@ -184,27 +217,27 @@
 }
 
 
-.btn__wish{
+#btn__wish{
 	background-color: #666666;
 }
-.btn__wish span{
+#btn__wish span{
 	color: #ffffff;
 	margin-left: 10px;
 }
 
 
-.btn__chat{
+#btn__chat{
 	background-color: #ffffff;
 }
-.btn__chat span{
+#btn__chat span{
 	color: #666666;
 }
 
 
-.btn__buy{
+#btn__buy{
 	background-color: #16A7F1;
 }
-.btn__buy{
+#btn__buy{
 	color: #ffffff;
 }
 
