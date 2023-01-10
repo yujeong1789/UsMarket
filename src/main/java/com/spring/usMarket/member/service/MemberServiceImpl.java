@@ -1,5 +1,7 @@
 package com.spring.usMarket.member.service;
 
+import java.util.Map;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -40,13 +42,13 @@ public class MemberServiceImpl implements MemberService{
 
 		@Transactional
 		@Override
-		public int checkOvelap(String joinMember) {
-			return memberDAO.overlapped(joinMember);
+		public void checkOvelap(String joinMember) {
+			memberDAO.overlapped(joinMember);
 		}
 		
 		@Transactional
 		@Override
-		public MemberDto loginCheckID(String member_id) throws Exception {
+		public Map<String, Object> loginCheckID(String member_id) throws Exception {
 			return memberDAO.idLogin(member_id);
 		}
 

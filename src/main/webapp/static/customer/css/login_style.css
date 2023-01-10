@@ -47,6 +47,18 @@
 	display:none;
 	font-size: 18px; color: red;
 }
+.nick_ok{
+	display:none;
+	font-size: 18px; color: green;
+}
+.nick_no{
+	display:none;
+	font-size: 18px; color: red;
+}
+.nick_no_length{
+	display:none;
+	font-size: 18px; color: red;
+}
 .email_ok{
 	display:none;
 	font-size: 18px; color: green;
