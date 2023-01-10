@@ -100,6 +100,7 @@
 	
                                                                                                                                                                                           
 	<resultMap type="HashMap" id="productInfo">
+		<result property="MEMBER_ID" column="MEMBER_ID" />
 		<result property="PRODUCT_NO" column="PRODUCT_NO" />
 		<result property="SELLER_NO" column="SELLER_NO" />
 		<result property="PRODUCT_CATEGORY1_NO" column="PRODUCT_CATEGORY1_NO" />
@@ -121,7 +122,7 @@
 	
 	<!-- 상품 상세보기 출력 -->
 	<select id="searchProductInfo" parameterType="int" resultMap="productInfo">
-		SELECT p.*, c.PRODUCT_CATEGORY1_NAME, c.PRODUCT_CATEGORY2_NAME
+		SELECT m.MEMBER_ID, p.*, c.PRODUCT_CATEGORY1_NAME, c.PRODUCT_CATEGORY2_NAME
 			, (SELECT COUNT(b.MEMBER_NO) FROM BOOKMARK b WHERE p.PRODUCT_NO = b.PRODUCT_NO) AS "BOOKMARK_COUNT"
 		FROM PRODUCT p, "MEMBER" m, CATEGORY_VIEW c
 		WHERE p.SELLER_NO = m.MEMBER_NO
