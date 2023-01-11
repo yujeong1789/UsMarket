@@ -23,18 +23,23 @@ import com.spring.usMarket.product.domain.ProductDto;
 
 @Service
 public class ProductServiceImpl implements ProductService {
-	private static final Logger logger = LoggerFactory.getLogger(ProductController.class);
+	private static final Logger logger = LoggerFactory.getLogger(ProductService.class);
 	
 	@Autowired ProductDao productDao;
 	@Autowired ProductCategoryDao productCategoryDao;
 
+	
+	public String getResult(int rowCnt) {
+		return rowCnt == 1 ? "OK" : "NOT_OK";
+	}
+	
 	
 	@Override
 	@Transactional(rollbackFor = SQLException.class, readOnly = true)
 	public List<Map<String, Object>> getProductCategory1() throws Exception {
 		
 		List<Map<String, Object>> category1 = productCategoryDao.searchProductCategory1(); 
-		logger.info("카테고리1.size() = {}", category1.size());
+		logger.info("category1.size() = {}", category1.size());
 		
 		return category1;
 	}
@@ -45,7 +50,7 @@ public class ProductServiceImpl implements ProductService {
 	public List<ProductCategoryDto> getProductCategory2(Integer product_category1_no) throws Exception {
 		
 		List<ProductCategoryDto> category2 = productCategoryDao.searchProductCategory2(product_category1_no);
-		logger.info("카테고리2 = {}", category2);
+		logger.info("category2 = {}", category2);
 		
 		return category2;
 	}
@@ -86,16 +91,14 @@ public class ProductServiceImpl implements ProductService {
 	}
 
 	
+	
 	@Override
-	@Transactional(rollbackFor = SQLException.class)
+	@Transactional(rollbackFor = SQLException.class, readOnly = true)
 	public Map<String, Object> getProductInfo(Integer product_no) throws Exception {
-		
-		int updateCnt = productDao.updateProductView(product_no);
-		logger.info("조회수 증가 발생, updateCnt = {}", updateCnt);
 		
 		Map<String, Object> resultMap = productDao.searchProductInfo(product_no);
 		resultMap.put("PRODUCT_REGDATE", TimeConvert.calculateTime((Date)resultMap.get("PRODUCT_REGDATE")));
-		logger.info("상품 상세보기 = {}", resultMap);
+		logger.info("상품 상세보기 = {}", resultMap.keySet().toString());
 		
 		return resultMap;
 	}
@@ -106,7 +109,7 @@ public class ProductServiceImpl implements ProductService {
 	public Map<String, Object> getSellerInfo(Integer seller_no) throws Exception {
 		
 		Map<String, Object> resultMap = productDao.searchSellerInfo(seller_no);
-		logger.info("판매자 정보 = {}", resultMap);
+		logger.info("판매자 정보 = {}", resultMap.keySet());
 		
 		return resultMap;
 	}
@@ -120,6 +123,53 @@ public class ProductServiceImpl implements ProductService {
 		logger.info("상위 2건 후기 = {}", resultMap);
 		
 		return resultMap;
+	}
+
+
+	@Override
+	@Transactional(rollbackFor = SQLException.class, readOnly = true)
+	public int getBookmarkByInfo(String current_id, Integer product_no) throws Exception {
+		
+		int rowCnt = productDao.searchBookmarkByInfo(current_id, product_no); 
+		logger.info("북마크 추가 여부 = ", (rowCnt == 1 ? "ADDED" : "NOT_ADDED"));
+		
+		return rowCnt;
+	}
+
+
+	@Override
+	@Transactional(rollbackFor = SQLException.class)
+	public int removeBookmark(String member_id, Integer product_no) throws Exception {
+		
+		int rowCnt = productDao.deleteBookmark(member_id, product_no);
+		logger.info("북마크 삭제 결과 = ", getResult(rowCnt));
+		
+		return rowCnt;
+	}
+
+
+	@Override
+	@Transactional(rollbackFor = SQLException.class)
+	public int addBookmark(String member_id, Integer product_no) throws Exception {
+		
+		Integer member_no = productDao.searchMemberNo(member_id);
+		logger.info("addBookmark, member_no = {}, product_no = {}", member_no, product_no);
+		
+		int rowCnt = productDao.insertBookmark(member_no, product_no);
+		logger.info("북마크 추가 결과 = ", getResult(rowCnt));
+		
+		return rowCnt;
+	}
+
+
+	@Override
+	@Transactional(rollbackFor = SQLException.class)
+	public int modifyProductView(Integer product_no) throws Exception {
+		
+		int rowCnt = productDao.updateProductView(product_no);
+		logger.info("조회수 증가 결과 = ", getResult(rowCnt));
+		
+		return rowCnt;
 	}
 
 }

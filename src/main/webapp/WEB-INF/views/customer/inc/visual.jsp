@@ -58,8 +58,6 @@
 		fetch("/usMarket/fetch/category")
 			.then((response) => response.json())
 			.then((json) => {
-				console.log(json.length);
-			
 				json.forEach((el, i) => {
 					const li = document.createElement('li');
 					const innerHTML_ = '<a id='+el.PRODUCT_CATEGORY1_NO+' href=${pageContext.request.contextPath}/product/list?category1='+el.PRODUCT_CATEGORY1_NO+'>'+el.PRODUCT_CATEGORY1_NAME+'</a>'; 

@@ -75,8 +75,8 @@
 						</c:when>
 						<c:otherwise>
 							<div class="product__buttons" id="product__buttons">
-								<div id="btn__wish" class="product__loginCheck" data-url="/product/like">
-									<img alt="찜" src="<c:url value='/resources/customer/img/wish_icon.png' />">
+								<div id="btn__wish" class="product__loginCheck" data-url="/product/like?product_no=${productInfo.PRODUCT_NO}">
+									<img id="bookmark__status" alt="찜" src="<c:url value='/resources/customer/img/wish_icon_0.png' />">
 									<span>찜</span>
 									<span><c:out value="${productInfo.BOOKMARK_COUNT }"/></span>
 								</div>
@@ -154,17 +154,34 @@
 	</div>
 </section>
 
+<script src="<c:url value='/resources/customer/js/product_info.js'/>"></script>
 <script type="text/javascript">
 	document.addEventListener('DOMContentLoaded', function(){
 		
 		const seller_id = `${productInfo.MEMBER_ID}`;
 		const current_id = document.getElementById('loginId').getAttribute('data-id');
-
+		const product_no = `${productInfo.PRODUCT_NO}`;
 		
-		if(seller_id == current_id){
-			document.getElementById('product__buttons').style.display = 'none';
-			document.getElementById('product__my__buttons').style.display = 'flex';			
+		console.log("product_no = "+product_no);
+		console.log("current_id = "+current_id);
+		
+		console.log("isEmpty() = "+isEmpty(current_id));
+		if(!isEmpty(current_id)){
+			if(seller_id == current_id){ // 내 상품일 경우
+				document.getElementById('product__buttons').style.display = 'none';
+				document.getElementById('product__my__buttons').style.display = 'flex';			
+			}else{ // 내 상품이 아닐 경우
+				fetch('/usMarket/fetch/bookmark/'+current_id+'/'+product_no)
+				.then((response) => response.json())
+				.then((json) => {
+					console.log(json == 0 ? 'NOT_ADDED' : 'ADDED');
+					if(json == 1){
+						document.getElementById('bookmark__status').setAttribute('src', '${pageContext.request.contextPath}/resources/customer/img/wish_icon_1.png');
+					}
+				}).catch((error) => console.log("error: "+error)); // fetch-2
+			}
 		}
+		
 		
 		
 		const seller_no = `${productInfo.SELLER_NO}`;
@@ -182,7 +199,7 @@
 				getTopReview(json.REVIEW_COUNT);
 			} // if-else
 				
-		}).catch((error) => console.log("error: "+error)); // fetch-1
+		}).catch((error) => console.log("error: "+error)); // fetch-2
 		
 
 		
@@ -191,21 +208,21 @@
 			.then((response) => response.json())
 			.then((json) => {
 				json.forEach((el, i) => {
-					setReview(el);
+					product__review.appendChild(setReview(el));
 				});
 				
-			}).catch((error) => console.log("error: "+error)); // fetch-2
+			}).catch((error) => console.log("error: "+error)); // fetch-3
 			
 			if(reviewCount > 2){
 				document.getElementById('product__review__more').style.display = 'flex';
 			}
+			
 		}; // getTopReview
 		
 		
 		
 		const tagElement = document.getElementById('product__tag__content');
 		const tag = `${productInfo.PRODUCT_TAG}`;
-		console.log((tag.length > 0));
 		
 		if(tag.length > 0){
 			const tagArr = tag.split(',');
@@ -226,97 +243,6 @@
 		});
 		
 	});
-	
-	
-		function setReview(el){
-			let parentDiv = document.createElement('div');
-			
-			// 1. 이미지
-			let product__review__1 = document.createElement('div');
-			product__review__1.className = 'product__review__1';
-			
-			let imgUrl = document.createElement('a');
-			imgUrl.setAttribute('href', '#'); // 회원 상세보기 링크 추가할 것
-			
-			let img = document.createElement('img');
-			img.setAttribute('alt', '판매자 이미지');
-			img.setAttribute('src', '<c:url value="/resources/customer/img/default_profile.png" />');
-			
-			imgUrl.appendChild(img);
-			product__review__1.appendChild(imgUrl);
-			parentDiv.appendChild(product__review__1);
-			
-			
-			let product__review__2 = document.createElement('div');
-			product__review__2.className = 'product__review__2';
-			
-			let review__info__1 = document.createElement('div');
-			review__info__1.className = 'review__info__1';
-			
-			
-			// 2. 닉네임
-			let review__nickname = document.createElement('a');
-			review__nickname.id = 'review__nickname';
-			review__nickname.setAttribute('href', '#'); // 회원 상세보기 링크 추가할 것
-			review__nickname.textContent = el.MEMBER_NICKNAME;
-			review__info__1.appendChild(review__nickname);
-			
-			
-			// 3. 등록일
-			let review__regdate = document.createElement('span');
-			review__regdate.id = review__regdate;
-			review__regdate.textContent = convert(el.DEAL_COMPLETE_DATE);
-			review__info__1.appendChild(review__regdate);
-			
-			product__review__2.appendChild(review__info__1);
-			
-			
-			let review__info__2 = document.createElement('div');
-			review__info__2.className = 'review__info__2';
-			
-			
-			// 4. 별점
-			let review__score = document.createElement('div');
-			review__score.id = 'review__score';
-			setScore(el.REVIEW_SCORE, review__score);
-			
-			review__info__2.appendChild(review__score);
-							
-			
-			// 5. 리뷰
-			let review__content = document.createElement('div');
-			review__content.id = 'review__content';
-			review__content.textContent = el.REVIEW_CONTENT;
-			review__info__2.appendChild(review__content);
-	
-			product__review__2.appendChild(review__info__2);
-			parentDiv.appendChild(product__review__2);
-			
-			product__review.appendChild(parentDiv);
-		};
-		
-		
-		function setSellerInfo(json){
-			document.getElementById('fetch__review__count').innerText = json.REVIEW_COUNT;
-			document.getElementById('fetch__member__nickname').innerText = json.MEMBER_NICKNAME; 
-			document.getElementById('fetch__product__count').innerText = json.PRODUCT_COUNT; 
-		};
-		
-		
-		function setScore(score, element) {
-			for (var i = 1; i <= 5; i++) {
-				let scoreImg = document.createElement('img');
-				
-				if(score >= i){
-					scoreImg.setAttribute('src', '<c:url value="/resources/customer/img/star.png" />');	
-				} else if(score < i){
-					scoreImg.setAttribute('src', '<c:url value="/resources/customer/img/star_blank.png" />');
-				}
-				
-				element.appendChild(scoreImg);
-			}
-			
-		};
 	
 	
 </script>

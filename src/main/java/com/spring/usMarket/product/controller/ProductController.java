@@ -1,6 +1,5 @@
 package com.spring.usMarket.product.controller;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -25,6 +24,9 @@ import com.spring.usMarket.product.service.ProductService;
 @RequestMapping("/product")
 public class ProductController {
 	private static final Logger logger = LoggerFactory.getLogger(ProductController.class);
+	
+	private static final int ADDED = 1;
+	private static final int NOT_ADDED = 0;
 	
 	@Autowired
 	ProductService productService;
@@ -61,10 +63,9 @@ public class ProductController {
 	
 	
 	@GetMapping("/info")
-	public void info(Integer product_no, Model model) {
+	public void info(Integer product_no, HttpServletRequest request, Model model) {
 		try {
 			Map<String, Object> productInfo = productService.getProductInfo(product_no);
-			
 			model.addAttribute("productInfo", productInfo);
 			
 		} catch (Exception e) {
@@ -76,6 +77,32 @@ public class ProductController {
 	@GetMapping("/buy")
 	public void buy() {
 		logger.info("product/buy");
+	}
+	
+	
+	@GetMapping("/like")
+	public String like(HttpServletRequest request, Integer product_no) {
+		
+		String member_id = (String)request.getSession().getAttribute("userId");
+		
+		int bookmarkStatus = 0;
+		
+		try {
+			bookmarkStatus = productService.getBookmarkByInfo(member_id, product_no);
+			
+			if(bookmarkStatus == ADDED) {
+				// 이미 북마크 추가된 상태면 삭제
+				productService.removeBookmark(member_id, product_no);
+			}else if(bookmarkStatus == NOT_ADDED) {
+				// 추가되지 않은 상태면 북마크 추가
+				productService.addBookmark(member_id, product_no);
+			}
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return "redirect:/product/info?product_no="+product_no;
 	}
 	
 	
