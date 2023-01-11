@@ -131,7 +131,7 @@ public class ProductServiceImpl implements ProductService {
 	public int getBookmarkByInfo(String current_id, Integer product_no) throws Exception {
 		
 		int rowCnt = productDao.searchBookmarkByInfo(current_id, product_no); 
-		logger.info("북마크 추가 여부 = ", (rowCnt == 1 ? "ADDED" : "NOT_ADDED"));
+		logger.info("북마크 추가 여부 = {}", (rowCnt == 1 ? "ADDED" : "NOT_ADDED"));
 		
 		return rowCnt;
 	}
@@ -142,7 +142,7 @@ public class ProductServiceImpl implements ProductService {
 	public int removeBookmark(String member_id, Integer product_no) throws Exception {
 		
 		int rowCnt = productDao.deleteBookmark(member_id, product_no);
-		logger.info("북마크 삭제 결과 = ", getResult(rowCnt));
+		logger.info("북마크 삭제 결과 = {}", getResult(rowCnt));
 		
 		return rowCnt;
 	}
@@ -156,7 +156,7 @@ public class ProductServiceImpl implements ProductService {
 		logger.info("addBookmark, member_no = {}, product_no = {}", member_no, product_no);
 		
 		int rowCnt = productDao.insertBookmark(member_no, product_no);
-		logger.info("북마크 추가 결과 = ", getResult(rowCnt));
+		logger.info("북마크 추가 결과 = {}", getResult(rowCnt));
 		
 		return rowCnt;
 	}
@@ -167,7 +167,7 @@ public class ProductServiceImpl implements ProductService {
 	public int modifyProductView(Integer product_no) throws Exception {
 		
 		int rowCnt = productDao.updateProductView(product_no);
-		logger.info("조회수 증가 결과 = ", getResult(rowCnt));
+		logger.info("조회수 증가 결과 = {}", getResult(rowCnt));
 		
 		return rowCnt;
 	}
