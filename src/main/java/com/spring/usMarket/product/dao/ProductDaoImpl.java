@@ -1,5 +1,6 @@
 package com.spring.usMarket.product.dao;
 
+import java.util.HashMap;
 import java.util.List;
 
 import java.util.Map;
@@ -33,6 +34,11 @@ public class ProductDaoImpl implements ProductDao {
 	}
 
 	@Override
+	public int searchMemberNo(String member_id) throws Exception {
+		return session.selectOne(namespace+"searchMemberNo", member_id);
+	}
+	
+	@Override
 	public Map<String, Object> searchProductInfo(Integer product_no) throws Exception {
 		return session.selectOne(namespace+"searchProductInfo", product_no);
 	}
@@ -51,5 +57,36 @@ public class ProductDaoImpl implements ProductDao {
 	public List<Map<String, Object>> searchReviewByInfo(Integer seller_no) throws Exception {
 		return session.selectList(namespace+"searchReviewByInfo", seller_no);
 	}
+
+	@Override
+	public int searchBookmarkByInfo(String current_id, Integer product_no) throws Exception {
+		
+		Map<String, Object> map = new HashMap<>();
+		map.put("current_id", current_id);
+		map.put("product_no", product_no);
+		
+		return session.selectOne(namespace+"searchBookmarkByInfo", map);
+	}
+
+	@Override
+	public int deleteBookmark(String member_id, Integer product_no) throws Exception {
+		
+		Map<String, Object> map = new HashMap<>();
+		map.put("member_id", member_id);
+		map.put("product_no", product_no);
+		
+		return session.delete(namespace+"deleteBookmark", map);
+	}
+
+	@Override
+	public int insertBookmark(Integer member_no, Integer product_no) throws Exception {
+		
+		Map<String, Object> map = new HashMap<>();
+		map.put("member_no", member_no);
+		map.put("product_no", product_no);
+		
+		return session.insert(namespace+"insertBookmark", map);
+	}
+	
 
 }

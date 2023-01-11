@@ -20,7 +20,15 @@ public interface ProductService {
 	
 	Map<String, Object> getProductInfo(Integer product_no) throws Exception;
 	
+	int modifyProductView(Integer product_no) throws Exception;
+	
 	Map<String, Object> getSellerInfo(Integer seller_no) throws Exception;
 	
 	List<Map<String, Object>> getReviewByInfo(Integer seller_no) throws Exception;
+	
+	int getBookmarkByInfo(String current_id, Integer product_no) throws Exception;
+	
+	int removeBookmark(String member_id, Integer product_no) throws Exception;
+	
+	int addBookmark(String member_id, Integer product_no) throws Exception;
 }

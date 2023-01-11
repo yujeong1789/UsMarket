@@ -6,13 +6,13 @@
 	<sql id="searchKeyword">
 		<choose>
 			<when test='keyword!=null and keyword!=""'>
-				 AND PRODUCT_NAME LIKE '%'||#{keyword}||'%'
-				 OR PRODUCT_TAG LIKE '%'||#{keyword}||'%'
+				 AND product_name LIKE '%'||#{keyword}||'%' 
+				 OR product_tag LIKE '%'||#{keyword}||'%' 
 			</when>
 			<otherwise>
-				 AND PRODUCT_CATEGORY1_NO = #{category1}
+				 AND product_category1_no = #{category1} 
 				<if test='category2!=null and category2!=""'>
-					 AND PRODUCT_CATEGORY2_NO = #{category2} 
+					 AND product_category2_no = #{category2} 
 				</if>
 			</otherwise>
 		</choose>
@@ -22,25 +22,25 @@
 	<sql id="searchProductState">
 		<choose>
 			<when test='option=="2"'>
-				 AND PRODUCT_STATE_NO IN(1, 2)
+				 AND product_state_no IN(1, 2) 
 			</when>
 			<when test='option=="3"'>
-				 AND PRODUCT_STATE_NO IN(1, 3)
+				 AND product_state_no IN(1, 3) 
 			</when>
 			<when test='option=="5"'>
-				 AND PRODUCT_STATE_NO IN(1, 2, 3)
+				 AND product_state_no IN(1, 2, 3) 
 			</when>
 			<otherwise>
-				 AND PRODUCT_STATE_NO = 1
+				 AND product_state_no = 1 
 			</otherwise>
 		</choose>
 	</sql>
 
 
 	<sql id="searchCategory">
-		AND PRODUCT_CATEGORY1_NO = #{category1}
+		AND product_category1_no = #{category1} 
 		<if test='category2!=null and category2!=""'>
-			AND PRODUCT_CATEGORY2_NO = #{category2} 
+			AND product_category2_no = #{category2} 
 		</if>
 	</sql>
 
@@ -48,51 +48,51 @@
 	<!-- 메인 상품 전체 출력 -->
 	<select id="searchMainProduct" resultType="productDto">
 		<![CDATA[ 
-		SELECT PRODUCT_NO, PRODUCT_NAME, PRODUCT_PRICE, PRODUCT_IMG_UUID, PRODUCT_REGDATE 
-		FROM PRODUCT_VIEW
-		WHERE PRODUCT_STATE_NO = 1 AND MEMBER_STATE_NO = 1 AND rownum <= 30
+		SELECT product_no, product_name, product_price, product_img_uuid, product_regdate 
+		FROM product_view 
+		WHERE product_state_no = 1 AND member_state_no = 1 AND rownum <= 30 
 		]]>
 	</select>
 
 
 	<!-- 상품 대분류 출력 -->
 	<select id="searchProductCategory1" resultType="map">
-		SELECT*FROM product_category1
-		ORDER BY PRODUCT_CATEGORY1_NO
+		SELECT * FROM product_category1 
+		ORDER BY product_category1_no
 	</select>
 	
 	
 	<!-- 상품 소분류 출력 -->
 	<select id="searchProductCategory2" parameterType="int" resultType="productCategoryDto">
-		SELECT*FROM CATEGORY_VIEW
-		WHERE PRODUCT_CATEGORY1_NO = #{PRODUCT_CATEGORY1_NO}
-		ORDER BY PRODUCT_CATEGORY2_NO
+		SELECT * FROM category_view 
+		WHERE product_category1_no = #{product_category1_no} 
+		ORDER BY product_category2_no 
 	</select>
 	
 	
 	<!-- 분류별 상품 출력 -->
 	<select id="searchProductByCategory" parameterType="searchCondition" resultType="productDto">
 		SELECT product_no, product_state_no, product_name, product_price, product_img_uuid, product_regdate 
-		FROM (
-				SELECT ROWNUM NUM, A.* 
-				FROM (
-						SELECT product_no, product_state_no, product_name, product_price, product_img_uuid, product_regdate 
-						FROM product_view
-						WHERE MEMBER_STATE_NO = 1 
-						<include refid="searchProductState" />
-						<include refid="searchKeyword" />
-						ORDER BY product_regdate DESC, product_no DESC	
+		FROM ( 
+				SELECT rownum as num, A.*  
+				FROM ( 
+						SELECT product_no, product_state_no, product_name, product_price, product_img_uuid, product_regdate  
+						FROM product_view 
+						WHERE member_state_no = 1  
+						<include refid="searchProductState" /> 
+						<include refid="searchKeyword" /> 
+						ORDER BY product_regdate DESC, product_no DESC 	
 					)A
 			)
-		WHERE NUM BETWEEN #{startPage} AND #{endPage}
+		WHERE num BETWEEN #{startPage} AND #{endPage}
 	</select>
 	
 	
 	<!-- 판매 중인 상품 수 출력 -->
 	<select id="searchProductCount" parameterType="searchCondition" resultType="int">
-		SELECT COUNT(*)
-		FROM product_view
-		WHERE MEMBER_STATE_NO=1 
+		SELECT count(*) 
+		FROM product_view 
+		WHERE member_state_no = 1 
 		<include refid="searchProductState" />
 		<include refid="searchKeyword" />
 	</select>
@@ -100,70 +100,101 @@
 	
                                                                                                                                                                                           
 	<resultMap type="HashMap" id="productInfo">
-		<result property="MEMBER_ID" column="MEMBER_ID" />
-		<result property="PRODUCT_NO" column="PRODUCT_NO" />
-		<result property="SELLER_NO" column="SELLER_NO" />
-		<result property="PRODUCT_CATEGORY1_NO" column="PRODUCT_CATEGORY1_NO" />
-		<result property="PRODUCT_CATEGORY2_NO" column="PRODUCT_CATEGORY2_NO" />
-		<result property="PRODUCT_STATE_NO" column="PRODUCT_STATE_NO" />
-		<result property="PRODUCT_NAME" column="PRODUCT_NAME" />
-		<result property="PRODUCT_CHANGE" column="PRODUCT_CHANGE" />
-		<result property="PRODUCT_PRICE" column="PRODUCT_PRICE" />
-		<result property="PRODUCT_EXPLANATION" column="PRODUCT_EXPLANATION" jdbcType="CLOB" javaType="java.lang.String"/>
-		<result property="PRODUCT_TAG" column="PRODUCT_TAG" />
-		<result property="PRODUCT_VIEW" column="PRODUCT_VIEW" />
-		<result property="PRODUCT_REGDATE" column="PRODUCT_REGDATE"/>
-		<result property="PRODUCT_PAY_KIND" column="PRODUCT_PAY_KIND" />
-		<result property="PRODUCT_USED" column="PRODUCT_USED" />
-		<result property="PRODUCT_CATEGORY1_NAME" column="PRODUCT_CATEGORY1_NAME" />
-		<result property="PRODUCT_CATEGORY2_NAME" column="PRODUCT_CATEGORY2_NAME" />
-		<result property="BOOKMARK_COUNT" column="BOOKMARK_COUNT" />
+		<result property="MEMBER_ID" column="member_id" />
+		<result property="PRODUCT_NO" column="product_no" />
+		<result property="SELLER_NO" column="seller_no" />
+		<result property="PRODUCT_CATEGORY1_NO" column="product_category1_no" />
+		<result property="PRODUCT_CATEGORY2_NO" column="product_category2_no" />
+		<result property="PRODUCT_STATE_NO" column="product_state_no" />
+		<result property="PRODUCT_NAME" column="product_name" />
+		<result property="PRODUCT_CHANGE" column="product_change" />
+		<result property="PRODUCT_PRICE" column="product_price" />
+		<result property="PRODUCT_EXPLANATION" column="product_explanation" jdbcType="CLOB" javaType="java.lang.String"/>
+		<result property="PRODUCT_TAG" column="product_tag" />
+		<result property="PRODUCT_VIEW" column="product_view" />
+		<result property="PRODUCT_REGDATE" column="product_regdate"/>
+		<result property="PRODUCT_PAY_KIND" column="product_pay_kind" />
+		<result property="PRODUCT_USED" column="product_used" />
+		<result property="PRODUCT_CATEGORY1_NAME" column="product_category1_name" />
+		<result property="PRODUCT_CATEGORY2_NAME" column="product_category2_name" />
+		<result property="BOOKMARK_COUNT" column="bookmark_count" />
 	</resultMap>
 	
 	<!-- 상품 상세보기 출력 -->
 	<select id="searchProductInfo" parameterType="int" resultMap="productInfo">
-		SELECT m.MEMBER_ID, p.*, c.PRODUCT_CATEGORY1_NAME, c.PRODUCT_CATEGORY2_NAME
-			, (SELECT COUNT(b.MEMBER_NO) FROM BOOKMARK b WHERE p.PRODUCT_NO = b.PRODUCT_NO) AS "BOOKMARK_COUNT"
-		FROM PRODUCT p, "MEMBER" m, CATEGORY_VIEW c
-		WHERE p.SELLER_NO = m.MEMBER_NO
-			AND p.PRODUCT_NO = #{PRODUCT_NO}
-			AND (c.PRODUCT_CATEGORY1_NO = p.PRODUCT_CATEGORY1_NO AND c.PRODUCT_CATEGORY2_NO = p.PRODUCT_CATEGORY2_NO)
+		SELECT m.member_id, p.*, c.product_category1_name, c.product_category2_name 
+			, (SELECT count(b.member_no) FROM bookmark b WHERE p.product_no = b.product_no) AS "bookmark_count" 
+		FROM product p, member m, category_view c 
+		WHERE p.seller_no = m.member_no 
+			AND p.product_no = #{product_no} 
+			AND (c.product_category1_no = p.product_category1_no AND c.product_category2_no = p.product_category2_no)
 	</select>
 	
 	
 	<!-- 상품 조회수 증가 -->
 	<update id="updateProductView" parameterType="int">
-		UPDATE PRODUCT
-		SET PRODUCT_VIEW = PRODUCT_VIEW+1
-		WHERE PRODUCT_NO = #{PRODUCT_NO}
+		UPDATE product 
+		SET product_view = product_view+1 
+		WHERE product_no = #{product_no} 
 	</update>
 	
 	
 	<!-- 판매자 정보 출력 -->
 	<select id="searchSellerInfo" parameterType="int" resultType="map">
-		SELECT MEMBER_NO, MEMBER_NICKNAME, MEMBER_IMAGE
-			, (SELECT COUNT(*) FROM PRODUCT WHERE SELLER_NO = m.MEMBER_NO AND PRODUCT_STATE_NO = 1) AS "PRODUCT_COUNT"
-			, (SELECT COUNT(*) FROM DEAL WHERE SELLER_NO = m.MEMBER_NO AND DEAL_REVIEW = 'Y') AS "REVIEW_COUNT"
-		FROM "MEMBER" m 
-		WHERE m.MEMBER_NO = #{SELLER_NO}
+		SELECT member_no, member_nickname, member_image 
+			, (SELECT count(*) FROM product WHERE seller_no = m.member_no AND product_state_no = 1) AS "PRODUCT_COUNT" 
+			, (SELECT count(*) FROM deal WHERE seller_no = m.member_no AND deal_review = 'Y') AS "REVIEW_COUNT" 
+		FROM member m 
+		WHERE m.member_no = #{SELLER_NO}
 	</select>
 	
 	
+	<!-- 상위 2건 리뷰 출력 -->
 	<select id="searchReviewByInfo" parameterType="int" resultType="map">
 		<![CDATA[
-		SELECT a.CUSTOMER_NO, a.REVIEW_CONTENT, a.REVIEW_SCORE, a.DEAL_COMPLETE_DATE, m.MEMBER_NICKNAME, m.MEMBER_IMAGE
-		FROM "MEMBER" m, (
-							SELECT *
-							FROM (
-									SELECT ROWNUM, d.CUSTOMER_NO, r.REVIEW_CONTENT, r.REVIEW_SCORE, d.DEAL_COMPLETE_DATE
-									FROM REVIEW r, DEAL d
-									WHERE r.DEAL_NO = d.DEAL_NO
-									AND d.SELLER_NO = #{SELLER_NO}
-									ORDER BY REIVIEW_REGDATE DESC
-								)
-							WHERE ROWNUM <= 2
-							) a
-		WHERE m.MEMBER_NO = a.CUSTOMER_NO		
+		SELECT a.customer_no, a.review_regdate, a.review_content, a.review_score, a.deal_complete_date, m.member_nickname, m.member_image 
+		FROM member m, ( 
+						 SELECT * 
+						 FROM ( 
+									SELECT rownum, d.customer_no, r.review_content, r.review_score, r.review_regdate, d.deal_complete_date 
+									FROM review r, deal d 
+									WHERE r.deal_no = d.deal_no 
+									AND d.seller_no = #{seller_no} 
+									ORDER BY r.review_regdate DESC 
+								) 
+							WHERE rownum <= 2 
+							) a 
+		WHERE m.member_no = a.customer_no		
 		]]>
+	</select>
+	
+	
+	<!-- 북마크 추가된 상품인지 검색 -->
+	<select id="searchBookmarkByInfo" parameterType="map" resultType="int">
+		SELECT count(*) 
+		FROM bookmark_view 
+		WHERE member_id = #{current_id} AND product_no = #{product_no} 
+	</select>
+	
+	
+	<!-- 북마크 삭제 -->
+	<delete id="deleteBookmark" parameterType="map">
+		DELETE FROM bookmark_view 
+		WHERE member_id = #{member_id} AND product_no = ${product_no}
+	</delete>
+	
+	
+	<!-- 북마크 추가 -->
+	<insert id="insertBookmark" parameterType="map">
+		<selectKey keyProperty="bookmark_seq" resultType="int" order="BEFORE">
+			SELECT bookmark_seq.nextval FROM dual 
+		</selectKey>
+		INSERT INTO bookmark (bookmark_no, member_no, product_no) 
+		values (#{bookmark_seq}, #{member_no}, #{product_no}) 
+	</insert>
+	
+	<!-- 회원번호 출력 -->
+	<select id="searchMemberNo" parameterType="string" resultType="int">
+		SELECT member_no FROM member WHERE member_id = #{member_id}
 	</select>
 </mapper>

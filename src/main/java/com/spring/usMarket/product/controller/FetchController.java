@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.spring.usMarket.product.service.ProductService;
 
 @RestController
+@RequestMapping("/fetch")
 public class FetchController {
 	private static final Logger logger = LoggerFactory.getLogger(ProductController.class);
 	
@@ -23,8 +24,9 @@ public class FetchController {
 	ProductService productService;
 	
 	
-	@GetMapping("/fetch/category")
+	@GetMapping("/category")
 	public List<Map<String, Object>> category(){
+		
 		List<Map<String, Object>> allCategory = new ArrayList<>();
 		
 		try {
@@ -36,7 +38,8 @@ public class FetchController {
 		return allCategory;
 	}
 	
-	@GetMapping("/fetch/seller/{seller_no}")
+	
+	@GetMapping("/seller/{seller_no}")
 	public Map<String, Object> seller(@PathVariable Integer seller_no){
 		
 		Map<String, Object> sellerInfo = new HashMap<>();
@@ -50,7 +53,8 @@ public class FetchController {
 		return sellerInfo;
 	}
 	
-	@GetMapping("/fetch/topReview/{seller_no}")
+	
+	@GetMapping("/topReview/{seller_no}")
 	public List<Map<String, Object>> topReview(@PathVariable Integer seller_no){
 		
 		List<Map<String, Object>> topReview = new ArrayList<>();
@@ -62,5 +66,19 @@ public class FetchController {
 		} // try-catch
 		
 		return topReview;
+	}
+	
+	@GetMapping("/bookmark/{current_id}/{product_no}")
+	public int bookmark(@PathVariable String current_id, @PathVariable Integer product_no) {
+		
+		int bookmarkStatus = 0;
+		
+		try {
+			bookmarkStatus = productService.getBookmarkByInfo(current_id, product_no);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return bookmarkStatus;
 	}
 }
