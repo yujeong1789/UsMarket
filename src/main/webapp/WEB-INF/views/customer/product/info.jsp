@@ -166,19 +166,25 @@
 		console.log("current_id = "+current_id);
 		
 		console.log("isEmpty() = "+isEmpty(current_id));
+		
 		if(!isEmpty(current_id)){
 			if(seller_id == current_id){ // 내 상품일 경우
 				document.getElementById('product__buttons').style.display = 'none';
-				document.getElementById('product__my__buttons').style.display = 'flex';			
+				document.getElementById('product__my__buttons').style.display = 'flex';
 			}else{ // 내 상품이 아닐 경우
 				fetch('/usMarket/fetch/bookmark/'+current_id+'/'+product_no)
 				.then((response) => response.json())
 				.then((json) => {
+					let icon__element = document.getElementById('bookmark__status');
+					let data_url = document.getElementById('btn__wish').getAttribute('data-url')+'&status='+json;
+					document.getElementById('btn__wish').setAttribute('data-url', data_url);
+					
 					console.log(json == 0 ? 'NOT_ADDED' : 'ADDED');
+					
 					if(json == 1){
-						document.getElementById('bookmark__status').setAttribute('src', '${pageContext.request.contextPath}/resources/customer/img/wish_icon_1.png');
+						icon__element.setAttribute('src', '${pageContext.request.contextPath}/resources/customer/img/wish_icon_1.png');
 					}
-				}).catch((error) => console.log("error: "+error)); // fetch-2
+				}).catch((error) => console.log("error: "+error)); // fetch-1
 			}
 		}
 		
@@ -210,7 +216,6 @@
 				json.forEach((el, i) => {
 					product__review.appendChild(setReview(el));
 				});
-				
 			}).catch((error) => console.log("error: "+error)); // fetch-3
 			
 			if(reviewCount > 2){
@@ -237,7 +242,6 @@
 		const loginElements = document.querySelectorAll('.product__loginCheck');
 		loginElements.forEach((el) => {
 			el.addEventListener('click', function() {
-				console.log('clicked');
 				location.href = "${pageContext.request.contextPath}"+el.getAttribute('data-url');
 			});
 		});
