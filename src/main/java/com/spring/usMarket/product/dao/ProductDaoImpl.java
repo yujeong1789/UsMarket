@@ -59,20 +59,20 @@ public class ProductDaoImpl implements ProductDao {
 	}
 
 	@Override
-	public int searchBookmarkByInfo(String current_id, Integer product_no) throws Exception {
+	public int searchBookmarkByInfo(Integer current_no, Integer product_no) throws Exception {
 		
 		Map<String, Object> map = new HashMap<>();
-		map.put("current_id", current_id);
+		map.put("current_no", current_no);
 		map.put("product_no", product_no);
 		
 		return session.selectOne(namespace+"searchBookmarkByInfo", map);
 	}
 
 	@Override
-	public int deleteBookmark(String member_id, Integer product_no) throws Exception {
+	public int deleteBookmark(Integer member_no, Integer product_no) throws Exception {
 		
 		Map<String, Object> map = new HashMap<>();
-		map.put("member_id", member_id);
+		map.put("member_no", member_no);
 		map.put("product_no", product_no);
 		
 		return session.delete(namespace+"deleteBookmark", map);

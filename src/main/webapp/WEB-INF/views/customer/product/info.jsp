@@ -160,6 +160,7 @@
 		
 		const seller_id = `${productInfo.MEMBER_ID}`;
 		const current_id = document.getElementById('loginId').getAttribute('data-id');
+		const current_no = document.getElementById('loginNo').getAttribute('data-no');
 		const product_no = `${productInfo.PRODUCT_NO}`;
 		
 		console.log("product_no = "+product_no);
@@ -172,7 +173,7 @@
 				document.getElementById('product__buttons').style.display = 'none';
 				document.getElementById('product__my__buttons').style.display = 'flex';
 			}else{ // 내 상품이 아닐 경우
-				fetch('/usMarket/fetch/bookmark/'+current_id+'/'+product_no)
+				fetch('/usMarket/fetch/bookmark/'+current_no+'/'+product_no)
 				.then((response) => response.json())
 				.then((json) => {
 					let icon__element = document.getElementById('bookmark__status');

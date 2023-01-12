@@ -172,15 +172,15 @@
 	<!-- 북마크 추가된 상품인지 검색 -->
 	<select id="searchBookmarkByInfo" parameterType="map" resultType="int">
 		SELECT count(*) 
-		FROM bookmark_view 
-		WHERE member_id = #{current_id} AND product_no = #{product_no} 
+		FROM bookmark  
+		WHERE member_no = #{current_no} AND product_no = #{product_no} 
 	</select>
 	
 	
 	<!-- 북마크 삭제 -->
 	<delete id="deleteBookmark" parameterType="map">
-		DELETE FROM bookmark_view 
-		WHERE member_id = #{member_id} AND product_no = ${product_no}
+		DELETE FROM bookmark 
+		WHERE member_no = #{member_no} AND product_no = ${product_no}
 	</delete>
 	
 	
