@@ -83,15 +83,17 @@ public class ProductController {
 	@GetMapping("/like")
 	public String like(HttpServletRequest request, Integer product_no, Integer status) {
 		
-		String member_id = (String)request.getSession().getAttribute("userId");
+		Integer member_no = Integer.parseInt((String) request.getSession().getAttribute("userNo"));
+		
+		logger.info("like, member_id = {}, member_no = {}", request.getSession().getAttribute("userId").toString(), member_no);
 		
 		try {
 			if(status == ADDED) {
 				// 이미 북마크 추가된 상태면 삭제
-				productService.removeBookmark(member_id, product_no);
+				productService.removeBookmark(member_no, product_no);
 			}else if(status == NOT_ADDED) {
 				// 추가되지 않은 상태면 북마크 추가
-				productService.addBookmark(member_id, product_no);
+				productService.addBookmark(member_no, product_no);
 			}
 			
 		} catch (Exception e) {

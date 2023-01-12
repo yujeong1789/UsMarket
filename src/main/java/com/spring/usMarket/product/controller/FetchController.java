@@ -68,13 +68,13 @@ public class FetchController {
 		return topReview;
 	}
 	
-	@GetMapping("/bookmark/{current_id}/{product_no}")
-	public int bookmark(@PathVariable String current_id, @PathVariable Integer product_no) {
+	@GetMapping("/bookmark/{current_no}/{product_no}")
+	public int bookmark(@PathVariable Integer current_no, @PathVariable Integer product_no) {
 		
 		int bookmarkStatus = 0;
 		
 		try {
-			bookmarkStatus = productService.getBookmarkByInfo(current_id, product_no);
+			bookmarkStatus = productService.getBookmarkByInfo(current_no, product_no);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
