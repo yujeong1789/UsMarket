@@ -52,7 +52,7 @@ public class MemberController {
 		}else if(member_password.equals(member.get("MEMBER_PASSWORD"))) {
 			logger.info("로그인 성공");
 			httpSession.setAttribute("userId", member_id);
-			httpSession.setAttribute("userNo", member.get("MEMBER_NO").toString());
+			httpSession.setAttribute("userNo", member.get("MEMBER_NO"));
 			return "redirect:/";
 		}else {
 			logger.info("비밀번호 오류");
