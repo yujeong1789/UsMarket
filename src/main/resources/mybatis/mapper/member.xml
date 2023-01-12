@@ -12,16 +12,20 @@
 		#{memberEmail},#{memberHp1},#{memberHp2},#{memberHp3},1)
 	</insert>
 
-	<select id="overlapped" parameterType="String" resultType="int">
-		select count(*) From member where MEMBER_ID=#{member_id} or MEMBER_NICKNAME=#{member_nick} or MEMBER_EMAIL=#{member_email}
+	<select id="overlappedNick" parameterType="String" resultType="int">
+		select count(MEMBER_NICKNAME) From member where MEMBER_NICKNAME=#{member_nick}
 	</select>
 	
 	<select id="overlappedID" parameterType="String" resultType="int">
-		select count(MEMBER_ID) From member where MEMBER_ID=#{memberId}
+		select count(MEMBER_ID) From member where MEMBER_ID=#{member_id}
+	</select>
+	
+	<select id="overlappedEmail" parameterType="String" resultType="int">
+		select count(MEMBER_EMAIL) From member where MEMBER_EMAIL=#{member_email}
 	</select>
 
 	<select id="idLogin" parameterType="String" resultType="map">
-		SELECT MEMBER_ID,MEMBER_PASSWORD FROM MEMBER WHERE MEMBER_ID = #{member_id}
+		SELECT MEMBER_NO,MEMBER_ID,MEMBER_PASSWORD FROM MEMBER WHERE MEMBER_ID = #{member_id}
 	</select>
 	
 	<select id="PwLogin" parameterType="String" resultType="int">
