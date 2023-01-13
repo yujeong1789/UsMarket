@@ -45,8 +45,9 @@
 	<!-- LoginInterceptor -->
  	<interceptors>
 		<interceptor>
-			<mapping path="/product/like"/>
-			<mapping path="/product/buy"/>
+			<mapping path="/product/like/**"/>
+			<mapping path="/product/buy/**"/>
+			<mapping path="/product/sell/**"/>
 			<mapping path="/chat/**"/>
 			<beans:bean class="com.spring.usMarket.common.LoginInterceptor" />
 		</interceptor>

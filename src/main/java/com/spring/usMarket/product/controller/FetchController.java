@@ -38,6 +38,20 @@ public class FetchController {
 		return allCategory;
 	}
 	
+	@GetMapping("/category2/{category2}")
+	public List<Map<String, Object>> category2(@PathVariable Integer category2){
+		
+		List<Map<String, Object>> category = new ArrayList<>();
+		
+		try {
+			category = productService.getCategory2(category2);
+		} catch (Exception e) {
+			e.printStackTrace();
+		} // try-catch
+		
+		return category;
+	}
+	
 	
 	@GetMapping("/seller/{seller_no}")
 	public Map<String, Object> seller(@PathVariable Integer seller_no){

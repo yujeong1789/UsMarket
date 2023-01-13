@@ -69,6 +69,14 @@
 		ORDER BY product_category2_no 
 	</select>
 	
+	<!-- 상품 소분류 출력2 -->
+	<select id="searchCategory2" parameterType="int" resultType="map">
+		SELECT product_category2_no, product_category2_name  
+		FROM product_category2 
+		WHERE product_category1_no = #{product_category1_no} 
+		ORDER BY product_category2_no
+	</select>
+	
 	
 	<!-- 분류별 상품 출력 -->
 	<select id="searchProductByCategory" parameterType="searchCondition" resultType="productDto">
