@@ -25,4 +25,9 @@ public class ProductCategoryDaoImpl implements ProductCategoryDao{
 		return session.selectList(namespace+"searchProductCategory2", product_category1_no);
 	}
 
+	@Override
+	public List<Map<String, Object>> searchCategory2(Integer product_category1_no) throws Exception {
+		return session.selectList(namespace+"searchCategory2", product_category1_no);
+	}
+
 }

@@ -12,14 +12,14 @@ public class ProductDto {
 	private Integer product_category2_no;
 	private Integer product_state_no;
 	private String product_name;
-	private String product_change;
+	private String product_change; // Y - 교환, N - 교환불가
 	private Integer product_price;
 	private String product_explanation;
 	private String product_tag;
 	private Integer product_view;
 	private String product_regdate;
 	private String product_pay_kind;
-	private String product_used;
+	private String product_used; // Y - 중고, N - 새상품
 	private String product_img_uuid;
 	
 	public ProductDto() {}

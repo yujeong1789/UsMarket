@@ -18,7 +18,7 @@
 							</form>
 						</div>
 						<div class="hero__search__mypage">
-							<a href="#">판매하기</a>
+							<a href="<c:url value='/product/sell'/>">판매하기</a>
 							<span>|</span>
 							<a href="#">내상점</a>
 							<span>|</span>
@@ -54,7 +54,8 @@
 		
 		const div__allCategory = document.getElementById('hero__categories__all');
 		const ul__allCategory = document.getElementById('ul__allCategory');
-			
+		
+
 		fetch("/usMarket/fetch/category")
 			.then((response) => response.json())
 			.then((json) => {
