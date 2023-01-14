@@ -83,7 +83,7 @@ public class ProductController {
 	@GetMapping("/like")
 	public String like(HttpServletRequest request, Integer product_no, Integer status) {
 		
-		Integer member_no = Integer.parseInt((String) request.getSession().getAttribute("userNo"));
+		Integer member_no = Integer.parseInt(String.valueOf(request.getSession().getAttribute("userNo")));
 		
 		logger.info("like, member_id = {}, member_no = {}", request.getSession().getAttribute("userId").toString(), member_no);
 		
