@@ -81,7 +81,8 @@
 }
 
 .product__sell__input input[type=text]{
-	height: 45px;
+	height: 50px;
+	margin-bottom: 8px;
 }
 
 .product__sell__radio input[type=radio]{
@@ -111,7 +112,7 @@
 .product__sell__section .input__font{
 	padding-left: 15px;
 	padding-right: 15px;
-	font-size: 17px;
+	font-size: 18px;
 	border: 1px solid #DCDBE4;
 }
 
@@ -124,17 +125,14 @@
 	margin-right: 5px;
 }
 
-.product__sell__input .first{
-	margin-top: 8px;	
-}
-
 .length__check{
 	font-weight: 500;
 }
 
 .product__sell__ul > li > .category{
 	display: flex;
-	border: 1px solid #DCDBE4;	
+	border: 1px solid #DCDBE4;
+	margin-bottom: 8px;
 }
 
 .product__sell__ul #sell__category1{
@@ -153,8 +151,8 @@
 }
 
 .sell__category__ul ul li{
-	height: 45px;
-	padding: 8px 25px 12px 25px;
+	height: 50px;
+	padding: 12px 25px 8px 25px;
 }
 
 .sell__category__ul ul li:hover{
@@ -163,13 +161,12 @@
 
 .selected__category__display{
 	width: 100%;
-	display: flex;
-	/* display: none; */
+	display: none;
 	align-items: center;
 	margin-left: 224px;
-	margin-top: 20px;
 	font-size: 20px;
 }
+
 
 .selected__category__display > span{
 	color: rgb(0, 85, 255);
@@ -195,4 +192,19 @@
 	font-size: 25px;
 	font-weight: 500;
 	color: #b5b5b5;
+}
+
+.product__input__warning{
+	display: none;
+	font-weight: 500;
+	color: red;
+	font-size: 17px;
+}
+
+.category__input__warning{
+	margin-left: 224px; 
+	display: flex; 
+	color: red; 
+	font-weight: 500; 
+	width: 100%;
 }

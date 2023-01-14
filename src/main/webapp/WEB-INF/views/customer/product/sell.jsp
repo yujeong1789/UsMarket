@@ -15,7 +15,8 @@
 				<span>*필수항목</span>
 			</div>
 			
-			<form name="addProduct">
+			<form id="addProductForm" name="addProduct" method="post">
+				<input type="hidden" id="product_no" name="product_no" readonly required>
 				<ul class="product__sell__ul">
 					<li>
 						<div class="product__sell__title essential">상품이미지</div>
@@ -28,15 +29,19 @@
 						<div class="product__sell__title essential">제목</div>
 						
 						<div class="product__sell__input">
-							<input class="input__font text" type="text" />
-							<div class="length__check first">
-								<span id="current__title__length">0</span>/<span id="max__title__length">40</span>
+							<input class="input__font text" id="product_name" name="product_name" type="text" maxlength="40" 
+								placeholder="상품 제목을 입력해 주세요. (공백 제외 2글자 이상)"/>
+							
+							<div class="product__input__warning" id="product_name_warning" data-target="product_name" data-status="not">공백 제외 2글자 이상 입력해 주세요.</div>
+							
+							<div class="length__check">
+								<span id="current__name__length">0</span>/40
 							</div>
 						</div>
 					</li>
 					<li>
 						<div class="product__sell__title essential">카테고리</div>
-						<div class="product__sell__input category">
+						<div class="product__sell__input category" id="product__sell__input__category">
 							<div class="sell__category__ul" id="sell__category1">
 								<ul id="category1__ul"></ul>
 							</div>
@@ -47,15 +52,17 @@
 								<ul id="category2__ul"></ul>
 							</div>
 						</div>
+						<div class="category__input__warning">
+							<div class="product__input__warning" id="product_category_warning"  data-target="product__sell__input__category" data-status="not">카테고리를 선택해 주세요.</div>
+						</div>
 						<div class="selected__category__display" id="selected__category__display">
 							<span>선택한 카테고리:</span>
 							<span id="selected__category__1"></span>
 							<span id="selected__category__2"></span>
 							
 							<!-- 확인용, 추후 hidden으로 변경 -->
-							<input style="width: 50px;" type="text" id="product_category1_no" name="product_category1_no" value="">
-							<input style="width: 50px;" type="text" id="product_category2_no" name="product_category2_no" value="">
-							
+							<input style="width: 50px;" type="text" id="product_category1_no" name="product_category1_no" value="" readonly required>
+							<input style="width: 50px;" type="text" id="product_category2_no" name="product_category2_no" value="" readonly required>
 						</div>
 					</li>
 					<li>
@@ -63,11 +70,11 @@
 						
 						<div class="product__sell__radio">
 							<label>
-								<input type="radio" value="Y" checked />
+								<input type="radio" name="product_used" id="product_used" value="Y" checked />
 								<span>중고상품</span>
 							</label>
 							<label>
-								<input type="radio" value="N" />
+								<input type="radio" name="product_used" id="product_used" value="N" />
 								<span>새상품</span>
 							</label>
 						</div>
@@ -77,11 +84,11 @@
 						
 						<div class="product__sell__radio">
 							<label>
-								<input type="radio" value="N" checked />
+								<input type="radio" name="product_change" id="product_change" value="Y" checked />
 								<span>교환가능</span>
 							</label>
 							<label>
-								<input type="radio" value="Y" />
+								<input type="radio" name="product_change" id="product_change" value="N" />
 								<span>교환불가</span>
 							</label>
 						</div>
@@ -90,17 +97,21 @@
 						<div class="product__sell__title essential">가격</div>
 						
 						<div class="product__sell__input">
-							<input class="input__font price" type="text" placeholder="숫자만 입력해 주세요."/>
+							<input class="input__font price" id="product_price" name="product_price" type="text" placeholder="숫자만 입력해 주세요."/>
 							원
+							<div class="product__input__warning" id="product_price_warning" data-target="product_price" data-status="not">100원 이상 100억 이하의 상품만 거래할 수 있습니다.</div>
 						</div>
 					</li>
 					<li>
 						<div class="product__sell__title essential">설명</div>
 						
 						<div class="product__sell__input">
-							<textarea class="input__font" rows="6" placeholder="구입 연도, 사용감, 하자 여부 등 필요한 정보를 작성해 주세요. (10글자 이상)"></textarea>
+							<textarea class="input__font" id="product_explanation" name="product_explanation" rows="6" maxlength="2000"  data-status="" placeholder="구입 연도, 사용감, 하자 여부 등 필요한 정보를 작성해 주세요. (10글자 이상)"></textarea>
+							
+							<div class="product__input__warning" id="product_explanation_warning" data-target="product_explanation" data-status="not">10글자 이상 입력해 주세요.</div>
+							
 							<div class="length__check">
-								<span id="current__content__length">0</span>/<span id="max__content__length">2000</span>
+								<span id="current__explanation__length">0</span>/2000
 							</div>
 						</div>
 					</li>
@@ -108,18 +119,20 @@
 						<div class="product__sell__title">연관태그</div>
 						
 						<div class="product__sell__input">
-							<input class="input__font text" type="text" />
+							<input class="input__font text" id="product_tag" name="product_tag" type="text" />
 						</div>
 					</li>
 				</ul>
 				<div class="product__sell__submit">
-					<button type="button" class="site-btn">등록하기</button>
+					<button class="site-btn" id="sell__submit" type="button">등록하기</button>
 				</div>
 			</form> <!-- form -->
 			
 		</div> <!-- container -->
 	</div> <!-- row -->
 </section> <!-- product__sell__section -->
+
+<script src="<c:url value='/resources/customer/js/product_sell.js'/>"></script>
 <script type="text/javascript">
 
 	document.addEventListener('DOMContentLoaded', function(){
@@ -129,6 +142,7 @@
 		
 		const product_category1_no = document.getElementById('product_category1_no');
 		const product_category2_no = document.getElementById('product_category2_no');
+		
 		
 		fetch("/usMarket/fetch/category")
 		.then((response) => response.json())
@@ -140,12 +154,15 @@
 				category1__ul.appendChild(category1_li);
 				
 				category1_li.addEventListener('click', function(e) {
-					setDisplayCategory1(e.target);
-					
+					setDisplayCategory1(this);
 					
 					fetch('/usMarket/fetch/category2/'+e.target.value)
 						.then((response) => response.json())
 						.then((json) => {
+							// 카테고리1이 선택되어 카테고리2가 로드되었을 시점에 스타일 적용
+							document.getElementById('product_category_warning').innerText = '소분류를 선택해 주세요.';
+							document.getElementById('product_category_warning').style.display = 'block';
+							
 							json.forEach((el) => {
 								let category2_li = document.createElement('li');
 								category2_li.textContent = el.PRODUCT_CATEGORY2_NAME;
@@ -153,41 +170,48 @@
 								category2__ul.appendChild(category2_li);
 								
 								category2_li.addEventListener('click', function(e){
-									setDisplayCategory2(e.target);
+									setDisplayCategory2(this);
 								}); // addEventListner
 							}); // forEach
 						}).catch((error) => console.log("error: "+error)); // fetch-2
 						
 				}); // addEventListner
-				
 			}); // forEach
 		}).catch((error) => console.log("error: "+error)); // fetch-1
-		
-		
 	});
 	
 	
-	function setDisplayCategory1(element){
-		setBlank();
-		document.getElementById('category2__alert').style.display = 'none';
-		product_category1_no.value = element.getAttribute('value');
-		console.log('category1 input value = '+product_category1_no.value);
-		document.getElementById('selected__category__display').style.display = 'flex';
-		document.getElementById('selected__category__1').className = 'selected__category';
-		document.getElementById('selected__category__1').innerText = element.innerText;
-	}
+	// 상품명
+	document.getElementById('product_name').addEventListener('keyup', function(e){
+		// 1. 길이 체크
+		setBorder(this, lengthCheck(this.value.replace(/(\s*)/g,'').length, 2, 40));
+		document.getElementById('current__name__length').innerText = this.value.replace(/(\s*)/g,'').length;
+	});
 	
-	function setBlank(){
-		category2__ul.innerHTML = '';
-		product_category2_no.value = '';
-		document.getElementById('selected__category__2').style.display = 'none';
-	}
+	// 상품 가격
+	document.getElementById('product_price').addEventListener('keyup', function(e){
+		priceRegexCheck(this);
+		setBorder(this, lengthCheck(this.value, 100, 1000000000));
+	});
 	
-	function setDisplayCategory2(element){
-		product_category2_no.value = element.getAttribute('value');
-		console.log('category2 input value = '+product_category2_no.value);
-		document.getElementById('selected__category__2').style.display = 'flex';
-		document.getElementById('selected__category__2').className = 'selected__category';
-		document.getElementById('selected__category__2').innerText = element.innerText;
-	}
+	// 상품 설명
+	document.getElementById('product_explanation').addEventListener('keyup', function(e){
+		setBorder(this, lengthCheck(this.value, 10, 2000));
+		document.getElementById('current__explanation__length').innerText = this.value.length;
+	});
+	
+	// submit
+	document.getElementById('sell__submit').addEventListener('click', function(e){
+		const warningElements = document.querySelectorAll('.product__input__warning');
+		warningElements.forEach((el) => {
+			if(el.getAttribute('data-status') != 'pass'){
+				el.style.display = 'block';
+				document.getElementById(el.getAttribute('data-target')).style.border = '2px solid red';
+			}
+		});
+		console.log(getCurrentDate());
+		document.getElementById('product_no').value = getCurrentDate(); 
+		//document.getElementById('addProductForm').submit();
+	});
+
 </script>
