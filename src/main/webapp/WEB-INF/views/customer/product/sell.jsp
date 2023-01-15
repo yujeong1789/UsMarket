@@ -22,7 +22,10 @@
 						<div class="product__sell__title essential">상품이미지</div>
 						
 						<div class="product__sell__input">
-							이미지 업로드 api 적용 예정
+							<div class="product__sell__file"> 
+								<input type="file" accept="image/jpg, image/jpeg, image/png" size="">
+							</div>
+							
 						</div>
 					</li>
 					<li>
