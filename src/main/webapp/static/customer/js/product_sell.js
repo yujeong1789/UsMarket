@@ -24,13 +24,14 @@ function priceRegexCheck(element) {
 }
 
 function setBorder(element, bool) {
+	let warningElement = document.getElementById(element.id + '_warning');
 	if (bool == false) {
-		document.getElementById(element.id + '_warning').style.display = 'block';
-		document.getElementById(element.id + '_warning').setAttribute('data-status', 'not');
+		warningElement.style.display = 'block';
+		warningElement.setAttribute('data-status', 'not');
 		element.style.border = '2px solid red';
 	} else {
-		document.getElementById(element.id + '_warning').style.display = 'none';
-		document.getElementById(element.id + '_warning').setAttribute('data-status', 'pass');
+		warningElement.style.display = 'none';
+		warningElement.setAttribute('data-status', 'pass');
 		element.style.border = '1px solid #DCDBE4';
 	}
 }
@@ -55,14 +56,14 @@ function setBlank() {
 function setDisplayCategory1(element) {
 	setBlank();
 	product_category1_no.value = element.getAttribute('value');
-	
+
 	document.getElementById('category2__alert').style.display = 'none';
 	document.getElementById('selected__category__display').style.display = 'flex';
-	
+
 	let selected__category__1 = document.getElementById('selected__category__1');
 	selected__category__1.className = 'selected__category';
 	selected__category__1.innerText = element.innerText;
-	
+
 	console.log('category1 input value = ' + product_category1_no.value);
 }
 
@@ -70,12 +71,12 @@ function setDisplayCategory1(element) {
 function setDisplayCategory2(element) {
 	document.getElementById('product__sell__input__category').style.border = '1px solid #DCDBE4';
 	product_category2_no.value = element.getAttribute('value');
-	
-	let product_category_warning = document.getElementById('product_category_warning'); 
+
+	let product_category_warning = document.getElementById('product_category_warning');
 	product_category_warning.setAttribute('data-status', 'pass');
 	product_category_warning.style.display = 'none';
-	
-	let selected__category__2 = document.getElementById('selected__category__2'); 
+
+	let selected__category__2 = document.getElementById('selected__category__2');
 	selected__category__2.style.display = 'flex';
 	selected__category__2.className = 'selected__category';
 	selected__category__2.innerText = element.innerText;
