@@ -97,9 +97,8 @@
 						<div class="product__sell__title essential">가격</div>
 						
 						<div class="product__sell__input">
-							<input class="input__font price" id="product_price" name="product_price" type="text" placeholder="숫자만 입력해 주세요."/>
-							원
-							<div class="product__input__warning" id="product_price_warning" data-target="product_price" data-status="not">100원 이상 100억 이하의 상품만 거래할 수 있습니다.</div>
+							<input class="input__font price" id="product_price" name="product_price" type="text" placeholder="숫자만 입력해 주세요."/> 원
+							<div class="product__input__warning" id="product_price_warning" data-target="product_price" data-status="not">100원 이상, 100억원 미만의 상품만 거래할 수 있습니다.</div>
 						</div>
 					</li>
 					<li>
@@ -119,8 +118,9 @@
 						<div class="product__sell__title">연관태그</div>
 						
 						<div class="product__sell__input">
-							<input class="input__font text" id="product_tag" name="product_tag" type="text" />
+							<input class="input__font text" id="product_tag" name="product_tag" maxlength="10" type="text" placeholder="태그는 띄어쓰기를 기준으로 구분되며, 최대 5개까지 추가할 수 있습니다. (10글자 이하)"/>
 						</div>
+						<div class="added__tags" id="added__tags"></div>
 					</li>
 				</ul>
 				<div class="product__sell__submit">
@@ -196,22 +196,77 @@
 	
 	// 상품 설명
 	document.getElementById('product_explanation').addEventListener('keyup', function(e){
-		setBorder(this, lengthCheck(this.value, 10, 2000));
+		setBorder(this, lengthCheck(this.value.length, 10, 2000));
 		document.getElementById('current__explanation__length').innerText = this.value.length;
 	});
 	
+	// 상품 태그
+	document.getElementById('product_tag').addEventListener('keydown', function(e){
+		if(e.keyCode == 32){ // space bar 입력되면 글자 수 검사
+			let currentValue = e.target.value.trim();
+			e.target.value = '';
+			if(lengthCheck(currentValue.length, 1, 10) && document.getElementById('added__tags').childElementCount < 5){
+				// 공백 제외 1~10글자면 입력된 태그 div로 추가
+				setTag(currentValue);
+				console.log('pass');
+			}
+			console.log(currentValue.length);
+		}
+	});
+	
+	// 입력된 태그 보여주는 함수
+	function setTag(value) {
+		const parentTag = document.createElement('div');
+
+		const tagContent = document.createElement('span');
+		tagContent.className = 'tag__content';
+		tagContent.innerText = value;
+		parentTag.appendChild(tagContent);
+
+		const tagDelete = document.createElement('img');
+		tagDelete.className = 'tag__delete';
+		tagDelete.setAttribute('src', '${pageContext.request.contextPath}/resources/customer/img/delete_icon.png');
+		parentTag.appendChild(tagDelete);
+
+		tagDelete.addEventListener('click', function(e) {
+			e.target.parentNode.remove();
+		});
+
+		document.getElementById('added__tags').appendChild(parentTag);
+	}
+	
 	// submit
 	document.getElementById('sell__submit').addEventListener('click', function(e){
+		if(!displayWarning()){
+			return;			
+		}else{
+			console.log(getCurrentDate());
+			document.getElementById('product_no').value = getCurrentDate(); 
+			
+			const addedTags = document.querySelectorAll('.tag__content');
+			addedTags.forEach((el, i) => {
+				document.getElementById('product_tag').value += el.innerText;
+				if(i < addedTags.length-1){
+					document.getElementById('product_tag').value += ' ';	
+				}
+			})
+			document.getElementById('addProductForm').submit();
+		}
+	});
+
+	function displayWarning(){
+		var result = true;
+		
 		const warningElements = document.querySelectorAll('.product__input__warning');
 		warningElements.forEach((el) => {
 			if(el.getAttribute('data-status') != 'pass'){
 				el.style.display = 'block';
 				document.getElementById(el.getAttribute('data-target')).style.border = '2px solid red';
+				
+				result = false;
 			}
 		});
-		console.log(getCurrentDate());
-		document.getElementById('product_no').value = getCurrentDate(); 
-		//document.getElementById('addProductForm').submit();
-	});
-
+		console.log(result);
+		return result;
+	};
 </script>
