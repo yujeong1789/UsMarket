@@ -15,7 +15,7 @@
 				<span>*필수항목</span>
 			</div>
 			
-			<form id="addProductForm" name="addProduct" method="post">
+			<form id="addProductForm" name="addProduct" action="<c:url value='/product/sell'/>" method="post" enctype="multipart/form-data">
 				<input type="hidden" id="product_no" name="product_no" readonly required>
 				<ul class="product__sell__ul">
 					<li>
@@ -23,8 +23,12 @@
 						
 						<div class="product__sell__input">
 							<div class="product__sell__file"> 
-								<input type="file" accept="image/jpg, image/jpeg, image/png" size="">
+								<input type="file" id="product_img" name="product_img" accept="image/jpg, image/jpeg, image/png" />
 							</div>
+							<div class="length__check">
+								<span id="current__file__length">0</span>/5
+							</div>
+							<div class="product__img__preview" id="product__img__preview"></div>
 							
 						</div>
 					</li>
@@ -272,4 +276,64 @@
 		console.log(result);
 		return result;
 	};
+	
+	document.getElementById('product_img').addEventListener('change', function(e){
+		/*
+  		if (this.files && this.files[0]) {
+ 			
+			var maxSize = 5 * 1024 * 1024;
+			var fileSize = this.files[0].size;
+
+			if(fileSize > maxSize){
+				alert("첨부파일 사이즈는 5MB 이내로 등록 가능합니다.");
+				this.value = '';
+				return false;
+			}else{ 
+				// 파일 사이즈 유효성 검사 통과하면 미리보기 함수 호출
+				console.log('file size pass');
+				//loadImg(this);
+			}
+		}
+		*/
+			loadImg(this);
+
+	});
+	
+	function loadImg(value){
+		for(let i=0; i<value.files.length; i++){
+			console.log(value.files.length);
+			
+			if(value.files && value.files[i]){
+				const productPreview = document.getElementById('product__img__preview');
+				
+				console.log(value.files[i]);
+				
+				let reader = new FileReader();
+				console.log('file name = '+value.files[i].name);
+				let node = document.createElement('div');
+				reader.onload = function(e){
+					
+					let tmp = '<img class=file__img__preview src='+e.target.result+' /><img class=file__img__delete src=${pageContext.request.contextPath}/resources/customer/img/delete_icon.png />';
+					node.innerHTML = tmp;
+					
+	 				node.querySelector('.file__img__delete').addEventListener('click', function(e){
+						node.remove();
+						
+		                const dataTransfer = new DataTransfer();
+		                let trans = $('#product_img')[0].files;
+		                let filearray = Array.from(trans);
+		                filearray.splice(i, 1);
+		                filearray.forEach(file => {
+		                    dataTransfer.items.add(file);
+		                });
+		                $('#product_img')[0].files = dataTransfer.files;
+					});
+	 				
+					productPreview.appendChild(node);
+				};
+				
+				reader.readAsDataURL(value.files[i]);
+			}
+		}
+	}
 </script>
