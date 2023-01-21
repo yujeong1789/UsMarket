@@ -22,9 +22,10 @@
 						<div class="product__sell__title essential">상품이미지</div>
 						
 						<div class="product__sell__input">
-							<div class="product__sell__file"> 
-								<input type="file" id="product_img" name="product_img" accept="image/jpg, image/jpeg, image/png" />
+							<div class="product__sell__file" id="product__sell__file"> 
+								<input type="file" id="product_img" name="product_img" accept="image/jpg, image/jpeg, image/png"/>
 							</div>
+							<div class="product__input__warning" id="product__sell__file_warning" data-target="product__sell__file" data-status="not">하나 이상의 사진을 업로드해 주세요.</div>
 							<div class="length__check">
 								<span id="current__file__length">0</span>/5
 							</div>
@@ -208,7 +209,7 @@
 	});
 	
 	// 상품 태그
-	document.getElementById('product_tag').addEventListener('keydown', function(e){
+	document.getElementById('product_tag').addEventListener('keyup', function(e){
 		if(e.keyCode == 32){ // space bar 입력되면 글자 수 검사
 			let currentValue = e.target.value.trim();
 			e.target.value = '';
@@ -257,6 +258,7 @@
 					document.getElementById('product_tag').value += ' ';	
 				}
 			})
+			init(fileArray);
 			document.getElementById('addProductForm').submit();
 		}
 	});
@@ -277,63 +279,62 @@
 		return result;
 	};
 	
+	
+	const fileArray = new Array();
 	document.getElementById('product_img').addEventListener('change', function(e){
-		/*
-  		if (this.files && this.files[0]) {
- 			
-			var maxSize = 5 * 1024 * 1024;
-			var fileSize = this.files[0].size;
-
-			if(fileSize > maxSize){
-				alert("첨부파일 사이즈는 5MB 이내로 등록 가능합니다.");
-				this.value = '';
-				return false;
-			}else{ 
-				// 파일 사이즈 유효성 검사 통과하면 미리보기 함수 호출
-				console.log('file size pass');
-				//loadImg(this);
-			}
-		}
-		*/
+		var maxSize = 5 * 1024 * 1024;
+		
+		if(fileArray.length > 4){
+			alert('첨부파일은 최대 5개까지 등록 가능합니다.');
+		}else if(this.files[0].size > maxSize){
+			alert('첨부파일 사이즈는 5MB 이내로 등록 가능합니다.');
+		} else{ 
+			// 파일 사이즈 유효성 검사 통과하면 미리보기 함수 호출
+			console.log('file size pass');
 			loadImg(this);
-
+		}
+		
 	});
 	
+	
+	// 업로드된 파일 객체를 배열에 할당
 	function loadImg(value){
-		for(let i=0; i<value.files.length; i++){
-			console.log(value.files.length);
+		if(value.files && value.files[0]){
+			fileArray.push(value.files[0]);
+			let reader = new FileReader();
+			console.log('file name = '+value.files[0].name);
+			let node = document.createElement('div');
 			
-			if(value.files && value.files[i]){
-				const productPreview = document.getElementById('product__img__preview');
+			reader.onload = function(e){
+				let tmp = '<img class=file__img__preview src='+e.target.result+' /><img class=file__img__delete src=${pageContext.request.contextPath}/resources/customer/img/delete_icon.png data-idx='+value.files[0].lastModified+' />';
+				node.innerHTML = tmp;
 				
-				console.log(value.files[i]);
-				
-				let reader = new FileReader();
-				console.log('file name = '+value.files[i].name);
-				let node = document.createElement('div');
-				reader.onload = function(e){
-					
-					let tmp = '<img class=file__img__preview src='+e.target.result+' /><img class=file__img__delete src=${pageContext.request.contextPath}/resources/customer/img/delete_icon.png />';
-					node.innerHTML = tmp;
-					
-	 				node.querySelector('.file__img__delete').addEventListener('click', function(e){
-						node.remove();
-						
-		                const dataTransfer = new DataTransfer();
-		                let trans = $('#product_img')[0].files;
-		                let filearray = Array.from(trans);
-		                filearray.splice(i, 1);
-		                filearray.forEach(file => {
-		                    dataTransfer.items.add(file);
-		                });
-		                $('#product_img')[0].files = dataTransfer.files;
-					});
-	 				
-					productPreview.appendChild(node);
-				};
-				
-				reader.readAsDataURL(value.files[i]);
-			}
-		}
-	}
+				node.querySelector('.file__img__delete').addEventListener('click', function(e){
+ 					const idx = Array.from(document.getElementById('product__img__preview').children).indexOf(e.target.parentElement);
+ 					console.log('target index = '+idx);
+ 					fileArray.splice(idx, 1);
+ 					document.getElementById('current__file__length').innerText = fileArray.length;
+ 					setBorder(document.getElementById('product__sell__file'), lengthCheck(document.getElementById('current__file__length').innerText, 1, 5));
+ 					node.remove();
+				}); // delete click event
+ 				document.getElementById('product__img__preview').appendChild(node);
+			}; // onload
+			reader.readAsDataURL(value.files[0]);
+		} // if
+		document.getElementById('current__file__length').innerText = fileArray.length;
+		setBorder(document.getElementById('product__sell__file'), lengthCheck(document.getElementById('current__file__length').innerText, 1, 5));
+	} // loadImg
+	
+	
+	
+	// submit 전 파일 저장된 배열을 filelist에 할당
+	function init(fileArray){
+		const dataTransfer = new DataTransfer();
+		fileArray.forEach(file => {
+			dataTransfer.items.add(file);
+			console.log(file);
+		});
+		document.getElementById('product_img').files = dataTransfer.files;
+	} // init
+	
 </script>
