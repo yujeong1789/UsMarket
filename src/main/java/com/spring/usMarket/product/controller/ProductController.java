@@ -1,12 +1,12 @@
 package com.spring.usMarket.product.controller;
 
+import java.io.File;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,8 +15,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.spring.usMarket.common.PageHandler;
 import com.spring.usMarket.common.SearchCondition;
@@ -113,11 +114,14 @@ public class ProductController {
 	}
 	
 	@PostMapping("/sell")
-	public void addProduct(HttpServletRequest request) throws Exception{
-		Iterator it = request.getParameterMap().entrySet().iterator();
+	public void addProduct(HttpServletRequest request, @RequestParam("product_img") MultipartFile[] file) throws Exception{
+		for (MultipartFile f : file) {
+			System.out.println(f.getOriginalFilename()+", "+f.getSize()+", "+f.getContentType());
+		}
 		
-		while (it.hasNext()) {
-			System.out.println(it.next());
+		Map<String, Object> map = new HashMap<String, Object>(request.getParameterMap());
+		for (String key : map.keySet()) {
+			logger.info("{} = {}", key, map.get(key));
 		}
 	}
 	
