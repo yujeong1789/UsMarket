@@ -231,7 +231,7 @@
 		const tag = `${productInfo.PRODUCT_TAG}`;
 		
 		if(tag.length > 0){
-			const tagArr = tag.split(',');
+			const tagArr = tag.split(' ');
 			
 			tagArr.forEach((el) => {
 				let appendTag = "<a href='${pageContext.request.contextPath}/product/list?keyword="+el+"'>"+el+"</a>";
