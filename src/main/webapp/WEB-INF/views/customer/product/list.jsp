@@ -70,7 +70,7 @@
 						<div class="product__info__1">
 							<div class="product__title">
 								<a href="<c:url value='/product/info?product_no=${product.product_no}' />">
-									<c:out value="${product.product_no} ${product.product_name }" />
+									<c:out value="${product.product_name }" />
 								</a> <!-- 상품명 -->
 							</div>
 							<div class="product__info__2">

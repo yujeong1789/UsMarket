@@ -104,7 +104,7 @@ public class ProductServiceImpl implements ProductService {
 	
 	@Override
 	@Transactional(rollbackFor = SQLException.class, readOnly = true)
-	public Map<String, Object> getProductInfo(Integer product_no) throws Exception {
+	public Map<String, Object> getProductInfo(String product_no) throws Exception {
 		
 		Map<String, Object> resultMap = productDao.searchProductInfo(product_no);
 		resultMap.put("PRODUCT_REGDATE", TimeConvert.calculateTime((Date)resultMap.get("PRODUCT_REGDATE")));
@@ -138,7 +138,7 @@ public class ProductServiceImpl implements ProductService {
 
 	@Override
 	@Transactional(rollbackFor = SQLException.class, readOnly = true)
-	public int getBookmarkByInfo(Integer current_no, Integer product_no) throws Exception {
+	public int getBookmarkByInfo(Integer current_no, String product_no) throws Exception {
 		
 		int rowCnt = productDao.searchBookmarkByInfo(current_no, product_no); 
 		logger.info("북마크 추가 여부 = {}", (rowCnt == 1 ? "ADDED" : "NOT_ADDED"));
@@ -149,7 +149,7 @@ public class ProductServiceImpl implements ProductService {
 
 	@Override
 	@Transactional(rollbackFor = SQLException.class)
-	public int removeBookmark(Integer member_no, Integer product_no) throws Exception {
+	public int removeBookmark(Integer member_no, String product_no) throws Exception {
 		
 		int rowCnt = productDao.deleteBookmark(member_no, product_no);
 		logger.info("북마크 삭제 결과 = {}", getResult(rowCnt));
@@ -160,7 +160,7 @@ public class ProductServiceImpl implements ProductService {
 
 	@Override
 	@Transactional(rollbackFor = SQLException.class)
-	public int addBookmark(Integer member_no, Integer product_no) throws Exception {
+	public int addBookmark(Integer member_no, String product_no) throws Exception {
 		
 		int rowCnt = productDao.insertBookmark(member_no, product_no);
 		logger.info("북마크 추가 결과 = {}", getResult(rowCnt));
@@ -171,7 +171,7 @@ public class ProductServiceImpl implements ProductService {
 
 	@Override
 	@Transactional(rollbackFor = SQLException.class)
-	public int modifyProductView(Integer product_no) throws Exception {
+	public int modifyProductView(String product_no) throws Exception {
 		
 		int rowCnt = productDao.updateProductView(product_no);
 		logger.info("조회수 증가 결과 = {}", getResult(rowCnt));

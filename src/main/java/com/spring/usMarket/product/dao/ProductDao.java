@@ -13,19 +13,19 @@ public interface ProductDao {
 	
 	int searchProductCount(SearchCondition sc) throws Exception;
 	
-	Map<String, Object> searchProductInfo(Integer product_no) throws Exception;
+	Map<String, Object> searchProductInfo(String product_no) throws Exception;
 	
-	int updateProductView(Integer product_no) throws Exception;
+	int updateProductView(String product_no) throws Exception;
 	
 	Map<String, Object> searchSellerInfo(Integer seller_no) throws Exception;
 	
 	List<Map<String, Object>> searchReviewByInfo(Integer seller_no) throws Exception;
 	
-	int searchBookmarkByInfo(Integer current_no, Integer product_no) throws Exception;
+	int searchBookmarkByInfo(Integer current_no, String product_no) throws Exception;
 	
-	int deleteBookmark(Integer member_no, Integer product_no) throws Exception;
+	int deleteBookmark(Integer member_no, String product_no) throws Exception;
 	
-	int insertBookmark(Integer member_no, Integer product_no) throws Exception;
+	int insertBookmark(Integer member_no, String product_no) throws Exception;
 	
 	int searchMemberNo(String member_id) throws Exception;
 }

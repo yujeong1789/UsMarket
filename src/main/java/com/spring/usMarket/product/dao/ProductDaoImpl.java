@@ -39,12 +39,12 @@ public class ProductDaoImpl implements ProductDao {
 	}
 	
 	@Override
-	public Map<String, Object> searchProductInfo(Integer product_no) throws Exception {
+	public Map<String, Object> searchProductInfo(String product_no) throws Exception {
 		return session.selectOne(namespace+"searchProductInfo", product_no);
 	}
 
 	@Override
-	public int updateProductView(Integer product_no) throws Exception {
+	public int updateProductView(String product_no) throws Exception {
 		return session.update(namespace+"updateProductView", product_no);
 	}
 
@@ -59,7 +59,7 @@ public class ProductDaoImpl implements ProductDao {
 	}
 
 	@Override
-	public int searchBookmarkByInfo(Integer current_no, Integer product_no) throws Exception {
+	public int searchBookmarkByInfo(Integer current_no, String product_no) throws Exception {
 		
 		Map<String, Object> map = new HashMap<>();
 		map.put("current_no", current_no);
@@ -69,7 +69,7 @@ public class ProductDaoImpl implements ProductDao {
 	}
 
 	@Override
-	public int deleteBookmark(Integer member_no, Integer product_no) throws Exception {
+	public int deleteBookmark(Integer member_no, String product_no) throws Exception {
 		
 		Map<String, Object> map = new HashMap<>();
 		map.put("member_no", member_no);
@@ -79,7 +79,7 @@ public class ProductDaoImpl implements ProductDao {
 	}
 
 	@Override
-	public int insertBookmark(Integer member_no, Integer product_no) throws Exception {
+	public int insertBookmark(Integer member_no, String product_no) throws Exception {
 		
 		Map<String, Object> map = new HashMap<>();
 		map.put("member_no", member_no);
