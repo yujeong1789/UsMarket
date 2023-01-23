@@ -68,7 +68,7 @@ public class ProductController {
 	
 	
 	@GetMapping("/info")
-	public void info(Integer product_no, HttpServletRequest request, Model model) {
+	public void info(String product_no, HttpServletRequest request, Model model) {
 		try {
 			Map<String, Object> productInfo = productService.getProductInfo(product_no);
 			model.addAttribute("productInfo", productInfo);
@@ -86,7 +86,7 @@ public class ProductController {
 	
 	
 	@GetMapping("/like")
-	public String like(HttpServletRequest request, Integer product_no, Integer status) {
+	public String like(HttpServletRequest request, String product_no, Integer status) {
 		
 		Integer member_no = Integer.parseInt(String.valueOf(request.getSession().getAttribute("userNo")));
 		
@@ -108,13 +108,17 @@ public class ProductController {
 		return "redirect:/product/info?product_no="+product_no;
 	}
 	
+	
 	@GetMapping("/sell")
 	public void sell() throws Exception{
 		logger.info("product/sell");
 	}
 	
+	
 	@PostMapping("/sell")
 	public void addProduct(HttpServletRequest request, @RequestParam("product_img") MultipartFile[] file) throws Exception{
+		
+		// form 전송 데이터 받는 것 확인, 파일 업로드 기능 구현할 것
 		for (MultipartFile f : file) {
 			System.out.println(f.getOriginalFilename()+", "+f.getSize()+", "+f.getContentType());
 		}
@@ -123,6 +127,8 @@ public class ProductController {
 		for (String key : map.keySet()) {
 			logger.info("{} = {}", key, map.get(key));
 		}
+		
+		// return "redirect:/product/info?product_no="+product_no;
 	}
 	
 /*	

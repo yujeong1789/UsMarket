@@ -83,7 +83,7 @@ public class FetchController {
 	}
 	
 	@GetMapping("/bookmark/{current_no}/{product_no}")
-	public int bookmark(@PathVariable Integer current_no, @PathVariable Integer product_no) {
+	public int bookmark(@PathVariable Integer current_no, @PathVariable String product_no) {
 		
 		int bookmarkStatus = 0;
 		
