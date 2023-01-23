@@ -54,12 +54,12 @@ public class ProductServiceImplTest {
 	public void setBookmarkTest() throws Exception{
 		List<ProductDto> productList = productService.getProductByCategory(new SearchCondition(1, 30, "", "", 1, 1));
 		
-		List<Integer> productNoList = new ArrayList<>();
+		List<String> productNoList = new ArrayList<>();
 		for (ProductDto dto : productList) {
 			productNoList.add(dto.getProduct_no());
 		}
 		
-		int randomProductNo = productNoList.get((int)((Math.random()*productNoList.size())));
+		String randomProductNo = productNoList.get((int)((Math.random()*productNoList.size()))).toString();
 		int bookmarkStatus = productService.getBookmarkByInfo(member_no, randomProductNo);
 		
 		int result = 0;
