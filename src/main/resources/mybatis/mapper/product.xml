@@ -6,8 +6,7 @@
 	<sql id="searchKeyword">
 		<choose>
 			<when test='keyword!=null and keyword!=""'>
-				 AND product_name LIKE '%'||#{keyword}||'%' 
-				 OR product_tag LIKE '%'||#{keyword}||'%' 
+				 AND (product_name LIKE '%'||#{keyword}||'%' OR product_tag LIKE '%'||#{keyword}||'%') 
 			</when>
 			<otherwise>
 				 AND product_category1_no = #{category1} 
@@ -129,7 +128,7 @@
 	</resultMap>
 	
 	<!-- 상품 상세보기 출력 -->
-	<select id="searchProductInfo" parameterType="int" resultMap="productInfo">
+	<select id="searchProductInfo" parameterType="string" resultMap="productInfo">
 		SELECT m.member_id, p.*, c.product_category1_name, c.product_category2_name 
 			, (SELECT count(b.member_no) FROM bookmark b WHERE p.product_no = b.product_no) AS "bookmark_count" 
 		FROM product p, member m, category_view c 
@@ -140,7 +139,7 @@
 	
 	
 	<!-- 상품 조회수 증가 -->
-	<update id="updateProductView" parameterType="int">
+	<update id="updateProductView" parameterType="string">
 		UPDATE product 
 		SET product_view = product_view+1 
 		WHERE product_no = #{product_no} 
@@ -205,4 +204,5 @@
 	<select id="searchMemberNo" parameterType="string" resultType="int">
 		SELECT member_no FROM member WHERE member_id = #{member_id}
 	</select>
+
 </mapper>
