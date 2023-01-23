@@ -6,7 +6,7 @@ import com.spring.usMarket.common.TimeConvert;
 
 public class ProductDto {
 	private Integer member_state_no;
-	private Integer product_no;
+	private String product_no;
 	private Integer seller_no;
 	private Integer product_category1_no;
 	private Integer product_category2_no;
@@ -17,17 +17,21 @@ public class ProductDto {
 	private String product_explanation;
 	private String product_tag;
 	private Integer product_view;
-	private String product_regdate;
+	private Date product_regdate;
 	private String product_pay_kind;
 	private String product_used; // Y - 중고, N - 새상품
 	private String product_img_uuid;
 	
-	public ProductDto() {}
+	
+	
+	public ProductDto() {
+	}
 
-	public ProductDto(Integer member_state_no, Integer product_no, Integer seller_no, Integer product_category1_no,
+	public ProductDto(Integer member_state_no, String product_no, Integer seller_no, Integer product_category1_no,
 			Integer product_category2_no, Integer product_state_no, String product_name, String product_change,
-			Integer product_price, String product_explanation, String product_tag, 
-			Integer product_view, String product_regdate, String product_pay_kind, String product_used, String product_img_uuid) {
+			Integer product_price, String product_explanation, String product_tag, Integer product_view,
+			Date product_regdate, String product_pay_kind, String product_used, String product_img_uuid) {
+		
 		this.member_state_no = member_state_no;
 		this.product_no = product_no;
 		this.seller_no = seller_no;
@@ -45,7 +49,7 @@ public class ProductDto {
 		this.product_used = product_used;
 		this.product_img_uuid = product_img_uuid;
 	}
-	
+
 	public Integer getMember_state_no() {
 		return member_state_no;
 	}
@@ -54,11 +58,11 @@ public class ProductDto {
 		this.member_state_no = member_state_no;
 	}
 
-	public Integer getProduct_no() {
+	public String getProduct_no() {
 		return product_no;
 	}
 
-	public void setProduct_no(Integer product_no) {
+	public void setProduct_no(String product_no) {
 		this.product_no = product_no;
 	}
 
@@ -143,11 +147,11 @@ public class ProductDto {
 	}
 
 	public String getProduct_regdate() {
-		return product_regdate;
+		return TimeConvert.calculateTime(product_regdate);
 	}
 
 	public void setProduct_regdate(Date product_regdate) {
-		this.product_regdate = TimeConvert.calculateTime(product_regdate);
+		this.product_regdate = product_regdate;
 	}
 
 	public String getProduct_pay_kind() {
@@ -157,7 +161,7 @@ public class ProductDto {
 	public void setProduct_pay_kind(String product_pay_kind) {
 		this.product_pay_kind = product_pay_kind;
 	}
-	
+
 	public String getProduct_used() {
 		return product_used;
 	}
@@ -180,9 +184,8 @@ public class ProductDto {
 				+ seller_no + ", product_category1_no=" + product_category1_no + ", product_category2_no="
 				+ product_category2_no + ", product_state_no=" + product_state_no + ", product_name=" + product_name
 				+ ", product_change=" + product_change + ", product_price=" + product_price + ", product_explanation="
-				+ product_explanation + ", product_tag=" + product_tag + ", product_used=" + product_used
-				+ ", product_view=" + product_view + ", product_regdate=" + product_regdate + ", product_pay_kind="
-				+ product_pay_kind + ", product_img_uuid=" + product_img_uuid + "]";
+				+ product_explanation + ", product_tag=" + product_tag + ", product_view=" + product_view
+				+ ", product_regdate=" + getProduct_regdate() + ", product_pay_kind=" + product_pay_kind + ", product_used="
+				+ product_used + ", product_img_uuid=" + product_img_uuid + "]";
 	}
-
 }
