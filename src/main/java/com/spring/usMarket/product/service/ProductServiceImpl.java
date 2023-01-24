@@ -2,7 +2,6 @@ package com.spring.usMarket.product.service;
 
 import java.sql.SQLException;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -10,16 +9,16 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.spring.usMarket.common.SearchCondition;
 import com.spring.usMarket.common.TimeConvert;
-import com.spring.usMarket.product.controller.ProductController;
 import com.spring.usMarket.product.dao.ProductCategoryDao;
 import com.spring.usMarket.product.dao.ProductDao;
 import com.spring.usMarket.product.domain.ProductCategoryDto;
 import com.spring.usMarket.product.domain.ProductDto;
+import com.spring.usMarket.product.domain.ProductFileDto;
+import com.spring.usMarket.product.domain.ProductInsertDto;
 
 @Service
 public class ProductServiceImpl implements ProductService {
@@ -175,6 +174,31 @@ public class ProductServiceImpl implements ProductService {
 		
 		int rowCnt = productDao.updateProductView(product_no);
 		logger.info("조회수 증가 결과 = {}", getResult(rowCnt));
+		
+		return rowCnt;
+	}
+
+
+	@Override
+	@Transactional(rollbackFor = SQLException.class)
+	public int addProductFile(List<ProductFileDto> productFileList) throws Exception {
+		
+		int rowCnt = 0;
+		for(ProductFileDto dto : productFileList) {
+			int result = productDao.insertProductFile(dto);
+			rowCnt+=result;
+		}
+		logger.info("productFileList.size() = {}, 파일 추가 결과 = {}", productFileList.size(), rowCnt);
+		
+		return rowCnt;
+	}
+
+
+	@Override
+	@Transactional(rollbackFor = SQLException.class)
+	public int addProduct(ProductInsertDto productInsertDto) throws Exception {
+		int rowCnt = productDao.insertProduct(productInsertDto);
+		logger.info("상품 등록 결과 = {}", getResult(rowCnt));
 		
 		return rowCnt;
 	}

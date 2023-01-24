@@ -200,9 +200,24 @@
 		values (#{bookmark_seq}, #{member_no}, #{product_no}) 
 	</insert>
 	
+	
 	<!-- 회원번호 출력 -->
 	<select id="searchMemberNo" parameterType="string" resultType="int">
 		SELECT member_no FROM member WHERE member_id = #{member_id}
 	</select>
+
+	
+	<!-- 상품 등록 -->
+	<insert id="insertProduct" parameterType="productInsertDto">
+		INSERT INTO product(product_no, seller_no, product_category1_no, product_category2_no, product_name, product_used, product_change, product_price, product_explanation, product_tag) 
+		values(#{product_no}, #{seller_no}, #{product_category1_no}, #{product_category2_no}, #{product_name}, #{product_used}, #{product_change}, #{product_price}, #{product_explanation}, #{product_tag}) 
+	</insert>
+	
+
+	<!-- 상품 이미지 등록 -->
+	<insert id="insertProductFile" parameterType="productFileDto">
+		INSERT INTO product_img 
+		 values(#{product_no}, #{product_img_path}, #{product_img_filename}, #{product_img_uuid}, #{product_img_order}) 
+	</insert>
 
 </mapper>

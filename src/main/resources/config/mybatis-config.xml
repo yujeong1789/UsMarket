@@ -8,6 +8,12 @@
 		<typeAlias type="com.spring.usMarket.product.domain.ProductCategoryDto"
 		 alias="productCategoryDto"/>
 		 
+		<typeAlias type="com.spring.usMarket.product.domain.ProductFileDto"
+		 alias="productFileDto"/>
+		 
+		<typeAlias type="com.spring.usMarket.product.domain.ProductInsertDto"
+		 alias="productInsertDto"/>
+		 
 		<typeAlias type="com.spring.usMarket.product.domain.ProductDto"
 		 alias="productDto"/>
 		 
