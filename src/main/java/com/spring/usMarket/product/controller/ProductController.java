@@ -1,8 +1,5 @@
 package com.spring.usMarket.product.controller;
 
-import java.io.File;
-import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -16,13 +13,14 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import com.spring.usMarket.common.PageHandler;
 import com.spring.usMarket.common.SearchCondition;
 import com.spring.usMarket.product.domain.ProductCategoryDto;
 import com.spring.usMarket.product.domain.ProductDto;
+import com.spring.usMarket.product.domain.ProductFileDto;
+import com.spring.usMarket.product.service.ProductFileService;
 import com.spring.usMarket.product.service.ProductService;
 
 @Controller
@@ -30,11 +28,15 @@ import com.spring.usMarket.product.service.ProductService;
 public class ProductController {
 	private static final Logger logger = LoggerFactory.getLogger(ProductController.class);
 	
+	
 	private static final int ADDED = 1;
 	private static final int NOT_ADDED = 0;
 	
 	@Autowired
 	ProductService productService;
+	
+	@Autowired
+	ProductFileService fileService;
 	
 	@GetMapping("/list")
 	public void list(SearchCondition sc, Model model){
@@ -116,18 +118,12 @@ public class ProductController {
 	
 	
 	@PostMapping("/sell")
-	public void addProduct(HttpServletRequest request, @RequestParam("product_img") MultipartFile[] file) throws Exception{
+	public void addProduct(MultipartHttpServletRequest request) throws Exception{
 		
-		// form 전송 데이터 받는 것 확인, 파일 업로드 기능 구현할 것
-		for (MultipartFile f : file) {
-			System.out.println(f.getOriginalFilename()+", "+f.getSize()+", "+f.getContentType());
+		List<ProductFileDto> list = fileService.upload(request.getFiles("product_img"), request.getParameter("product_no"));
+		for(ProductFileDto dto : list) {
+			logger.info("productFileDto = {}", dto.toString());
 		}
-		
-		Map<String, Object> map = new HashMap<String, Object>(request.getParameterMap());
-		for (String key : map.keySet()) {
-			logger.info("{} = {}", key, map.get(key));
-		}
-		
 		// return "redirect:/product/info?product_no="+product_no;
 	}
 	
