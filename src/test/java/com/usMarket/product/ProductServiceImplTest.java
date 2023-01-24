@@ -3,6 +3,7 @@ package com.usMarket.product;
 import static org.junit.Assert.assertEquals;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -17,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.spring.usMarket.common.SearchCondition;
 import com.spring.usMarket.product.domain.ProductCategoryDto;
 import com.spring.usMarket.product.domain.ProductDto;
+import com.spring.usMarket.product.domain.ProductInsertDto;
 import com.spring.usMarket.product.service.ProductService;
 
 @Transactional
@@ -70,6 +72,13 @@ public class ProductServiceImplTest {
 		}
 		
 		System.out.println("setBookmarkTest = " + (result == 1 ? "PASS" : "FAIL"));
+		assertEquals(result, 1);
+	}
+	
+	@Test
+	public void addProductTest() throws Exception{
+		ProductInsertDto dto = new ProductInsertDto(20230122201753956L, 43, 1, 1, "test title", "N", "N", 150000, "test content", "t a g");
+		int result = productService.addProduct(dto);
 		assertEquals(result, 1);
 	}
 
