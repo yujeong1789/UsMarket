@@ -1,11 +1,14 @@
 package com.spring.usMarket.product.service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 import com.spring.usMarket.common.SearchCondition;
 import com.spring.usMarket.product.domain.ProductCategoryDto;
 import com.spring.usMarket.product.domain.ProductDto;
+import com.spring.usMarket.product.domain.ProductFileDto;
+import com.spring.usMarket.product.domain.ProductInsertDto;
 
 public interface ProductService {
 	List<Map<String, Object>> getProductCategory1() throws Exception;
@@ -33,4 +36,8 @@ public interface ProductService {
 	int removeBookmark(Integer member_no, String product_no) throws Exception;
 	
 	int addBookmark(Integer member_no, String product_no) throws Exception;
+	
+	int addProduct(ProductInsertDto productInsertDto) throws Exception;
+	
+	int addProductFile(List<ProductFileDto> productFileList) throws Exception;
 }

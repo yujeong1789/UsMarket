@@ -11,6 +11,8 @@ import org.springframework.stereotype.Repository;
 
 import com.spring.usMarket.common.SearchCondition;
 import com.spring.usMarket.product.domain.ProductDto;
+import com.spring.usMarket.product.domain.ProductFileDto;
+import com.spring.usMarket.product.domain.ProductInsertDto;
 
 @Repository
 public class ProductDaoImpl implements ProductDao {
@@ -86,6 +88,16 @@ public class ProductDaoImpl implements ProductDao {
 		map.put("product_no", product_no);
 		
 		return session.insert(namespace+"insertBookmark", map);
+	}
+
+	@Override
+	public int insertProductFile(ProductFileDto productFileDto) throws Exception {
+		return session.insert(namespace+"insertProductFile", productFileDto);
+	}
+
+	@Override
+	public int insertProduct(ProductInsertDto productInsertDto) throws Exception {
+		return session.insert(namespace+"insertProduct", productInsertDto);
 	}
 	
 

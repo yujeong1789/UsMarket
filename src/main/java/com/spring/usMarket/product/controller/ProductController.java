@@ -20,6 +20,7 @@ import com.spring.usMarket.common.SearchCondition;
 import com.spring.usMarket.product.domain.ProductCategoryDto;
 import com.spring.usMarket.product.domain.ProductDto;
 import com.spring.usMarket.product.domain.ProductFileDto;
+import com.spring.usMarket.product.domain.ProductInsertDto;
 import com.spring.usMarket.product.service.ProductFileService;
 import com.spring.usMarket.product.service.ProductService;
 
@@ -112,20 +113,35 @@ public class ProductController {
 	
 	
 	@GetMapping("/sell")
-	public void sell() throws Exception{
+	public void sell(){
 		logger.info("product/sell");
 	}
 	
 	
 	@PostMapping("/sell")
-	public void addProduct(MultipartHttpServletRequest request) throws Exception{
-		
-		List<ProductFileDto> list = fileService.upload(request.getFiles("product_img"), request.getParameter("product_no"));
-		for(ProductFileDto dto : list) {
-			logger.info("productFileDto = {}", dto.toString());
-		}
-		// return "redirect:/product/info?product_no="+product_no;
+	public String addProduct(MultipartHttpServletRequest request, ProductInsertDto dto){
+		try {
+			// 1. 상품 등록
+			logger.info("productInsertDto = {}", dto.toString());
+			int result = productService.addProduct(dto);
+			
+			if(result != 1) return "redirect:/product/sell";
+			
+			// 2. 파일 업로드
+			List<ProductFileDto> list = fileService.upload(request.getFiles("product_img"), dto.getProduct_no().toString());
+			
+			// 3. 파일 db에 insert
+			int rowCnt = productService.addProductFile(list);
+			logger.info("addProductFile result = {}", (list.size() == rowCnt ? "SUCCESS" : "FAIL"));
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		} // try-catch
+				
+		return "redirect:/product/info?product_no="+dto.getProduct_no();
 	}
+	
+	
 	
 /*	
     private boolean loginCheck(HttpServletRequest request) {

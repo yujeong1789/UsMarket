@@ -17,6 +17,7 @@
 			
 			<form id="addProductForm" name="addProduct" action="<c:url value='/product/sell'/>" method="post" enctype="multipart/form-data">
 				<input type="hidden" id="product_no" name="product_no" readonly required>
+				<input type="hidden" id="seller_no" name="seller_no" readonly required>
 				<ul class="product__sell__ul">
 					<li>
 						<div class="product__sell__title essential">상품이미지</div>
@@ -145,12 +146,14 @@
 
 	document.addEventListener('DOMContentLoaded', function(){
 		
+		// seller_no
+		document.getElementById('seller_no').value = document.getElementById('loginNo').dataset.no;
+		
 		const category1__ul = document.getElementById('category1__ul');
 		const category2__ul = document.getElementById('category2__ul');
 		
 		const product_category1_no = document.getElementById('product_category1_no');
 		const product_category2_no = document.getElementById('product_category2_no');
-		
 		
 		fetch("/usMarket/fetch/category")
 		.then((response) => response.json())
