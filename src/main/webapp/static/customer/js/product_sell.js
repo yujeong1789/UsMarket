@@ -2,16 +2,19 @@
  * 
  */
 
-// 10보다 작은 값에 0을 붙임
-function _pad(n, width) {
-	n = n + '';
-	return n.length >= width ? n : new Array(width - n.length + 1).join('0') + n;
+// 10보다 작은 값에 0을 붙임 (1월 -> 01월)
+function leftPad(value) {
+	if (value>=10){
+		return value
+	}
+	return '0'+value;
 }
 
 // 현재 시간을 리턴
 function getCurrentDate() {
 	var d = new Date();
-	return d.getFullYear() + _pad((1 + d.getMonth()), '2') + _pad(d.getDate(), '2') + d.getHours() + d.getMinutes() + d.getSeconds() + d.getMilliseconds();
+	return (d.getFullYear().toString().slice(2)) + leftPad(d.getMonth()+1) + leftPad(d.getDate()) + leftPad(d.getHours()) + leftPad(d.getMinutes()) + d.getSeconds() + d.getMilliseconds();
+	//return (d.getFullYear().toString().slice(2)) +'/'+ leftPad(d.getMonth()+1) + '/'+ leftPad(d.getDate()) +' '+leftPad(d.getHours()) +':'+ leftPad(d.getMinutes()) +':'+ d.getSeconds() +'.'+  d.getMilliseconds();
 }
 
 // 숫자 외 값을 입력하면 알림 띄우고 공백으로 replace하는 함수
