@@ -74,6 +74,8 @@ public class ProductController {
 	public void info(String product_no, HttpServletRequest request, Model model) {
 		try {
 			Map<String, Object> productInfo = productService.getProductInfo(product_no);
+			List<String> productImage = productService.getProductImage(product_no);			
+			model.addAttribute("productImage", productImage);
 			model.addAttribute("productInfo", productInfo);
 			
 		} catch (Exception e) {
@@ -128,7 +130,7 @@ public class ProductController {
 			if(result != 1) return "redirect:/product/sell";
 			
 			// 2. 파일 업로드
-			List<ProductFileDto> list = fileService.upload(request.getFiles("product_img"), dto.getProduct_no().toString());
+			List<ProductFileDto> list = fileService.upload(request.getFiles("product_img"), dto.getProduct_no());
 			
 			// 3. 파일 db에 insert
 			int rowCnt = productService.addProductFile(list);
