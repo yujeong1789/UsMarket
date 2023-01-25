@@ -31,7 +31,7 @@
 			<div class="product__box">
 				<div class="product__img">
 					<a href="<c:url value='/product/info?product_no=${productDto.product_no}' />">
-						<img src="${pageContext.request.contextPath}/resources/productImgUpload/2022/11/29/IMG_5403.PNG">
+						<img src="${productDto.product_img_path }">
 						<!-- 임시 이미지 출력 (수정 예정) -->
 					</a>
 				</div>

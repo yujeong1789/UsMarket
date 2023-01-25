@@ -63,8 +63,7 @@
 								<c:if test="${product.product_state_no == 3}">
 									<img class="product__img__top" src="${pageContext.request.contextPath}/resources/customer/img/product/complete.png">
 								</c:if>
-								<img src="${pageContext.request.contextPath}/resources/productImgUpload/2022/11/29/IMG_5403.PNG">
-								<!-- 임시 이미지 출력 (수정 예정) -->
+								<img src="${product.product_img_path}">
 							</a>
 						</div>
 						<div class="product__info__1">
