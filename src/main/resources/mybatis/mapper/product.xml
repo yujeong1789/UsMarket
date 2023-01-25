@@ -47,9 +47,9 @@
 	<!-- 메인 상품 전체 출력 -->
 	<select id="searchMainProduct" resultType="productDto">
 		<![CDATA[ 
-		SELECT product_no, product_name, product_price, product_img_uuid, product_regdate 
-		FROM product_view 
-		WHERE product_state_no = 1 AND member_state_no = 1 AND rownum <= 30 
+		SELECT product_no, product_name, product_price, product_img_path, product_regdate 
+		 FROM product_view 
+		 WHERE product_state_no = 1 AND member_state_no = 1 AND rownum <= 30 
 		]]>
 	</select>
 
@@ -57,55 +57,55 @@
 	<!-- 상품 대분류 출력 -->
 	<select id="searchProductCategory1" resultType="map">
 		SELECT * FROM product_category1 
-		ORDER BY product_category1_no
+		 ORDER BY product_category1_no
 	</select>
 	
 	
 	<!-- 상품 소분류 출력 -->
 	<select id="searchProductCategory2" parameterType="int" resultType="productCategoryDto">
 		SELECT * FROM category_view 
-		WHERE product_category1_no = #{product_category1_no} 
-		ORDER BY product_category2_no 
+		 WHERE product_category1_no = #{product_category1_no} 
+		 ORDER BY product_category2_no 
 	</select>
 	
 	<!-- 상품 소분류 출력2 -->
 	<select id="searchCategory2" parameterType="int" resultType="map">
 		SELECT product_category2_no, product_category2_name  
-		FROM product_category2 
-		WHERE product_category1_no = #{product_category1_no} 
-		ORDER BY product_category2_no
+		 FROM product_category2 
+		 WHERE product_category1_no = #{product_category1_no} 
+		 ORDER BY product_category2_no
 	</select>
 	
 	
 	<!-- 분류별 상품 출력 -->
 	<select id="searchProductByCategory" parameterType="searchCondition" resultType="productDto">
-		SELECT product_no, product_state_no, product_name, product_price, product_img_uuid, product_regdate 
-		FROM ( 
+		SELECT product_no, product_state_no, product_name, product_price, product_img_path, product_regdate 
+		 FROM ( 
 				SELECT rownum as num, A.*  
-				FROM ( 
-						SELECT product_no, product_state_no, product_name, product_price, product_img_uuid, product_regdate  
-						FROM product_view 
-						WHERE member_state_no = 1  
-						<include refid="searchProductState" /> 
-						<include refid="searchKeyword" /> 
-						ORDER BY product_regdate DESC, product_no DESC 	
-					)A
-			)
-		WHERE num BETWEEN #{startPage} AND #{endPage}
+				 FROM ( 
+						SELECT product_no, product_state_no, product_name, product_price, product_img_path, product_regdate  
+						 FROM product_view 
+						 WHERE member_state_no = 1  
+				 		 <include refid="searchProductState" /> 
+				 		 <include refid="searchKeyword" /> 
+				 		 ORDER BY product_regdate DESC, product_no DESC 	
+					 )A
+			 )
+		 WHERE num BETWEEN #{startPage} AND #{endPage}
 	</select>
 	
 	
 	<!-- 판매 중인 상품 수 출력 -->
 	<select id="searchProductCount" parameterType="searchCondition" resultType="int">
 		SELECT count(*) 
-		FROM product_view 
-		WHERE member_state_no = 1 
+		 FROM product_view 
+		 WHERE member_state_no = 1 
 		<include refid="searchProductState" />
 		<include refid="searchKeyword" />
 	</select>
     
 	
-                                                                                                                                                                                          
+	<!-- 상품 상세보기 출력 -->                                                                                                                                                                      
 	<resultMap type="HashMap" id="productInfo">
 		<result property="MEMBER_ID" column="member_id" />
 		<result property="PRODUCT_NO" column="product_no" />
@@ -126,23 +126,21 @@
 		<result property="PRODUCT_CATEGORY2_NAME" column="product_category2_name" />
 		<result property="BOOKMARK_COUNT" column="bookmark_count" />
 	</resultMap>
-	
-	<!-- 상품 상세보기 출력 -->
 	<select id="searchProductInfo" parameterType="string" resultMap="productInfo">
 		SELECT m.member_id, p.*, c.product_category1_name, c.product_category2_name 
-			, (SELECT count(b.member_no) FROM bookmark b WHERE p.product_no = b.product_no) AS "bookmark_count" 
-		FROM product p, member m, category_view c 
-		WHERE p.seller_no = m.member_no 
-			AND p.product_no = #{product_no} 
-			AND (c.product_category1_no = p.product_category1_no AND c.product_category2_no = p.product_category2_no)
+			 , (SELECT count(b.member_no) FROM bookmark b WHERE p.product_no = b.product_no) AS "bookmark_count" 
+		 FROM product p, member m, category_view c 
+		 WHERE p.seller_no = m.member_no 
+			 AND p.product_no = #{product_no} 
+			 AND (c.product_category1_no = p.product_category1_no AND c.product_category2_no = p.product_category2_no)
 	</select>
 	
 	
 	<!-- 상품 조회수 증가 -->
 	<update id="updateProductView" parameterType="string">
 		UPDATE product 
-		SET product_view = product_view+1 
-		WHERE product_no = #{product_no} 
+		 SET product_view = product_view+1 
+		 WHERE product_no = #{product_no} 
 	</update>
 	
 	
@@ -151,8 +149,8 @@
 		SELECT member_no, member_nickname, member_image 
 			, (SELECT count(*) FROM product WHERE seller_no = m.member_no AND product_state_no = 1) AS "PRODUCT_COUNT" 
 			, (SELECT count(*) FROM deal WHERE seller_no = m.member_no AND deal_review = 'Y') AS "REVIEW_COUNT" 
-		FROM member m 
-		WHERE m.member_no = #{SELLER_NO}
+		 FROM member m 
+		 WHERE m.member_no = #{SELLER_NO}
 	</select>
 	
 	
@@ -160,18 +158,18 @@
 	<select id="searchReviewByInfo" parameterType="int" resultType="map">
 		<![CDATA[
 		SELECT a.customer_no, a.review_regdate, a.review_content, a.review_score, a.deal_complete_date, m.member_nickname, m.member_image 
-		FROM member m, ( 
+		 FROM member m, ( 
 						 SELECT * 
-						 FROM ( 
+						  FROM ( 
 									SELECT rownum, d.customer_no, r.review_content, r.review_score, r.review_regdate, d.deal_complete_date 
-									FROM review r, deal d 
-									WHERE r.deal_no = d.deal_no 
-									AND d.seller_no = #{seller_no} 
-									ORDER BY r.review_regdate DESC 
+									 FROM review r, deal d 
+									 WHERE r.deal_no = d.deal_no 
+									 AND d.seller_no = #{seller_no} 
+									 ORDER BY r.review_regdate DESC 
 								) 
-							WHERE rownum <= 2 
-							) a 
-		WHERE m.member_no = a.customer_no		
+							 WHERE rownum <= 2 
+							 ) a 
+		 WHERE m.member_no = a.customer_no		
 		]]>
 	</select>
 	
@@ -179,15 +177,15 @@
 	<!-- 북마크 추가된 상품인지 검색 -->
 	<select id="searchBookmarkByInfo" parameterType="map" resultType="int">
 		SELECT count(*) 
-		FROM bookmark  
-		WHERE member_no = #{current_no} AND product_no = #{product_no} 
+		 FROM bookmark  
+		 WHERE member_no = #{current_no} AND product_no = #{product_no} 
 	</select>
 	
 	
 	<!-- 북마크 삭제 -->
 	<delete id="deleteBookmark" parameterType="map">
 		DELETE FROM bookmark 
-		WHERE member_no = #{member_no} AND product_no = ${product_no}
+		 WHERE member_no = #{member_no} AND product_no = ${product_no}
 	</delete>
 	
 	
@@ -197,7 +195,7 @@
 			SELECT bookmark_seq.nextval FROM dual 
 		</selectKey>
 		INSERT INTO bookmark (bookmark_no, member_no, product_no) 
-		values (#{bookmark_seq}, #{member_no}, #{product_no}) 
+		 values (#{bookmark_seq}, #{member_no}, #{product_no}) 
 	</insert>
 	
 	
@@ -210,7 +208,7 @@
 	<!-- 상품 등록 -->
 	<insert id="insertProduct" parameterType="productInsertDto">
 		INSERT INTO product(product_no, seller_no, product_category1_no, product_category2_no, product_name, product_used, product_change, product_price, product_explanation, product_tag) 
-		values(#{product_no}, #{seller_no}, #{product_category1_no}, #{product_category2_no}, #{product_name}, #{product_used}, #{product_change}, #{product_price}, #{product_explanation}, #{product_tag}) 
+		 values(#{product_no}, #{seller_no}, #{product_category1_no}, #{product_category2_no}, #{product_name}, #{product_used}, #{product_change}, #{product_price}, #{product_explanation}, #{product_tag}) 
 	</insert>
 	
 
@@ -220,4 +218,11 @@
 		 values(#{product_no}, #{product_img_path}, #{product_img_filename}, #{product_img_uuid}, #{product_img_order}) 
 	</insert>
 
+	
+	<!-- 상품 이미지 출력 -->
+	<select id="searchProductImage" parameterType="string" resultType="string">
+		SELECT product_img_path FROM product_img
+	 	 WHERE product_no = #{product_no}
+	 	 ORDER BY product_img_order
+	</select>
 </mapper>

@@ -40,4 +40,6 @@ public interface ProductService {
 	int addProduct(ProductInsertDto productInsertDto) throws Exception;
 	
 	int addProductFile(List<ProductFileDto> productFileList) throws Exception;
+	
+	List<String> getProductImage(String product_no) throws Exception;
 }

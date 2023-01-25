@@ -99,6 +99,11 @@ public class ProductDaoImpl implements ProductDao {
 	public int insertProduct(ProductInsertDto productInsertDto) throws Exception {
 		return session.insert(namespace+"insertProduct", productInsertDto);
 	}
+
+	@Override
+	public List<String> searchProductImage(String product_no) throws Exception {
+		return session.selectList(namespace+"searchProductImage", product_no);
+	}
 	
 
 }
