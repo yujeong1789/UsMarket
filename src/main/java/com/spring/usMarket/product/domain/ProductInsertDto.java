@@ -1,7 +1,7 @@
 package com.spring.usMarket.product.domain;
 
 public class ProductInsertDto {
-	private Long product_no;
+	private String product_no;
 	private Integer seller_no;
 	private Integer product_category1_no;
 	private Integer product_category2_no;
@@ -14,7 +14,7 @@ public class ProductInsertDto {
 	
 	public ProductInsertDto() {}
 
-	public ProductInsertDto(Long product_no, Integer seller_no, Integer product_category1_no,
+	public ProductInsertDto(String product_no, Integer seller_no, Integer product_category1_no,
 			Integer product_category2_no, String product_name, String product_used, String product_change,
 			Integer product_price, String product_explanation, String product_tag) {
 		this.product_no = product_no;
@@ -29,11 +29,11 @@ public class ProductInsertDto {
 		this.product_tag = product_tag;
 	}
 
-	public Long getProduct_no() {
+	public String getProduct_no() {
 		return product_no;
 	}
 
-	public void setProduct_no(Long product_no) {
+	public void setProduct_no(String product_no) {
 		this.product_no = product_no;
 	}
 
