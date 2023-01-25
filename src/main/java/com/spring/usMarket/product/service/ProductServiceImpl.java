@@ -203,4 +203,14 @@ public class ProductServiceImpl implements ProductService {
 		return rowCnt;
 	}
 
+
+	@Override
+	@Transactional(rollbackFor = SQLException.class, readOnly = true)
+	public List<String> getProductImage(String product_no) throws Exception {
+		List<String> productImage = productDao.searchProductImage(product_no);
+		logger.info("상품 이미지 = {}", productImage.toString());
+		
+		return productImage;
+	}
+
 }
