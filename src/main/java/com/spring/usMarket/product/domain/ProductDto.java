@@ -20,7 +20,7 @@ public class ProductDto {
 	private Date product_regdate;
 	private String product_pay_kind;
 	private String product_used; // Y - 중고, N - 새상품
-	private String product_img_uuid;
+	private String product_img_path;
 	
 	
 	
@@ -30,7 +30,7 @@ public class ProductDto {
 	public ProductDto(Integer member_state_no, String product_no, Integer seller_no, Integer product_category1_no,
 			Integer product_category2_no, Integer product_state_no, String product_name, String product_change,
 			Integer product_price, String product_explanation, String product_tag, Integer product_view,
-			Date product_regdate, String product_pay_kind, String product_used, String product_img_uuid) {
+			Date product_regdate, String product_pay_kind, String product_used, String product_img_path) {
 		
 		this.member_state_no = member_state_no;
 		this.product_no = product_no;
@@ -47,7 +47,7 @@ public class ProductDto {
 		this.product_regdate = product_regdate;
 		this.product_pay_kind = product_pay_kind;
 		this.product_used = product_used;
-		this.product_img_uuid = product_img_uuid;
+		this.product_img_path = product_img_path;
 	}
 
 	public Integer getMember_state_no() {
@@ -170,12 +170,12 @@ public class ProductDto {
 		this.product_used = product_used;
 	}
 
-	public String getProduct_img_uuid() {
-		return product_img_uuid;
+	public String getProduct_img_path() {
+		return product_img_path;
 	}
 
-	public void setProduct_img_uuid(String product_img_uuid) {
-		this.product_img_uuid = product_img_uuid;
+	public void setProduct_img_path(String product_img_path) {
+		this.product_img_path = product_img_path;
 	}
 
 	@Override
@@ -186,6 +186,6 @@ public class ProductDto {
 				+ ", product_change=" + product_change + ", product_price=" + product_price + ", product_explanation="
 				+ product_explanation + ", product_tag=" + product_tag + ", product_view=" + product_view
 				+ ", product_regdate=" + getProduct_regdate() + ", product_pay_kind=" + product_pay_kind + ", product_used="
-				+ product_used + ", product_img_uuid=" + product_img_uuid + "]";
+				+ product_used + ", product_img_path=" + product_img_path + "]";
 	}
 }
