@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.spring.usMarket.common.PageHandler;
 import com.spring.usMarket.common.SearchCondition;
 import com.spring.usMarket.product.domain.ProductCategoryDto;
@@ -74,8 +75,12 @@ public class ProductController {
 	public void info(String product_no, HttpServletRequest request, Model model) {
 		try {
 			Map<String, Object> productInfo = productService.getProductInfo(product_no);
-			List<String> productImage = productService.getProductImage(product_no);			
-			model.addAttribute("productImage", productImage);
+			
+			List<String> productImage = productService.getProductImage(product_no);
+			ObjectMapper mapper = new ObjectMapper();
+			String jsonText = mapper.writeValueAsString(productImage);
+			
+			model.addAttribute("jsonText", jsonText);
 			model.addAttribute("productInfo", productInfo);
 			
 		} catch (Exception e) {
