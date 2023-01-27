@@ -21,7 +21,11 @@
 			<div class="product__info">
 				<!-- 상품 정보 영역 -->
 				<div class="product__info__img">
-					<img src="${pageContext.request.contextPath}/resources/productImgUpload/2022/11/29/IMG_5403.PNG">
+					<div class="product__img__button" id="product__img__button">
+						<img id="img_preview" src="<c:url value='/resources/customer/img/img_preview.png'/>">
+						<img id="img_next" src="<c:url value='/resources/customer/img/img_next.png'/>">
+					</div>
+					<img id="product__current__img">
 				</div>
 				<div class="product__info__div">
 					<div class="product_name">
@@ -190,10 +194,73 @@
 		}
 		
 		
+		// 이미지 불러오기
+		const imgList = JSON.parse(`${jsonText}`);
+		document.getElementById('product__current__img').src = imgList[0]; 
+		document.getElementById('img_preview').style.visibility = 'hidden';
+		const imgListSize = imgList.length;
+		let imgOrder = 0;
 		
+		console.log('imgList = '+imgList);
+		console.log('imgListSize = '+imgListSize);
+		console.log('imgOrder = '+imgOrder);
+		
+		if(imgList.length <= 1){
+			// 이미지가 한 장만 존재할 경우 preview, next 버튼 숨기기
+			document.getElementById('product__img__button').style.display = 'none';
+		}
+		
+		// 이전 요소가 존재하는지
+		function getPreviewImg(imgOrder){
+			// 현재 index가 0이 아니면
+			if(imgOrder > 0){
+				imgOrder--;
+			}
+			return imgOrder;
+		}
+		
+		// 다음 요소가 존재하는지
+		function getNextImg(imgOrder){
+			// 현재 index가 마지막 index보다 작으면
+			if(imgOrder < (imgListSize-1)){
+				imgOrder++;
+			}
+			return imgOrder;
+		}
+		
+		document.getElementById('img_next').addEventListener('click', function(){
+			imgOrder = getNextImg(imgOrder);
+			console.log(imgOrder);
+			
+			if(imgOrder == (imgList.length-1)){
+				// 마지막 요소면 next 버튼 숨김
+				document.getElementById('img_next').style.visibility = 'hidden';	
+			}
+			document.getElementById('img_preview').style.visibility = 'visible';
+			document.getElementById('product__current__img').src = imgList[imgOrder];				
+		});
+		
+		document.getElementById('img_preview').addEventListener('click', function(){
+			imgOrder = getPreviewImg(imgOrder);
+			console.log(imgOrder);
+			
+			if(imgOrder == 0){
+				// 첫번째 요소면 preview 버튼 숨김
+				document.getElementById('img_preview').style.visibility = 'hidden';
+			}
+			
+			document.getElementById('img_next').style.visibility = 'visible';
+			document.getElementById('product__current__img').src = imgList[imgOrder];
+		});
+		
+		
+		
+		
+		
+		
+		// 리뷰 출력하기
 		const seller_no = `${productInfo.SELLER_NO}`;
 		const product__review = document.getElementById('product__review');
-		
 		
 		fetch('/usMarket/fetch/seller/'+seller_no)
 		.then((response) => response.json())
@@ -208,7 +275,7 @@
 				
 		}).catch((error) => console.log("error: "+error)); // fetch-2
 		
-
+		
 		
 		function getTopReview(reviewCount){
 			fetch('/usMarket/fetch/topReview/'+seller_no)
