@@ -63,7 +63,7 @@
 								<c:if test="${product.product_state_no == 3}">
 									<img class="product__img__top" src="${pageContext.request.contextPath}/resources/customer/img/product/complete.png">
 								</c:if>
-								<img src="${product.product_img_path}">
+								<img src="https://usmarket.s3.ap-northeast-2.amazonaws.com/${product.product_img_path}">
 							</a>
 						</div>
 						<div class="product__info__1">
