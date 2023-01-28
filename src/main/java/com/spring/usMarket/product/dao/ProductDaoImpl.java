@@ -104,6 +104,20 @@ public class ProductDaoImpl implements ProductDao {
 	public List<String> searchProductImage(String product_no) throws Exception {
 		return session.selectList(namespace+"searchProductImage", product_no);
 	}
-	
+
+	@Override
+	public int updateProductState(Integer product_state_no, String seller_no, String product_no) throws Exception {
+		Map<String, Object> map = new HashMap<>();
+		map.put("product_state_no", product_state_no);
+		map.put("seller_no", seller_no);
+		map.put("product_no", product_no);
+		
+		return session.update(namespace+"updateProductState", map);
+	}
+
+	@Override
+	public int deleteProductImage(String product_no) throws Exception {
+		return session.delete(namespace+"deleteProductImage", product_no);
+	}	
 
 }

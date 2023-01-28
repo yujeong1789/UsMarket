@@ -36,4 +36,8 @@ public interface ProductDao {
 	int insertProductFile(ProductFileDto productFileDto) throws Exception;
 	
 	List<String> searchProductImage(String product_no) throws Exception;
+	
+	int updateProductState(Integer product_state_no, String seller_no, String product_no) throws Exception;
+	
+	int deleteProductImage(String product_no) throws Exception;
 }

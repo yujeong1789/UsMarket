@@ -42,4 +42,8 @@ public interface ProductService {
 	int addProductFile(List<ProductFileDto> productFileList) throws Exception;
 	
 	List<String> getProductImage(String product_no) throws Exception;
+	
+	int modifyProductState(Integer product_state_no, String seller_no, String product_no) throws Exception;
+	
+	int removeProductImage(String product_no) throws Exception;
 }

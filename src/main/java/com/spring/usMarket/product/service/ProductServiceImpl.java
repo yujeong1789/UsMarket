@@ -197,6 +197,7 @@ public class ProductServiceImpl implements ProductService {
 	@Override
 	@Transactional(rollbackFor = SQLException.class)
 	public int addProduct(ProductInsertDto productInsertDto) throws Exception {
+		
 		int rowCnt = productDao.insertProduct(productInsertDto);
 		logger.info("상품 등록 결과 = {}", getResult(rowCnt));
 		
@@ -207,10 +208,33 @@ public class ProductServiceImpl implements ProductService {
 	@Override
 	@Transactional(rollbackFor = SQLException.class, readOnly = true)
 	public List<String> getProductImage(String product_no) throws Exception {
+		
 		List<String> productImage = productDao.searchProductImage(product_no);
 		logger.info("상품 이미지 = {}", productImage.toString());
 		
 		return productImage;
+	}
+
+	
+	@Override
+	@Transactional(rollbackFor = SQLException.class)
+	public int modifyProductState(Integer product_state_no, String seller_no, String product_no) throws Exception {
+		
+		int rowCnt = productDao.updateProductState(product_state_no, seller_no, product_no);
+		logger.info("상품 상태 업데이트 결과 = {}", getResult(rowCnt));
+		
+		return rowCnt;
+	}
+
+	
+	@Override
+	@Transactional(rollbackFor = SQLException.class)
+	public int removeProductImage(String product_no) throws Exception {
+		
+		int rowCnt = productDao.deleteProductImage(product_no);
+		logger.info("상품 이미지 삭제 결과 = {}", rowCnt);
+		
+		return rowCnt;
 	}
 
 }
