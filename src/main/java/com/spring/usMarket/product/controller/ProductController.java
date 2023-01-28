@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,7 +30,6 @@ import com.spring.usMarket.product.service.ProductService;
 @RequestMapping("/product")
 public class ProductController {
 	private static final Logger logger = LoggerFactory.getLogger(ProductController.class);
-	
 	
 	private static final int ADDED = 1;
 	private static final int NOT_ADDED = 0;
@@ -127,6 +127,7 @@ public class ProductController {
 	
 	@PostMapping("/sell")
 	public String addProduct(MultipartHttpServletRequest request, ProductInsertDto dto){
+		dto.setSeller_no(Integer.parseInt(getUserNo(request)));
 		try {
 			// 1. 상품 등록
 			logger.info("productInsertDto = {}", dto.toString());
@@ -139,7 +140,7 @@ public class ProductController {
 			
 			// 3. 파일 db에 insert
 			int rowCnt = productService.addProductFile(list);
-			logger.info("addProductFile result = {}", (list.size() == rowCnt ? "SUCCESS" : "FAIL"));
+			logger.info("addProductFile {}", (list.size() == rowCnt ? "SUCCESS" : "FAIL"));
 			
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -149,13 +150,11 @@ public class ProductController {
 	}
 	
 	
-	
-/*	
-    private boolean loginCheck(HttpServletRequest request) {
+
+    private String getUserNo(HttpServletRequest request) {
         // 1. 세션을 얻어서
         HttpSession session = request.getSession();
         // 2. 세션에 id가 있는지 확인, 있으면 true를 반환
-        return session.getAttribute("userId") != null;
+        return String.valueOf(request.getSession().getAttribute("userNo"));
     }
-*/
 }
