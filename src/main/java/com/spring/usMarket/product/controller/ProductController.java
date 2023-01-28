@@ -150,6 +150,38 @@ public class ProductController {
 	}
 	
 	
+	/*
+	 * 상품 delete할 시 자식 테이블에 영향이 있음. 따라서 db상에서 삭제처리하지 않고 blind 상태코드를 추가해 update하는 식으로 구현할 것.
+	 * */
+	@PostMapping("/remove")
+	public String removeProduct(HttpServletRequest request, String product_no, Integer product_state_no) {
+		String seller_no = getUserNo(request);
+		
+		logger.info("product_no = {}, seller_no = {}, product_state_no = {}", product_no, seller_no, product_state_no);
+		
+		String url = "redirect:/product/info?product_no="+product_no;
+		
+		try {
+			List<String> productImage = productService.getProductImage(product_no);
+			boolean deleteResult = fileService.delete(productImage);
+			if(deleteResult) {
+				
+				int updateCnt = productService.modifyProductState(4, seller_no, product_no);
+				int removeCnt = productService.removeProductImage(product_no);
+				
+				if(updateCnt+removeCnt == productImage.size()+1) {
+					url = "redirect:/";
+					logger.info("removeProduct SUCCESS");
+				}
+			}
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return url;
+	}
+	
 
     private String getUserNo(HttpServletRequest request) {
         // 1. 세션을 얻어서
