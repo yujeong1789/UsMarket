@@ -57,7 +57,6 @@ function setBlank() {
 
 // category1 클릭시 수행될 함수
 function setDisplayCategory1(element) {
-	setBlank();
 	product_category1_no.value = element.getAttribute('value');
 
 	document.getElementById('category2__alert').style.display = 'none';
@@ -66,7 +65,7 @@ function setDisplayCategory1(element) {
 	let selected__category__1 = document.getElementById('selected__category__1');
 	selected__category__1.className = 'selected__category';
 	selected__category__1.innerText = element.innerText;
-
+	
 	console.log('category1 input value = ' + product_category1_no.value);
 }
 
