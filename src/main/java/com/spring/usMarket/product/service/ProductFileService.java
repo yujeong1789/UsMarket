@@ -15,8 +15,11 @@ import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.amazonaws.AmazonClientException;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
+import com.amazonaws.services.s3.model.DeleteObjectRequest;
+import com.amazonaws.services.s3.model.DeleteObjectsResult.DeletedObject;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.amazonaws.util.IOUtils;
@@ -44,10 +47,24 @@ public class ProductFileService {
 	}
 	
 	public String getUUID(String originFileName) {
-		return UUID.randomUUID().toString() + "_" + originFileName; 
+		return UUID.randomUUID().toString(); 
 	}
 	
-	public List<ProductFileDto> upload(List<MultipartFile> file, String product_no) throws IOException{
+	public boolean delete(List<String> keyList) throws Exception{
+		int rowCnt = 0;
+		
+		for(String key : keyList) {
+			DeleteObjectRequest deleteObjectRequest = new DeleteObjectRequest(this.bucket, key);
+			this.s3Client.deleteObject(deleteObjectRequest);
+			logger.info("delete complete! {}", deleteObjectRequest.getKey());
+			rowCnt++;
+		}
+		
+		return rowCnt == keyList.size() ? true : false;
+	}
+	
+	public List<ProductFileDto> upload(List<MultipartFile> file, String product_no) throws Exception{
+		// key
 		List<ProductFileDto> list = new ArrayList<>();
 		
 		int idx = 0;
@@ -57,22 +74,23 @@ public class ProductFileService {
 			
 			String originalName = multipartFile.getOriginalFilename();
 			String uuid = getUUID(originalName);
+
 			
 			ObjectMetadata objectMetadata = new ObjectMetadata();
 			objectMetadata.setContentLength(bytes.length);
 			objectMetadata.setContentType(multipartFile.getContentType());
 						
 			// 요청 바디 작성
-			PutObjectRequest putObjectRequest = new PutObjectRequest(this.bucket, getPath()+getUUID(originalName), multipartFile.getInputStream(), objectMetadata)
+			PutObjectRequest putObjectRequest = new PutObjectRequest(this.bucket, getPath()+uuid, multipartFile.getInputStream(), objectMetadata)
 					.withCannedAcl(CannedAccessControlList.PublicRead);
+			
 			
 			// s3에 저장
 			this.s3Client.putObject(putObjectRequest);
 			
 			logger.info("upload complete! {}", putObjectRequest.getKey());
 			
-			String realPath = "https://"+this.bucket+".s3."+this.region+".amazonaws.com/"+putObjectRequest.getKey();			
-			// https://usmarket.s3.ap-northeast-2.amazonaws.com/2023/01/24/2da9322b-f45f-428a-b1b3-bde87f88d052_IMG_5402.PNG
+			String realPath = putObjectRequest.getKey();
 			
 			ProductFileDto productFileDto = new ProductFileDto(product_no, realPath, originalName, uuid, idx);
 			list.add(productFileDto);

@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,7 +30,6 @@ import com.spring.usMarket.product.service.ProductService;
 @RequestMapping("/product")
 public class ProductController {
 	private static final Logger logger = LoggerFactory.getLogger(ProductController.class);
-	
 	
 	private static final int ADDED = 1;
 	private static final int NOT_ADDED = 0;
@@ -127,6 +127,7 @@ public class ProductController {
 	
 	@PostMapping("/sell")
 	public String addProduct(MultipartHttpServletRequest request, ProductInsertDto dto){
+		dto.setSeller_no(Integer.parseInt(getUserNo(request)));
 		try {
 			// 1. 상품 등록
 			logger.info("productInsertDto = {}", dto.toString());
@@ -139,7 +140,7 @@ public class ProductController {
 			
 			// 3. 파일 db에 insert
 			int rowCnt = productService.addProductFile(list);
-			logger.info("addProductFile result = {}", (list.size() == rowCnt ? "SUCCESS" : "FAIL"));
+			logger.info("addProductFile {}", (list.size() == rowCnt ? "SUCCESS" : "FAIL"));
 			
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -149,13 +150,43 @@ public class ProductController {
 	}
 	
 	
+	/*
+	 * 상품 delete할 시 자식 테이블에 영향이 있음. 따라서 db상에서 삭제처리하지 않고 blind 상태코드를 추가해 update하는 식으로 구현할 것.
+	 * */
+	@PostMapping("/remove")
+	public String removeProduct(HttpServletRequest request, String product_no, Integer product_state_no) {
+		String seller_no = getUserNo(request);
+		
+		logger.info("product_no = {}, seller_no = {}, product_state_no = {}", product_no, seller_no, product_state_no);
+		
+		String url = "redirect:/product/info?product_no="+product_no;
+		
+		try {
+			List<String> productImage = productService.getProductImage(product_no);
+			boolean deleteResult = fileService.delete(productImage);
+			if(deleteResult) {
+				
+				int updateCnt = productService.modifyProductState(4, seller_no, product_no);
+				int removeCnt = productService.removeProductImage(product_no);
+				
+				if(updateCnt+removeCnt == productImage.size()+1) {
+					url = "redirect:/";
+					logger.info("removeProduct SUCCESS");
+				}
+			}
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return url;
+	}
 	
-/*	
-    private boolean loginCheck(HttpServletRequest request) {
+
+    private String getUserNo(HttpServletRequest request) {
         // 1. 세션을 얻어서
         HttpSession session = request.getSession();
         // 2. 세션에 id가 있는지 확인, 있으면 true를 반환
-        return session.getAttribute("userId") != null;
+        return String.valueOf(request.getSession().getAttribute("userNo"));
     }
-*/
 }

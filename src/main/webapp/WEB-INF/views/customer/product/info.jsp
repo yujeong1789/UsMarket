@@ -36,23 +36,31 @@
 					</div>
 					
 					<div class="product__detail__1">
-						<div class="product__wish">
-							<div class="product__detail__icon">
-								<img alt="좋아요" src="<c:url value='/resources/customer/img/wish.png' />">
+						<div class="left">
+							<div class="product__wish">
+								<div class="product__detail__icon">
+									<img alt="좋아요" src="<c:url value='/resources/customer/img/wish.png' />">
+								</div>
+								<span><c:out value="${productInfo.BOOKMARK_COUNT }"/></span>
 							</div>
-							<span><c:out value="${productInfo.BOOKMARK_COUNT }"/></span>
+							<div class="product__view">
+								<div class="product__detail__icon">
+									<img alt="조회수" src="<c:url value='/resources/customer/img/view.png' />">
+								</div>
+							 	<span><c:out value="${productInfo.PRODUCT_VIEW }"/></span>
+							</div>
+							<div class="product__uploaded">
+								<div class="product__detail__icon">
+									<img alt="업로드 시간" src="<c:url value='/resources/customer/img/clock.png' />">
+								</div>
+								<span><c:out value="${productInfo.PRODUCT_REGDATE }"/></span>						
+							</div>
 						</div>
-						<div class="product__view">
+						<div class="right">
 							<div class="product__detail__icon">
-								<img alt="조회수" src="<c:url value='/resources/customer/img/view.png' />">
+								<img alt="신고하기" src="<c:url value='/resources/customer/img/report.png'/>">
 							</div>
-						 	<span><c:out value="${productInfo.PRODUCT_VIEW }"/></span>
-						</div>
-						<div class="product__uploaded">
-							<div class="product__detail__icon">
-								<img alt="업로드 시간" src="<c:url value='/resources/customer/img/clock.png' />">
-							</div>
-							<span><c:out value="${productInfo.PRODUCT_REGDATE }"/></span>						
+							<span id="product__report">신고하기</span>
 						</div>
 					</div>
 					
@@ -72,12 +80,14 @@
 					</div>
 					
 					<c:choose>
-						<c:when test="${productInfo.PRODUCT_STATE_NO != 1 }"> <!-- 판매 중이 아닌 상품일 경우 -->
+						<c:when test="${productInfo.PRODUCT_STATE_NO != 1 }"> 
+							<!-- 판매 중이 아닌 상품일 경우 -->
 							<div class="product__not__sale">
 								<span>현재 판매 중인 상품이 아닙니다.</span>
 							</div>
 						</c:when>
 						<c:otherwise>
+							<!-- 내 상품이 아닐 경우 보여질 버튼 -->
 							<div class="product__buttons" id="product__buttons">
 								<div id="btn__wish" class="product__loginCheck" data-url="/product/like?product_no=${productInfo.PRODUCT_NO}">
 									<img id="bookmark__status" alt="찜" src="<c:url value='/resources/customer/img/wish_icon_0.png' />">
@@ -92,9 +102,17 @@
 								</div>
 							</div>
 							
+							<!-- 내 상품일 경우 보여질 버튼 -->
 							<div class="product__my__buttons" id="product__my__buttons">
-								<div class="btn__my__store">
+							<form id="productModifyForm" method="post">
+								<input type="hidden" name="product_no">
+								<input type="hidden" name="product_state_no">
+							</form>
+								<div class="btn__my__store" id="btn__my__store">
 									<span>내 상점 관리하기</span>
+								</div>
+								<div class="btn__product__delete" id="btn__product__delete">
+									<span>삭제하기</span>
 								</div>
 							</div>	
 						</c:otherwise>
@@ -166,6 +184,7 @@
 		const current_id = document.getElementById('loginId').getAttribute('data-id');
 		const current_no = document.getElementById('loginNo').getAttribute('data-no');
 		const product_no = `${productInfo.PRODUCT_NO}`;
+		const product_state = `${productInfo.PRODUCT_STATE_NO}`;
 		
 		console.log("product_no = "+product_no);
 		console.log("current_id = "+current_id);
@@ -174,9 +193,10 @@
 		
 		if(!isEmpty(current_id)){
 			if(seller_id == current_id){ // 내 상품일 경우
-				document.getElementById('product__buttons').style.display = 'none';
-				document.getElementById('product__my__buttons').style.display = 'flex';
-			}else{ // 내 상품이 아닐 경우
+				document.getElementById('product__buttons').style.display = 'none'; // 찜, 구매, 채팅 숨기기
+				document.querySelector('.product__detail__1 > .right').style.visibility = 'hidden'; // 신고 버튼 숨기기
+				document.getElementById('product__my__buttons').style.display = 'flex'; // 내 상점 관리, 삭제 활성화
+			}else if(seller_id != current_id && product_state == 1){ // 내 상품이 아니며 판매 중인 상품일 경우
 				fetch('/usMarket/fetch/bookmark/'+current_no+'/'+product_no)
 				.then((response) => response.json())
 				.then((json) => {
@@ -196,14 +216,13 @@
 		
 		// 이미지 불러오기
 		const imgList = JSON.parse(`${jsonText}`);
-		document.getElementById('product__current__img').src = imgList[0]; 
+		const imgPath = 'https://usmarket.s3.ap-northeast-2.amazonaws.com/';
+		document.getElementById('product__current__img').src = imgPath + imgList[0]; 
 		document.getElementById('img_preview').style.visibility = 'hidden';
-		const imgListSize = imgList.length;
 		let imgOrder = 0;
 		
 		console.log('imgList = '+imgList);
-		console.log('imgListSize = '+imgListSize);
-		console.log('imgOrder = '+imgOrder);
+		console.log('imgListSize = '+imgList.length);
 		
 		if(imgList.length <= 1){
 			// 이미지가 한 장만 존재할 경우 preview, next 버튼 숨기기
@@ -222,7 +241,7 @@
 		// 다음 요소가 존재하는지
 		function getNextImg(imgOrder){
 			// 현재 index가 마지막 index보다 작으면
-			if(imgOrder < (imgListSize-1)){
+			if(imgOrder < (imgList.length-1)){
 				imgOrder++;
 			}
 			return imgOrder;
@@ -230,32 +249,47 @@
 		
 		document.getElementById('img_next').addEventListener('click', function(){
 			imgOrder = getNextImg(imgOrder);
-			console.log(imgOrder);
+			console.log('imgOrder = '+imgOrder);
 			
 			if(imgOrder == (imgList.length-1)){
 				// 마지막 요소면 next 버튼 숨김
+				console.log('마지막 요소');
 				document.getElementById('img_next').style.visibility = 'hidden';	
 			}
+			// preview 버튼 표시
 			document.getElementById('img_preview').style.visibility = 'visible';
-			document.getElementById('product__current__img').src = imgList[imgOrder];				
+			document.getElementById('product__current__img').src = imgPath + imgList[imgOrder];							
 		});
 		
 		document.getElementById('img_preview').addEventListener('click', function(){
 			imgOrder = getPreviewImg(imgOrder);
-			console.log(imgOrder);
+			console.log('imgOrder = '+imgOrder);
 			
 			if(imgOrder == 0){
 				// 첫번째 요소면 preview 버튼 숨김
+				console.log('첫번째 요소');
 				document.getElementById('img_preview').style.visibility = 'hidden';
 			}
-			
+			// next 버튼 표시
 			document.getElementById('img_next').style.visibility = 'visible';
-			document.getElementById('product__current__img').src = imgList[imgOrder];
+			document.getElementById('product__current__img').src = imgPath + imgList[imgOrder];
 		});
 		
 		
-		
-		
+		// 삭제하기
+		// 판매 중인 상품일 경우에만 삭제 이벤트 등록 (판매 중이 아닐 경우 버튼이 존재하지 않기 때문)
+		if(product_state == 1){
+			document.getElementById('btn__product__delete').addEventListener('click', function(){
+				if(confirm('상품을 삭제하시겠습니까?')){
+					const productModifyForm = document.getElementById('productModifyForm');
+					productModifyForm.children[0].value = product_no;
+					productModifyForm.children[1].value = 4;
+					productModifyForm.setAttribute('action', '${pageContext.request.contextPath}/product/remove');
+					
+					productModifyForm.submit();
+				}
+			});			
+		}
 		
 		
 		// 리뷰 출력하기

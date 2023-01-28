@@ -166,14 +166,13 @@
 				
 				category1_li.addEventListener('click', function(e) {
 					setDisplayCategory1(this);
-					
 					fetch('/usMarket/fetch/category2/'+e.target.value)
 						.then((response) => response.json())
 						.then((json) => {
-							// 카테고리1이 선택되어 카테고리2가 로드되었을 시점에 스타일 적용
+							// 카테고리1이 선택되어 카테고리2가 로드되었을 시점에 스타일 적용 및 초기화
 							document.getElementById('product_category_warning').innerText = '소분류를 선택해 주세요.';
 							document.getElementById('product_category_warning').style.display = 'block';
-							
+							setBlank();
 							json.forEach((el) => {
 								let category2_li = document.createElement('li');
 								category2_li.textContent = el.PRODUCT_CATEGORY2_NAME;

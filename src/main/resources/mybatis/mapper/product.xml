@@ -68,6 +68,7 @@
 		 ORDER BY product_category2_no 
 	</select>
 	
+	
 	<!-- 상품 소분류 출력2 -->
 	<select id="searchCategory2" parameterType="int" resultType="map">
 		SELECT product_category2_no, product_category2_name  
@@ -131,7 +132,8 @@
 			 , (SELECT count(b.member_no) FROM bookmark b WHERE p.product_no = b.product_no) AS "bookmark_count" 
 		 FROM product p, member m, category_view c 
 		 WHERE p.seller_no = m.member_no 
-			 AND p.product_no = #{product_no} 
+		 	 AND p.product_state_no != 4 
+			 AND p.product_no = #{product_no}  
 			 AND (c.product_category1_no = p.product_category1_no AND c.product_category2_no = p.product_category2_no)
 	</select>
 	
@@ -225,4 +227,18 @@
 	 	 WHERE product_no = #{product_no}
 	 	 ORDER BY product_img_order
 	</select>
+	
+	<!-- 상품 상태 변경 -->
+	<update id="updateProductState" parameterType="map">
+		UPDATE product
+ 		 SET product_state_no = #{product_state_no} 
+		 WHERE seller_no = #{seller_no} AND product_no = #{product_no}
+	</update>
+	
+	<!-- 상품 이미지 삭제 -->
+	<delete id="deleteProductImage" parameterType="string">
+		DELETE FROM product_img
+		 WHERE product_no = #{product_no}
+	</delete>
+	
 </mapper>
