@@ -40,4 +40,6 @@ public interface ProductDao {
 	int updateProductState(Integer product_state_no, String seller_no, String product_no) throws Exception;
 	
 	int deleteProductImage(String product_no) throws Exception;
+	
+	Map<String, Object> searchProductOrderInfo(String product_no) throws Exception;
 }

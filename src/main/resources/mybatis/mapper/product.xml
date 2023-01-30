@@ -241,4 +241,10 @@
 		 WHERE product_no = #{product_no}
 	</delete>
 	
+	<!-- 상품 구매시 상품 정보 출력 -->
+	<select id="searchProductOrderInfo" parameterType="string" resultType="map">
+		SELECT * FROM product_order_view
+		 WHERE product_no = #{product_no}
+	</select>
+	
 </mapper>

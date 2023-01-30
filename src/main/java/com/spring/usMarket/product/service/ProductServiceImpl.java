@@ -237,4 +237,15 @@ public class ProductServiceImpl implements ProductService {
 		return rowCnt;
 	}
 
+
+	@Override
+	@Transactional(rollbackFor = SQLException.class, readOnly = true)
+	public Map<String, Object> getProductOrderInfo(String product_no) throws Exception {
+		
+		Map<String, Object> resultMap = productDao.searchProductOrderInfo(product_no);
+		logger.info("주문 상품 정보 = {}", resultMap.toString());
+		
+		return resultMap;
+	}
+
 }

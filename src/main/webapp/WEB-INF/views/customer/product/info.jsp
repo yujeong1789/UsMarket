@@ -97,14 +97,17 @@
 								<div id="btn__chat" class="product__loginCheck" data-url="/chat/list">
 									<span>채팅하기</span>
 								</div>
-								<div id="btn__buy" class="product__loginCheck" data-url="/product/buy">
+								<form id="productBuyForm" method="post" action="<c:url value='/product/buy'/>">
+									<input type="hidden" name="product_no">
+								</form>
+								<div id="btn__buy">
 									<span>바로구매</span>
 								</div>
 							</div>
 							
 							<!-- 내 상품일 경우 보여질 버튼 -->
 							<div class="product__my__buttons" id="product__my__buttons">
-							<form id="productModifyForm" method="post">
+							<form id="productModifyForm" method="post" action="<c:url value='/product/remove'/>">
 								<input type="hidden" name="product_no">
 								<input type="hidden" name="product_state_no">
 							</form>
@@ -284,13 +287,19 @@
 					const productModifyForm = document.getElementById('productModifyForm');
 					productModifyForm.children[0].value = product_no;
 					productModifyForm.children[1].value = 4;
-					productModifyForm.setAttribute('action', '${pageContext.request.contextPath}/product/remove');
 					
 					productModifyForm.submit();
 				}
 			});			
 		}
 		
+		// 구매하기
+		document.getElementById('btn__buy').addEventListener('click', function(){
+			const productBuyForm = document.getElementById('productBuyForm');
+			productBuyForm.children[0].value = product_no;
+			
+			productBuyForm.submit();
+		});
 		
 		// 리뷰 출력하기
 		const seller_no = `${productInfo.SELLER_NO}`;
@@ -340,11 +349,10 @@
 			});			
 		}
 		
-		
 		const loginElements = document.querySelectorAll('.product__loginCheck');
 		loginElements.forEach((el) => {
 			el.addEventListener('click', function() {
-				location.href = "${pageContext.request.contextPath}"+el.getAttribute('data-url');
+				location.href = '${pageContext.request.contextPath}'+el.getAttribute('data-url');
 			});
 		});
 		

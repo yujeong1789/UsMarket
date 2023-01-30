@@ -46,4 +46,6 @@ public interface ProductService {
 	int modifyProductState(Integer product_state_no, String seller_no, String product_no) throws Exception;
 	
 	int removeProductImage(String product_no) throws Exception;
+	
+	Map<String, Object> getProductOrderInfo(String product_no) throws Exception;
 }
