@@ -118,6 +118,11 @@ public class ProductDaoImpl implements ProductDao {
 	@Override
 	public int deleteProductImage(String product_no) throws Exception {
 		return session.delete(namespace+"deleteProductImage", product_no);
+	}
+
+	@Override
+	public Map<String, Object> searchProductOrderInfo(String product_no) throws Exception {
+		return session.selectOne(namespace+"searchProductOrderInfo", product_no);
 	}	
 
 }
