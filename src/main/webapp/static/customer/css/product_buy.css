@@ -64,6 +64,9 @@
 	width: 150px;
 	height: 150px;
 	object-fit: cover;
+	border-radius: 100%;
+	margin-top: 15px;
+	margin-bottom: 15px;
 }
 
 .title{
@@ -108,6 +111,15 @@
 	border: 1px solid #e7e7e7;
 	padding-left: 10px;
 	padding-top: 3px;
+}
+
+.product__order__address textarea{
+	width: 100%;
+	resize: none;
+	height: 40px;
+	border: 1px solid #e7e7e7;
+	padding-left: 10px;
+	padding-top: 8px;
 }
 
 .product__order__address button{
