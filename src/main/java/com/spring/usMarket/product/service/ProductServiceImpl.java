@@ -248,4 +248,14 @@ public class ProductServiceImpl implements ProductService {
 		return resultMap;
 	}
 
+
+	@Override
+	public Map<String, Object> getCustomerInfo(String customer_no) throws Exception {
+		
+		Map<String, Object> resultMap = productDao.searchCustomerInfo(customer_no);
+		logger.info("구매회원 정보 = {}", resultMap.toString());
+		
+		return resultMap;
+	}
+
 }

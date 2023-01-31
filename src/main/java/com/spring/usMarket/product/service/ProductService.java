@@ -48,4 +48,6 @@ public interface ProductService {
 	int removeProductImage(String product_no) throws Exception;
 	
 	Map<String, Object> getProductOrderInfo(String product_no) throws Exception;
+	
+	Map<String, Object> getCustomerInfo(String customer_no) throws Exception;
 }

@@ -123,6 +123,11 @@ public class ProductDaoImpl implements ProductDao {
 	@Override
 	public Map<String, Object> searchProductOrderInfo(String product_no) throws Exception {
 		return session.selectOne(namespace+"searchProductOrderInfo", product_no);
+	}
+
+	@Override
+	public Map<String, Object> searchCustomerInfo(String customer_no) throws Exception {
+		return session.selectOne(namespace+"searchCustomerInfo", customer_no);
 	}	
 
 }
