@@ -95,4 +95,18 @@ public class FetchController {
 		
 		return bookmarkStatus;
 	}
+	
+	@GetMapping("/customerInfo/{customer_no}")
+	public Map<String, Object> customerInfo(@PathVariable String customer_no) {
+		
+		Map<String, Object> customerInfo = new HashMap<>();
+		
+		try {
+			customerInfo = productService.getCustomerInfo(customer_no);
+		} catch (Exception e) {
+			e.printStackTrace();
+		} // try-catch
+		
+		return customerInfo;
+	}
 }

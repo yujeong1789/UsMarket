@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
@@ -86,12 +87,6 @@ public class ProductController {
 		} catch (Exception e) {
 			e.printStackTrace();
 		} // try-catch
-	}
-	
-	
-	@GetMapping("/buy")
-	public void buy() {
-		logger.info("product/buy");
 	}
 	
 	
@@ -183,6 +178,25 @@ public class ProductController {
 	}
 	
 
+	@PostMapping("/buy")
+	public void buy(String product_no, HttpServletRequest request, Model model) {
+		String customer_no = getUserNo(request);
+		
+		logger.info("buy product_no = {}, customer_no = {}", product_no, customer_no);
+		try {
+			Map<String, Object> productOrderInfo = productService.getProductOrderInfo(product_no);
+			
+			model.addAttribute("product_no", product_no);
+			model.addAttribute("customer_no", customer_no);
+			model.addAttribute("productOrderInfo", productOrderInfo);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+	}
+	
+	
     private String getUserNo(HttpServletRequest request) {
         // 1. 세션을 얻어서
         HttpSession session = request.getSession();

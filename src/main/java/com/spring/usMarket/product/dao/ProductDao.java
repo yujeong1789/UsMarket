@@ -42,4 +42,6 @@ public interface ProductDao {
 	int deleteProductImage(String product_no) throws Exception;
 	
 	Map<String, Object> searchProductOrderInfo(String product_no) throws Exception;
+	
+	Map<String, Object> searchCustomerInfo(String customer_no) throws Exception;
 }
