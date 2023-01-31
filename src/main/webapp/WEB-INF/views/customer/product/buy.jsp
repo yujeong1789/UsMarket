@@ -66,7 +66,7 @@
 							<div>
 								<div class="address-title">배송 요청사항</div>
 								<div>
-									<input type="text" class="w-100" id="deal_delivery_message" name="deal_delivery_message" maxlength="30" placeholder="배송 관련 요청사항을 입력해 주세요. (선택)">
+									<textarea id="deal_delivery_message" name="deal_delivery_message" maxlength="30" placeholder="배송 관련 요청사항을 입력해 주세요. (선택)"></textarea>
 								</div>
 							</div>
 							<div class="mt-5">
@@ -87,7 +87,7 @@
 					<li>
 						<div class="title">결제수단</div>
 						<div class="product__order__report order__border d-flex">
-							<input type="radio" class="mr-2" name="kakaoPay" id="kakaoPay" checked />
+							<input type="radio" class="mr-2" checked />
 							<span class="mr-1">카카오페이</span>
 							<img src="<c:url value='/resources/customer/img/payment_icon.png'/>">
 						</div>
@@ -137,13 +137,95 @@
 			new daum.Postcode({
 				oncomplete: function(data){
 					document.getElementById('customer_zipcode').value = data.zonecode;
+					document.getElementById('customer_zipcode').style.border = '1px solid #e7e7e7';
+					
 					document.getElementById('customer_address').value = data.roadAddress;
+					document.getElementById('customer_address').style.border = '1px solid #e7e7e7';
 					
 					document.getElementById('customer_address_detail').value = '';
 					document.getElementById('customer_address_detail').removeAttribute('readonly');
+					document.getElementById('customer_address_detail').style.border = '1px solid red';
 				}
 			}).open();
 		});
 		
+		// 유효성 검증
+		// 1. 이름
+		document.querySelectorAll('#buyProductForm input[type=text]').forEach(el => {
+			el.addEventListener('keyup', function(e){
+				valueCheck(el);
+			})
+		});
+		
+		
+		// 2. 연락처
+		// 숫자 이외의 값을 입력할 경우 alert 띄우고 값 제거
+		document.getElementById('customer_hp').addEventListener('keyup', function(e){
+			const hpRegex = /[^-0-9]/g;
+			if (hpRegex.test(e.target.value)) {
+				alert('숫자만 입력해 주세요.');
+				e.target.value = e.target.value.replace(hpRegex, '');
+			}
+		});
+		
+		// 3. 주소
+		document.getElementById('buy__submit').addEventListener('click', function(e){
+			if(!orderValidate()){
+				return;
+			}else{
+				payment();
+			}
+		});
+		
+		
+		function orderValidate(){
+			var result = true;
+			document.querySelectorAll('#buyProductForm input[type=text]').forEach(el => {
+				if(el.value.length < 1){
+					el.style.border = '1px solid red';
+					el.focus();
+					result = false;
+				}else{
+					el.style.border = '1px solid #e7e7e7';
+				}
+			});
+			return result;
+		};
+		
+		function valueCheck(element){
+			if(element.value.length < 1){
+				element.style.border = '1px solid red';
+				element.focus();
+				return false;
+			}else{
+				element.style.border = '1px solid #e7e7e7';
+			}
+		};
+		
+		function payment(data){
+			IMP.init('imp88123621');
+			IMP.request_pay({
+				pg: 'kakaopay.TC0ONETIME',
+			    pay_method : 'card',  //생략가
+			    merchant_uid: "order_no_0002", //상점에서 생성한 고유 주문번호
+			    name : '주문명:결제테스트', // 상품명
+			    amount : 1004, // 가격
+			    buyer_email : 'iamport@siot.do',
+			    buyer_name : '구매자이름',
+			    buyer_tel : '010-1234-5678',
+			    buyer_addr : '서울특별시 강남구 삼성동',
+			    buyer_postcode : '123-456',
+			    
+			}, function(rsp){
+				if(rsp.success){
+					alert('success!');
+					// 완료시 주문완료 페이지로 리디렉션 및 db작업 진행되어야 함.
+					// location.href='${pageContext.request.contextPath}/product/order?deal_no='+거래번호;
+				} else {
+					alert(rsp.error_msg);
+					location.href='${pageContext.request.contextPath}/product/info?product_no='+`${productOrderInfo.PRODUCT_NO}`;
+				}
+			});
+		}
 	});
 </script>
