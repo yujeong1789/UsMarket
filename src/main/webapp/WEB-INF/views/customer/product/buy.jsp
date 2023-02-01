@@ -15,6 +15,7 @@
 			<form id="buyProductForm" name="buyProduct">
 				<input type="hidden" id="deal_no" name="deal_no"  readonly required>
 				<input type="hidden" id="product_no" name="product_no" value="${product_no }" readonly required>
+				<input type="hidden" id="customer_email" readonly required>
 				<ul class="product__buy__ul" >
 					<li>
 						<div class="title">결제하기</div>
@@ -100,6 +101,7 @@
 		</div> <!-- container -->
 	</div> <!-- row -->
 </section> <!-- product__buy__section -->
+
 <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 <script>
 	document.addEventListener('DOMContentLoaded', function(){
@@ -122,9 +124,10 @@
 			var len = Object.keys(json).length;
 			document.getElementById('customer_name').value = json.MEMBER_NAME;
 			document.getElementById('customer_hp').value = json.MEMBER_HP;
+			document.getElementById('customer_email').value = json.MEMBER_EMAIL;
 			
 			// 우편번호, 주소, 상세주소는 필수 데이터가 아니기 때문에 존재하지 않을 수 있음. 따라서 해당 데이터가 존재할 때만 값을 set
-			if(len > 2){
+			if(len > 3){
 				document.getElementById('customer_zipcode').value = json.MEMBER_ZIPCODE;
 				document.getElementById('customer_address').value = json.MEMBER_ADDRESS;
 				document.getElementById('customer_address_detail').value = json.MEMBER_ADDRESS_DETAIL;
@@ -202,24 +205,27 @@
 			}
 		};
 		
+		
+		// 결제 api 호출
 		function payment(data){
 			IMP.init('imp88123621');
 			IMP.request_pay({
 				pg: 'kakaopay.TC0ONETIME',
 			    pay_method : 'card',  //생략가
-			    merchant_uid: "order_no_0002", //상점에서 생성한 고유 주문번호
-			    name : '주문명:결제테스트', // 상품명
-			    amount : 1004, // 가격
-			    buyer_email : 'iamport@siot.do',
-			    buyer_name : '구매자이름',
-			    buyer_tel : '010-1234-5678',
-			    buyer_addr : '서울특별시 강남구 삼성동',
-			    buyer_postcode : '123-456',
-			    
+			    merchant_uid: getOrderNo(10), //상점에서 생성한 고유 주문번호
+			    name : `${productOrderInfo.PRODUCT_NAME}`, // 상품명
+			    amount : `${productOrderInfo.PRODUCT_PRICE}`, // 가격
+			    buyer_email : document.getElementById('customer_email').value, 
+			    buyer_name : document.getElementById('customer_name').value,
+			    buyer_tel : document.getElementById('customer_hp').value,
+			    buyer_addr : document.getElementById('customer_address').value+' '+document.getElementById('customer_address_detail').value,
+			    buyer_postcode : document.getElementById('customer_zipcode').value,
+			    m_redirect_url : '${pageContext.request.contextPath}/product/info?product_no='+`${productOrderInfo.PRODUCT_NO}`,
 			}, function(rsp){
 				if(rsp.success){
 					alert('success!');
-					// 완료시 주문완료 페이지로 리디렉션 및 db작업 진행되어야 함.
+					// document.getElementById('buyProductForm').submit();
+					// form submit -> db에 거래내역 insert -> 거래완료 페이지로 리디렉션
 					// location.href='${pageContext.request.contextPath}/product/order?deal_no='+거래번호;
 				} else {
 					alert(rsp.error_msg);

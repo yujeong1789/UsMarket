@@ -248,7 +248,7 @@
 	</select>
 	
 	<select id="searchCustomerInfo" parameterType="string" resultType="map">
-		SELECT member_name, member_hp, member_zipcode, member_address, member_address_detail FROM MEMBER
+		SELECT member_name, member_hp, member_email, member_zipcode, member_address, member_address_detail FROM MEMBER
 		 WHERE member_no = #{member_no}
 	</select>
 	
