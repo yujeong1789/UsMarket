@@ -17,6 +17,9 @@
 		<typeAlias type="com.spring.usMarket.product.domain.ProductDto"
 		 alias="productDto"/>
 		 
+		<typeAlias type="com.spring.usMarket.deal.domain.DealInsertDto"
+		 alias="dealInsertDto"/>
+		 
 		<typeAlias type="com.spring.usMarket.common.SearchCondition"
 		 alias="searchCondition"/>
 		 	
