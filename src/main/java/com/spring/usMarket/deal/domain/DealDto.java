@@ -11,11 +11,11 @@ public class DealDto extends DealInsertDto{
 	public DealDto() {}
 	
 	public DealDto(String deal_no, Integer product_no, Integer seller_no, Integer customer_no,
-			String customer_name, String custoemr_hp, String customer_zipcode, String customer_address,
+			String customer_name, String customer_hp, String customer_zipcode, String customer_address,
 			String dustomer_address_detail, String deal_delivery_message, 
 			String deal_review, Date deal_complete_date, String deal_delivery_state, String deal_state) {
 		
-		super(deal_no, product_no, seller_no, customer_no, customer_name, custoemr_hp, customer_zipcode, customer_address, dustomer_address_detail, deal_delivery_message);
+		super(deal_no, product_no, seller_no, customer_no, customer_name, customer_hp, customer_zipcode, customer_address, dustomer_address_detail, deal_delivery_message);
 		
 		this.deal_review = deal_review;
 		this.deal_complete_date = deal_complete_date;

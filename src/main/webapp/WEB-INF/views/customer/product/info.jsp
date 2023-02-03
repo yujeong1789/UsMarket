@@ -279,9 +279,10 @@
 		});
 		
 		
-		// 삭제하기
-		// 판매 중인 상품일 경우에만 삭제 이벤트 등록 (판매 중이 아닐 경우 버튼이 존재하지 않기 때문)
+		
+		// 판매 중인 상품일 경우에만 구매, 삭제 이벤트 등록 (판매 중이 아닐 경우 버튼이 존재하지 않기 때문)
 		if(product_state == 1){
+			// 삭제하기
 			document.getElementById('btn__product__delete').addEventListener('click', function(){
 				if(confirm('상품을 삭제하시겠습니까?')){
 					const productModifyForm = document.getElementById('productModifyForm');
@@ -290,16 +291,17 @@
 					
 					productModifyForm.submit();
 				}
-			});			
+			});		
+			
+			// 구매하기
+			document.getElementById('btn__buy').addEventListener('click', function(){
+				const productBuyForm = document.getElementById('productBuyForm');
+				productBuyForm.children[0].value = product_no;
+				
+				productBuyForm.submit();
+			});
 		}
 		
-		// 구매하기
-		document.getElementById('btn__buy').addEventListener('click', function(){
-			const productBuyForm = document.getElementById('productBuyForm');
-			productBuyForm.children[0].value = product_no;
-			
-			productBuyForm.submit();
-		});
 		
 		// 리뷰 출력하기
 		const seller_no = `${productInfo.SELLER_NO}`;

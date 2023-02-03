@@ -13,7 +13,8 @@
 	<div class="row">
 		<div class="container">
 			<form id="buyProductForm" name="buyProduct">
-				<input type="hidden" id="deal_no" name="deal_no"  readonly required>
+				<input type="hidden" id="deal_no" name="deal_no" readonly required>
+				<input type="hidden" id="seller_no" name="seller_no" value="${productOrderInfo.SELLER_NO}" readonly required>
 				<input type="hidden" id="product_no" name="product_no" value="${product_no }" readonly required>
 				<input type="hidden" id="customer_email" readonly required>
 				<ul class="product__buy__ul" >
@@ -72,7 +73,7 @@
 							</div>
 							<div class="mt-5">
 								<label class="d-flex align-items-center">
-									<input type="checkbox" class="mr-2" id="addressUpdate" name="addressUpdate">
+									<input type="checkbox" class="mr-2" id="addressUpdate" name="addressUpdate" value="N">
 									<span>입력한 주소로 내 정보를 업데이트합니다.</span>
 								</label>
 							</div>
@@ -176,6 +177,12 @@
 			if(!orderValidate()){
 				return;
 			}else{
+				let deal_no = getOrderNo(10);
+				document.getElementById('deal_no').value = deal_no;
+				
+				let addressUpdate = document.getElementById('addressUpdate');
+				if(addressUpdate.checked) addressUpdate.value = 'Y'; 
+				
 				payment();
 			}
 		});
@@ -212,7 +219,7 @@
 			IMP.request_pay({
 				pg: 'kakaopay.TC0ONETIME',
 			    pay_method : 'card',  //생략가
-			    merchant_uid: getOrderNo(10), //상점에서 생성한 고유 주문번호
+			    merchant_uid: document.getElementById('deal_no').value, //상점에서 생성한 고유 주문번호
 			    name : `${productOrderInfo.PRODUCT_NAME}`, // 상품명
 			    amount : `${productOrderInfo.PRODUCT_PRICE}`, // 가격
 			    buyer_email : document.getElementById('customer_email').value, 
@@ -224,9 +231,34 @@
 			}, function(rsp){
 				if(rsp.success){
 					alert('success!');
-					// document.getElementById('buyProductForm').submit();
-					// form submit -> db에 거래내역 insert -> 거래완료 페이지로 리디렉션
-					// location.href='${pageContext.request.contextPath}/product/order?deal_no='+거래번호;
+					
+					let params = {
+						deal_no: document.getElementById('deal_no').value,
+						product_no: document.getElementById('product_no').value,
+						seller_no: document.getElementById('seller_no').value,
+						customer_no: document.getElementById('customer_no').value,
+						customer_name: document.getElementById('customer_name').value,
+						customer_hp: document.getElementById('customer_hp').value,
+						customer_zipcode: document.getElementById('customer_zipcode').value,
+						customer_address: document.getElementById('customer_address').value,
+						customer_address_detail: document.getElementById('customer_address_detail').value,
+						deal_delivery_message: document.getElementById('deal_delivery_message').value,
+					}
+					
+					// 결제 성공시 fetch api로 db작업
+					fetch('/usMarket/fetch/deal/add/'+document.getElementById('addressUpdate').value, {
+						method: 'POST',
+						headers: {
+							'Content-type' : 'application/json'
+						},
+						body: JSON.stringify(params),
+					})
+					.then((response) => response.text()) // 서버가 텍스트를 반환하는 경우 response.text()가 적합하다.
+					.then((text) => {
+						location.href = '${pageContext.request.contextPath}/deal/complete?deal_no='+text;
+					}).catch((error) => console.log('error: '+error)); // fetch
+					
+					
 				} else {
 					alert(rsp.error_msg);
 					location.href='${pageContext.request.contextPath}/product/info?product_no='+`${productOrderInfo.PRODUCT_NO}`;
