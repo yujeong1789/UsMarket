@@ -10,9 +10,13 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.spring.usMarket.deal.domain.DealInsertDto;
+import com.spring.usMarket.deal.service.DealService;
 import com.spring.usMarket.product.service.ProductService;
 
 @RestController
@@ -23,6 +27,8 @@ public class FetchController {
 	@Autowired
 	ProductService productService;
 	
+	@Autowired
+	DealService dealService;
 	
 	@GetMapping("/category")
 	public List<Map<String, Object>> category(){
@@ -109,4 +115,23 @@ public class FetchController {
 		
 		return customerInfo;
 	}
+	
+	@PostMapping("/deal/add/{isUpdate}")
+	public String dealAdd(@RequestBody DealInsertDto dto, @PathVariable String isUpdate) {
+		logger.info("isUpdate = {}", isUpdate);
+		logger.info("DealInsertDto = {}", dto.toString());
+
+		String deal_no = "";
+		
+		try {
+			boolean result = dealService.addDeal(dto, isUpdate);
+			if(result) deal_no = dto.getDeal_no();
+			logger.info("deal_no = {}", deal_no);
+		} catch (Exception e) {
+			e.printStackTrace();
+		} // try-catch
+
+		return deal_no;
+	}
+	
 }
