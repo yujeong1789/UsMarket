@@ -11,4 +11,11 @@
 		 		#{customer_zipcode}, #{customer_address}, #{customer_address_detail}, #{deal_delivery_message})
 	</insert>
 	
+	<!-- 사용자 주소 업데이트 -->
+	<update id="updateAddress" parameterType="map">
+		UPDATE MEMBER
+		 SET member_zipcode = #{member_zipcode}, member_address = #{member_address}, member_address_detail = #{member_address_detail}
+		 WHERE member_no = #{member_no}
+	</update>
+	
 </mapper>
