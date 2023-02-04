@@ -57,10 +57,10 @@
 	
 	<!-- websocket 관련 설정 -->
 	<websocket:handlers>
-		<websocket:mapping handler="MyHandler" path="/chatting"/>
+		<websocket:mapping handler="chattingHandler" path="/chatting"/>
 		<websocket:sockjs></websocket:sockjs>
 	</websocket:handlers>
 	
-	<beans:bean id="MyHandler" class="com.spring.usMarket.common.ChattingHandler"/>
+	<beans:bean id="chattingHandler" class="com.spring.usMarket.common.ChattingHandler"/>
 	    
 </beans:beans>
