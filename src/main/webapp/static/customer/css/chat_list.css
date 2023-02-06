@@ -1,0 +1,189 @@
+@charset "UTF-8";
+
+.chat-background{
+	background-color: #fafafa;
+}
+
+.chat-list-layout{
+	display: flex;
+	background-color: #ffffff;
+}
+
+.chat-list-layout > div{
+	width: 570px;
+	height: 700px;
+}
+
+
+/* 채팅 목록 */
+.list-div{
+	border-right: 1px solid #eeeeee;
+}
+
+.list-title{
+	display: flex;
+	align-items: center;
+	height: 130px;
+	padding: 20px 30px 0px 30px;
+}
+
+.list-title > span{
+	font-weight: 500;
+	font-size: 30px;
+}
+
+.list-div-content{
+	overflow: scroll;
+	height: 570px;
+}
+
+.list-content-1{
+	width: 430px;
+}
+
+.list-content{
+	display: flex;
+	align-items: center;
+	cursor: pointer;
+	width: 100%;
+	height: 100px;
+	padding: 10px 30px 10px 30px;
+	
+}
+
+.list-content:hover{
+	background-color: #faf9fa;
+}
+
+.list-content img{
+	width: 60px;
+	height: 60px;
+	object-fit: contain;
+}
+
+.list-content-1{
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	margin-left: 20px;
+}
+
+.list-content-left > div:first-child{
+	font-weight: 600;
+	font-size: 18px;
+}
+
+.list-content-left > div:last-child{
+	font-weight: 600;
+	color: #ababab;
+	font-size: 13px;
+}
+
+.list-content-right{
+	margin-left: 20px;
+	width: 10px;
+	height: 10px;
+	border-radius: 50%;
+	background-color: #0084ff;
+}
+
+
+
+/* 채팅 상세보기 */
+.info-title{
+	height: 70px;
+	padding: 20px 20px 20px 20px;
+	border-bottom: 1px solid #f6f6f6;
+}
+
+.info-title > span{
+	font-size: 20px;
+	font-weight: 500;
+}
+
+.info-content-layout{
+	overflow: scroll;
+	display: flex;
+	flex-direction: column;
+	justify-content: flex-end;
+	height: 560px;
+	padding-left: 20px;
+	padding-right: 20px;
+}
+
+.info-content-layout > .info-content{
+	margin-bottom: 20px;
+	display: flex;
+	flex-direction: column;
+}
+
+.info-content-layout > .info-content > div{
+	display: flex;
+}
+
+.left{
+	justify-content: flex-start;
+}
+
+.left > p{
+	background-color: #ffffff;
+	border: 1px solid #dedede; 
+}
+
+.right{
+	justify-content: flex-end;
+}
+
+.right > p{
+	background-color: #f5f7f9;
+}
+
+.info-content-layout > .info-content p {
+	color: #1c1c1c;
+	font-size: 15px;
+	font-weight: 500;
+	max-width: 350px;
+	border-radius: 25px;
+	padding: 10px 20px 10px 20px;
+	margin: 0px 0px 0px 0px;
+	white-space: pre-line;
+}
+
+/* 메세지 입력창 */
+.info-textarea{
+	border-top: 1px solid #f6f6f6;
+	padding: 10px 25px 10px 25px;
+}
+
+.textarea{
+	height: 50px;
+	width: 520px;
+	padding: 0px 20px 0px 20px;
+	border-radius: 25px;
+	background-color: #fafafa;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+}
+
+.textarea textarea{
+	width: 450px;
+	height: 20px;
+	font-size: 15px;
+	resize: none;
+	background-color: #fafafa;
+	line-height: 1.2;
+	border-style: none;
+	margin-right: 20px;
+}
+
+.btn_send{
+	visibility: hidden;
+}
+
+.btn_send img{
+	width: 25px;
+	height: 25px;
+	object-fit: contain;
+	cursor: pointer;
+}
