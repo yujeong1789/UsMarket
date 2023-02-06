@@ -22,7 +22,7 @@
 							<span>|</span>
 							<a href="#">내상점</a>
 							<span>|</span>
-							<a href="#">채팅</a>
+							<a href="<c:url value='/chat/list'/>">채팅</a>
 						</div>
 					</div> <!-- hero__search -->
 				</div>
