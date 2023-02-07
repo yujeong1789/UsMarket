@@ -10,8 +10,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
-import com.spring.usMarket.product.domain.ProductDto;
-import com.spring.usMarket.product.service.ProductService;
+import com.spring.usMarket.domain.product.ProductDto;
+import com.spring.usMarket.service.product.ProductService;
 
 @Controller
 public class IndexController { // 메인 페이지 출력

@@ -5,25 +5,25 @@
 <configuration>
 	
 	<typeAliases>
-		<typeAlias type="com.spring.usMarket.product.domain.ProductCategoryDto"
+		<typeAlias type="com.spring.usMarket.domain.product.ProductCategoryDto"
 		 alias="productCategoryDto"/>
 		 
-		<typeAlias type="com.spring.usMarket.product.domain.ProductFileDto"
+		<typeAlias type="com.spring.usMarket.domain.product.ProductFileDto"
 		 alias="productFileDto"/>
 		 
-		<typeAlias type="com.spring.usMarket.product.domain.ProductInsertDto"
+		<typeAlias type="com.spring.usMarket.domain.product.ProductInsertDto"
 		 alias="productInsertDto"/>
 		 
-		<typeAlias type="com.spring.usMarket.product.domain.ProductDto"
+		<typeAlias type="com.spring.usMarket.domain.product.ProductDto"
 		 alias="productDto"/>
 		 
-		<typeAlias type="com.spring.usMarket.deal.domain.DealInsertDto"
+		<typeAlias type="com.spring.usMarket.domain.deal.DealInsertDto"
 		 alias="dealInsertDto"/>
 		 
-		<typeAlias type="com.spring.usMarket.common.SearchCondition"
+		<typeAlias type="com.spring.usMarket.utils.SearchCondition"
 		 alias="searchCondition"/>
 		 	
-		<typeAlias type="com.spring.usMarket.member.domain.MemberDto"
+		<typeAlias type="com.spring.usMarket.domain.member.MemberDto"
 		 alias="memberDto"/>
 	</typeAliases>
 </configuration>
