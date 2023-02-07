@@ -2,7 +2,7 @@ package com.spring.usMarket.domain.deal;
 
 public class DealInsertDto {
 	private String deal_no;					// 거래번호
-	private Integer product_no;				// 상품번호
+	private String product_no;				// 상품번호
 	private Integer seller_no;				// 판매회원 번호
 	
 	private Integer customer_no;			// 구매회원 번호
@@ -17,7 +17,7 @@ public class DealInsertDto {
 	public DealInsertDto() {}
 
 
-	public DealInsertDto(String deal_no, Integer product_no, Integer seller_no, Integer customer_no,
+	public DealInsertDto(String deal_no, String product_no, Integer seller_no, Integer customer_no,
 			String customer_name, String customer_hp, String customer_zipcode, String customer_address,
 			String customer_address_detail, String deal_delivery_message) {
 		this.deal_no = deal_no;
@@ -43,12 +43,12 @@ public class DealInsertDto {
 	}
 
 
-	public Integer getProduct_no() {
+	public String getProduct_no() {
 		return product_no;
 	}
 
 
-	public void setProduct_no(Integer product_no) {
+	public void setProduct_no(String product_no) {
 		this.product_no = product_no;
 	}
 
