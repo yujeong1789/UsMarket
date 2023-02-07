@@ -10,7 +10,7 @@ public class DealDto extends DealInsertDto{
 	
 	public DealDto() {}
 	
-	public DealDto(String deal_no, Integer product_no, Integer seller_no, Integer customer_no,
+	public DealDto(String deal_no, String product_no, Integer seller_no, Integer customer_no,
 			String customer_name, String customer_hp, String customer_zipcode, String customer_address,
 			String dustomer_address_detail, String deal_delivery_message, 
 			String deal_review, Date deal_complete_date, String deal_delivery_state, String deal_state) {
