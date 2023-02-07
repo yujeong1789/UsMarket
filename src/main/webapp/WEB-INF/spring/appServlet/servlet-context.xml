@@ -55,12 +55,12 @@
 		</interceptor>
 	</interceptors>
 	
-	<!-- websocket 관련 설정 -->
+	<!-- websocket handler -->
+	<beans:bean id="echoHandler" class="com.spring.usMarket.handler.EchoHandler"/>
 	<websocket:handlers>
-		<websocket:mapping handler="chattingHandler" path="/chatting"/>
+		<websocket:mapping handler="echoHandler" path="/echo"/>
 		<websocket:sockjs></websocket:sockjs>
 	</websocket:handlers>
 	
-	<beans:bean id="chattingHandler" class="com.spring.usMarket.common.ChattingHandler"/>
 	    
 </beans:beans>
