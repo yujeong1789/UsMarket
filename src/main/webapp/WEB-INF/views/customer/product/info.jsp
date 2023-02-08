@@ -87,25 +87,30 @@
 							</div>
 						</c:when>
 						<c:otherwise>
-							<!-- 내 상품이 아닐 경우 보여질 버튼 -->
+							<!-- 판매 중이며 내 상품이 아닐 경우 보여질 버튼 -->
 							<div class="product__buttons" id="product__buttons">
-								<div id="btn__wish" class="product__loginCheck" data-url="/product/like?product_no=${productInfo.PRODUCT_NO}">
+								<div id="btn__wish" data-url="/product/like?product_no=${productInfo.PRODUCT_NO}">
 									<img id="bookmark__status" alt="찜" src="<c:url value='/resources/customer/img/wish_icon_0.png' />">
 									<span>찜</span>
 									<span><c:out value="${productInfo.BOOKMARK_COUNT }"/></span>
 								</div>
-								<div id="btn__chat" class="product__loginCheck" data-url="/chat/list">
+								<div id="btn__chat">
 									<span>채팅하기</span>
+									<form id="addChatRoomForm" method="post" action="<c:url value='/chat/add'/>">
+										<input type="hidden" name="room_no">
+										<input type="hidden" name="chat_member_1">
+										<input type="hidden" name="chat_member_2">
+									</form>
 								</div>
-								<form id="productBuyForm" method="post" action="<c:url value='/product/buy'/>">
-									<input type="hidden" name="product_no">
-								</form>
 								<div id="btn__buy">
 									<span>바로구매</span>
+									<form id="productBuyForm" method="post" action="<c:url value='/product/buy'/>">
+										<input type="hidden" name="product_no">
+									</form>
 								</div>
 							</div>
 							
-							<!-- 내 상품일 경우 보여질 버튼 -->
+							<!-- 판매 중이며 내 상품일 경우 보여질 버튼 -->
 							<div class="product__my__buttons" id="product__my__buttons">
 							<form id="productModifyForm" method="post" action="<c:url value='/product/remove'/>">
 								<input type="hidden" name="product_no">
@@ -184,6 +189,7 @@
 	document.addEventListener('DOMContentLoaded', function(){
 		
 		const seller_id = `${productInfo.MEMBER_ID}`;
+		const seller_no = `${productInfo.SELLER_NO}`;
 		const current_id = document.getElementById('loginId').getAttribute('data-id');
 		const current_no = document.getElementById('loginNo').getAttribute('data-no');
 		const product_no = `${productInfo.PRODUCT_NO}`;
@@ -191,11 +197,12 @@
 		
 		console.log("product_no = "+product_no);
 		console.log("current_id = "+current_id);
+		console.log("seller_no = "+seller_no);
 		
 		console.log("isEmpty() = "+isEmpty(current_id));
 		
 		if(!isEmpty(current_id)){
-			if(seller_id == current_id){ // 내 상품일 경우
+			if(seller_id == current_id && product_state == 1){ // 내 상품이며 판매 중인 상품일 경우
 				document.getElementById('product__buttons').style.display = 'none'; // 찜, 구매, 채팅 숨기기
 				document.querySelector('.product__detail__1 > .right').style.visibility = 'hidden'; // 신고 버튼 숨기기
 				document.getElementById('product__my__buttons').style.display = 'flex'; // 내 상점 관리, 삭제 활성화
@@ -280,7 +287,7 @@
 		
 		
 		
-		// 판매 중인 상품일 경우에만 구매, 삭제 이벤트 등록 (판매 중이 아닐 경우 버튼이 존재하지 않기 때문)
+		// 판매 중인 상품일 경우에만 구매, 채팅, 찜, 삭제 이벤트 등록 (판매 중이 아닐 경우 버튼이 존재하지 않기 때문)
 		if(product_state == 1){
 			// 삭제하기
 			document.getElementById('btn__product__delete').addEventListener('click', function(){
@@ -300,11 +307,27 @@
 				
 				productBuyForm.submit();
 			});
+			
+			// 찜
+			document.getElementById('btn__wish').addEventListener('click', function(){
+				location.href = '${pageContext.request.contextPath}'+this.getAttribute('data-url');
+			});
+			
+			// 채팅하기
+			document.getElementById('btn__chat').addEventListener('click', function(){
+				const addChatRoomForm = document.getElementById('addChatRoomForm');
+				
+				addChatRoomForm.children[0].value = getOrderNo(10);
+				addChatRoomForm.children[1].value = current_no;
+				addChatRoomForm.children[2].value = seller_no;
+				
+				console.log(addChatRoomForm);
+				addChatRoomForm.submit();				
+			});
 		}
 		
 		
 		// 리뷰 출력하기
-		const seller_no = `${productInfo.SELLER_NO}`;
 		const product__review = document.getElementById('product__review');
 		
 		fetch('/usMarket/fetch/seller/'+seller_no)
@@ -338,7 +361,7 @@
 		}; // getTopReview
 		
 		
-		
+		// 상품 태그 출력하기
 		const tagElement = document.getElementById('product__tag__content');
 		const tag = `${productInfo.PRODUCT_TAG}`;
 		
@@ -350,13 +373,6 @@
 				tagElement.innerHTML += appendTag;
 			});			
 		}
-		
-		const loginElements = document.querySelectorAll('.product__loginCheck');
-		loginElements.forEach((el) => {
-			el.addEventListener('click', function() {
-				location.href = '${pageContext.request.contextPath}'+el.getAttribute('data-url');
-			});
-		});
 		
 	});
 	
