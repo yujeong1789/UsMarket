@@ -31,7 +31,7 @@
 				</div>
 				<div class="info-div">
 					<div class="info-title">
-						<span>닉네임</span>
+						<span id="chat_to_nickname"></span>
 					</div>
 					<div class="info-content-layout">
 						<div class="info-content">
@@ -58,9 +58,10 @@
 		</div>
 	</div>
 </section>
-<script src="https://cdn.jsdelivr.net/npm/sockjs-client@1/dist/sockjs.min.js"></script>
-<script type="text/javascript">
+<script type="text/javascript" charset="utf-8">
 document.addEventListener('DOMContentLoaded', function(){
+	const condition = `${condition}`; // 새로 생성되었을 경우 add, 이미 존재하면 기존 채팅방 띄우기
+	console.log(condition);
 	
 	document.getElementById('chat_content').addEventListener('keyup', function(){
 		if(this.value.length > 0){
@@ -69,6 +70,28 @@ document.addEventListener('DOMContentLoaded', function(){
 			document.querySelector('.btn_send').style.visibility = 'hidden';
 		}
 	});
+		
+	// 1. 새로 생성되었을 경우 새 채팅방 띄우기
+	if(condition == 'add'){
+		console.log(`${chat_from}`);
+		console.log(`${chat_to}`);
+		// getNickName(`${chat_to}`);
+		
+	}
 	
+	// 회원 닉네임 얻기
+	function getNickName(user_no){
+		fetch('/usMarket/fetch/nickname/'+user_no)
+		.then((response) => response.text())
+		.then((text) => {
+			console.log(text);
+			setTextContent(document.getElementById('chat_to_nickname'), text);
+		}).catch((error) => console.log('error: '+error));
+	}
+	
+	// 특정 element의 textContent를 변경
+	function setTextContent(element, text){
+		element.textContent = text;
+	}
 });
 </script>
