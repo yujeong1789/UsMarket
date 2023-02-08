@@ -5,6 +5,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletResponse;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,19 +18,23 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.spring.usMarket.domain.deal.DealInsertDto;
+import com.spring.usMarket.service.chat.ChatService;
 import com.spring.usMarket.service.deal.DealService;
 import com.spring.usMarket.service.product.ProductService;
 
 @RestController
 @RequestMapping("/fetch")
 public class FetchController {
-	private static final Logger logger = LoggerFactory.getLogger(ProductController.class);
+	private static final Logger logger = LoggerFactory.getLogger(FetchController.class);
 	
 	@Autowired
 	ProductService productService;
 	
 	@Autowired
 	DealService dealService;
+	
+	@Autowired
+	ChatService chatService;
 	
 	@GetMapping("/category")
 	public List<Map<String, Object>> category(){
@@ -134,4 +140,18 @@ public class FetchController {
 		return deal_no;
 	}
 	
+	@GetMapping(value="/nickname/{member_no}", produces="text/plain; charset=UTF-8")
+	public String nickName(@PathVariable String member_no) {
+		logger.info("member_no = {}", member_no);
+		
+		String nickName = "";
+		
+		try {
+			Integer member_no_ = Integer.parseInt(member_no);
+			nickName = chatService.getNickName(member_no_);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return nickName;
+	}
 }

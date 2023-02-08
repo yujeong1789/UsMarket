@@ -15,11 +15,11 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.spring.usMarket.common.SearchCondition;
-import com.spring.usMarket.product.domain.ProductCategoryDto;
-import com.spring.usMarket.product.domain.ProductDto;
-import com.spring.usMarket.product.domain.ProductInsertDto;
-import com.spring.usMarket.product.service.ProductService;
+import com.spring.usMarket.domain.product.ProductCategoryDto;
+import com.spring.usMarket.domain.product.ProductDto;
+import com.spring.usMarket.domain.product.ProductInsertDto;
+import com.spring.usMarket.service.product.ProductService;
+import com.spring.usMarket.utils.SearchCondition;
 
 @Transactional
 @WebAppConfiguration
@@ -77,7 +77,8 @@ public class ProductServiceImplTest {
 	
 	@Test
 	public void addProductTest() throws Exception{
-		ProductInsertDto dto = new ProductInsertDto(20230122201753956L, 43, 1, 1, "test title", "N", "N", 150000, "test content", "t a g");
+		String product_no = "9999999";
+		ProductInsertDto dto = new ProductInsertDto(product_no, member_no, 1, 1, "test title", "N", "N", 150000, "test content", "t a g");
 		int result = productService.addProduct(dto);
 		assertEquals(result, 1);
 	}

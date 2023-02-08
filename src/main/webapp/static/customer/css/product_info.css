@@ -175,6 +175,10 @@
 	justify-content: space-between;
 }
 
+.product__buttons form{
+	display: none;
+}
+
 .product__my__buttons{
 	display: none;
 	justify-content: space-between;
