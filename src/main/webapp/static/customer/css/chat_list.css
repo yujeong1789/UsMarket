@@ -76,7 +76,11 @@
 .list-content-left > div:last-child{
 	font-weight: 600;
 	color: #ababab;
-	font-size: 13px;
+	font-size: 15px;
+}
+
+.list-content-left > .content{
+	margin-left: 1px;
 }
 
 .list-content-right{
@@ -104,8 +108,7 @@
 .info-content-layout{
 	overflow: scroll;
 	display: flex;
-	flex-direction: column;
-	justify-content: flex-end;
+	flex-direction: column-reverse;
 	height: 560px;
 	padding-left: 20px;
 	padding-right: 20px;

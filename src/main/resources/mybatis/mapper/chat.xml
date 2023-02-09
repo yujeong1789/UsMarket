@@ -3,6 +3,12 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.mybatis.mapper.chat">
 
+	<select id="searchChatRoom" parameterType="map" resultType="chatRoomDto">
+		SELECT*FROM chat_room
+		 WHERE (CHAT_MEMBER_1 = #{chat_member_1} AND CHAT_MEMBER_2 = #{chat_member_2}) 
+				 OR (CHAT_MEMBER_2 = #{chat_member_1} AND CHAT_MEMBER_1 = #{chat_member_2})
+	</select>
+
 	<insert id="insertChatRoom" parameterType="chatRoomDto">
 		INSERT INTO chat_room
 		 values(#{room_no}, #{chat_member_1}, #{chat_member_2})
@@ -11,6 +17,26 @@
 	<select id="searchNickName" parameterType="int" resultType="string">
 		SELECT member_nickname FROM MEMBER
 		 WHERE member_no = #{member_no}
+	</select>
+	
+	<select id="searchChatList" parameterType="int" resultType="map">
+		SELECT c.room_no, c.chat_from, c.chat_content, c.chat_time, c.chat_read, m.member_image, m.member_nickname, m.member_state_no
+		 FROM chat c, member m
+		 WHERE (c.room_no, c.chat_time) 
+			 IN (
+				 SELECT room_no, MAX(chat_time) AS chat_time
+				 FROM chat
+				 WHERE chat_to = #{member_no}
+				 GROUP BY room_no
+				)
+		 AND c.chat_from = m.member_no
+		 ORDER BY c.chat_time DESC
+	</select>
+	
+	<select id="searchChatInfo" parameterType="string" resultType="chatDto">
+		SELECT * FROM chat
+	 	 WHERE room_no = #{room_no}
+		 ORDER BY chat_time DESC
 	</select>
 	
 </mapper>

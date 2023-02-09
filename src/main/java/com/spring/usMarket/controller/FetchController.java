@@ -5,8 +5,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.servlet.http.HttpServletResponse;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.spring.usMarket.domain.chat.ChatDto;
 import com.spring.usMarket.domain.deal.DealInsertDto;
 import com.spring.usMarket.service.chat.ChatService;
 import com.spring.usMarket.service.deal.DealService;
@@ -153,5 +152,34 @@ public class FetchController {
 			e.printStackTrace();
 		}
 		return nickName;
+	}
+	
+	@GetMapping("/chatlist/{member_no}")
+	public List<Map<String, Object>> chatList(@PathVariable String member_no) {
+		logger.info("member_no = {}", member_no);
+		
+		List<Map<String, Object>> chatList = new ArrayList<>();
+		try {
+			Integer member_no_ = Integer.parseInt(member_no);
+			chatList = chatService.getChatList(member_no_);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return chatList;
+	}
+	
+	@GetMapping("/chatinfo/{room_no}")
+	public List<ChatDto> chatInfo(@PathVariable String room_no) {
+		logger.info("room_no = {}", room_no);
+		
+		List<ChatDto> chatInfo = new ArrayList<>();
+		try {
+			chatInfo = chatService.getChatInfo(room_no);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return chatInfo;
 	}
 }

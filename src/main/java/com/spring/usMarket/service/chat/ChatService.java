@@ -1,8 +1,14 @@
 package com.spring.usMarket.service.chat;
 
+import java.util.List;
+import java.util.Map;
+
+import com.spring.usMarket.domain.chat.ChatDto;
 import com.spring.usMarket.domain.chat.ChatRoomDto;
 
 public interface ChatService {
-	int addChatRoom(ChatRoomDto dto) throws Exception;
+	ChatRoomDto getChatRoom(Integer chat_member_1, Integer chat_member_2) throws Exception;
 	String getNickName(Integer member_no) throws Exception;
+	List<Map<String, Object>> getChatList(Integer member_no) throws Exception;
+	List<ChatDto> getChatInfo (String room_no) throws Exception;
 }

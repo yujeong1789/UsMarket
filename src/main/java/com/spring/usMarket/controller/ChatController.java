@@ -7,7 +7,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -30,16 +29,17 @@ public class ChatController {
 	}
 	
 	@PostMapping("/add")
-	public String add(ChatRoomDto dto, HttpServletRequest request, RedirectAttributes ratt) {
-		logger.info(dto.toString());
+	public String add(Integer chat_member_1, Integer chat_member_2, HttpServletRequest request, RedirectAttributes ratt) {
+		logger.info(chat_member_1+", "+chat_member_2);
 		try {
-			int rowCnt = chatService.addChatRoom(dto);
-			ratt.addFlashAttribute("condition", "add");
+			ChatRoomDto dto = chatService.getChatRoom(chat_member_1, chat_member_2);
+			ratt.addFlashAttribute("condition", "open");
+			ratt.addFlashAttribute("room_no", dto.getRoom_no());
 			
 			if(dto.getChat_member_1() == Integer.parseInt(getUserNo(request))) {
 				ratt.addFlashAttribute("chat_from", dto.getChat_member_1());
 				ratt.addFlashAttribute("chat_to", dto.getChat_member_2());
-			}else {
+			} else {
 				ratt.addFlashAttribute("chat_from", dto.getChat_member_2());
 				ratt.addFlashAttribute("chat_to", dto.getChat_member_1());
 			}
