@@ -3,20 +3,26 @@ package com.spring.usMarket.dao.member;
 import java.util.Map;
 
 import org.apache.ibatis.session.SqlSession;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 
 import com.spring.usMarket.domain.member.MemberDto;
+import com.spring.usMarket.service.member.MemberService;
 
 import lombok.RequiredArgsConstructor;
 
 @Repository
 @RequiredArgsConstructor
 public class MemberDaoImpl implements MemberDao{
+	private static final Logger logger = LoggerFactory.getLogger(MemberService.class);
+
 	private final SqlSession session;
 	private static String namespace="com.mybatis.mapper.member.";
 	
 	@Override
 	public int insertMember(MemberDto member) {
+		logger.info("/ DaoImpl / memberDto = {}",member.toString());
 		return session.insert(namespace+"insertMember", member);
 	}
 
