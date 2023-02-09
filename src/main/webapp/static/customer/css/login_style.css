@@ -35,64 +35,11 @@
 	animation: warning .3s ease;
 	animation-iteration-count:3;
 }
-.id_ok{
-	display:none;
-	font-size: 18px; color: green;
-}
-.id_no{
-	display:none;
-	font-size: 18px; color: red;
-}
-.id_no_length{
-	display:none;
-	font-size: 18px; color: red;
-}
-.nick_ok{
-	display:none;
-	font-size: 18px; color: green;
-}
-.nick_no{
-	display:none;
-	font-size: 18px; color: red;
-}
-.nick_no_length{
-	display:none;
-	font-size: 18px; color: red;
-}
-.email_ok{
-	display:none;
-	font-size: 18px; color: green;
-}
-.email_no{
-	display:none;
-	font-size: 18px; color: red;
-}
 .int-area text {
 	color : red;
 }
 .nice-select {
     width: 30%;
-}
-.hp-area {
-	width: 400px; position: relative;
-	margin-top: 20px;
-}
-.hp-area input {
-	width: 30%;
-	padding: 10px 10px 5px;
-	background-color: transparent;
-	border: none;
-	border-bottom: 1px solid #999;
-	font-size: 18px;
-	outline: none;
-}
-
-.hp-area span {
-	font-size: 18px;
-}
-
-.hp-area text{
-	color : red;
 }
 @keyframes warning {
 	0% {transform: translateX(-8px);}
@@ -105,7 +52,52 @@
 	top: 0;
 	font-size: 13px; color: #166cea;
 }
-
+.int-area-emailCheck input{
+	width: 70%;
+    padding: 20px 10px 10px;
+    background-color: #ebebe4;
+    border: none;
+    border-bottom: 1px solid #999999;
+    font-size: 18px;
+    outline: none;
+}
+.email_check_btn {
+    width: 28%;
+    height: 50px;
+    background: #16A7F1;
+    color: #fff;
+    font-size: 15px;
+    border: none;
+    border-radius: 100px;
+    cursor: pointer;
+    font-weight: 600;
+}
+.int-area-addressCheck input{
+	width: 70%;
+    padding: 20px 10px 10px;
+    background-color: transparent;
+    border: none;
+    border-bottom: 1px solid #999999;
+    font-size: 18px;
+    outline: none;
+}
+.int-area-addressCheck label{
+	position: absolute; left: 10px; top: 0px;
+	font-size: 18px; 
+	color: #999999;
+	transition: all .5s ease;
+}
+.address_btn {
+    width: 28%;
+    height: 50px;
+    background: #16A7F1;
+    color: #fff;
+    font-size: 15px;
+    border: none;
+    border-radius: 100px;
+    cursor: pointer;
+    font-weight: 600;
+}
 .btn-area {margin-top: 30px;}
 .btn-area button {
 	width: 100%; height: 50px;
@@ -128,7 +120,10 @@
 	font-size: 15px; color: #999;
 	text-decoration: none;
 }
-
+#View {
+    display:block;
+    margin:auto;
+}
 
 
 

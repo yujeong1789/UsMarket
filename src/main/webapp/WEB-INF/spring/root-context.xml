@@ -39,6 +39,26 @@
 	<bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
 		<property name="dataSource" ref="dataSource"/>
 	</bean>
+	
+	<bean id="mailSender2" class="org.springframework.mail.javamail.JavaMailSenderImpl"> 
+		<property name="host" value="smtp.gmail.com" />
+		<property name="port" value="587" />
+	 	<property name="username" value="ehd1530@gmail.com"/> 
+    	<!-- 이메일 아이디 @gmail.com까지 전부-->
+ 		<property name="password" value="lnzrxxzdjpfbtkny"/>
+ 		<!-- 구글 2차 앱 등록 비밀번호 "lnzrxxzdjpfbtkny" / 일반 비밀번호로 연결안됨 --> 
+		<property name="javaMailProperties">
+			<props>
+				<prop key="mail.smtp.auth">true</prop>
+				<prop key="mail.transport.protocol">smtp</prop>
+				<prop key="mail.smtp.socketFactory.class">javax.net.ssl.SSLSocketFactory</prop>
+                <prop key="mail.smtp.starttls.enable">true</prop>
+				<prop key="mail.debug">true</prop>
+				<prop key="mail.smtp.ssl.trust">smtp.gmail.com</prop>
+				<prop key="mail.smtp.ssl.protocols">TLSv1.2</prop>
+			</props>
+		</property>
+	</bean>
 	<tx:annotation-driven/>
 	<context:component-scan base-package="com.spring.usMarket"/>
 </beans>
