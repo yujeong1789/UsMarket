@@ -95,6 +95,7 @@ public class FetchController {
 		return topReview;
 	}
 	
+	
 	@GetMapping("/bookmark/{current_no}/{product_no}")
 	public int bookmark(@PathVariable Integer current_no, @PathVariable String product_no) {
 		
@@ -109,6 +110,7 @@ public class FetchController {
 		return bookmarkStatus;
 	}
 	
+	
 	@GetMapping("/customerInfo/{customer_no}")
 	public Map<String, Object> customerInfo(@PathVariable String customer_no) {
 		
@@ -122,6 +124,7 @@ public class FetchController {
 		
 		return customerInfo;
 	}
+	
 	
 	@PostMapping("/deal/add/{isUpdate}")
 	public String dealAdd(@RequestBody DealInsertDto dto, @PathVariable String isUpdate) {
@@ -141,20 +144,6 @@ public class FetchController {
 		return deal_no;
 	}
 	
-	@GetMapping(value="/nickname/{member_no}", produces="text/plain; charset=UTF-8")
-	public String nickName(@PathVariable String member_no) {
-		logger.info("member_no = {}", member_no);
-		
-		String nickName = "";
-		
-		try {
-			Integer member_no_ = Integer.parseInt(member_no);
-			nickName = chatService.getNickName(member_no_);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return nickName;
-	}
 	
 	@GetMapping("/chatlist/{member_no}")
 	public List<Map<String, Object>> chatList(@PathVariable String member_no, HttpServletRequest request) {
@@ -171,6 +160,7 @@ public class FetchController {
 		
 		return chatList;
 	}
+	
 	
 	@PostMapping("/chatinfo")
 	public List<ChatDto> chatInfo(@RequestBody Map<String, String> data) {
