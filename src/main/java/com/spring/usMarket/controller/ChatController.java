@@ -14,6 +14,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.spring.usMarket.domain.chat.ChatRoomDto;
 import com.spring.usMarket.service.chat.ChatService;
+import com.spring.usMarket.utils.SessionParameters;
 
 @Controller
 @RequestMapping("/chat")
@@ -36,7 +37,7 @@ public class ChatController {
 			ratt.addFlashAttribute("condition", "open");
 			ratt.addFlashAttribute("room_no", dto.getRoom_no());
 			
-			if(dto.getChat_member_1() == Integer.parseInt(getUserNo(request))) {
+			if(dto.getChat_member_1() == Integer.parseInt(SessionParameters.getUserNo(request))) {
 				ratt.addFlashAttribute("chat_from", dto.getChat_member_1());
 				ratt.addFlashAttribute("chat_to", dto.getChat_member_2());
 			} else {
@@ -49,11 +50,4 @@ public class ChatController {
 		}
 		return "redirect:/chat/list";
 	}
-	
-    private String getUserNo(HttpServletRequest request) {
-        // 1. 세션을 얻어서
-        HttpSession session = request.getSession();
-        // 2. 세션에 id가 있는지 확인, 있으면 true를 반환
-        return String.valueOf(request.getSession().getAttribute("userNo"));
-    }
 }

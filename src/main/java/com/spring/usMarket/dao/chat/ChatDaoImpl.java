@@ -34,11 +34,6 @@ public class ChatDaoImpl implements ChatDao{
 	}
 
 	@Override
-	public String searchNickName(Integer member_no) throws Exception {
-		return session.selectOne(namespace+"searchNickName", member_no);
-	}
-
-	@Override
 	public List<Map<String, Object>> searchChatList(Integer member_no) throws Exception {
 		return session.selectList(namespace+"searchChatList", member_no);
 	}
@@ -46,6 +41,15 @@ public class ChatDaoImpl implements ChatDao{
 	@Override
 	public List<ChatDto> searchChatInfo(String room_no) throws Exception {
 		return session.selectList(namespace+"searchChatInfo", room_no);
+	}
+
+	@Override
+	public int updateChatRead(String room_no, Integer chat_to) throws Exception {
+		Map<String, Object> map = new HashMap<>();
+		map.put("room_no", room_no);
+		map.put("chat_to", chat_to);
+		
+		return session.update(namespace+"updateChatRead", map);
 	}
 
 }

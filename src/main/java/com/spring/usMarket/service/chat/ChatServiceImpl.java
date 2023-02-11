@@ -1,8 +1,6 @@
 package com.spring.usMarket.service.chat;
 
 import java.sql.SQLException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -49,16 +47,6 @@ public class ChatServiceImpl implements ChatService{
 
 	@Override
 	@Transactional(rollbackFor = SQLException.class, readOnly = true)
-	public String getNickName(Integer member_no) throws Exception {
-		
-		String result = chatDao.searchNickName(member_no);
-		logger.info("닉네임 = {}", result);
-		
-		return result;
-	}
-
-	@Override
-	@Transactional(rollbackFor = SQLException.class, readOnly = true)
 	public List<Map<String, Object>> getChatList(Integer member_no) throws Exception {
 		
 		List<Map<String, Object>> chatListMap = chatDao.searchChatList(member_no);
@@ -68,8 +56,12 @@ public class ChatServiceImpl implements ChatService{
 	}
 
 	@Override
-	public List<ChatDto> getChatInfo(String room_no) throws Exception {
-		
+	@Transactional(rollbackFor = SQLException.class)
+	public List<ChatDto> getChatInfo(String room_no, String is_read, Integer chat_to) throws Exception {
+		if(is_read == "N" || is_read.equals("N")) {
+			int rowCnt = chatDao.updateChatRead(room_no, chat_to);
+			logger.info("chat_read 업데이트 결과 = {}", rowCnt);
+		}
 		List<ChatDto> chatInfo = chatDao.searchChatInfo(room_no);
 		logger.info("chatInfo.size() = {}", chatInfo.size());
 		

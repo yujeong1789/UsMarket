@@ -250,6 +250,7 @@ public class ProductServiceImpl implements ProductService {
 
 
 	@Override
+	@Transactional(rollbackFor = SQLException.class, readOnly = true)
 	public Map<String, Object> getCustomerInfo(String customer_no) throws Exception {
 		
 		Map<String, Object> resultMap = productDao.searchCustomerInfo(customer_no);

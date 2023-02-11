@@ -37,6 +37,10 @@
 	height: 570px;
 }
 
+.list-div-content > form{
+	display: none;
+}
+
 .list-content-1{
 	width: 430px;
 }
@@ -90,7 +94,6 @@
 	border-radius: 50%;
 	background-color: #0084ff;
 }
-
 
 
 /* 채팅 상세보기 */
