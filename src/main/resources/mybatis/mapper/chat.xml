@@ -3,10 +3,15 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.mybatis.mapper.chat">
 
-	<select id="searchChatRoom" parameterType="map" resultType="chatRoomDto">
+	<select id="searchChatRoomByInfo" parameterType="map" resultType="chatRoomDto">
 		SELECT*FROM chat_room
-		 WHERE (CHAT_MEMBER_1 = #{chat_member_1} AND CHAT_MEMBER_2 = #{chat_member_2}) 
-				 OR (CHAT_MEMBER_2 = #{chat_member_1} AND CHAT_MEMBER_1 = #{chat_member_2})
+		 WHERE (chat_member_1 = #{chat_member_1} AND chat_member_2 = #{chat_member_2}) 
+				 OR (chat_member_2 = #{chat_member_1} AND chat_member_1 = #{chat_member_2})
+	</select>
+
+	<select id="searchNickName" parameterType="int" resultType="string">
+		SELECT member_nickname FROM MEMBER
+		 WHERE member_no = #{member_no}
 	</select>
 
 	<insert id="insertChatRoom" parameterType="chatRoomDto">
@@ -18,11 +23,9 @@
  		SELECT 
 			c.room_no
 			, c.chat_from
+			, c.chat_to
 			, c.chat_content
 			, c.chat_time
-			, m.member_image
-			, m.member_nickname
-			, m.member_state_no
 			, (
 				SELECT c2.chat_read 
 				FROM chat c2
@@ -34,7 +37,7 @@
 													GROUP BY room_no
 												   )
 			 ) AS chat_read
-		 FROM chat c, member m
+		 FROM chat c
 		 WHERE (c.room_no, c.chat_time) 
 			 IN (
 				 SELECT room_no, MAX(chat_time) AS chat_time
@@ -42,7 +45,6 @@
 				 WHERE chat_to = #{member_no} OR chat_from = #{member_no}
 				 GROUP BY room_no
 				)
-		 AND c.chat_from = m.member_no
 		 ORDER BY c.chat_time DESC
 	</select>
 	
@@ -57,5 +59,10 @@
 		 SET chat_read = 'Y'
 		 WHERE room_no = #{room_no} AND chat_to = #{chat_to} AND chat_read = 'N'
 	</update>
+	
+	<insert id="insertChat" parameterType="chatDto">
+		INSERT INTO chat(room_no, chat_from, chat_to, chat_content, chat_time)
+		 values(#{room_no}, #{chat_from}, #{chat_to}, #{chat_content}, #{chat_time})
+	</insert>
 	
 </mapper>

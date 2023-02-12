@@ -49,12 +49,21 @@ document.addEventListener('DOMContentLoaded', function(){
 	
 	
 	// 입력창 이벤트
-	document.getElementById('chat_content').addEventListener('keyup', function(){
-		if(this.value.length > 0){
+	document.getElementById('chat_content').addEventListener('keyup', function(event){
+		if(this.value.trim().length > 0){
 			document.querySelector('.btn_send').style.visibility = 'visible';
+			if(event.keyCode == 13){
+				event.preventDefault();
+				document.querySelector('.btn_send').click();
+			}
 		}else{
 			document.querySelector('.btn_send').style.visibility = 'hidden';
 		}
+	});
+	
+	document.querySelector('.btn_send').addEventListener('click', function(){
+		console.log('btn click');
+		sendMessage();
 	});
 	
 	
@@ -66,31 +75,49 @@ document.addEventListener('DOMContentLoaded', function(){
 			document.querySelector('.list-div-content').replaceChildren(); // list 초기화
 			console.log(json);
 			json.forEach((el, i) => {
-				let chatList_ = setChatList(el);
-				
-				chatList_.addEventListener('click', function(e){
-					this.childNodes[1].childNodes[1].style.visibility = 'hidden';
-					document.getElementById('chat_to_nickname').innerHTML = '';
-					
-					if(document.querySelector('[data-open = Y]')){
-						document.querySelector('[data-open = Y]').removeAttribute('data-open');
-					}
-					this.setAttribute('data-open', 'Y');
-					
-					document.querySelector('.info-content-layout').replaceChildren();
-					getChatInfo(el.ROOM_NO, this.getAttribute('data-read'));
-				});
-				
-				document.querySelector('.list-div-content').appendChild(chatList_);
-				
+				initChatList(el);
 			});
+			setTimeout(() => {
+				document.querySelector('.list-div-content').style.visibility = 'visible';	
+			}, 500);
 		}).catch((error) => console.log('error: '+error));
 	}
+	
+	function initChatList(element){
+		let chatList_ = setChatList(element);
+		
+		chatList_.addEventListener('click', function(e){
+			initChatInfo(this);
+			getChatInfo(element.ROOM_NO, this.getAttribute('data-read'));
+		});
+		document.querySelector('.list-div-content').appendChild(chatList_);
+	}
+	
+	function initChatInfo(element){
+		element.childNodes[1].childNodes[1].style.visibility = 'hidden';
+		document.getElementById('chat_to_nickname').innerHTML = '';
+		document.querySelector('.info-textarea').style.visibility = 'visible';
+		document.getElementById('chat_content').value = '';
+		document.querySelector('.btn_send').style.visibility = 'hidden';
+		
+		if(document.querySelector('[data-open = Y]')){
+			document.querySelector('[data-open = Y]').removeAttribute('data-open');
+		}
+		element.setAttribute('data-open', 'Y');
+		
+		document.querySelector('.info-content-layout').replaceChildren();
+	} 
 	
 	function setChatList(el){
 		let parentDiv = document.createElement('div');
 		parentDiv.className = 'list-content';
 		parentDiv.setAttribute('data-room', el.ROOM_NO);
+		
+		if(el.CHAT_FROM == current_no) {
+			parentDiv.setAttribute('data-to', el.CHAT_TO);
+		} else {
+			parentDiv.setAttribute('data-to', el.CHAT_FROM);
+		}
 		
 		let img = document.createElement('img');
 		img.setAttribute('src', '${pageContext.request.contextPath}/resources/customer/img/default_profile.png');
@@ -104,7 +131,7 @@ document.addEventListener('DOMContentLoaded', function(){
 		
 		let title = document.createElement('div');
 		title.className = 'title';
-		title.textContent = el.MEMBER_NICKNAME;
+		getNickName(title, parentDiv.getAttribute('data-to'));
 		list_content_left.appendChild(title);
 		
 		let content = document.createElement('div');
@@ -181,5 +208,40 @@ document.addEventListener('DOMContentLoaded', function(){
 		return parentDiv;
 	}
 	
+	function sendMessage(){
+		const currentChat = document.querySelector('[data-open="Y"]');
+		let params = {
+			room_no: currentChat.getAttribute('data-room'),
+			chat_to: currentChat.getAttribute('data-to'),
+			chat_from: current_no,
+			chat_content: document.getElementById('chat_content').value.replace(/<[^>]*>?/g, '').slice(0, -1),
+		}
+		
+		document.getElementById('chat_content').value = '';
+		document.querySelector('.btn_send').style.visibility = 'hidden';
+		
+		fetch('/usMarket/fetch/chat/send', {
+			method: 'POST',
+			headers: {
+				'Content-type' : 'application/json'
+			},
+			body: JSON.stringify(params),
+		})
+		.then((response) => response.json())
+		.then((json) => {
+			getChatList(current_no);
+			document.querySelector('[data-room="'+json.room_no+'"]').click();
+		}).catch((error) => console.log('error: '+error));
+	}
+	
+	
+	// 회원 닉네임 얻기 (사진 얻어오는 로직도 추가할 것)
+	function getNickName(element, user_no){
+		fetch('/usMarket/fetch/nickname/'+user_no)
+		.then((response) => response.text())
+		.then((text) => {
+			element.textContent = text;
+		}).catch((error) => console.log('error: '+error));
+	}
 });
 </script>

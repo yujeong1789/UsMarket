@@ -1,6 +1,7 @@
 package com.spring.usMarket.service.chat;
 
 import java.sql.SQLException;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -28,9 +29,9 @@ public class ChatServiceImpl implements ChatService{
 	
 	@Override
 	@Transactional(rollbackFor = SQLException.class)
-	public ChatRoomDto getChatRoom(Integer chat_member_1, Integer chat_member_2) throws Exception {
+	public ChatRoomDto getChatRoomByInfo(Integer chat_member_1, Integer chat_member_2) throws Exception {
 		
-		ChatRoomDto dto = chatDao.searchChatRoom(chat_member_1, chat_member_2);
+		ChatRoomDto dto = chatDao.searchChatRoomByInfo(chat_member_1, chat_member_2);
 		
 		if(dto == null) {
 			// 새 채팅방 생성
@@ -66,6 +67,25 @@ public class ChatServiceImpl implements ChatService{
 		logger.info("chatInfo.size() = {}", chatInfo.size());
 		
 		return chatInfo;
+	}
+
+	@Override
+	@Transactional(rollbackFor = SQLException.class)
+	public int addChat(ChatDto dto) throws Exception {
+		dto.setChat_time(new Date());
+		int rowCnt = chatDao.insertChat(dto);
+		logger.info("채팅 전송 결과 = {}", getResult(rowCnt));
+		return rowCnt;
+	}
+	
+	@Override
+	@Transactional(rollbackFor = SQLException.class, readOnly = true)
+	public String getNickName(Integer member_no) throws Exception {
+		
+		String result = chatDao.searchNickName(member_no);
+		logger.info("닉네임 = {}", result);
+		
+		return result;
 	}
 
 }

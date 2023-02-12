@@ -33,7 +33,7 @@ public class ChatController {
 	public String add(Integer chat_member_1, Integer chat_member_2, HttpServletRequest request, RedirectAttributes ratt) {
 		logger.info(chat_member_1+", "+chat_member_2);
 		try {
-			ChatRoomDto dto = chatService.getChatRoom(chat_member_1, chat_member_2);
+			ChatRoomDto dto = chatService.getChatRoomByInfo(chat_member_1, chat_member_2);
 			ratt.addFlashAttribute("condition", "open");
 			ratt.addFlashAttribute("room_no", dto.getRoom_no());
 			

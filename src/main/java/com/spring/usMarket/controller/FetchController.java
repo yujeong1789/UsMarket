@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.spring.usMarket.domain.chat.ChatDto;
 import com.spring.usMarket.domain.deal.DealInsertDto;
 import com.spring.usMarket.service.chat.ChatService;
@@ -145,6 +146,22 @@ public class FetchController {
 	}
 	
 	
+	@GetMapping(value="/nickname/{member_no}", produces="text/plain; charset=UTF-8")
+	public String nickName(@PathVariable String member_no) {
+		logger.info("member_no = {}", member_no);
+		
+		String nickName = "";
+		
+		try {
+			Integer member_no_ = Integer.parseInt(member_no);
+			nickName = chatService.getNickName(member_no_);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return nickName;
+	}
+	
+	
 	@GetMapping("/chatlist/{member_no}")
 	public List<Map<String, Object>> chatList(@PathVariable String member_no, HttpServletRequest request) {
 		logger.info("member_no = {}", member_no);
@@ -178,5 +195,25 @@ public class FetchController {
 		}
 		
 		return chatInfo;
+	}
+	
+	@SuppressWarnings("unchecked")
+	@PostMapping("/chat/send")
+	public Map<String, Object> chatSend(@RequestBody ChatDto dto) {
+		
+		logger.info(dto.toString());
+		Map<String, Object> chatMap = new HashMap<>();
+		try {
+			int rowCnt = chatService.addChat(dto);
+			
+			if(rowCnt == 0) throw new Exception();
+			
+			ObjectMapper objectMapper = new ObjectMapper();
+			chatMap = objectMapper.convertValue(dto, Map.class);
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return chatMap;
 	}
 }
