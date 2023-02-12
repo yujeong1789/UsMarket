@@ -1,4 +1,4 @@
-package com.usMarket.product;
+package com.usMarket.test;
 
 import static org.junit.Assert.assertEquals;
 
