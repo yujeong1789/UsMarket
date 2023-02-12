@@ -19,12 +19,12 @@ public class ChatDaoImpl implements ChatDao{
 	private static String namespace = "com.mybatis.mapper.chat.";
 	
 	@Override
-	public ChatRoomDto searchChatRoom(Integer chat_member_1, Integer chat_member_2) throws Exception {
+	public ChatRoomDto searchChatRoomByInfo(Integer chat_member_1, Integer chat_member_2) throws Exception {
 		Map<String, Integer> map = new HashMap<>();
 		map.put("chat_member_1", chat_member_1);
 		map.put("chat_member_2", chat_member_2);
 		
-		return session.selectOne(namespace+"searchChatRoom", map);
+		return session.selectOne(namespace+"searchChatRoomByInfo", map);
 	}
 	
 	@Override
@@ -50,6 +50,16 @@ public class ChatDaoImpl implements ChatDao{
 		map.put("chat_to", chat_to);
 		
 		return session.update(namespace+"updateChatRead", map);
+	}
+
+	@Override
+	public int insertChat(ChatDto dto) throws Exception {
+		return session.insert(namespace+"insertChat", dto);
+	}
+
+	@Override
+	public String searchNickName(Integer member_no) throws Exception {
+		return session.selectOne(namespace+"searchNickName", member_no);
 	}
 
 }
