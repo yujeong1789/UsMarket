@@ -45,8 +45,8 @@
 		<property name="port" value="587" />
 	 	<property name="username" value="ehd1530@gmail.com"/> 
     	<!-- 이메일 아이디 @gmail.com까지 전부-->
- 		<property name="password" value="lnzrxxzdjpfbtkny"/>
- 		<!-- 구글 2차 앱 등록 비밀번호 "lnzrxxzdjpfbtkny" / 일반 비밀번호로 연결안됨 --> 
+ 		<property name="password" value="mvllwjbiipmjnuia "/>
+ 		<!-- 구글 2차 앱 등록 비밀번호 / 일반 비밀번호로 연결안됨 --> 
 		<property name="javaMailProperties">
 			<props>
 				<prop key="mail.smtp.auth">true</prop>

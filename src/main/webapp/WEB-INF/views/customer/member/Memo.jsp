@@ -8,7 +8,63 @@
 <title>Insert title here</title>
 </head>
 <body>
+//----------------------------------------------------------
+<form name="joinForm" enctype="multipart/form-data">
+	
+	<input type="file" id="profile" name="member_profile_image" accept="image/jpg, image/jpeg, image/png" style="display:none;"/>
+	
+	<input type="image" id="profile_image" name="member_image" style="display:none;"/>
+	
+	<label for="profile" style="width:100%">
+		<img id="profile_img" alt="프로필 이미지" src="<c:url value='/resources/customer/img/profile.png'/>" style="display:block; margin:auto; height:100px;">
+	</label>
+	
+</form>
+<script type="text/javascript">
+/* 프로필 미리보기 */
+function readURL(input) {
+	if (input.files && input.files[0]) {
+		var reader = new FileReader();
+		 
+		reader.onload = function (e) {
+		//img태그
+		$('#profile_img').attr('src', e.target.result); 
+		//input태그
+		$('#profile_image').val($('#profile').val()); 
+		console.log($('#profile_image').val());
+		}
+		 
+		reader.readAsDataURL(input.files[0]);
+	}//if
+}//function
+ 
+// 이벤트를 바인딩해서 input에 파일이 올라올때 (input에 change를 트리거할때) 위의 함수를 this context로 실행합니다.
+$("#profile").change(function(){
+	var maxSize = 2 * 1024 * 1024;
+	console.log("file-size = "+this.files[0].size);
+	if(this.files[0].size > maxSize){
+		alert('첨부파일 사이즈는 2MB 이내로 등록 가능합니다.');
+	} else{ 
+		// 파일 사이즈 유효성 검사 통과하면 미리보기 함수 호출
+		console.log('file size pass');
+		readURL(this);
+	}
+});
+</script>
 
+
+
+
+
+
+
+
+
+
+
+
+
+//----------------------------------------------------------
 <div class="int-area">
 	<input type="text" oninput="this.value = this.value.replace(/[^a-z|A-Z|0-9|ㄱ-ㅎ|ㅏ-ㅣ|가-힣]/g, '').replace(/(\..*)\./g, '$1');"
 	name="member_nicknamename" id="nick" autocomplete="off" required title="닉네임을 입력해주세요.">
