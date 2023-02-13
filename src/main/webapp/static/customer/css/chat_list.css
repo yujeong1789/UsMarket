@@ -33,7 +33,6 @@
 }
 
 .list-div-content{
-	visibility: hidden;
 	overflow: scroll;
 	height: 570px;
 }
