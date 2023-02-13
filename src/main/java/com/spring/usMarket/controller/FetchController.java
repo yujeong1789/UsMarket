@@ -23,6 +23,7 @@ import com.spring.usMarket.domain.deal.DealInsertDto;
 import com.spring.usMarket.service.chat.ChatService;
 import com.spring.usMarket.service.deal.DealService;
 import com.spring.usMarket.service.product.ProductService;
+import com.spring.usMarket.utils.SessionParameters;
 
 @RestController
 @RequestMapping("/fetch")
@@ -162,14 +163,14 @@ public class FetchController {
 	}
 	
 	
-	@GetMapping("/chatlist/{member_no}")
-	public List<Map<String, Object>> chatList(@PathVariable String member_no, HttpServletRequest request) {
+	@GetMapping("/chatlist")
+	public List<Map<String, Object>> chatList(HttpServletRequest request) {
+		Integer member_no = Integer.parseInt(SessionParameters.getUserNo(request));
 		logger.info("member_no = {}", member_no);
 		
 		List<Map<String, Object>> chatList = new ArrayList<>();
 		try {
-			Integer member_no_ = Integer.parseInt(member_no);
-			chatList = chatService.getChatList(member_no_);
+			chatList = chatService.getChatList(member_no);
 			
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -180,11 +181,11 @@ public class FetchController {
 	
 	
 	@PostMapping("/chatinfo")
-	public List<ChatDto> chatInfo(@RequestBody Map<String, String> data) {
+	public List<ChatDto> chatInfo(@RequestBody Map<String, String> data, HttpServletRequest request) {
 
 		String room_no = data.get("room_no");
 		String is_read = data.get("is_read");
-		Integer chat_to = Integer.parseInt(data.get("chat_to"));
+		Integer chat_to = Integer.parseInt(SessionParameters.getUserNo(request));
 		logger.info("room_no = {}, is_read = {}, chat_to = {}", room_no, is_read, chat_to);
 		
 		List<ChatDto> chatInfo = new ArrayList<>();
@@ -199,8 +200,8 @@ public class FetchController {
 	
 	@SuppressWarnings("unchecked")
 	@PostMapping("/chat/send")
-	public Map<String, Object> chatSend(@RequestBody ChatDto dto) {
-		
+	public Map<String, Object> chatSend(@RequestBody ChatDto dto, HttpServletRequest request) {
+		dto.setChat_from(Integer.parseInt(SessionParameters.getUserNo(request)));
 		logger.info(dto.toString());
 		Map<String, Object> chatMap = new HashMap<>();
 		try {
