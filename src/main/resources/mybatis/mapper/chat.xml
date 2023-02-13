@@ -20,32 +20,28 @@
 	</insert>
 	
 	<select id="searchChatList" parameterType="int" resultType="map">
- 		SELECT 
-			c.room_no
-			, c.chat_from
-			, c.chat_to
-			, c.chat_content
-			, c.chat_time
-			, (
-				SELECT c2.chat_read 
-				FROM chat c2
-				WHERE c2.room_no = c.room_no
-				AND (c2.room_no, c2.chat_time) IN (
-													SELECT room_no, MAX(chat_time) AS chat_time
-													FROM chat
-													WHERE chat_to = #{member_no}
-													GROUP BY room_no
-												   )
-			 ) AS chat_read
-		 FROM chat c
-		 WHERE (c.room_no, c.chat_time) 
-			 IN (
-				 SELECT room_no, MAX(chat_time) AS chat_time
-				 FROM chat
-				 WHERE chat_to = #{member_no} OR chat_from = #{member_no}
-				 GROUP BY room_no
-				)
-		 ORDER BY c.chat_time DESC
+		SELECT c.room_no
+			 , m.member_nickname
+			 , m.member_no AS chat_to
+			 , m.member_image
+			 , m.member_state_no
+			 , c.chat_content
+			 , c.chat_time
+			 , (SELECT c2.chat_read
+		          FROM chat c2 
+		         WHERE c2.room_no = c.room_no 
+		           AND (c2.room_no, c2.chat_time) IN (SELECT room_no
+		           											, Max(chat_time) AS CHAT_TIME 
+													   FROM chat 
+													  WHERE chat_to = #{member_no}
+												 	  GROUP BY room_no)) AS chat_read
+		FROM chat c, member m
+		WHERE (c.room_no, c.chat_time) IN (SELECT room_no, MAX(chat_time) AS chat_time
+											 FROM chat
+											WHERE chat_from = #{member_no} OR chat_to = #{member_no}
+											GROUP BY room_no)
+		AND DECODE(c.chat_from, #{member_no}, c.chat_to, c.chat_from) = m.member_no
+		ORDER BY c.chat_time DESC
 	</select>
 	
 	<select id="searchChatInfo" parameterType="string" resultType="chatDto">
