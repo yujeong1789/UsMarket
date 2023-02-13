@@ -18,6 +18,8 @@
 				<div class="info-div">
 					<div class="info-title">
 						<span id="chat_to_nickname"></span>
+						<input type="text" name="room_no" id="room_no">
+						<input type="text" name="room_no" id="chat_to">
 					</div>
 					<div class="info-content-layout"></div>
 					<div class="info-textarea">
@@ -44,7 +46,7 @@ document.addEventListener('DOMContentLoaded', function(){
 		setTimeout(() => {
 			var tmp_room = `${room_no}`;
 			document.querySelector('[data-room="'+tmp_room+'"]').click();
-		}, 1000);
+		}, 500);
 	}
 	
 	
@@ -69,28 +71,23 @@ document.addEventListener('DOMContentLoaded', function(){
 	
 	// 채팅방 list 얻기
 	function getChatList(user_no){
-		fetch('/usMarket/fetch/chatlist/'+current_no)
+		fetch('/usMarket/fetch/chatlist')
 		.then((response) => response.json())
 		.then((json) => {
 			document.querySelector('.list-div-content').replaceChildren(); // list 초기화
 			console.log(json);
 			json.forEach((el, i) => {
-				initChatList(el);
+				let chatList_ = setChatList(el);
+				
+				chatList_.addEventListener('click', function(e){
+					document.getElementById('room_no').value = el.ROOM_NO;
+					document.getElementById('chat_to').value = el.CHAT_TO;
+					initChatInfo(this);
+					getChatInfo(el.ROOM_NO, this.getAttribute('data-read'));
+				});
+				document.querySelector('.list-div-content').appendChild(chatList_);
 			});
-			setTimeout(() => {
-				document.querySelector('.list-div-content').style.visibility = 'visible';	
-			}, 500);
 		}).catch((error) => console.log('error: '+error));
-	}
-	
-	function initChatList(element){
-		let chatList_ = setChatList(element);
-		
-		chatList_.addEventListener('click', function(e){
-			initChatInfo(this);
-			getChatInfo(element.ROOM_NO, this.getAttribute('data-read'));
-		});
-		document.querySelector('.list-div-content').appendChild(chatList_);
 	}
 	
 	function initChatInfo(element){
@@ -99,12 +96,6 @@ document.addEventListener('DOMContentLoaded', function(){
 		document.querySelector('.info-textarea').style.visibility = 'visible';
 		document.getElementById('chat_content').value = '';
 		document.querySelector('.btn_send').style.visibility = 'hidden';
-		
-		if(document.querySelector('[data-open = Y]')){
-			document.querySelector('[data-open = Y]').removeAttribute('data-open');
-		}
-		element.setAttribute('data-open', 'Y');
-		
 		document.querySelector('.info-content-layout').replaceChildren();
 	} 
 	
@@ -112,12 +103,6 @@ document.addEventListener('DOMContentLoaded', function(){
 		let parentDiv = document.createElement('div');
 		parentDiv.className = 'list-content';
 		parentDiv.setAttribute('data-room', el.ROOM_NO);
-		
-		if(el.CHAT_FROM == current_no) {
-			parentDiv.setAttribute('data-to', el.CHAT_TO);
-		} else {
-			parentDiv.setAttribute('data-to', el.CHAT_FROM);
-		}
 		
 		let img = document.createElement('img');
 		img.setAttribute('src', '${pageContext.request.contextPath}/resources/customer/img/default_profile.png');
@@ -131,7 +116,7 @@ document.addEventListener('DOMContentLoaded', function(){
 		
 		let title = document.createElement('div');
 		title.className = 'title';
-		getNickName(title, parentDiv.getAttribute('data-to'));
+		title.textContent = el.MEMBER_NICKNAME;
 		list_content_left.appendChild(title);
 		
 		let content = document.createElement('div');
@@ -160,8 +145,6 @@ document.addEventListener('DOMContentLoaded', function(){
 	
 	// 채팅내역 얻기
 	function getChatInfo(room_no, is_read){
-		console.log(room_no);
-		console.log(is_read);
 		fetch('/usMarket/fetch/chatinfo', {
 			method: 'POST',
 			headers: {
@@ -170,7 +153,6 @@ document.addEventListener('DOMContentLoaded', function(){
 			body: JSON.stringify({
 				room_no: room_no,
 				is_read: is_read,
-				chat_to: current_no,
 			}),
 		})
 		.then((response) => response.json())
@@ -178,8 +160,8 @@ document.addEventListener('DOMContentLoaded', function(){
 			console.log(json);
 			
 			document.querySelector('.info-content-layout').replaceChildren(); // 채팅내역 로드된 시점에 info 다시 초기화
-			document.getElementById('chat_to_nickname').textContent = document.querySelector('[data-open="Y"] .title').textContent;
-			
+			document.querySelector('[data-room="'+room_no+'"]').setAttribute('data-read', 'Y');
+			document.getElementById('chat_to_nickname').textContent = document.querySelector('[data-room="'+room_no+'"] .title').textContent;
 			json.forEach((el, i) => {
 				document.querySelector('.info-content-layout').appendChild(setChatInfo(el));
 			});
@@ -209,11 +191,9 @@ document.addEventListener('DOMContentLoaded', function(){
 	}
 	
 	function sendMessage(){
-		const currentChat = document.querySelector('[data-open="Y"]');
 		let params = {
-			room_no: currentChat.getAttribute('data-room'),
-			chat_to: currentChat.getAttribute('data-to'),
-			chat_from: current_no,
+			room_no: document.getElementById('room_no').value,
+			chat_to: document.getElementById('chat_to').value,
 			chat_content: document.getElementById('chat_content').value.replace(/<[^>]*>?/g, '').slice(0, -1),
 		}
 		
@@ -231,16 +211,7 @@ document.addEventListener('DOMContentLoaded', function(){
 		.then((json) => {
 			getChatList(current_no);
 			document.querySelector('[data-room="'+json.room_no+'"]').click();
-		}).catch((error) => console.log('error: '+error));
-	}
-	
-	
-	// 회원 닉네임 얻기 (사진 얻어오는 로직도 추가할 것)
-	function getNickName(element, user_no){
-		fetch('/usMarket/fetch/nickname/'+user_no)
-		.then((response) => response.text())
-		.then((text) => {
-			element.textContent = text;
+			// click()으로 전체 채팅 불러오지 말고 안 읽은 채팅만 추가적으로 불러오도록 수정할 것
 		}).catch((error) => console.log('error: '+error));
 	}
 });
