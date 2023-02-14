@@ -34,7 +34,6 @@ import lombok.RequiredArgsConstructor;
 public class MemberController {
 	private static final Logger logger = LoggerFactory.getLogger(MemberController.class);
 
-	private final MemberFileService fileService;
 	private final MemberService memberService;
 	private final JavaMailSender mailSender;
 
@@ -89,35 +88,34 @@ public class MemberController {
 	}
 
 	@PostMapping("/join")
-	public String join(@ModelAttribute MemberDto member,MultipartHttpServletRequest request, Model model) {
+	public String join(@ModelAttribute MemberDto member,MultipartHttpServletRequest request,Model model) {
 		try {
 			// 1. 회원 등록
-			logger.info("memberDto = {}",member.toString());
 			if(member.getMember_image() == null) {
-				member.setMember_image("profil.png");
+				member.setMember_image(request.getFile("member_profile_image").getOriginalFilename());
 			}
+			logger.info("memberDto = {}",member.toString());
 			int result = memberService.addMember(member);
-			
 			if(result != 1) {
-				logger.info("회원가입 실패");
+				model.addAttribute("message", "이미 등록된 회원정보입니다.");
 				return "redirect:/member/join";
 			}
 			
-			/*
-			 * // 2. 파일 업로드 logger.info("MultipartHttpServletRequest = {}",request);
-			 * MemberFileDto list = fileService.upload(request.getFile("member_img"),
-			 * member.getMember_no());
-			 * 
-			 * // 3. 파일 db에 insert int rowCnt = memberService.addMemberFile(list);
-			 * logger.info("addMemberFile result = {}", (rowCnt ));
-			 */
+			// 2. 파일 업로드
+			logger.info("Member_no : "+member.getMember_no()+", request.getFile : "+request.getFile("member_profile_image"));
+			MemberFileDto list = memberService.upload(request.getFile("member_profile_image"),member.getMember_no());				
+			
+			// 3. 파일 db에 insert
+			int rowCnt = memberService.addMemberFile(list);
+			logger.info("addMemberFile result = {}", rowCnt);
+			
 		} catch (Exception e) {
 			model.addAttribute("message", "회원가입에 실패 했습니다.");
 			e.printStackTrace();
 			return "member/join";
 		}// try-catch
 		
-		return "redirecr:/";
+		return "redirect:/";
 	}
 
 	@ResponseBody

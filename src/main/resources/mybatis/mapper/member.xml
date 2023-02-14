@@ -4,21 +4,21 @@
 <mapper namespace="com.mybatis.mapper.member">
 	<!-- 회원 등록 -->
 	<insert id="insertMember" parameterType="memberDto">
-		<!-- <selectKey keyProperty="member_no" resultType="Integer" order="BEFORE">
+		<selectKey keyProperty="member_no" resultType="Integer" order="BEFORE">
 			select member_seq.nextval from dual
-		</selectKey> -->
+		</selectKey>
 		insert into member (MEMBER_NO,MEMBER_NAME,MEMBER_ID,MEMBER_PASSWORD,MEMBER_IMAGE,
-		MEMBER_EMAIL,MEMBER_HP,MEMBER_REGDATE,MEMBER_STATE_NO,MEMBER_NICKNAME,
+		MEMBER_EMAIL,MEMBER_HP,MEMBER_NICKNAME,
 		MEMBER_ZIPCODE,MEMBER_ADDRESS,MEMBER_ADDRESS_DETAIL) 
-		values (66,#{member_name},#{member_id},#{member_password},#{member_image},
-		#{member_email},#{member_hp},SYSDATE,DEFAULT,#{member_nickname},
+		values (#{member_no},#{member_name},#{member_id},#{member_password},#{member_image},
+		#{member_email},#{member_hp},#{member_nickname},
 		#{member_zipcode},#{member_address},#{member_address_detail})
 	</insert>
 
 	<!-- 회원 이미지 등록 -->
 	<insert id="insertMemberFile" parameterType="memberFileDto">
 		INSERT INTO member_img 
-		 values(#{member_no}, #{member_img_path}, #{member_img_filename}, #{member_img_uuid}, #{member_img_order}) 
+		 values(#{member_no}, #{member_img_path}, #{member_img_filename}, #{member_img_uuid}) 
 	</insert>
 
 	<!-- 닉네임 중복 검사 -->

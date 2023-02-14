@@ -8,6 +8,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 
 import com.spring.usMarket.domain.member.MemberDto;
+import com.spring.usMarket.domain.member.MemberFileDto;
+import com.spring.usMarket.domain.product.ProductFileDto;
 import com.spring.usMarket.service.member.MemberService;
 
 import lombok.RequiredArgsConstructor;
@@ -26,6 +28,12 @@ public class MemberDaoImpl implements MemberDao{
 		return session.insert(namespace+"insertMember", member);
 	}
 
+	@Override
+	public int insertMemberFile(MemberFileDto memberFileDto) throws Exception {
+		return session.insert(namespace+"insertMemberFile", memberFileDto);
+	}
+
+	
 	@Override
 	public int overlappedID(String member_id) {
 		return session.selectOne(namespace+"overlappedID", member_id);

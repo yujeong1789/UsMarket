@@ -15,8 +15,19 @@
 	<section class="login-form">
 		<h1>회원가입</h1>
 		<form name="joinForm" enctype="multipart/form-data">
-			<input type='image' name="member_image" id="profil" 
-			style="display:block; margin:auto;" src="<c:url value='/resources/customer/img/profil.png'/>"/>
+			<%-- <input type="file" id="profile" name="member_image" accept="image/jpg, image/jpeg, image/png" style="display:none;" />
+			<label for="profile" style="width:100%">
+				<img id="profile_img" alt="프로필 이미지" src="<c:url value='/resources/customer/img/profile.png'/>" style="display:block; margin:auto; height:100px;">
+			</label> --%>
+			<input type="file" id="profile" name="member_profile_image" accept="image/jpg, image/jpeg, image/png" style="display:none;"/>
+			<input type="image" id="profile_image" name="member_image" style="display:none;"/>
+			<label for="profile" style="width:100%">
+				<img id="profile_img" alt="프로필 이미지" src="<c:url value='/resources/customer/img/profile.png'/>" style="display:block; margin:auto; height:100px;">
+			</label>
+			
+			<div style="text-align:center;">
+				<span>프로필</span>
+			</div>
 			<div class="int-area">
 			</div>
 			<div class="int-area">
@@ -151,6 +162,32 @@
 			},1500);
 		}
 		
+		/* 프로필 미리보기 */
+		function readURL(input) {
+			if (input.files && input.files[0]) {
+				var reader = new FileReader();
+				 
+				reader.onload = function (e) {
+				$('#profile_img').attr('src', e.target.result); //img태그
+				}
+				 
+				reader.readAsDataURL(input.files[0]);
+			}//if
+		}//function
+		 
+		// 이벤트를 바인딩해서 input에 파일이 올라올때 (input에 change를 트리거할때) 위의 함수를 this context로 실행합니다.
+		$("#profile").change(function(){
+			var maxSize = 2 * 1024 * 1024;
+			console.log("file-size = "+this.files[0].size);
+			if(this.files[0].size > maxSize){
+				alert('첨부파일 사이즈는 2MB 이내로 등록 가능합니다.');
+			} else{ 
+				// 파일 사이즈 유효성 검사 통과하면 미리보기 함수 호출
+				console.log('file size pass');
+				readURL(this);
+			}
+		});
+				
 		// 주소 api 호출
 		document.getElementById('address_btn').addEventListener('click', function(){
 			new daum.Postcode({
@@ -410,7 +447,7 @@
 			console.log("name : "+nameCk+", nick : "+nickCk+", id : "+idCk+
 					", pw1 : "+pw1Ck+", pw2 : "+pw2Ck+", address : "+addressCk+", email : "+emailCk+", hp : "+hpCk);
 			
-			console.log("member_image : "+$('#profil').val());
+			console.log("member_image : "+$('#profile').val());
 			
 			console.log("member_nick : "+$('#nick').val()+"member_id : "+$('#id').val()+"member_email : "+$('#email').val());
 			
