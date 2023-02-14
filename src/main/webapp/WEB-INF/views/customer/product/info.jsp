@@ -97,8 +97,9 @@
 								<div id="btn__chat">
 									<span>채팅하기</span>
 									<form id="addChatRoomForm" method="post" action="<c:url value='/chat/add'/>">
-										<input type="hidden" name="chat_member_1">
-										<input type="hidden" name="chat_member_2">
+										<input type="hidden" name="seller_no">
+										<input type="hidden" name="product_name">
+										<input type="hidden" name="seller_nickname">
 									</form>
 								</div>
 								<div id="btn__buy">
@@ -315,8 +316,9 @@
 			// 채팅하기
 			document.getElementById('btn__chat').addEventListener('click', function(){
 				const addChatRoomForm = document.getElementById('addChatRoomForm');
-				addChatRoomForm.children[0].value = current_no;
-				addChatRoomForm.children[1].value = seller_no;
+				addChatRoomForm.children[0].value = seller_no;
+				addChatRoomForm.children[1].value = document.querySelector('.product_name').textContent.trim();
+				addChatRoomForm.children[2].value = document.getElementById('fetch__member__nickname').textContent;
 				
 				console.log(addChatRoomForm);
 				addChatRoomForm.submit();				

@@ -3,7 +3,9 @@ package com.usMarket.test;
 import static org.junit.Assert.assertEquals;
 
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -15,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.spring.usMarket.dao.chat.ChatDao;
 import com.spring.usMarket.domain.chat.ChatDto;
+import com.spring.usMarket.domain.chat.ChatRoomDto;
 import com.spring.usMarket.service.chat.ChatService;
 
 @Transactional
@@ -24,16 +27,20 @@ import com.spring.usMarket.service.chat.ChatService;
 public class ChatServiceTest {
 	
 	@Autowired private ChatService chatService;
-	@Autowired private ChatDao chatDao;
+	
 	@Test
 	public void addChatTest() throws Exception{
-		ChatDto dto = new ChatDto("20230209EGOWGWDPDB", 43, 1, "test content", new Date(), "N");
-		int rowCnt = chatService.addChat(dto);
-		assertEquals(rowCnt, 1);
-		
-		List<ChatDto> dto_ = chatDao.searchChatInfo(dto.getRoom_no());
-		for(ChatDto chatDto : dto_) {
+		Integer current_no = 2;
+		Integer seller_no = 3;
+		ChatRoomDto dto = chatService.getChatRoomByInfo(current_no, seller_no);
+		if(dto == null) {
+			dto = chatService.addChatRoom(current_no, seller_no, "test message");
+		}
+		List<ChatDto> chatInfo = chatService.getChatInfo(dto.getRoom_no());
+		for(ChatDto chatDto : chatInfo){
 			System.out.println(chatDto.toString());
 		}
+		
+		assertEquals(chatInfo.size(), 1);
 	}
 }

@@ -44,7 +44,7 @@ document.addEventListener('DOMContentLoaded', function(){
 	// info에서 이동했을 경우 해당 채팅방 띄우기 (새로 추가된 경우, 이미 존재하는 경우 모두 동일함)
 	if(`${condition}` == 'open'){
 		setTimeout(() => {
-			var tmp_room = `${room_no}`;
+			let tmp_room = `${room_no}`;
 			document.querySelector('[data-room="'+tmp_room+'"]').click();
 		}, 500);
 	}
@@ -58,7 +58,7 @@ document.addEventListener('DOMContentLoaded', function(){
 				event.preventDefault();
 				document.querySelector('.btn_send').click();
 			}
-		}else{
+		} else {			
 			document.querySelector('.btn_send').style.visibility = 'hidden';
 		}
 	});
@@ -71,6 +71,7 @@ document.addEventListener('DOMContentLoaded', function(){
 	
 	// 채팅방 list 얻기
 	function getChatList(user_no){
+		console.log('getChatList start');
 		fetch('/usMarket/fetch/chatlist')
 		.then((response) => response.json())
 		.then((json) => {
@@ -78,20 +79,21 @@ document.addEventListener('DOMContentLoaded', function(){
 			console.log(json);
 			json.forEach((el, i) => {
 				let chatList_ = setChatList(el);
+				document.querySelector('.list-div-content').appendChild(chatList_);
 				
 				chatList_.addEventListener('click', function(e){
 					document.getElementById('room_no').value = el.ROOM_NO;
 					document.getElementById('chat_to').value = el.CHAT_TO;
-					initChatInfo(this);
-					getChatInfo(el.ROOM_NO, this.getAttribute('data-read'));
+					this.childNodes[1].childNodes[1].style.visibility = 'hidden';
+					initChatInfo();
+					getChatInfo(el.ROOM_NO, chatList_.getAttribute('data-read'));
 				});
-				document.querySelector('.list-div-content').appendChild(chatList_);
 			});
+			console.log('getChatList end');
 		}).catch((error) => console.log('error: '+error));
 	}
 	
-	function initChatInfo(element){
-		element.childNodes[1].childNodes[1].style.visibility = 'hidden';
+	function initChatInfo(){
 		document.getElementById('chat_to_nickname').innerHTML = '';
 		document.querySelector('.info-textarea').style.visibility = 'visible';
 		document.getElementById('chat_content').value = '';
@@ -129,22 +131,21 @@ document.addEventListener('DOMContentLoaded', function(){
 		let list_content_right = document.createElement('div');
 		list_content_right.className = 'list-content-right';
 		list_content_1.appendChild(list_content_right);
-		
-		parentDiv.appendChild(list_content_1);
-		
 		if(el.CHAT_READ == 'N'){
 			list_content_right.style.visibility = 'visible';
-			parentDiv.setAttribute('data-read', 'N');
-		} else {
-			list_content_right.style.visibility = 'hidden';
+			parentDiv.setAttribute('data-read', el.CHAT_READ);
+		}else{
+			list_content_right.style.visibility = 'hidden';			
 			parentDiv.setAttribute('data-read', 'Y');
 		}
+		parentDiv.appendChild(list_content_1);
 		
 		return parentDiv;
 	}
 	
 	// 채팅내역 얻기
 	function getChatInfo(room_no, is_read){
+		console.log('getChatInfo room_no, is_read = '+room_no+', '+is_read);
 		fetch('/usMarket/fetch/chatinfo', {
 			method: 'POST',
 			headers: {
@@ -159,8 +160,7 @@ document.addEventListener('DOMContentLoaded', function(){
 		.then((json) => {
 			console.log(json);
 			
-			document.querySelector('.info-content-layout').replaceChildren(); // 채팅내역 로드된 시점에 info 다시 초기화
-			document.querySelector('[data-room="'+room_no+'"]').setAttribute('data-read', 'Y');
+			document.querySelector('.info-content-layout').replaceChildren(); // 채팅내역 로드된 시점에 info 다시 초기화d
 			document.getElementById('chat_to_nickname').textContent = document.querySelector('[data-room="'+room_no+'"] .title').textContent;
 			json.forEach((el, i) => {
 				document.querySelector('.info-content-layout').appendChild(setChatInfo(el));
@@ -186,7 +186,7 @@ document.addEventListener('DOMContentLoaded', function(){
 		childDiv.appendChild(p);
 		
 		parentDiv.appendChild(childDiv);
-		
+		console.log('setChatInfo');
 		return parentDiv;
 	}
 	
@@ -194,9 +194,8 @@ document.addEventListener('DOMContentLoaded', function(){
 		let params = {
 			room_no: document.getElementById('room_no').value,
 			chat_to: document.getElementById('chat_to').value,
-			chat_content: document.getElementById('chat_content').value.replace(/<[^>]*>?/g, '').slice(0, -1),
+			chat_content: document.getElementById('chat_content').value.replace(/\n|<[^>]*>?/g, ''),
 		}
-		
 		document.getElementById('chat_content').value = '';
 		document.querySelector('.btn_send').style.visibility = 'hidden';
 		

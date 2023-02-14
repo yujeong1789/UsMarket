@@ -184,13 +184,16 @@ public class FetchController {
 	public List<ChatDto> chatInfo(@RequestBody Map<String, String> data, HttpServletRequest request) {
 
 		String room_no = data.get("room_no");
-		String is_read = data.get("is_read");
+		String is_read = (data.get("is_read") == null ? "Y" : data.get("is_read"));
 		Integer chat_to = Integer.parseInt(SessionParameters.getUserNo(request));
 		logger.info("room_no = {}, is_read = {}, chat_to = {}", room_no, is_read, chat_to);
 		
 		List<ChatDto> chatInfo = new ArrayList<>();
 		try {
-			chatInfo = chatService.getChatInfo(room_no, is_read, chat_to);
+			if(is_read == "N" || is_read.equals("N")) {
+				chatService.modifyChatRead(room_no, chat_to);
+			}
+			chatInfo = chatService.getChatInfo(room_no);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -208,7 +211,7 @@ public class FetchController {
 			int rowCnt = chatService.addChat(dto);
 			
 			if(rowCnt == 0) throw new Exception();
-			
+			int updateCnt = chatService.modifyChatRead(dto.getRoom_no(), dto.getChat_from());
 			ObjectMapper objectMapper = new ObjectMapper();
 			chatMap = objectMapper.convertValue(dto, Map.class);
 			

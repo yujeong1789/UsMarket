@@ -28,23 +28,34 @@ public class ChatServiceImpl implements ChatService{
 	}
 	
 	@Override
-	@Transactional(rollbackFor = SQLException.class)
+	@Transactional(rollbackFor = SQLException.class, readOnly = true)
 	public ChatRoomDto getChatRoomByInfo(Integer chat_member_1, Integer chat_member_2) throws Exception {
 		
 		ChatRoomDto dto = chatDao.searchChatRoomByInfo(chat_member_1, chat_member_2);
 		
-		if(dto == null) {
-			// 새 채팅방 생성
-			String room_no = RandomString.getRandomString(RandomString.yyyyMMdd, 10);
-			dto = new ChatRoomDto(room_no, chat_member_1, chat_member_2);
-			int rowCnt = chatDao.insertChatRoom(dto);
-			logger.info("채팅방 생성 결과 ={}", getResult(rowCnt));
-		}
+		return dto;
+
+	}
+	
+	@Override
+	@Transactional(rollbackFor = SQLException.class)
+	public ChatRoomDto addChatRoom(Integer current_no, Integer seller_no, String message) throws Exception {
 		
-		logger.info("dto.toString = {}", dto);
+		String room_no = RandomString.getRandomString(RandomString.yyyyMMdd, 10);
+		ChatRoomDto dto = new ChatRoomDto(room_no, current_no, seller_no);
+		int rowCnt = chatDao.insertChatRoom(dto);
+		logger.info("채팅방 생성 결과 = {}", getResult(rowCnt));
+		if(rowCnt == 1) {
+			ChatDto chatDto = new ChatDto(room_no, current_no, seller_no, message, new Date(), "N");
+			logger.info("chatDto.toString = {}", chatDto.toString());
+			
+			int rowCnt_ = chatDao.insertChat(chatDto);
+			logger.info("채팅 전송 결과 = {}", getResult(rowCnt_));
+		}
 		
 		return dto;
 	}
+	
 
 	@Override
 	@Transactional(rollbackFor = SQLException.class, readOnly = true)
@@ -58,23 +69,32 @@ public class ChatServiceImpl implements ChatService{
 
 	@Override
 	@Transactional(rollbackFor = SQLException.class)
-	public List<ChatDto> getChatInfo(String room_no, String is_read, Integer chat_to) throws Exception {
-		if(is_read == "N" || is_read.equals("N")) {
-			int rowCnt = chatDao.updateChatRead(room_no, chat_to);
-			logger.info("chat_read 업데이트 결과 = {}", rowCnt);
-		}
+	public int modifyChatRead(String room_no, Integer chat_to) throws Exception {
+		
+		int rowCnt = chatDao.updateChatRead(room_no, chat_to);
+		logger.info("chat_read 업데이트 결과 = {}", rowCnt);
+		
+		return rowCnt;
+	}
+
+	@Override
+	@Transactional(rollbackFor = SQLException.class, readOnly = true)
+	public List<ChatDto> getChatInfo(String room_no) throws Exception {
+		
 		List<ChatDto> chatInfo = chatDao.searchChatInfo(room_no);
 		logger.info("chatInfo.size() = {}", chatInfo.size());
 		
 		return chatInfo;
 	}
-
+	
 	@Override
 	@Transactional(rollbackFor = SQLException.class)
 	public int addChat(ChatDto dto) throws Exception {
+		
 		dto.setChat_time(new Date());
 		int rowCnt = chatDao.insertChat(dto);
 		logger.info("채팅 전송 결과 = {}", getResult(rowCnt));
+		
 		return rowCnt;
 	}
 	
@@ -87,5 +107,6 @@ public class ChatServiceImpl implements ChatService{
 		
 		return result;
 	}
+
 
 }
