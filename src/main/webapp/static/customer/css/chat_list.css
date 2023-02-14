@@ -150,6 +150,7 @@
 	padding: 10px 20px 10px 20px;
 	margin: 0px 0px 0px 0px;
 	white-space: pre-line;
+	overflow-wrap: break-word;
 }
 
 /* 메세지 입력창 */
