@@ -30,20 +30,20 @@ public class ChatController {
 	}
 	
 	@PostMapping("/add")
-	public String add(Integer chat_member_1, Integer chat_member_2, HttpServletRequest request, RedirectAttributes ratt) {
-		logger.info(chat_member_1+", "+chat_member_2);
+	public String add(Integer seller_no, String product_name, String seller_nickname, HttpServletRequest request, RedirectAttributes ratt) {
+		Integer current_no = Integer.parseInt(SessionParameters.getUserNo(request));
+		logger.info("seller_no = {}, current_no = {}", seller_no, current_no);
 		try {
-			ChatRoomDto dto = chatService.getChatRoomByInfo(chat_member_1, chat_member_2);
+			ChatRoomDto dto = chatService.getChatRoomByInfo(seller_no, current_no);
+			// null이면 새 채팅방 만들고 채팅 insert
+			if(dto == null) {
+				String chat_content = seller_nickname+"님, 판매 중인 "+product_name+" 상품에 문의사항이 있어요!";
+				dto = chatService.addChatRoom(current_no, seller_no, chat_content);
+			}
 			ratt.addFlashAttribute("condition", "open");
 			ratt.addFlashAttribute("room_no", dto.getRoom_no());
-			
-			if(dto.getChat_member_1() == Integer.parseInt(SessionParameters.getUserNo(request))) {
-				ratt.addFlashAttribute("chat_from", dto.getChat_member_1());
-				ratt.addFlashAttribute("chat_to", dto.getChat_member_2());
-			} else {
-				ratt.addFlashAttribute("chat_from", dto.getChat_member_2());
-				ratt.addFlashAttribute("chat_to", dto.getChat_member_1());
-			}
+			ratt.addFlashAttribute("chat_from", current_no);
+			ratt.addFlashAttribute("chat_to", seller_no);
 			
 		} catch (Exception e) {
 			e.printStackTrace();
