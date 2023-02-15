@@ -39,6 +39,13 @@ public class FetchController {
 	@Autowired
 	ChatService chatService;
 	
+	@PostMapping("/sessionCheck")
+	public String sessionCheck(HttpServletRequest request) {
+		String userNo = SessionParameters.getUserNo(request);
+		
+		return userNo;
+	}
+	
 	@GetMapping("/category")
 	public List<Map<String, Object>> category(){
 		
@@ -211,7 +218,6 @@ public class FetchController {
 			int rowCnt = chatService.addChat(dto);
 			
 			if(rowCnt == 0) throw new Exception();
-			int updateCnt = chatService.modifyChatRead(dto.getRoom_no(), dto.getChat_from());
 			ObjectMapper objectMapper = new ObjectMapper();
 			chatMap = objectMapper.convertValue(dto, Map.class);
 			
