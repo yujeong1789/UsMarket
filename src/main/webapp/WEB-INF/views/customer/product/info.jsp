@@ -4,7 +4,6 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 
 <link rel="stylesheet" href="<c:url value='/resources/customer/css/product_info.css'/>" type="text/css">
-<script src="<c:url value='/resources/customer/js/timeConvert.js'/>"></script>
 
 <section class="product__info__section">
 	<div class="container">
