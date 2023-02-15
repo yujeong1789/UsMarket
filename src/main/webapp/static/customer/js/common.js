@@ -61,3 +61,17 @@ let convert = function(createdAt) {
 	const years = days / 365
 	return `${Math.floor(years)}년 전`
 };
+
+let msToTime = function(createdAt){
+	let milliSeconds = new Date(createdAt);
+	const utcNow = milliSeconds.getTimezoneOffset();
+	const koreaTimeDiff = 9 * 60 * 60 * 1000;
+	
+	if(utcNow == -540){
+		milliSeconds = new Date(createdAt+koreaTimeDiff);	
+	}
+	const hour = String(Math.floor((milliSeconds/ (1000 * 60 *60 )) % 24 )).padStart(2, "0"); // 시
+	const minutes = String(Math.floor((milliSeconds  / (1000 * 60 )) % 60 )).padStart(2, "0"); // 분
+		
+	return hour + ":" + minutes;
+};
