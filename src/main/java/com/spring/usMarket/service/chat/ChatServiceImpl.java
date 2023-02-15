@@ -95,6 +95,11 @@ public class ChatServiceImpl implements ChatService{
 		int rowCnt = chatDao.insertChat(dto);
 		logger.info("채팅 전송 결과 = {}", getResult(rowCnt));
 		
+		/*
+		int updateCnt = chatDao.updateChatRead(dto.getRoom_no(), dto.getChat_from());
+		logger.info("chat_read updateCnt = {}", updateCnt);
+		*/
+		
 		return rowCnt;
 	}
 	
