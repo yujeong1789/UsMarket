@@ -9,7 +9,7 @@
 		http://www.springframework.org/schema/context https://www.springframework.org/schema/context/spring-context.xsd http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd">
 	
 	<!-- Root Context: defines shared resources visible to all other web components -->
-	<context:property-placeholder location="classpath:props/database.properties" />
+	<context:property-placeholder location="classpath:props/database.properties ,classpath:props/mailsender.properties" />
 	
 	<!-- 파일 업로드를 위한 MutipartResolver 구현체 CommonsMultipartResolver  bean 등록 -->
 	<bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
@@ -41,11 +41,11 @@
 	</bean>
 	
 	<bean id="mailSender2" class="org.springframework.mail.javamail.JavaMailSenderImpl"> 
-		<property name="host" value="smtp.gmail.com" />
-		<property name="port" value="587" />
-	 	<property name="username" value="ehd1530@gmail.com"/> 
+		<property name="host" value="${mailSender.host}" />
+		<property name="port" value="${mailSender.port}" />
+	 	<property name="username" value="${mailSender.username}"/> 
     	<!-- 이메일 아이디 @gmail.com까지 전부-->
- 		<property name="password" value="mvllwjbiipmjnuia "/>
+ 		<property name="password" value="${mailSender.password}"/>
  		<!-- 구글 2차 앱 등록 비밀번호 / 일반 비밀번호로 연결안됨 --> 
 		<property name="javaMailProperties">
 			<props>
