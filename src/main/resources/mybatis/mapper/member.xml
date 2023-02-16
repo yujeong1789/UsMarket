@@ -15,12 +15,6 @@
 		#{member_zipcode},#{member_address},#{member_address_detail})
 	</insert>
 
-	<!-- 회원 이미지 등록 -->
-	<insert id="insertMemberFile" parameterType="memberFileDto">
-		INSERT INTO member_img 
-		 values(#{member_no}, #{member_img_path}, #{member_img_filename}, #{member_img_uuid}) 
-	</insert>
-
 	<!-- 닉네임 중복 검사 -->
 	<select id="overlappedNick" parameterType="String" resultType="int">
 		select count(MEMBER_NICKNAME) From member where MEMBER_NICKNAME=#{member_nick}
@@ -39,6 +33,11 @@
 	<!-- 회원 이미지 등록 -->
 	<select id="idLogin" parameterType="String" resultType="map">
 		SELECT MEMBER_NO,MEMBER_ID,MEMBER_PASSWORD FROM MEMBER WHERE MEMBER_ID = #{member_id}
+	</select>
+	
+	<!-- 회원 정보 검색 -->
+	<select id="memberSearch" parameterType="Insert" resultType="map">
+		SELECT * FROM MEMBER WHERE MEMBER_NO = #{member_no}
 	</select>
 	
 </mapper>
