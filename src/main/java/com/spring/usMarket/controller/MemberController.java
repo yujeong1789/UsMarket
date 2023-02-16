@@ -11,6 +11,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -22,8 +23,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import com.spring.usMarket.domain.member.MemberDto;
-import com.spring.usMarket.domain.member.MemberFileDto;
-import com.spring.usMarket.service.member.MemberFileService;
 import com.spring.usMarket.service.member.MemberService;
 
 import lombok.RequiredArgsConstructor;
@@ -46,7 +45,8 @@ public class MemberController {
 	public String loginCheck(HttpServletRequest request, String member_id, String member_password, Model model)
 			throws Exception {
 		logger.info("ID 입력 정보 = " + member_id + ", PW 입력 정보 = " + member_password);
-
+		
+		BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 		Map<String, Object> member = memberService.loginCheckID(member_id);
 		logger.info("회원정보 = " + member);
 
@@ -58,7 +58,7 @@ public class MemberController {
 			model.addAttribute("mem_id", member_id);
 			model.addAttribute("mem_pw", member_password);
 			return "member/login";
-		} else if (member_password.equals(member.get("MEMBER_PASSWORD"))) {
+		} else if (encoder.matches(member_password, (String) member.get("MEMBER_PASSWORD"))) {
 			logger.info("로그인 성공");
 			httpSession.setAttribute("userId", member_id);
 			httpSession.setAttribute("userNo", member.get("MEMBER_NO"));
@@ -90,25 +90,20 @@ public class MemberController {
 	@PostMapping("/join")
 	public String join(@ModelAttribute MemberDto member,MultipartHttpServletRequest request,Model model) {
 		try {
-			// 1. 회원 등록
-			if(member.getMember_image() == null) {
-				member.setMember_image(request.getFile("member_profile_image").getOriginalFilename());
+			// 1. 파일 업로드
+			String img = "/resource/customer/img/profile.png";
+			if(request.getFile("member_profile_image").getSize() != 0) {
+				img = memberService.upload(request.getFile("member_profile_image"));
 			}
+
+			// 2. 회원 등록
+			member.setMember_image(img);
 			logger.info("memberDto = {}",member.toString());
 			int result = memberService.addMember(member);
 			if(result != 1) {
 				model.addAttribute("message", "이미 등록된 회원정보입니다.");
 				return "redirect:/member/join";
 			}
-			
-			// 2. 파일 업로드
-			logger.info("Member_no : "+member.getMember_no()+", request.getFile : "+request.getFile("member_profile_image"));
-			MemberFileDto list = memberService.upload(request.getFile("member_profile_image"),member.getMember_no());				
-			
-			// 3. 파일 db에 insert
-			int rowCnt = memberService.addMemberFile(list);
-			logger.info("addMemberFile result = {}", rowCnt);
-			
 		} catch (Exception e) {
 			model.addAttribute("message", "회원가입에 실패 했습니다.");
 			e.printStackTrace();
@@ -183,4 +178,16 @@ public class MemberController {
 		}
 	} // end sendMailTest()
 
+	@GetMapping("/mypage")
+	public void info(Integer member_no, HttpServletRequest request, Model model) {
+		try {
+			Map<Integer, Object> memberInfo = memberService.getMemberInfo(member_no);
+			
+			model.addAttribute("productInfo", memberInfo);
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		} // try-catch
+	}
+	
 }

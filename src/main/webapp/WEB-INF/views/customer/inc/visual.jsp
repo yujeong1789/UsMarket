@@ -20,7 +20,7 @@
 						<div class="hero__search__mypage">
 							<a href="<c:url value='/product/sell'/>">판매하기</a>
 							<span>|</span>
-							<a href="#">내상점</a>
+							<a href="<c:url value='/member/mypage'/>">내상점</a>
 							<span>|</span>
 							<a href="<c:url value='/chat/list'/>">채팅</a>
 						</div>

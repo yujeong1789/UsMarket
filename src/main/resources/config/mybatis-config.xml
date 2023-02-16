@@ -30,9 +30,6 @@
 		 	
 		<typeAlias type="com.spring.usMarket.domain.member.MemberDto"
 		 alias="memberDto"/>
-		 
-		<typeAlias type="com.spring.usMarket.domain.member.MemberFileDto"
-		 alias="memberFileDto"/>
 	</typeAliases>
 	
 </configuration>

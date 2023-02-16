@@ -6,6 +6,7 @@ import java.util.Date;
 import java.util.Map;
 import java.util.UUID;
 
+import org.mindrot.jbcrypt.BCrypt;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +22,6 @@ import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.amazonaws.util.IOUtils;
 import com.spring.usMarket.dao.member.MemberDao;
 import com.spring.usMarket.domain.member.MemberDto;
-import com.spring.usMarket.domain.member.MemberFileDto;
 
 import lombok.RequiredArgsConstructor;
 
@@ -49,19 +49,11 @@ public class MemberServiceImpl implements MemberService {
 	@Override
 	public int addMember(MemberDto member) {
 		logger.info("/ Service / memberDto = {}",member.toString());
-		
+		member.setMember_password(BCrypt.hashpw(member.getMember_password(), BCrypt.gensalt()));
 		int rowCnt = memberDAO.insertMember(member);
 		logger.info("회원 등록 결과 = {}", getResult(rowCnt));
 
 		return rowCnt;
-	}
-
-	@Override
-	public int addMemberFile(MemberFileDto memberFile) throws Exception {
-
-		int result = memberDAO.insertMemberFile(memberFile);
-		
-		return result;
 	}
 	
 	public String getPath() {
@@ -74,18 +66,17 @@ public class MemberServiceImpl implements MemberService {
 		return UUID.randomUUID().toString() + "_" + originFileName; 
 	}
 	
-	public MemberFileDto upload(MultipartFile file, Integer member_no) throws IOException{
+	public String upload(MultipartFile file) throws IOException{
 		byte[] bytes = IOUtils.toByteArray(file.getInputStream());
 		
 		String originalName = file.getOriginalFilename();
-		String uuid = getUUID(originalName);
 		
 		ObjectMetadata objectMetadata = new ObjectMetadata();
 		objectMetadata.setContentLength(bytes.length);
 		objectMetadata.setContentType(file.getContentType());
 					
 		// 요청 바디 작성
-		PutObjectRequest putObjectRequest = new PutObjectRequest(this.bucket, getPath()+getUUID(originalName), file.getInputStream(), objectMetadata)
+		PutObjectRequest putObjectRequest = new PutObjectRequest(this.bucket, "profile"+getUUID(originalName), file.getInputStream(), objectMetadata)
 				.withCannedAcl(CannedAccessControlList.PublicRead);
 		
 		// s3에 저장
@@ -96,9 +87,7 @@ public class MemberServiceImpl implements MemberService {
 		String realPath = "https://"+this.bucket+".s3."+this.region+".amazonaws.com/"+putObjectRequest.getKey();			
 		// https://usmarket.s3.ap-northeast-2.amazonaws.com/2023/01/24/2da9322b-f45f-428a-b1b3-bde87f88d052_IMG_5402.PNG
 		
-		MemberFileDto memberImage = new MemberFileDto(member_no, realPath, originalName, uuid);
-			
-		return memberImage;
+		return realPath;
 	}
 
 	@Transactional
@@ -123,6 +112,11 @@ public class MemberServiceImpl implements MemberService {
 	@Override
 	public Map<String, Object> loginCheckID(String member_id) throws Exception {
 		return memberDAO.idLogin(member_id);
+	}
+
+	@Override
+	public Map<Integer, Object> getMemberInfo(Integer member_no) throws Exception {
+		return memberDAO.memberSearche(member_no);
 	}
 
 }
