@@ -3,8 +3,6 @@ package com.spring.usMarket.handler;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.socket.CloseStatus;
@@ -12,9 +10,13 @@ import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
 import org.springframework.web.socket.handler.TextWebSocketHandler;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.spring.usMarket.domain.chat.ChatDto;
+
 // 핸들러 구현
 public class EchoHandler extends TextWebSocketHandler{
 	
+	private final ObjectMapper objectMapper = new ObjectMapper();
 	private static final Logger logger = LoggerFactory.getLogger(EchoHandler.class);
 	private static Map<String, WebSocketSession> sessionList = new ConcurrentHashMap<>();
 	
@@ -39,16 +41,15 @@ public class EchoHandler extends TextWebSocketHandler{
 		String msg = message.getPayload();
 		
 		if(!msg.isEmpty()) {
-			JSONParser jsonParser = new JSONParser();
-			JSONObject jsonObject = (JSONObject)jsonParser.parse(msg);
+			ChatDto chatDto = objectMapper.readValue(msg, ChatDto.class);
+			logger.info(chatDto.toString());
 			
-			String receiverNo = String.valueOf(jsonObject.get("chat_to"));
-			String chatContent = String.valueOf(jsonObject.get("chat_content"));
-			
+			String receiverNo = String.valueOf(chatDto.getChat_to());
 			if(sessionList.get(receiverNo) != null) {
 				WebSocketSession receiver = sessionList.get(receiverNo);
-				receiver.sendMessage(new TextMessage(chatContent));
+				receiver.sendMessage(new TextMessage(msg));
 			}
+			session.sendMessage(new TextMessage(msg));
 		}
 		
 	}

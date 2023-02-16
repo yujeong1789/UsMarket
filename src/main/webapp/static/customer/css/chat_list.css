@@ -35,12 +35,16 @@
 .list-div-content{
 	overflow: scroll;
 	height: 570px;
+	display: flex;
+	flex-direction: column;
+	justify-content: start;
 }
 
 
 .list-content-1{
 	width: 430px;
 }
+
 
 .list-content{
 	display: flex;
@@ -50,6 +54,10 @@
 	height: 100px;
 	padding: 10px 30px 10px 30px;
 	
+}
+
+.list-content[data-read=Y] .list-content-right{
+	visibility: hidden;
 }
 
 .list-content:hover{
@@ -69,9 +77,24 @@
 	margin-left: 20px;
 }
 
-.list-content-left > div:first-child{
+.list-content-left > div{
+	display: flex;
+	align-items: center;
+	
+}
+
+.list-content-left > .title > p:first-child{
 	font-weight: 600;
 	font-size: 18px;
+	color: #1c1c1c;
+	margin-bottom: 0px;
+}
+
+.list-content-left > .title > p:last-child{
+	font-size: 13px;
+	margin-bottom: 0px;
+	margin-left: 15px;
+	color: #8f8b8b;
 }
 
 .list-content-left > div:last-child{
@@ -80,15 +103,12 @@
 	font-weight: 600;
 	color: #999999;
 	font-size: 15px;
+	margin-top: 3px;
 	margin-left: 1px;
 }
 
 .list-content-left > div:last-child > p{
 	margin: 0px 0px 0px 0px;
-}
-
-.list-content-left > div:last-child > p:last-child{
-	margin-left: 20px;
 }
 
 .list-content-right{
@@ -97,6 +117,7 @@
 	height: 10px;
 	border-radius: 50%;
 	background-color: #0084ff;
+	visibility: visible;
 }
 
 
