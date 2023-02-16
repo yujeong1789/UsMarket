@@ -36,7 +36,7 @@
 	</select>
 	
 	<!-- 회원 정보 검색 -->
-	<select id="memberSearch" parameterType="Insert" resultType="map">
+	<select id="memberSearch" parameterType="Integer" resultType="map">
 		SELECT * FROM MEMBER WHERE MEMBER_NO = #{member_no}
 	</select>
 	
