@@ -6,6 +6,7 @@ import java.util.Date;
 import java.util.Map;
 import java.util.UUID;
 
+import org.mindrot.jbcrypt.BCrypt;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,7 +50,7 @@ public class MemberServiceImpl implements MemberService {
 	@Override
 	public int addMember(MemberDto member) {
 		logger.info("/ Service / memberDto = {}",member.toString());
-		
+		member.setMember_password(BCrypt.hashpw(member.getMember_password(), BCrypt.gensalt()));
 		int rowCnt = memberDAO.insertMember(member);
 		logger.info("회원 등록 결과 = {}", getResult(rowCnt));
 
@@ -85,7 +86,7 @@ public class MemberServiceImpl implements MemberService {
 		objectMetadata.setContentType(file.getContentType());
 					
 		// 요청 바디 작성
-		PutObjectRequest putObjectRequest = new PutObjectRequest(this.bucket, getPath()+getUUID(originalName), file.getInputStream(), objectMetadata)
+		PutObjectRequest putObjectRequest = new PutObjectRequest(this.bucket, "profile"+getUUID(originalName), file.getInputStream(), objectMetadata)
 				.withCannedAcl(CannedAccessControlList.PublicRead);
 		
 		// s3에 저장
