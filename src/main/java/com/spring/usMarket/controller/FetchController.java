@@ -1,6 +1,7 @@
 package com.spring.usMarket.controller;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -212,7 +213,11 @@ public class FetchController {
 	@PostMapping("/chat/send")
 	public Map<String, Object> chatSend(@RequestBody ChatDto dto, HttpServletRequest request) {
 		dto.setChat_from(Integer.parseInt(SessionParameters.getUserNo(request)));
+		dto.setChat_time(new Date());
+		dto.setChat_read("N");
+		
 		logger.info(dto.toString());
+		
 		Map<String, Object> chatMap = new HashMap<>();
 		try {
 			int rowCnt = chatService.addChat(dto);
