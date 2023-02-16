@@ -22,7 +22,6 @@ import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.amazonaws.util.IOUtils;
 import com.spring.usMarket.dao.member.MemberDao;
 import com.spring.usMarket.domain.member.MemberDto;
-import com.spring.usMarket.domain.member.MemberFileDto;
 
 import lombok.RequiredArgsConstructor;
 
@@ -55,14 +54,6 @@ public class MemberServiceImpl implements MemberService {
 		logger.info("회원 등록 결과 = {}", getResult(rowCnt));
 
 		return rowCnt;
-	}
-
-	@Override
-	public int addMemberFile(MemberFileDto memberFile) throws Exception {
-
-		int result = memberDAO.insertMemberFile(memberFile);
-		
-		return result;
 	}
 	
 	public String getPath() {
@@ -121,6 +112,11 @@ public class MemberServiceImpl implements MemberService {
 	@Override
 	public Map<String, Object> loginCheckID(String member_id) throws Exception {
 		return memberDAO.idLogin(member_id);
+	}
+
+	@Override
+	public Map<Integer, Object> getMemberInfo(Integer member_no) throws Exception {
+		return memberDAO.memberSearche(member_no);
 	}
 
 }
