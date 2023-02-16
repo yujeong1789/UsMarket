@@ -15,5 +15,5 @@ public interface MemberService {
 	int checkID(String member_id);
 	int checkEmail(String member_email);
 	Map<String, Object> loginCheckID(String member_id) throws Exception;
-	MemberFileDto upload(MultipartFile file, Integer member_no)throws IOException;
+	String upload(MultipartFile file)throws IOException;
 }
