@@ -23,8 +23,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import com.spring.usMarket.domain.member.MemberDto;
-import com.spring.usMarket.domain.member.MemberFileDto;
-import com.spring.usMarket.service.member.MemberFileService;
 import com.spring.usMarket.service.member.MemberService;
 
 import lombok.RequiredArgsConstructor;
@@ -180,4 +178,16 @@ public class MemberController {
 		}
 	} // end sendMailTest()
 
+	@GetMapping("/mypage")
+	public void info(Integer member_no, HttpServletRequest request, Model model) {
+		try {
+			Map<Integer, Object> memberInfo = memberService.getMemberInfo(member_no);
+			
+			model.addAttribute("productInfo", memberInfo);
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		} // try-catch
+	}
+	
 }
