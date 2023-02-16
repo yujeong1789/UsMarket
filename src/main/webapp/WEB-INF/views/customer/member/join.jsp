@@ -22,7 +22,8 @@
 			<input type="file" id="profile" name="member_profile_image" accept="image/jpg, image/jpeg, image/png" style="display:none;"/>
 			<input type="image" id="profile_image" name="member_image" style="display:none;"/>
 			<label for="profile" style="width:100%">
-				<img id="profile_img" alt="프로필 이미지" src="<c:url value='/resources/customer/img/profile.png'/>" style="display:block; margin:auto; height:100px;">
+				<img id="profile_img" alt="프로필 이미지" src="<c:url value='/resources/customer/img/profile.png'/>" 
+				style="display:block; margin:auto; height:100px; border: 1px solid #999999; border-radius: 50%;">
 			</label>
 			
 			<div style="text-align:center;">
