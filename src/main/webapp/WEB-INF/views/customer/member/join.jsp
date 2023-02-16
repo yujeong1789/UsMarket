@@ -448,11 +448,7 @@
 			console.log("name : "+nameCk+", nick : "+nickCk+", id : "+idCk+
 					", pw1 : "+pw1Ck+", pw2 : "+pw2Ck+", address : "+addressCk+", email : "+emailCk+", hp : "+hpCk);
 			
-			console.log("member_image : "+$('#profile').val());
-			
-			console.log("member_nick : "+$('#nick').val()+"member_id : "+$('#id').val()+"member_email : "+$('#email').val());
-			
- 			if(nameCk && nickCk && idCk && pw1Ck && pw2Ck && addressCk && emailCk && hpCk){
+			if(nameCk && nickCk && idCk && pw1Ck && pw2Ck && addressCk && emailCk && hpCk){
 				joinForm.method="POST";
 				joinForm.action="${pageContext.request.contextPath}/member/join";
 				joinForm.submit(); 
