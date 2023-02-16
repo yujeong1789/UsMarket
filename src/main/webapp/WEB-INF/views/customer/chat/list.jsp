@@ -2,6 +2,7 @@
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
+<%@ page import="com.spring.usMarket.utils.TimeConvert"%>
 
 <link rel="stylesheet" href="<c:url value='/resources/customer/css/chat_list.css'/>" type="text/css">
 <section class="chat-list-section">
@@ -13,13 +14,36 @@
 						<span>채팅목록</span>
 					</div>
 					<div class="list-div-content">
+					
+					<c:if test="${!empty chatList }">
+						<c:forEach var="chatList" items="${chatList }">
+							<div class="list-content" data-room="${chatList.ROOM_NO}" data-read="${chatList.CHAT_READ eq 'N' ? chatList.CHAT_READ : 'Y'}" data-to="${chatList.CHAT_TO}">
+								<c:set var="member_image" value="${empty chatList.MEMBER_IMAGE || chatList.MEMBER_IMAGE eq '' ? '/resources/customer/img/default_profile.png' : chatList.MEMBER_IMAGE}"/>
+								<img src="<c:url value='${member_image }'/>">
+								<div class="list-content-1">
+									<div class="list-content-left">
+										<div class="title">
+											<p>${chatList.MEMBER_NICKNAME}</p>
+											<p>${TimeConvert.calculateTime(chatList.CHAT_TIME)}</p>
+										</div>
+										
+										<div class="content">
+											<p>${chatList.CHAT_CONTENT}</p>
+										</div>
+									</div>
+									<div class="list-content-right"></div>
+								</div>
+							</div>
+						</c:forEach>
+					</c:if>
+					
 					</div>
 				</div>
 				<div class="info-div">
 					<div class="info-title">
 						<a id="chat_to_no"><span id="chat_to_nickname"></span></a>
 						<input type="text" name="room_no" id="room_no">
-						<input type="text" name="room_no" id="chat_to">
+						<input type="text" name="chat_to" id="chat_to">
 					</div>
 					<div class="info-content-layout"></div>
 					<div class="info-textarea">
@@ -37,22 +61,182 @@
 </section>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.4.0/sockjs.min.js"></script>
 <script type="text/javascript">
-	// 웹소켓
+
+const current_no = document.getElementById('loginNo').getAttribute('data-no');
+const chatList = document.querySelectorAll('.list-content');
+let listOrder = -1; 
+
+chatList.forEach(el => {
+	el.addEventListener('click', function(){
+		if(document.querySelector('[data-open="Y"]')){
+			document.querySelector('[data-open="Y"]').removeAttribute('data-open');
+		}
+		initChatInfo(this);
+		getChatInfo(this.getAttribute('data-room'), this.getAttribute('data-read'));
+	});
+});
+
+
+function initChatInfo(element){
+	element.setAttribute('data-open', 'Y');
+	document.getElementById('room_no').value = element.getAttribute('data-room');
+	document.getElementById('chat_to').value = element.getAttribute('data-to');
+	document.getElementById('chat_to_nickname').innerHTML = '';
+	document.querySelector('.info-textarea').style.visibility = 'visible';
+	document.getElementById('chat_content').value = '';
+	document.querySelector('.btn_send').style.visibility = 'hidden';
+	document.querySelector('.info-content-layout').replaceChildren();
+}
+
+
+if(`${room_no}` != ''){
+	var tmp_room = `${room_no}`;
+	document.querySelector('.data-room["'+tmp_roon+'"]').click();
+}
+
+
+//채팅내역 얻기
+function getChatInfo(room_no, is_read){
+	console.log('getChatInfo room_no, is_read = '+room_no+', '+is_read);
+	fetch('/usMarket/fetch/chatinfo', {
+		method: 'POST',
+		headers: {
+			'Content-type' : 'application/json'
+		},
+		body: JSON.stringify({
+			room_no: room_no,
+			is_read: is_read,
+		}),
+	})
+	.then((response) => response.json())
+	.then((json) => {
+		document.querySelector('.info-content-layout').replaceChildren();
+		json.forEach((el, i) => {
+			document.querySelector('.info-content-layout').appendChild(setChatInfo(el));
+		});
+		document.getElementById('chat_to_nickname').textContent = document.querySelector('[data-room="'+room_no+'"] .title > p:first-child').textContent;
+	}).catch((error) => console.log('error: '+error));
+}
+
+
+function setChatInfo(el){
+	let parentDiv = document.createElement('div');
+	parentDiv.className = 'info-content';
+	
+	let childDiv = document.createElement('div');
+	
+	if(current_no == el.chat_from){
+		childDiv.className = 'right';
+	} else {
+		childDiv.className = 'left';
+	}
+	
+	let span = document.createElement('span');
+	span.textContent = msToTime(el.chat_time);
+	span.className = 'chat-time';
+	childDiv.appendChild(span);
+	
+	let p = document.createElement('p');
+	p.className = 'chat-content';
+	p.textContent = el.chat_content;
+	childDiv.appendChild(p);
+	
+	parentDiv.appendChild(childDiv);
+	
+	return parentDiv;
+}
+
+
+document.addEventListener('DOMContentLoaded', function(){
 	var socket = null;
+	
+	connectWs();
+})
+
+
+function connectWs(){
+	sock = new SockJS('${pageContext.request.contextPath}/echo');
+	socket = sock;
+	
+	sock.onopen = function(){
+		console.log('info: connection opened.');
+	}
+	
+	sock.onmessage = function(evt){
+		let data = JSON.parse(evt.data);
+		let newList = document.querySelector('[data-room="'+data.room_no+'"]');
+		newList.style.order = listOrder;
+		newList.querySelector('p:last-child').textContent = convert(data.chat_time);
+		newList.querySelector('.content p').textContent = setPreview(data.chat_content);
+		
+		if(data.chat_from != current_no){
+			newList.querySelector('.list-content-right').style.visibility = 'visible';			
+		}
+		
+		if(document.querySelector('[data-open="Y"]').getAttribute('data-room') == data.room_no){
+			console.log(document.querySelector('[data-open="Y"]').getAttribute('data-room'));
+			newList.querySelector('.list-content-right').style.visibility = 'hidden';
+			let appendInfo = setChatInfo(data);
+			document.querySelector('.info-content-layout').prepend(appendInfo);
+		}
+		listOrder--;		
+	}
+	
+}
+
+document.getElementById('chat_content').addEventListener('keyup', function(event){
+	if(this.value.trim().length > 0){
+		document.querySelector('.btn_send').style.visibility = 'visible';
+		if(event.keyCode == 13){
+			event.preventDefault();
+			document.querySelector('.btn_send').click();
+		}
+	} else {			
+		document.querySelector('.btn_send').style.visibility = 'hidden';
+	}
+});
+
+document.querySelector('.btn_send').addEventListener('click', function(){
+	console.log('btn click');
+	sendMessage();
+});
+
+function sendMessage(){
+	let params = {
+		room_no: document.getElementById('room_no').value,
+		chat_to: document.getElementById('chat_to').value,
+		chat_content: document.getElementById('chat_content').value.replace(/\n|<[^>]*>?/g, ''),
+	}
+	document.getElementById('chat_content').value = '';
+	document.querySelector('.btn_send').style.visibility = 'hidden';
+	
+	fetch('/usMarket/fetch/chat/send', {
+		method: 'POST',
+		headers: {
+			'Content-type' : 'application/json'
+		},
+		body: JSON.stringify(params),
+	})
+	.then((response) => response.json())
+	.then((json) => {
+		socket.send(JSON.stringify(json));
+		// click()으로 전체 채팅 불러오지 말고 안 읽은 채팅만 추가적으로 불러오도록 수정할 것
+	}).catch((error) => console.log('error: '+error));
+}
+
+function setPreview(content){
+	if(content.length > 15){
+		content = content.substr(0, 15)+'...';
+	}
+	return content;
+}
+/*
+	// 웹소켓
 	
 	document.addEventListener('DOMContentLoaded', function(){
 		
-		const current_no = document.getElementById('loginNo').getAttribute('data-no');
-		
-		getChatList(current_no);
-		
-		// info에서 이동했을 경우 해당 채팅방 띄우기 (새로 추가된 경우, 이미 존재하는 경우 모두 동일함)
-		if(`${condition}` == 'open'){
-			setTimeout(() => {
-				let tmp_room = `${room_no}`;
-				document.querySelector('[data-room="'+tmp_room+'"]').click();
-			}, 800);
-		}
+	const current_no = document.getElementById('loginNo').getAttribute('data-no');
+	
 		
 		
 		// 입력창 이벤트
@@ -261,4 +445,5 @@
 		};
 		
 	}
+*/
 </script>
