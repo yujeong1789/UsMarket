@@ -75,11 +75,10 @@ public class MemberServiceImpl implements MemberService {
 		return UUID.randomUUID().toString() + "_" + originFileName; 
 	}
 	
-	public MemberFileDto upload(MultipartFile file, Integer member_no) throws IOException{
+	public String upload(MultipartFile file) throws IOException{
 		byte[] bytes = IOUtils.toByteArray(file.getInputStream());
 		
 		String originalName = file.getOriginalFilename();
-		String uuid = getUUID(originalName);
 		
 		ObjectMetadata objectMetadata = new ObjectMetadata();
 		objectMetadata.setContentLength(bytes.length);
@@ -97,9 +96,7 @@ public class MemberServiceImpl implements MemberService {
 		String realPath = "https://"+this.bucket+".s3."+this.region+".amazonaws.com/"+putObjectRequest.getKey();			
 		// https://usmarket.s3.ap-northeast-2.amazonaws.com/2023/01/24/2da9322b-f45f-428a-b1b3-bde87f88d052_IMG_5402.PNG
 		
-		MemberFileDto memberImage = new MemberFileDto(member_no, realPath, originalName, uuid);
-			
-		return memberImage;
+		return realPath;
 	}
 
 	@Transactional
