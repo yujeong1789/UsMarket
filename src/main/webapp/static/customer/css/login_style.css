@@ -35,6 +35,19 @@
 	animation: warning .3s ease;
 	animation-iteration-count:3;
 }
+.int-area span.warning {
+	color: red !important;
+	animation: warning .3s ease;
+	animation-iteration-count:3;
+	display: block;
+}
+.int-area span {
+	left: 10px; top: 15px;
+	font-size: 18px; 
+	color: #999999;
+	transition: all .5s ease;
+	display: none;
+}
 .int-area text {
 	color : red;
 }
@@ -124,8 +137,16 @@
     display:block;
     margin:auto;
 }
-
-
+/* Change the color to your own background color */
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+	transition: background-color 5000s ease-in-out 0s;
+	-webkit-transition: background-color 9999s ease-out;
+	-webkit-box-shadow: 0 0 0px 1000px white inset !important;
+	-webkit-text-fill-color: #000000 !important;
+  }
 
 
 
