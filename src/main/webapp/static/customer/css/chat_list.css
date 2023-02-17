@@ -60,6 +60,10 @@
 	visibility: hidden;
 }
 
+.list-content[data-open=Y]{
+	background-color: #f4f8ff;
+}
+
 .list-content:hover{
 	background-color: #faf9fa;
 }
@@ -131,10 +135,11 @@
 .info-title span{
 	color: #1c1c1c;
 	font-size: 20px;
-	font-weight: 500;
+	font-weight: 700;
+	cursor: pointer;
 }
 
-.info-title > input{
+.info-title > form{
 	display: none;
 }
 
