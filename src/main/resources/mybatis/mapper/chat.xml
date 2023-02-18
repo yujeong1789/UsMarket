@@ -9,8 +9,8 @@
 				 OR (chat_member_2 = #{chat_member_1} AND chat_member_1 = #{chat_member_2})
 	</select>
 
-	<select id="searchNickName" parameterType="int" resultType="string">
-		SELECT member_nickname FROM MEMBER
+	<select id="searchChatMember" parameterType="int" resultType="map">
+		SELECT member_nickname, member_image FROM MEMBER
 		 WHERE member_no = #{member_no}
 	</select>
 
