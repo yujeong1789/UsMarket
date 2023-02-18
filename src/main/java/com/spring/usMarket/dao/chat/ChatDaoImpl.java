@@ -58,8 +58,7 @@ public class ChatDaoImpl implements ChatDao{
 	}
 
 	@Override
-	public String searchNickName(Integer member_no) throws Exception {
-		return session.selectOne(namespace+"searchNickName", member_no);
+	public Map<String, Object> searchChatMember(Integer member_no) throws Exception {
+		return session.selectOne(namespace+"searchChatMember", member_no);
 	}
-
 }
