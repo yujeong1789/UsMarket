@@ -1,6 +1,7 @@
 package com.spring.usMarket.controller;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -18,6 +19,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.support.RequestContextUtils;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.spring.usMarket.domain.chat.ChatDto;
 import com.spring.usMarket.domain.chat.ChatRoomDto;
 import com.spring.usMarket.service.chat.ChatService;
 import com.spring.usMarket.utils.SessionParameters;
@@ -57,12 +60,16 @@ public class ChatController {
 		logger.info("seller_no = {}, current_no = {}", seller_no, current_no);
 		try {
 			ChatRoomDto dto = chatService.getChatRoomByInfo(seller_no, current_no);
+			ChatDto chatDto = new ChatDto();
 			// null이면 새 채팅방 만들고 채팅 insert
 			if(dto == null) {
 				String chat_content = seller_nickname+"님, 판매 중인 "+product_name+" 상품에 문의사항이 있어요!";
-				dto = chatService.addChatRoom(current_no, seller_no, chat_content);
+				chatDto = chatService.addChatRoom(current_no, seller_no, chat_content);
+				ratt.addFlashAttribute("chatDto", new ObjectMapper().writeValueAsString(chatDto));
+				ratt.addFlashAttribute("room_no", chatDto.getRoom_no());
+			}else {
+				ratt.addFlashAttribute("room_no", dto.getRoom_no());
 			}
-			ratt.addFlashAttribute("room_no", dto.getRoom_no());
 			
 		} catch (Exception e) {
 			e.printStackTrace();
