@@ -153,9 +153,9 @@
 }
 
 .info-content-layout > .info-content{
-	margin-bottom: 20px;
 	display: flex;
 	flex-direction: column;
+	margin: 10px 0px 10px 0px;
 }
 
 .info-content-layout > .info-content > div{
@@ -203,6 +203,32 @@
 .info-content-layout > .info-content span{
 	font-size: 13px;
 	color: #999999;
+}
+
+.chat_date{
+	display: flex;
+	flex-basis: 100%;
+	padding: 20px 0px 20px 0px;
+	color: #ababab;
+}
+
+.chat_date::before{
+	content: "";
+	flex-grow: 1;
+	background-color: #e4e4e4;
+	height: 1px;
+	font-size: 0px;
+	line-height: 0px;
+	margin: 9px 15px;
+}
+.chat_date::after{
+	content: "";
+	flex-grow: 1;
+	background-color: #e4e4e4;
+	height: 1px;
+	font-size: 0px;
+	line-height: 0px;
+	margin: 9px 15px;
 }
 
 /* 메세지 입력창 */

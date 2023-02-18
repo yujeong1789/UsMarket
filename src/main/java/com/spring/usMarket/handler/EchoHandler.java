@@ -3,6 +3,8 @@ package com.spring.usMarket.handler;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.socket.CloseStatus;
@@ -39,17 +41,21 @@ public class EchoHandler extends TextWebSocketHandler{
 		logger.info("handleTextMessage senderNo = {}, payload = {}", senderNo, message.getPayload().toString());
 		
 		String msg = message.getPayload();
+		JSONObject jsonObject = (JSONObject)new JSONParser().parse(msg);
+		String type = (String)jsonObject.get("type");
+		msg = (String)jsonObject.get("body").toString();
 		
 		if(!msg.isEmpty()) {
 			ChatDto chatDto = objectMapper.readValue(msg, ChatDto.class);
-			logger.info(chatDto.toString());
-			
 			String receiverNo = String.valueOf(chatDto.getChat_to());
-			if(sessionList.get(receiverNo) != null) {
+			if(sessionList.get(receiverNo) != null ) {
 				WebSocketSession receiver = sessionList.get(receiverNo);
 				receiver.sendMessage(new TextMessage(msg));
 			}
-			session.sendMessage(new TextMessage(msg));
+			if(type == "chat" || type.equals("chat")) {
+				session.sendMessage(new TextMessage(msg));	
+			}
+			
 		}
 		
 	}

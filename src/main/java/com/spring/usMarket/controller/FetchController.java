@@ -155,19 +155,19 @@ public class FetchController {
 	}
 	
 	
-	@GetMapping(value="/nickname/{member_no}", produces="text/plain; charset=UTF-8")
-	public String nickName(@PathVariable String member_no) {
+	@GetMapping(value="/chatmember/{member_no}")
+	public Map<String, Object> chatMember(@PathVariable String member_no) {
 		logger.info("member_no = {}", member_no);
 		
-		String nickName = "";
+		Map<String, Object> memberMap = new HashMap<>();
 		
 		try {
 			Integer member_no_ = Integer.parseInt(member_no);
-			nickName = chatService.getNickName(member_no_);
+			memberMap = chatService.getChatMember(member_no_);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return nickName;
+		return memberMap;
 	}
 	
 	
@@ -189,18 +189,12 @@ public class FetchController {
 	
 	
 	@PostMapping("/chatinfo")
-	public List<ChatDto> chatInfo(@RequestBody Map<String, String> data, HttpServletRequest request) {
-
-		String room_no = data.get("room_no");
-		String is_read = (data.get("is_read") == null ? "Y" : data.get("is_read"));
+	public List<ChatDto> chatInfo(@RequestBody String room_no, HttpServletRequest request) {
 		Integer chat_to = Integer.parseInt(SessionParameters.getUserNo(request));
-		logger.info("room_no = {}, is_read = {}, chat_to = {}", room_no, is_read, chat_to);
+		logger.info("room_no = {}, chat_to = {}", room_no, chat_to);
 		
 		List<ChatDto> chatInfo = new ArrayList<>();
 		try {
-			if(is_read == "N" || is_read.equals("N")) {
-				chatService.modifyChatRead(room_no, chat_to);
-			}
 			chatInfo = chatService.getChatInfo(room_no);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -230,5 +224,19 @@ public class FetchController {
 			e.printStackTrace();
 		}
 		return chatMap;
+	}
+	
+	@PostMapping("/chat/read")
+	public int chatRead(@RequestBody String room_no, HttpServletRequest request) {
+		Integer chat_to = Integer.parseInt(SessionParameters.getUserNo(request));
+		logger.info("chatRead room_no = {}, member_no = {}", room_no, chat_to);
+		int updateCnt = 0;
+		try {
+			updateCnt = chatService.modifyChatRead(room_no, chat_to);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return updateCnt;
 	}
 }
