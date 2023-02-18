@@ -8,10 +8,10 @@ import com.spring.usMarket.domain.chat.ChatRoomDto;
 
 public interface ChatService {
 	ChatRoomDto getChatRoomByInfo(Integer current_no, Integer seller_no) throws Exception;
-	ChatRoomDto addChatRoom(Integer current_no, Integer seller_no, String message) throws Exception;
+	ChatDto addChatRoom(Integer current_no, Integer seller_no, String message) throws Exception;
 	List<Map<String, Object>> getChatList(Integer member_no) throws Exception;
 	int modifyChatRead(String room_no, Integer chat_to) throws Exception;
 	int addChat(ChatDto dto) throws Exception;
 	List<ChatDto> getChatInfo(String room_no) throws Exception;
-	String getNickName(Integer member_no) throws Exception;
+	Map<String, Object> getChatMember(Integer member_no) throws Exception;
 }

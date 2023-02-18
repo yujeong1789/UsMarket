@@ -39,21 +39,22 @@ public class ChatServiceImpl implements ChatService{
 	
 	@Override
 	@Transactional(rollbackFor = SQLException.class)
-	public ChatRoomDto addChatRoom(Integer current_no, Integer seller_no, String message) throws Exception {
+	public ChatDto addChatRoom(Integer current_no, Integer seller_no, String message) throws Exception {
 		
 		String room_no = RandomString.getRandomString(RandomString.yyyyMMdd, 10);
 		ChatRoomDto dto = new ChatRoomDto(room_no, current_no, seller_no);
 		int rowCnt = chatDao.insertChatRoom(dto);
 		logger.info("채팅방 생성 결과 = {}", getResult(rowCnt));
+		ChatDto chatDto = new ChatDto();
 		if(rowCnt == 1) {
-			ChatDto chatDto = new ChatDto(room_no, current_no, seller_no, message, new Date(), "N");
+			chatDto = new ChatDto(room_no, current_no, seller_no, message, new Date(), "N");
 			logger.info("chatDto.toString = {}", chatDto.toString());
 			
 			int rowCnt_ = chatDao.insertChat(chatDto);
 			logger.info("채팅 전송 결과 = {}", getResult(rowCnt_));
 		}
 		
-		return dto;
+		return chatDto;
 	}
 	
 
@@ -96,15 +97,15 @@ public class ChatServiceImpl implements ChatService{
 		
 		return rowCnt;
 	}
-	
+
 	@Override
 	@Transactional(rollbackFor = SQLException.class, readOnly = true)
-	public String getNickName(Integer member_no) throws Exception {
+	public Map<String, Object> getChatMember(Integer member_no) throws Exception {
 		
-		String result = chatDao.searchNickName(member_no);
-		logger.info("닉네임 = {}", result);
+		Map<String, Object> chatMemberMap = chatDao.searchChatMember(member_no);
+		logger.info("chatMemberMap.toString() = {}", chatMemberMap.toString());
 		
-		return result;
+		return chatMemberMap;
 	}
 
 
