@@ -47,6 +47,10 @@
 							<input type="hidden" id="chat_to" name="member_no">
 						</form>
 						<span id="chat_to_nickname"></span>
+						<div class="info-title-report">
+							<img alt="신고하기" src="<c:url value='/resources/customer/img/report.png'/>">
+							<span id="chat-report">신고하기</span>
+						</div>
 					</div>
 					<div class="info-content-layout"></div>
 					<div class="info-textarea">
@@ -78,7 +82,15 @@ function listClickEvent(el){
 		if(document.querySelector('[data-open="Y"]')){
 			document.querySelector('[data-open="Y"]').removeAttribute('data-open');
 		}
+		if(this.getAttribute('data-read') == 'N'){ // 조회 여부 update
+			console.log(this.getAttribute('data-read'));
+			console.log(this.getAttribute('data-room'));
+			modifyChatRead(this.getAttribute('data-room'));
+			this.querySelector('.list-content-right').style.visibility = 'hidden';
+		}
 		initChatInfo(this);
+		this.querySelector('.list-content-right').style.visibility = 'hidden';
+		document.querySelector('.info-title-report').style.visibility = 'visible';
 		getChatInfo(this.getAttribute('data-room'), this.getAttribute('data-read'));
 	});
 };
