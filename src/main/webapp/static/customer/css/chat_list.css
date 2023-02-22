@@ -127,16 +127,36 @@
 
 /* 채팅 상세보기 */
 .info-title{
+	display: flex;
+	justify-content: space-between;
 	height: 70px;
 	padding: 20px 20px 20px 20px;
 	border-bottom: 1px solid #f6f6f6;
+	align-items: center;
 }
 
-.info-title span{
+.info-title > #chat_to_nickname{
 	color: #1c1c1c;
 	font-size: 20px;
 	font-weight: 700;
 	cursor: pointer;
+}
+
+.info-title-report{
+	visibility: hidden;
+}
+
+.info-title-report > img{
+	width: 16px;
+	height: 16px;
+	object-fit: contain;
+	margin-bottom: 3px;
+}
+
+.info-title-report > span{
+	cursor: pointer;
+	color: #FE5A5A;
+	font-weight: 600; 
 }
 
 .info-title > form{
