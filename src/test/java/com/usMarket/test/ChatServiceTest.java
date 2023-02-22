@@ -32,11 +32,11 @@ public class ChatServiceTest {
 	public void addChatTest() throws Exception{
 		Integer current_no = 2;
 		Integer seller_no = 3;
-		ChatRoomDto dto = chatService.getChatRoomByInfo(current_no, seller_no);
-		if(dto == null) {
-			dto = chatService.addChatRoom(current_no, seller_no, "test message");
+		ChatRoomDto roomDto = chatService.getChatRoomByInfo(current_no, seller_no);
+		if(roomDto == null) {
+			ChatDto chatDto = chatService.addChatRoom(current_no, seller_no, "test message");
 		}
-		List<ChatDto> chatInfo = chatService.getChatInfo(dto.getRoom_no());
+		List<ChatDto> chatInfo = chatService.getChatInfo(roomDto.getRoom_no());
 		for(ChatDto chatDto : chatInfo){
 			System.out.println(chatDto.toString());
 		}
