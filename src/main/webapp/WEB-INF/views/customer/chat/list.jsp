@@ -5,8 +5,32 @@
 <%@ page import="com.spring.usMarket.utils.TimeConvert"%>
 
 <link rel="stylesheet" href="<c:url value='/resources/customer/css/chat_list.css'/>" type="text/css">
+<link rel="stylesheet" href="<c:url value='/resources/customer/css/report_modal.css'/>" type="text/css">
 <script src="<c:url value='/resources/customer/js/chat_list.js'/>"></script>
 <section class="chat-list-section">
+	
+	<!-- 신고하기 모달 -->
+	<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title">신고하기</h5>
+				</div>
+				<div class="modal-body">
+					
+				</div>
+				<div class="modal-footer">
+					<div class="btn-close">
+						<p>취소</p>
+					</div>
+					<div>
+						<p>신고하기</p>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div> <!-- modal -->
+	
 	<div class="row chat-background">
 		<div class="container">
 			<div class="chat-list-layout">
@@ -83,14 +107,10 @@ function listClickEvent(el){
 			document.querySelector('[data-open="Y"]').removeAttribute('data-open');
 		}
 		if(this.getAttribute('data-read') == 'N'){ // 조회 여부 update
-			console.log(this.getAttribute('data-read'));
-			console.log(this.getAttribute('data-room'));
-			modifyChatRead(this.getAttribute('data-room'));
 			this.querySelector('.list-content-right').style.visibility = 'hidden';
+			modifyChatRead(this.getAttribute('data-room'));
 		}
 		initChatInfo(this);
-		this.querySelector('.list-content-right').style.visibility = 'hidden';
-		document.querySelector('.info-title-report').style.visibility = 'visible';
 		getChatInfo(this.getAttribute('data-room'), this.getAttribute('data-read'));
 	});
 };
@@ -98,7 +118,6 @@ function listClickEvent(el){
 
 document.addEventListener('DOMContentLoaded', function(){
 	var socket = null;
-	
 	connectWs();
 });
 
@@ -107,6 +126,7 @@ function initChatInfo(element){
 	element.setAttribute('data-open', 'Y');
 	document.getElementById('chat_to').value = element.getAttribute('data-to');
 	document.getElementById('chat_to_nickname').innerHTML = '';
+	document.querySelector('.info-title-report').style.visibility = 'visible';
 	document.querySelector('.info-textarea').style.visibility = 'visible';
 	document.getElementById('chat_content').value = '';
 	document.querySelector('.btn_send').style.visibility = 'hidden';
@@ -332,4 +352,14 @@ function getChatMember(member_no, element){
 		element.children[2].children[0].children[0].children[0].textContent = json.MEMBER_NICKNAME;
 	}).catch((error) => console.log("error: "+error)); // fetch-3	
 };
+
+// 신고하기
+document.getElementById('chat-report').addEventListener('click', function(){
+	var reportModal = new bootstrap.Modal(document.getElementById('exampleModal'));
+	reportModal.show();
+	document.querySelector('.btn-close').addEventListener('click', function(e){
+		console.log('hide');
+		reportModal.hide();	
+	});
+});
 </script>

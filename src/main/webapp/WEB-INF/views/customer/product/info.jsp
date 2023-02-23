@@ -4,10 +4,34 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 
 <link rel="stylesheet" href="<c:url value='/resources/customer/css/product_info.css'/>" type="text/css">
-
+<link rel="stylesheet" href="<c:url value='/resources/customer/css/report_modal.css'/>" type="text/css">
 <section class="product__info__section">
+
+	<!-- 신고하기 모달 -->
+	<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title">신고하기</h5>
+				</div>
+				<div class="modal-body">
+					
+				</div>
+				<div class="modal-footer">
+					<div class="btn-close">
+						<p>취소</p>
+					</div>
+					<div>
+						<p>신고하기</p>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div> <!-- modal -->
+	
 	<div class="container">
 		<div class="row">
+			<!-- 신고하기 모달 -->
 			<div class="col-lg-12">
 				<!-- 카테고리 영역 -->
 				<a class="home" href="<c:url value='/'/>">홈</a>
@@ -71,11 +95,7 @@
 						<div class="product__exchange">
 							<div class="product__label">교환여부</div>
 							<span><c:out value="${productInfo.PRODUCT_CHANGE eq 'Y' ? '교환가능':'교환불가능'}"/></span>
-						</div>
-						<div class="product__location">
-							<div class="product__label">거래지역</div>
-							<span></span>
-						</div>							
+						</div>	
 					</div>
 					
 					<c:choose>
@@ -321,6 +341,16 @@
 				
 				console.log(addChatRoomForm);
 				addChatRoomForm.submit();				
+			});
+			
+			// 신고하기
+			document.getElementById('product__report').addEventListener('click', function(){
+				var reportModal = new bootstrap.Modal(document.getElementById('exampleModal'));
+				reportModal.show();
+				document.querySelector('.btn-close').addEventListener('click', function(e){
+					console.log('hide');
+					reportModal.hide();	
+				});
 			});
 		}
 		
