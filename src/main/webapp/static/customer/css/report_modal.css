@@ -4,12 +4,10 @@
 	top: 150px;
 }
 
-.modal-content{
-	height: 500px;
-}
-
 .modal-header{
-	justify-content: center;
+	padding-left: 30px;
+	background-color: #353B4C;
+	border-bottom: none;
 }
 
 .modal-header > .btn-close{
@@ -21,8 +19,83 @@
 	object-fit: contain;
 }
 
+.modal-body{
+	padding: 20px 30px 20px 30px;
+}
+
+.modal-body div{
+	margin-bottom: 30px;
+}
+
+.modal-body .report-title{
+	font-weight: 700;
+	font-size: 16px;
+}
+
+.modal-body .report-body{
+	width: 100%;
+	margin-top: 10px;
+}
+
+.modal-body .report-info{
+	background-color: #F4F8FB;
+	padding: 15px 20px 15px 20px;
+}
+
+.modal-body > div:last-child > form > div{
+	flex-wrap: wrap;
+}
+
+.report-info > p:first-child{
+	color: #1C1C1C;
+	font-weight: 700;
+}
+
+.report-info > p:last-child{
+	color: #1C1C1C;
+	margin: 0px;
+}
+
+.report-textarea{
+	padding: 15px 20px 15px 20px;
+	width: 100%;
+	background-color: #F5F5F5;
+	border: 1px solid #CFCFCF;
+	margin-top: 10px;
+}
+
+.report-textarea > textarea{
+	width: 100%;
+	resize: none;
+	border: none;
+	background-color: #F5F5F5;
+}
+
+.report-body > label{
+	width: 30%;
+}
+
+.report-textarea > div{
+	display: flex;
+	justify-content: end;
+	margin: 0px;
+}
+
+.report-textarea > div > p{
+	margin: 0px;
+}
+
+.disable{	
+	background-color: #EEEEEE;
+}
+
+.writeable{
+	background-color: #F4F8FB;
+}
+
 .modal-title{
 	font-weight: 650;
+	color: #FFFFFF;
 }
 
 .modal-footer{
@@ -61,4 +134,3 @@
 .modal-footer > div:last-child > p{
 	color: #FFFFFF;
 }
-
