@@ -8,20 +8,48 @@
 <section class="product__info__section">
 
 	<!-- 신고하기 모달 -->
-	<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+	<div class="modal fade" id="reportModal" tabindex="-1" aria-labelledby="reportModalLabel" aria-hidden="true">
 		<div class="modal-dialog">
 			<div class="modal-content">
 				<div class="modal-header">
 					<h5 class="modal-title">신고하기</h5>
 				</div>
 				<div class="modal-body">
-					
+					<div class="report-into">
+						<span class="report-title">신고대상</span>
+						<div class="report-body report-info">
+							<p></p>
+							<p></p>							
+						</div>
+					</div>
+					<div class="report-content">
+						<form id="addReportForm" action="<c:url value='/report'/>" method="post">
+							<span class="report-title">신고사유</span>
+							<input type="hidden" id="qna_category1_no" name="qna_category1_no" value="1" readonly="readonly">
+							<input type="hidden" id="qna_title" name="qna_title" value="상품 신고" readonly="readonly">
+							<input type="hidden" id="member_no" name="member_no" readonly="readonly">
+							<div class="report-body">
+								<label>
+									<input type="radio" name="qna_category2_no" id="qna_category2_no" value="4" checked />
+									<span>허위매물</span>
+								</label>
+								<label>
+									<input type="radio" name="qna_category2_no" id="qna_category2_no" value="5"/>
+									<span>기타</span>
+								</label>
+								<div class="report-textarea">
+									<textarea readonly="readonly" rows="5" maxlength="300"></textarea>
+									<div><p>0</p><p>/300</p></div>
+								</div>
+							</div>
+						</form>
+					</div>
 				</div>
 				<div class="modal-footer">
 					<div class="btn-close">
 						<p>취소</p>
 					</div>
-					<div>
+					<div class="modal-submit">
 						<p>신고하기</p>
 					</div>
 				</div>
@@ -214,6 +242,24 @@
 		const product_no = `${productInfo.PRODUCT_NO}`;
 		const product_state = `${productInfo.PRODUCT_STATE_NO}`;
 		
+		const reportModalEl = document.getElementById('reportModal');
+		const reportModal = new bootstrap.Modal(reportModalEl);
+		
+		// modal show event
+		reportModalEl.addEventListener('show.bs.modal', function(e){
+			console.log('show modal');
+			document.querySelector('.report-info > p:first-child').textContent = seller_id.substr(0, 3)+'****';
+			document.querySelector('.report-info > p:last-child').textContent = `${productInfo.PRODUCT_NAME}`;
+			document.getElementById('member_no').value = document.getElementById('loginNo').dataset.no;						
+		});
+		
+		// modal hide event
+		reportModalEl.addEventListener('hide.bs.modal', function(e){
+			console.log('hide modal');
+			document.querySelector('input[type="radio"]').checked = 'true';
+			switchWriteable(false);
+		});
+		
 		console.log("product_no = "+product_no);
 		console.log("current_id = "+current_id);
 		console.log("seller_no = "+seller_no);
@@ -305,7 +351,6 @@
 		});
 		
 		
-		
 		// 판매 중인 상품일 경우에만 구매, 채팅, 찜, 삭제 이벤트 등록 (판매 중이 아닐 경우 버튼이 존재하지 않기 때문)
 		if(product_state == 1){
 			// 삭제하기
@@ -344,15 +389,44 @@
 			});
 			
 			// 신고하기
-			document.getElementById('product__report').addEventListener('click', function(){
-				var reportModal = new bootstrap.Modal(document.getElementById('exampleModal'));
-				reportModal.show();
-				document.querySelector('.btn-close').addEventListener('click', function(e){
-					console.log('hide');
-					reportModal.hide();	
-				});
-			});
-		}
+			document.getElementById('product__report').addEventListener('click', function(e){
+				if(isEmpty(document.getElementById('loginNo').dataset.no)){
+					e.preventDefault();
+					location.href = '${pageContext.request.contextPath}/member/login';
+				} else{
+					reportModal.show();
+					
+					document.querySelector('.btn-close').addEventListener('click', function(e){
+						reportModal.hide();
+					}); // close button event
+					
+					const radioNodes = document.getElementsByName('qna_category2_no');
+					radioNodes.forEach(el => {
+						el.addEventListener('click', function(){
+							switchWriteable(this.value == '5');
+						});
+					}); // radio click event
+					
+					document.querySelector('.report-textarea > textarea').addEventListener('input', function(e){
+						this.nextElementSibling.firstChild.textContent = this.value.length;
+					}); // textarea input event
+					
+					document.querySelector('.modal-submit').addEventListener('click', function(e){
+						e.preventDefault();
+						if(document.querySelector('input[type=radio]:checked').value == '5' && document.querySelector('.report-textarea > textarea').value.length == 0){
+							alert('신고 내용을 입력해 주세요.');
+						} else {
+							if(confirm('해당 상품을 신고하시겠습니까?')){
+								// submit 처리
+								alert('신고가 정상적으로 접수되었습니다.');
+								reportModal.hide();
+							}
+						}
+					}); // submit button event
+				} // if-else
+					
+			}); // modal show
+		} // if
 		
 		
 		// 리뷰 출력하기
@@ -372,7 +446,7 @@
 		}).catch((error) => console.log("error: "+error)); // fetch-2
 		
 		
-		
+		// 상위 2건 리뷰 얻기
 		function getTopReview(reviewCount){
 			fetch('/usMarket/fetch/topReview/'+seller_no)
 			.then((response) => response.json())
@@ -400,6 +474,22 @@
 				let appendTag = "<a href='${pageContext.request.contextPath}/product/list?keyword="+el+"'>"+el+"</a>";
 				tagElement.innerHTML += appendTag;
 			});			
+		}
+		
+		function switchWriteable(result){
+			if(result){
+				document.querySelector('.report-textarea').style.backgroundColor = '#F4F8FB';
+				document.querySelector('.report-textarea > textarea').style.backgroundColor = '#F4F8FB';
+				document.querySelector('.report-textarea > textarea').removeAttribute('readonly');
+				document.querySelector('.report-textarea > textarea').setAttribute('placeholder', '위 신고항목에 없거나 추가로 신고하실 내용을 적어 주세요.');
+			}else{
+				document.querySelector('.report-textarea').style.backgroundColor = '#F5F5F5';
+				document.querySelector('.report-textarea > textarea').style.backgroundColor = '#F5F5F5';
+				document.querySelector('.report-textarea > textarea').setAttribute('readonly', 'true');
+				document.querySelector('.report-textarea > textarea').value = '';
+				document.querySelector('.report-textarea > textarea').nextElementSibling.firstChild.textContent = 0;
+				document.querySelector('.report-textarea > textarea').removeAttribute('placeholder');
+			}
 		}
 		
 	});

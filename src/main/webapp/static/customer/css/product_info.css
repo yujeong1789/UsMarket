@@ -497,4 +497,5 @@
 	height: 60px;
 	object-fit: cover;
 	opacity: 60%;
+	cursor: pointer;
 }
