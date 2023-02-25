@@ -13,7 +13,7 @@
 					<div class="hero__text">
 						<img src="<c:url value='/resources/customer/img/hero/visual-text.png'/>" />
 						<div class="hero__button">
-							<a href="#"><img src="<c:url value='/resources/customer/img/hero/visual-icon.png'/>" /></a>
+							<img src="<c:url value='/resources/customer/img/hero/visual-icon.png'/>" />
 						</div>
 					</div>
 				</div>
@@ -56,3 +56,10 @@
 		
 	</div> <!-- container -->
 </section>
+
+<script type="text/javascript">
+document.querySelector('.hero__button').addEventListener('click', function(){
+	var location = document.querySelector('.section-title').offsetTop;
+	window.scrollTo({left: 0, top: location, behavior: 'smooth'});
+});
+</script>

@@ -326,7 +326,7 @@
 			imgOrder = getNextImg(imgOrder);
 			console.log('imgOrder = '+imgOrder);
 			
-			if(imgOrder == (imgList.length-1)){
+			if(imgOrder == (imgList.length - 1)){
 				// 마지막 요소면 next 버튼 숨김
 				console.log('마지막 요소');
 				document.getElementById('img_next').style.visibility = 'hidden';	
@@ -391,41 +391,43 @@
 			// 신고하기
 			document.getElementById('product__report').addEventListener('click', function(e){
 				if(isEmpty(document.getElementById('loginNo').dataset.no)){
-					e.preventDefault();
 					location.href = '${pageContext.request.contextPath}/member/login';
 				} else{
 					reportModal.show();
 					
+					// close button event
 					document.querySelector('.btn-close').addEventListener('click', function(e){
 						reportModal.hide();
-					}); // close button event
-					
-					const radioNodes = document.getElementsByName('qna_category2_no');
-					radioNodes.forEach(el => {
-						el.addEventListener('click', function(){
-							switchWriteable(this.value == '5');
-						});
-					}); // radio click event
-					
-					document.querySelector('.report-textarea > textarea').addEventListener('input', function(e){
-						this.nextElementSibling.firstChild.textContent = this.value.length;
-					}); // textarea input event
-					
-					document.querySelector('.modal-submit').addEventListener('click', function(e){
-						e.preventDefault();
-						if(document.querySelector('input[type=radio]:checked').value == '5' && document.querySelector('.report-textarea > textarea').value.length == 0){
-							alert('신고 내용을 입력해 주세요.');
-						} else {
-							if(confirm('해당 상품을 신고하시겠습니까?')){
-								// submit 처리
-								alert('신고가 정상적으로 접수되었습니다.');
-								reportModal.hide();
-							}
-						}
-					}); // submit button event
-				} // if-else
-					
-			}); // modal show
+					}); 
+				}
+			});
+			
+			// radio click event
+			const radioNodes = document.getElementsByName('qna_category2_no');
+			radioNodes.forEach(el => {
+				el.addEventListener('click', function(){
+					switchWriteable(this.value == '5');
+				});
+			}); 
+			
+			// textarea input event
+			document.querySelector('.report-textarea > textarea').addEventListener('input', function(e){
+				this.nextElementSibling.firstChild.textContent = this.value.length;
+			}); 
+			
+			// submit button event
+			document.querySelector('.modal-submit').addEventListener('click', function(e){
+				if(document.querySelector('input[type=radio]:checked').value == '5' && document.querySelector('.report-textarea > textarea').value.length == 0){
+					alert('신고 내용을 입력해 주세요.');
+				} else {
+					if(confirm('해당 상품을 신고하시겠습니까?')){
+						// submit 처리
+						alert('신고가 정상적으로 접수되었습니다.');
+						reportModal.hide();
+					}
+				}
+			}); 
+			
 		} // if
 		
 		
