@@ -2,6 +2,7 @@
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 <%@ page import="com.spring.usMarket.utils.TimeConvert"%>
 
 <link rel="stylesheet" href="<c:url value='/resources/customer/css/chat_list.css'/>" type="text/css">
@@ -10,20 +11,24 @@
 <section class="chat-list-section">
 	
 	<!-- 신고하기 모달 -->
-	<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+	<div class="modal fade" id="reportModal" tabindex="-1" aria-labelledby="reportModalLabel" aria-hidden="true">
 		<div class="modal-dialog">
 			<div class="modal-content">
 				<div class="modal-header">
 					<h5 class="modal-title">신고하기</h5>
 				</div>
 				<div class="modal-body">
-					
+					<div class="report-into">
+						<span>신고대상</span>
+					</div>
+					<div class="report-content">
+					</div>
 				</div>
 				<div class="modal-footer">
 					<div class="btn-close">
 						<p>취소</p>
 					</div>
-					<div>
+					<div class="modal-submit">
 						<p>신고하기</p>
 					</div>
 				</div>
@@ -54,7 +59,8 @@
 										</div>
 										
 										<div class="content">
-											<p>${chatList.CHAT_CONTENT}</p>
+											<c:set var="chat_content" value="${fn:length(chatList.CHAT_CONTENT) gt 25 ? (fn:substring(chatList.CHAT_CONTENT, 0, 25) += '...') : chatList.CHAT_CONTENT}"/>
+											<p>${chat_content }</p>
 										</div>
 									</div>
 									<div class="list-content-right"></div>
@@ -355,7 +361,7 @@ function getChatMember(member_no, element){
 
 // 신고하기
 document.getElementById('chat-report').addEventListener('click', function(){
-	var reportModal = new bootstrap.Modal(document.getElementById('exampleModal'));
+	var reportModal = new bootstrap.Modal(document.getElementById('reportModal'));
 	reportModal.show();
 	document.querySelector('.btn-close').addEventListener('click', function(e){
 		console.log('hide');
