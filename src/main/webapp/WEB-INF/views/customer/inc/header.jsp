@@ -5,8 +5,8 @@
 
 <c:set var="req" value="${pageContext.request }" />
 
-<c:set var="loginId" value="${req.getSession(false) == null ? '' : pageContext.request.session.getAttribute('userId')}"/>
-<c:set var="loginNo" value="${req.getSession(false) == null ? '' : pageContext.request.session.getAttribute('userNo')}"/>
+<c:set var="loginId" value="${empty req.getSession(false) ? '' : pageContext.request.session.getAttribute('userId')}"/>
+<c:set var="loginNo" value="${empty req.getSession(false) ? '' : pageContext.request.session.getAttribute('userNo')}"/>
 <c:set var="loginOutLink" value="${empty loginId ? '/member/login' : '/member/logout'}"/>
 <c:set var="loginOut" value="${empty loginId ? '로그인' : '로그아웃'}"/>
 
@@ -25,7 +25,8 @@
                     <div class="col-lg-6 col-md-6">
                         <div class="header__top__left">
                             <div class="header__top__left__favorite">
-                            	<a class="favorite" href="#"><img src="<c:url value='/resources/customer/img/favorite.png' />">즐겨찾기</a>
+                            	<img src="<c:url value='/resources/customer/img/favorite.png' />">
+                            	<a id="header_favorite" href="#">즐겨찾기</a>
                             </div>
                         </div>
                     </div>
@@ -52,11 +53,10 @@
 	<!-- Header Section End -->
 	
 <script type="text/javascript">
-	// 즐겨찾기 추가 스크립트
 	$(document).ready(function(){
-		$('.favorite').on('click', function(e) {
-			let bookmarkURL = window.location.href;
-            let bookmarkTitle = document.title;
+		$('#header_favorite').on('click', function(e) {
+			let bookmarkTitle = '우리의 지구를 위해, 어스마켓';
+			let bookmarkURL = '${pageContext.request.contextPath}/';
             let triggerDefault = false;
             if (window.sidebar && window.sidebar.addPanel) {
                 // Firefox version < 23
@@ -77,5 +77,5 @@
             }
 			return triggerDefault;
 		});
-	});	    
+	});
 </script>
