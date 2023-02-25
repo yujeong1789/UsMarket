@@ -38,14 +38,13 @@ public class EchoHandler extends TextWebSocketHandler{
 	protected void handleTextMessage(WebSocketSession session, TextMessage message) throws Exception {
 		
 		String senderNo = String.valueOf(session.getAttributes().get("userNo"));
-		logger.info("handleTextMessage senderNo = {}, payload = {}", senderNo, message.getPayload().toString());
+		JSONObject jsonObject = (JSONObject)new JSONParser().parse(message.getPayload());
+		String type = jsonObject.get("type").toString();
+		String msg = jsonObject.get("body").toString();
 		
-		String msg = message.getPayload();
-		JSONObject jsonObject = (JSONObject)new JSONParser().parse(msg);
-		String type = (String)jsonObject.get("type");
-		msg = (String)jsonObject.get("body").toString();
+		logger.info("handleTextMessage senderNo = {}, type = {}, msg = {}", senderNo, type, msg);
 		
-		if(!msg.isEmpty()) {
+		if(!msg.isEmpty() || msg != "") {
 			ChatDto chatDto = objectMapper.readValue(msg, ChatDto.class);
 			String receiverNo = String.valueOf(chatDto.getChat_to());
 			if(sessionList.get(receiverNo) != null ) {
@@ -53,7 +52,8 @@ public class EchoHandler extends TextWebSocketHandler{
 				receiver.sendMessage(new TextMessage(msg));
 			}
 			if(type == "chat" || type.equals("chat")) {
-				session.sendMessage(new TextMessage(msg));	
+				logger.info("type = {} sendMessage", type);
+				session.sendMessage(new TextMessage(msg));
 			}
 			
 		}
