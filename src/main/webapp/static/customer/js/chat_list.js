@@ -6,7 +6,7 @@
 	list_content.className = 'list-content';
 	list_content.setAttribute('data-room', data.room_no);
 	list_content.setAttribute('data-read', (data.chat_read == 'N' ? data.chat_read : 'Y'));
-	list_content.setAttribute('data-to', data.chat_to);
+	list_content.setAttribute('data-to', data.chat_from);
 	
 	let chat_time = document.createElement('input');
 	chat_time.type = 'hidden';
