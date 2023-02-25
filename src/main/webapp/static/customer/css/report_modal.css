@@ -1,5 +1,10 @@
 @charset "UTF-8";
 
+
+#reportModal{
+	overscroll-behavior: none;
+}
+
 .modal-dialog{
 	top: 150px;
 }
