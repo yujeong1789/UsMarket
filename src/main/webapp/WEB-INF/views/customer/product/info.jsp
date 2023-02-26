@@ -4,58 +4,11 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 
 <link rel="stylesheet" href="<c:url value='/resources/customer/css/product_info.css'/>" type="text/css">
-<link rel="stylesheet" href="<c:url value='/resources/customer/css/report_modal.css'/>" type="text/css">
 <section class="product__info__section">
 
 	<!-- 신고하기 모달 -->
-	<div class="modal fade" id="reportModal" tabindex="-1" aria-labelledby="reportModalLabel" aria-hidden="true">
-		<div class="modal-dialog">
-			<div class="modal-content">
-				<div class="modal-header">
-					<h5 class="modal-title">신고하기</h5>
-				</div>
-				<div class="modal-body">
-					<div class="report-into">
-						<span class="report-title">신고대상</span>
-						<div class="report-body report-info">
-							<p></p>
-							<p></p>							
-						</div>
-					</div>
-					<div class="report-content">
-						<form id="addReportForm" action="<c:url value='/report'/>" method="post">
-							<span class="report-title">신고사유</span>
-							<input type="hidden" id="qna_category1_no" name="qna_category1_no" value="1" readonly="readonly">
-							<input type="hidden" id="qna_title" name="qna_title" value="상품 신고" readonly="readonly">
-							<input type="hidden" id="member_no" name="member_no" readonly="readonly">
-							<div class="report-body">
-								<label>
-									<input type="radio" name="qna_category2_no" id="qna_category2_no" value="4" checked />
-									<span>허위매물</span>
-								</label>
-								<label>
-									<input type="radio" name="qna_category2_no" id="qna_category2_no" value="5"/>
-									<span>기타</span>
-								</label>
-								<div class="report-textarea">
-									<textarea readonly="readonly" rows="5" maxlength="300"></textarea>
-									<div><p>0</p><p>/300</p></div>
-								</div>
-							</div>
-						</form>
-					</div>
-				</div>
-				<div class="modal-footer">
-					<div class="btn-close">
-						<p>취소</p>
-					</div>
-					<div class="modal-submit">
-						<p>신고하기</p>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div> <!-- modal -->
+	<input type="hidden" id="report_type" value="1">
+	<jsp:include page="/WEB-INF/views/customer/inc/report_modal.jsp"/>
 	
 	<div class="container">
 		<div class="row">
@@ -242,15 +195,13 @@
 		const product_no = `${productInfo.PRODUCT_NO}`;
 		const product_state = `${productInfo.PRODUCT_STATE_NO}`;
 		
-		const reportModalEl = document.getElementById('reportModal');
-		const reportModal = new bootstrap.Modal(reportModalEl);
-		
 		// modal show event
+		/*
 		reportModalEl.addEventListener('show.bs.modal', function(e){
 			console.log('show modal');
 			document.querySelector('.report-info > p:first-child').textContent = seller_id.substr(0, 3)+'****';
 			document.querySelector('.report-info > p:last-child').textContent = `${productInfo.PRODUCT_NAME}`;
-			document.getElementById('member_no').value = document.getElementById('loginNo').dataset.no;						
+			document.getElementById('report_member_no').value = seller_no;						
 		});
 		
 		// modal hide event
@@ -259,6 +210,7 @@
 			document.querySelector('input[type="radio"]').checked = 'true';
 			switchWriteable(false);
 		});
+		*/
 		
 		console.log("product_no = "+product_no);
 		console.log("current_id = "+current_id);
@@ -394,40 +346,8 @@
 					location.href = '${pageContext.request.contextPath}/member/login';
 				} else{
 					reportModal.show();
-					
-					// close button event
-					document.querySelector('.btn-close').addEventListener('click', function(e){
-						reportModal.hide();
-					}); 
 				}
 			});
-			
-			// radio click event
-			const radioNodes = document.getElementsByName('qna_category2_no');
-			radioNodes.forEach(el => {
-				el.addEventListener('click', function(){
-					switchWriteable(this.value == '5');
-				});
-			}); 
-			
-			// textarea input event
-			document.querySelector('.report-textarea > textarea').addEventListener('input', function(e){
-				this.nextElementSibling.firstChild.textContent = this.value.length;
-			}); 
-			
-			// submit button event
-			document.querySelector('.modal-submit').addEventListener('click', function(e){
-				if(document.querySelector('input[type=radio]:checked').value == '5' && document.querySelector('.report-textarea > textarea').value.length == 0){
-					alert('신고 내용을 입력해 주세요.');
-				} else {
-					if(confirm('해당 상품을 신고하시겠습니까?')){
-						// submit 처리
-						alert('신고가 정상적으로 접수되었습니다.');
-						reportModal.hide();
-					}
-				}
-			}); 
-			
 		} // if
 		
 		
@@ -476,22 +396,6 @@
 				let appendTag = "<a href='${pageContext.request.contextPath}/product/list?keyword="+el+"'>"+el+"</a>";
 				tagElement.innerHTML += appendTag;
 			});			
-		}
-		
-		function switchWriteable(result){
-			if(result){
-				document.querySelector('.report-textarea').style.backgroundColor = '#F4F8FB';
-				document.querySelector('.report-textarea > textarea').style.backgroundColor = '#F4F8FB';
-				document.querySelector('.report-textarea > textarea').removeAttribute('readonly');
-				document.querySelector('.report-textarea > textarea').setAttribute('placeholder', '위 신고항목에 없거나 추가로 신고하실 내용을 적어 주세요.');
-			}else{
-				document.querySelector('.report-textarea').style.backgroundColor = '#F5F5F5';
-				document.querySelector('.report-textarea > textarea').style.backgroundColor = '#F5F5F5';
-				document.querySelector('.report-textarea > textarea').setAttribute('readonly', 'true');
-				document.querySelector('.report-textarea > textarea').value = '';
-				document.querySelector('.report-textarea > textarea').nextElementSibling.firstChild.textContent = 0;
-				document.querySelector('.report-textarea > textarea').removeAttribute('placeholder');
-			}
 		}
 		
 	});

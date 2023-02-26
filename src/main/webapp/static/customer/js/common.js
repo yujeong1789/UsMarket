@@ -73,3 +73,7 @@ let msToDate = function(createdAt){
 	
 	return `${milliSeconds.getFullYear()}/${leftPad(milliSeconds.getMonth()+1)}/${leftPad(milliSeconds.getDate())}` 
 }
+
+let getFormData = function(form){
+	return Object.fromEntries(new FormData(form).entries());
+}

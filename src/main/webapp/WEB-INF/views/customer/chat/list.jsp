@@ -8,33 +8,12 @@
 <link rel="stylesheet" href="<c:url value='/resources/customer/css/chat_list.css'/>" type="text/css">
 <link rel="stylesheet" href="<c:url value='/resources/customer/css/report_modal.css'/>" type="text/css">
 <script src="<c:url value='/resources/customer/js/chat_list.js'/>"></script>
+
 <section class="chat-list-section">
 	
 	<!-- 신고하기 모달 -->
-	<div class="modal fade" id="reportModal" tabindex="-1" aria-labelledby="reportModalLabel" aria-hidden="true">
-		<div class="modal-dialog">
-			<div class="modal-content">
-				<div class="modal-header">
-					<h5 class="modal-title">신고하기</h5>
-				</div>
-				<div class="modal-body">
-					<div class="report-into">
-						<span>신고대상</span>
-					</div>
-					<div class="report-content">
-					</div>
-				</div>
-				<div class="modal-footer">
-					<div class="btn-close">
-						<p>취소</p>
-					</div>
-					<div class="modal-submit">
-						<p>신고하기</p>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div> <!-- modal -->
+	<input type="hidden" id="report_type" value="2">
+	<jsp:include page="/WEB-INF/views/customer/inc/report_modal.jsp"/>
 	
 	<div class="row chat-background">
 		<div class="container">
@@ -361,11 +340,6 @@ function getChatMember(member_no, element){
 
 // 신고하기
 document.getElementById('chat-report').addEventListener('click', function(){
-	var reportModal = new bootstrap.Modal(document.getElementById('reportModal'));
 	reportModal.show();
-	document.querySelector('.btn-close').addEventListener('click', function(e){
-		console.log('hide');
-		reportModal.hide();	
-	});
 });
 </script>
