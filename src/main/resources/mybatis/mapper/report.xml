@@ -20,4 +20,10 @@
 				 , #{report_image}
 				 , #{report_info})
 	</insert>
+	
+	<select id="selectReportCategory2" parameterType="int" resultType="map">
+		SELECT report_category2_no, report_category2_name FROM report_category2
+		 WHERE report_category1_no = #{report_category1_no}
+		 ORDER BY report_category2_no
+	</select>
 </mapper>
