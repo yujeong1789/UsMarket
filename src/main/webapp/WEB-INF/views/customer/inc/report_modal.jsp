@@ -104,7 +104,8 @@ document.querySelector('.report-textarea > textarea').addEventListener('input', 
 
 // submit button event
 document.querySelector('.modal-submit').addEventListener('click', function(e){
-	if(document.querySelector('input[type=radio]:checked').value == radioNodes[radioNodes.length-1].value && document.querySelector('.report-textarea > textarea').value.length == 0){
+	let lastRadio = document.querySelectorAll('input[type=radio]');
+	if(document.querySelector('input[type=radio]:checked').value == lastRadio[lastRadio.length-1].value && document.querySelector('.report-textarea > textarea').value.length == 0){
 		alert('신고 내용을 입력해 주세요.');
 		document.querySelector('.report-textarea > textarea').focus();
 	} else {
