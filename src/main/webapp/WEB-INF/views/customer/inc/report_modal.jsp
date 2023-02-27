@@ -11,38 +11,39 @@
 					<h5 class="modal-title">신고하기</h5>
 				</div>
 				<div class="modal-body">
-					<div class="report-into">
+				
+					<div class="report-into mb-4">
 						<span class="report-title">신고대상</span>
-						<div class="report-body report-info">				
+						<div class="report-body report-info mt-2">				
 						</div>
 					</div>
+					
 					<div class="report-content">
 						<form id="addReportForm" action="<c:url value='/fetch/report'/>" method="post" enctype="multipart/form-data">
 							<span class="report-title">신고사유</span>
 							
-							<input type="text" id="report_category1_no" name="report_category1_no" readonly="readonly">
+							<input type="hidden" id="report_category1_no" name="report_category1_no" readonly="readonly">
 							<input type="hidden" id="report_member_no" name="report_member_no" readonly="readonly">
 							<input type="hidden" id="report_info" name="report_info" readonly="readonly">
 							
 							<div class="report-body">
-								
-								<label>
-									<input type="radio" name="report_category2_no" id="report_category2_no" value="4" checked />
-									<span>허위매물</span>
-								</label>
-								<label>
-									<input type="radio" name="report_category2_no" id="report_category2_no" value="5"/>
-									<span>기타</span>
-								</label>
+								<div class="report-category mt-2"></div>
 								 
-								<div class="report-textarea">
+								<div class="report-textarea mb-4">
 									<textarea readonly="readonly" name="report_content" rows="5" maxlength="300"></textarea>
 									<div><p>0</p><p>/300</p></div>
 								</div>
+								
+								<span class="report-title">첨부 이미지</span>
+								<div class="report_file mt-2">
+									<input type="file" id="report_image" name="report_image">
+								</div>
 							</div>
 						</form>
-					</div>
-				</div>
+					</div> <!-- report-content -->
+					
+				</div> <!-- modal-body -->
+				
 				<div class="modal-footer">
 					<div class="btn-close">
 						<p>취소</p>
@@ -50,13 +51,32 @@
 					<div class="modal-submit">
 						<p>신고하기</p>
 					</div>
-				</div>
-			</div>
-		</div>
+				</div> <!-- modal-footer -->
+				
+			</div> <!-- modal-content -->
+		</div> <!-- modal-dialog -->
 	</div> <!-- modal -->
 <script type="text/javascript">
 const reportModalEl = document.getElementById('reportModal');
 const reportModal = new bootstrap.Modal(reportModalEl);
+
+document.addEventListener('DOMContentLoaded', function(){
+	let path = window.location.pathname.split('/')[2]; // product, chat, deal, review 
+	switch (path) {
+	case 'product':
+		getReportCategory2(1);
+		break;
+	case 'chat':
+		getReportCategory2(2);
+		break;
+	case 'deal':
+		getReportCategory2(3);
+		break;
+	case 'review':
+		getReportCategory2(4);
+		break;
+	};
+});
 
 // modal show event
 reportModalEl.addEventListener('show.bs.modal', function(e){
@@ -67,21 +87,14 @@ reportModalEl.addEventListener('show.bs.modal', function(e){
 // modal hide event
 reportModalEl.addEventListener('hide.bs.modal', function(e){
 	console.log('hide modal');
+	document.querySelector('input[type=radio]').checked = true;
+	document.getElementById('report_image').value = '';
 	switchWriteable(false);
-	radioNodes[0].checked = 'true';
 });
 
 //close button event
 document.querySelector('.btn-close').addEventListener('click', function(e){
 	reportModal.hide();
-}); 
-
-// radio click event
-const radioNodes = document.querySelectorAll('.report-body input[type=radio]');
-radioNodes.forEach((el, i) => {
-	el.addEventListener('click', function(){
-		switchWriteable(i == radioNodes.length-1);
-	});
 }); 
 
 // textarea input event
@@ -91,7 +104,8 @@ document.querySelector('.report-textarea > textarea').addEventListener('input', 
 
 // submit button event
 document.querySelector('.modal-submit').addEventListener('click', function(e){
-	if(document.querySelector('input[type=radio]:checked').value == radioNodes[radioNodes.length-1].value && document.querySelector('.report-textarea > textarea').value.length == 0){
+	let lastRadio = document.querySelectorAll('input[type=radio]');
+	if(document.querySelector('input[type=radio]:checked').value == lastRadio[lastRadio.length-1].value && document.querySelector('.report-textarea > textarea').value.length == 0){
 		alert('신고 내용을 입력해 주세요.');
 		document.querySelector('.report-textarea > textarea').focus();
 	} else {
@@ -135,5 +149,35 @@ function switchWriteable(result){
 		textarea.nextElementSibling.firstChild.textContent = 0;
 		textarea.removeAttribute('placeholder');
 	}
+};
+
+function getReportCategory2(report_category1_no){
+	fetch('/usMarket/fetch/reportCategory/'+report_category1_no)
+	.then((response) => response.json())
+	.then((json) => {
+		console.log(json);
+		
+		json.forEach((el, i) => {
+			var label = document.createElement('label');
+			var radio = document.createElement('input');
+			radio.setAttribute('type', 'radio');
+			radio.name = 'report_category2_no';
+			radio.value = el.REPORT_CATEGORY2_NO;
+			if(i == 0){
+				radio.checked = true;
+			}
+			label.appendChild(radio);
+			var categoryName = document.createElement('span');
+			categoryName.textContent = el.REPORT_CATEGORY2_NAME;
+			label.appendChild(categoryName);
+			
+			label.addEventListener('click', function(){
+				switchWriteable(i == json.length - 1);
+			}); // lebal click event
+			
+			document.querySelector('.report-category').appendChild(label);
+		});
+		
+	}).catch((error) => console.log("error: "+error));
 };
 </script>

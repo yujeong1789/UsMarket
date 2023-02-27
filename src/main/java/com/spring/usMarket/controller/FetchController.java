@@ -24,6 +24,7 @@ import com.spring.usMarket.domain.deal.DealInsertDto;
 import com.spring.usMarket.service.chat.ChatService;
 import com.spring.usMarket.service.deal.DealService;
 import com.spring.usMarket.service.product.ProductService;
+import com.spring.usMarket.service.report.ReportService;
 import com.spring.usMarket.utils.SessionParameters;
 
 @RestController
@@ -31,14 +32,11 @@ import com.spring.usMarket.utils.SessionParameters;
 public class FetchController {
 	private static final Logger logger = LoggerFactory.getLogger(FetchController.class);
 	
-	@Autowired
-	ProductService productService;
+	@Autowired ProductService productService;
+	@Autowired DealService dealService;
+	@Autowired ChatService chatService;
+	@Autowired ReportService reportService;
 	
-	@Autowired
-	DealService dealService;
-	
-	@Autowired
-	ChatService chatService;
 	
 	@PostMapping("/sessionCheck")
 	public String sessionCheck(HttpServletRequest request) {
@@ -238,5 +236,24 @@ public class FetchController {
 		}
 		
 		return updateCnt;
+	}
+	
+	@GetMapping("/reportCategory/{report_category1_no}")
+	public List<Map<String, Object>> reportCategory(@PathVariable String report_category1_no){
+		logger.info("report_category1_no = {}", report_category1_no);
+		List<Map<String, Object>> reportCategoryMap = new ArrayList<>();
+		
+		try {
+			reportCategoryMap = reportService.getReportCategory2(Integer.parseInt(report_category1_no));
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return reportCategoryMap;
+	}
+	
+	@PostMapping("/report")
+	public void report(HttpServletRequest request, @RequestBody Map<String, Object> paramMap) {
+		logger.info("paramMap.toString() = {}", paramMap.toString());
 	}
 }
