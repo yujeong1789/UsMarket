@@ -28,10 +28,6 @@
 	padding: 20px 30px 20px 30px;
 }
 
-.modal-body div{
-	margin-bottom: 30px;
-}
-
 .modal-body .report-title{
 	font-weight: 700;
 	font-size: 16px;
@@ -39,7 +35,6 @@
 
 .modal-body .report-body{
 	width: 100%;
-	margin-top: 10px;
 }
 
 .modal-body .report-info{
@@ -61,12 +56,25 @@
 	margin: 0px;
 }
 
+.report-category{
+	display: flex;
+	flex-wrap: wrap;
+	padding: 0px 5px 0px 5px;
+}
+
+.report-category > label{
+	margin-right: 40px;
+}
+
+.report-category input[type=radio]{
+	margin-right: 5px;
+}
+
 .report-textarea{
 	padding: 15px 20px 15px 20px;
 	width: 100%;
 	background-color: #F5F5F5;
 	border: 1px solid #CFCFCF;
-	margin-top: 10px;
 }
 
 .report-textarea > textarea{
