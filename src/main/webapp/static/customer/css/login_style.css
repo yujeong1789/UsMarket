@@ -46,7 +46,7 @@
 	font-size: 18px; 
 	color: #999999;
 	transition: all .5s ease;
-	display: none;
+	display: block;
 }
 .int-area text {
 	color : red;
@@ -148,8 +148,35 @@ input:-webkit-autofill:active {
 	-webkit-text-fill-color: #000000 !important;
   }
 
+#preview{
+	width : 100%;
+	margin: auto;
+}
 
+.profile_box{
+	position: relative;
+	margin:auto; 
+	width: 100%;
+}
 
+#profile_img{
+	display:block; 
+	margin:auto; 
+	width:100px; 
+	height:100px; 
+	border: 1px solid #999999; 
+	border-radius: 50%;
+	object-fit: cover;
+	position: absolut;
+}
+
+.file__img__delete{
+	width: 20px;
+	object-fit: cover;
+	position: absolute;
+	cursor: pointer;
+	display: none;
+}
   
 
 
