@@ -1,5 +1,7 @@
 package com.spring.usMarket.controller;
 
+import java.text.SimpleDateFormat;
+import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
@@ -23,7 +25,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import com.spring.usMarket.domain.member.MemberDto;
+import com.spring.usMarket.domain.product.ProductDto;
 import com.spring.usMarket.service.member.MemberService;
+import com.spring.usMarket.utils.PageHandler;
+import com.spring.usMarket.utils.SearchCondition;
 
 import lombok.RequiredArgsConstructor;
 
@@ -37,7 +42,11 @@ public class MemberController {
 	private final JavaMailSender mailSender;
 
 	@GetMapping("/login")
-	public String login(MemberDto member) {
+	public String login(HttpServletRequest request) {
+		String uri = request.getHeader("Referer");
+		if (uri != null & !uri.contains("/login")) {
+			request.getSession().setAttribute("prevPage", uri);
+		}
 		return "member/login";
 	}
 
@@ -62,7 +71,7 @@ public class MemberController {
 			logger.info("로그인 성공");
 			httpSession.setAttribute("userId", member_id);
 			httpSession.setAttribute("userNo", member.get("MEMBER_NO"));
-			return "redirect:/";
+			return "redirect:" + request.getSession().getAttribute("prevPage");
 		} else {
 			logger.info("비밀번호 오류");
 			String msg = "잘못된 입력입니다.";
@@ -79,11 +88,12 @@ public class MemberController {
 		logger.info("logout메서드 진입");
 		HttpSession session = request.getSession();
 		session.invalidate();
-		return "redirect:/";
+		return "redirect:" + request.getHeader("Referer");
 	}
 
 	@GetMapping("/join")
-	public String join(MemberDto member) {
+	public String join(HttpServletRequest request) {
+		logger.info("prevPage : "+request.getSession().getAttribute("prevPage"));
 		return "member/join";
 	}
 
@@ -109,8 +119,7 @@ public class MemberController {
 			e.printStackTrace();
 			return "member/join";
 		}// try-catch
-		
-		return "redirect:/";
+		return "redirect:" + request.getSession().getAttribute("prevPage");
 	}
 
 	@ResponseBody
@@ -179,15 +188,33 @@ public class MemberController {
 	} // end sendMailTest()
 
 	@GetMapping("/mypage")
-	public void info(Integer member_no, HttpServletRequest request, Model model) {
+	public String info(HttpServletRequest request, Model model, SearchCondition sc) {
+		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy년 MM월 dd일");
+		sc.setPageSize(15);
 		try {
-			Map<Integer, Object> memberInfo = memberService.getMemberInfo(member_no);
+			Integer member_no = Integer.parseInt(String.valueOf(request.getSession().getAttribute("userNo")));
+			logger.info("member_id = {}, member_no = {}", request.getSession().getAttribute("userId").toString(), member_no);
+			//session으로 넘어온 회원 정보
+						
+			MemberDto memberInfo = memberService.getMemberInfo(member_no);
+			model.addAttribute("memberInfo", memberInfo);
+			model.addAttribute("regdate",dateFormat.format(memberInfo.getMember_regdate()));
+			//session에서 읽은 정보로 회원 정보 불러옴
+
+			List<ProductDto> mypageProductList = memberService.getMypageProduct(member_no);
+			int totalCnt = memberService.getMypageProductCount(member_no);
 			
-			model.addAttribute("productInfo", memberInfo);
+			PageHandler pageHandler = new PageHandler(totalCnt, sc);
 			
+			model.addAttribute("mypageProductList", mypageProductList);
+			model.addAttribute("Page", sc.getPage());
+			model.addAttribute("PageSize", sc.getPageSize());
+			model.addAttribute("ph", pageHandler);
+			//마이페이지 상품 정보
 		} catch (Exception e) {
 			e.printStackTrace();
 		} // try-catch
+		return "member/mypage";
 	}
 	
 }
