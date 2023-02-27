@@ -1,8 +1,10 @@
 package com.spring.usMarket.service.member;
 
 import java.io.IOException;
+import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -22,6 +24,7 @@ import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.amazonaws.util.IOUtils;
 import com.spring.usMarket.dao.member.MemberDao;
 import com.spring.usMarket.domain.member.MemberDto;
+import com.spring.usMarket.domain.product.ProductDto;
 
 import lombok.RequiredArgsConstructor;
 
@@ -115,8 +118,30 @@ public class MemberServiceImpl implements MemberService {
 	}
 
 	@Override
-	public Map<Integer, Object> getMemberInfo(Integer member_no) throws Exception {
-		return memberDAO.memberSearche(member_no);
+	public MemberDto getMemberInfo(Integer member_no) throws Exception {
+		MemberDto member = memberDAO.memberSearch(member_no);
+		logger.info("회원정보 = {}", member.toString());
+		
+		return member;
 	}
 
+	@Override
+	@Transactional(rollbackFor = SQLException.class, readOnly = true)
+	public List<ProductDto> getMypageProduct(Integer member_no) throws Exception {
+		
+		List<ProductDto> mypageProduct = memberDAO.searchMypageProduct(member_no);
+		logger.info("마이 페이지 상품.size() = {}", mypageProduct.size());
+		
+		return mypageProduct;
+	}
+
+	@Override
+	@Transactional(rollbackFor = SQLException.class, readOnly = true)
+	public int getMypageProductCount(Integer member_no) throws Exception {
+		
+		int productCount = memberDAO.searchMypageProductCount(member_no);
+		logger.info("전체 상품 수 = {}", productCount);
+		
+		return productCount;
+	}
 }
