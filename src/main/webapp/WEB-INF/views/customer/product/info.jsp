@@ -345,7 +345,10 @@
 				if(isEmpty(document.getElementById('loginNo').dataset.no)){
 					location.href = '${pageContext.request.contextPath}/member/login';
 				} else{
-					reportModal.show();
+					document.getElementById('report_member_no').value = seller_no;
+					document.getElementById('report_info').value = `${param.product_no}`;
+					document.querySelector('.report-info').textContent = document.getElementById('fetch__member__nickname').textContent;
+					reportModal.show();		
 				}
 			});
 		} // if

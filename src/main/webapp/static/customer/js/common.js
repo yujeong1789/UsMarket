@@ -72,8 +72,14 @@ let msToDate = function(createdAt){
 	let milliSeconds = new Date(createdAt);
 	
 	return `${milliSeconds.getFullYear()}/${leftPad(milliSeconds.getMonth()+1)}/${leftPad(milliSeconds.getDate())}` 
-}
+};
 
 let getFormData = function(form){
 	return Object.fromEntries(new FormData(form).entries());
-}
+};
+
+let getFileSize = function(filesize) {
+    var text = ['Bytes', 'KB', 'MB', 'GB', 'TB', 'PB'];
+    var e = Math.floor(Math.log(filesize) / Math.log(1024));
+    return (filesize / Math.pow(1024, e)).toFixed(0) + text[e];
+};
