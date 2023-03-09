@@ -340,6 +340,13 @@ function getChatMember(member_no, element){
 
 // 신고하기
 document.getElementById('chat-report').addEventListener('click', function(){
-	reportModal.show();
+	if(isEmpty(document.getElementById('loginNo').dataset.no)){
+		location.href = '${pageContext.request.contextPath}/member/login';
+	} else{
+		document.querySelector('.report-info').textContent = document.querySelector('[data-open="Y"]').querySelector('p').textContent;
+		document.getElementById('report_member_no').value = document.querySelector('[data-open="Y"]').getAttribute('data-to');
+		document.getElementById('report_info').value = document.querySelector('[data-open="Y"]').getAttribute('data-room');
+		reportModal.show();
+	}
 });
 </script>

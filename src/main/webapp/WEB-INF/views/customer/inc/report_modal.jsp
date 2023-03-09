@@ -14,14 +14,14 @@
 				
 					<div class="report-into mb-4">
 						<span class="report-title">신고대상</span>
-						<div class="report-body report-info mt-2">				
-						</div>
+						<div class="report-body report-info mt-2"></div>
 					</div>
 					
 					<div class="report-content">
 						<form id="addReportForm" action="<c:url value='/fetch/report'/>" method="post" enctype="multipart/form-data">
 							<span class="report-title">신고사유</span>
 							
+							<input type="hidden" id="report_no" name="report_no" readonly="readonly">
 							<input type="hidden" id="report_category1_no" name="report_category1_no" readonly="readonly">
 							<input type="hidden" id="report_member_no" name="report_member_no" readonly="readonly">
 							<input type="hidden" id="report_info" name="report_info" readonly="readonly">
@@ -34,9 +34,12 @@
 									<div><p>0</p><p>/300</p></div>
 								</div>
 								
-								<span class="report-title">첨부 이미지</span>
-								<div class="report_file mt-2">
-									<input type="file" id="report_image" name="report_image">
+								<span class="report-title">첨부 이미지 (최대 5MB)</span>
+								<div class="report-file mt-2">
+									<label for="report_image">파일 선택</label>
+									<span class="upload-name"></span>
+									<img class="upload-remove" alt="삭제" src="<c:url value='/resources/customer/img/upload_remove.png'/>">
+									<input type="file" id="report_image" accept="image/jpg, image/jpeg, image/png">
 								</div>
 							</div>
 						</form>
@@ -89,10 +92,11 @@ reportModalEl.addEventListener('hide.bs.modal', function(e){
 	console.log('hide modal');
 	document.querySelector('input[type=radio]').checked = true;
 	document.getElementById('report_image').value = '';
+	document.querySelector('.upload-remove').click();
 	switchWriteable(false);
 });
 
-//close button event
+// close button event
 document.querySelector('.btn-close').addEventListener('click', function(e){
 	reportModal.hide();
 }); 
@@ -102,6 +106,28 @@ document.querySelector('.report-textarea > textarea').addEventListener('input', 
 	this.nextElementSibling.firstChild.textContent = this.value.length;
 }); 
 
+
+// input file event
+document.getElementById('report_image').addEventListener('change', function(e){
+	var maxSize = 5 * 1024 * 1024;
+	
+	if(this.files[0].size > maxSize){
+		alert('첨부파일 사이즈는 5MB 이내로 등록 가능합니다.');
+	} else{
+		console.log('통과');
+		document.querySelector('.upload-name').textContent = this.files[0].name;
+		document.querySelector('.upload-remove').style.visibility = 'visible';
+	}
+	
+});
+
+// upload remove event
+document.querySelector('.upload-remove').addEventListener('click', function(e){
+	document.getElementById('report_image').value = '';
+	document.querySelector('.upload-name').textContent = '';
+	this.style.visibility = 'hidden';
+});
+
 // submit button event
 document.querySelector('.modal-submit').addEventListener('click', function(e){
 	let lastRadio = document.querySelectorAll('input[type=radio]');
@@ -110,22 +136,24 @@ document.querySelector('.modal-submit').addEventListener('click', function(e){
 		document.querySelector('.report-textarea > textarea').focus();
 	} else {
 		if(confirm('해당 상품을 신고하시겠습니까?')){
-			var formData = getFormData(document.getElementById('addReportForm'));
-			console.log(JSON.stringify(formData));
-			/*
+			document.getElementById('report_no').value = 'R'+getOrderNo(9);
+			var formData = new FormData(document.getElementById('addReportForm'));
+			
+			if(document.getElementById('report_image').files[0] != null){
+				formData.append('image', document.getElementById('report_image').files[0]);				
+			}
+			
 			// fetch
 			fetch('/usMarket/fetch/report', {
 				method: 'POST',
-				headers: {
-					'Content-type' : 'application/json'
-				},
-				body: JSON.stringify(formData),
+				body: formData,
 			})
 			.then((response) => response.text())
 			.then((text) => {
 				console.log(text);
 			}).catch((error) => console.log('error: '+error));
-			*/
+			
+			
 			alert('신고가 정상적으로 접수되었습니다.');
 			reportModal.hide();
 		}
@@ -178,6 +206,6 @@ function getReportCategory2(report_category1_no){
 			document.querySelector('.report-category').appendChild(label);
 		});
 		
-	}).catch((error) => console.log("error: "+error));
+	}).catch((error) => console.log('error: '+error));
 };
 </script>

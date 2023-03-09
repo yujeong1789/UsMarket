@@ -1,5 +1,6 @@
 package com.spring.usMarket.controller;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -16,11 +17,15 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.spring.usMarket.domain.chat.ChatDto;
 import com.spring.usMarket.domain.deal.DealInsertDto;
+import com.spring.usMarket.domain.report.ReportInsertDto;
 import com.spring.usMarket.service.chat.ChatService;
 import com.spring.usMarket.service.deal.DealService;
 import com.spring.usMarket.service.product.ProductService;
@@ -253,7 +258,11 @@ public class FetchController {
 	}
 	
 	@PostMapping("/report")
-	public void report(HttpServletRequest request, @RequestBody Map<String, Object> paramMap) {
-		logger.info("paramMap.toString() = {}", paramMap.toString());
+	public void report(MultipartHttpServletRequest request, ReportInsertDto dto) {
+		if(request.getFile("image") != null) {			
+			logger.info("file.toString() = {}", request.getFile("image").toString());
+		}
+		dto.setMember_no(Integer.parseInt(SessionParameters.getUserNo(request)));
+		logger.info("dto.toString() = {}", dto.toString());
 	}
 }
