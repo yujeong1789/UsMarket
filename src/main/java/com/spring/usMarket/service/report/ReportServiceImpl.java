@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.spring.usMarket.dao.report.ReportDao;
+import com.spring.usMarket.domain.report.ReportInsertDto;
 
 @Service
 public class ReportServiceImpl implements ReportService{
@@ -18,11 +19,18 @@ public class ReportServiceImpl implements ReportService{
 	
 	@Autowired ReportDao reportDao;
 
+	public String getResult(int rowCnt) {
+		return rowCnt == 1 ? "OK" : "NOT_OK";
+	}
+	
 	@Override
 	@Transactional(rollbackFor = SQLException.class)
-	public int addReport(Map<String, Object> map) throws Exception {
-		// TODO Auto-generated method stub
-		return 0;
+	public int addReport(ReportInsertDto dto) throws Exception {
+		
+		int rowCnt = reportDao.insertReport(dto);
+		logger.info("신고 등록 결과 = {}", getResult(rowCnt));
+		
+		return rowCnt;
 	}
 
 	@Override
