@@ -195,23 +195,6 @@
 		const product_no = `${productInfo.PRODUCT_NO}`;
 		const product_state = `${productInfo.PRODUCT_STATE_NO}`;
 		
-		// modal show event
-		/*
-		reportModalEl.addEventListener('show.bs.modal', function(e){
-			console.log('show modal');
-			document.querySelector('.report-info > p:first-child').textContent = seller_id.substr(0, 3)+'****';
-			document.querySelector('.report-info > p:last-child').textContent = `${productInfo.PRODUCT_NAME}`;
-			document.getElementById('report_member_no').value = seller_no;						
-		});
-		
-		// modal hide event
-		reportModalEl.addEventListener('hide.bs.modal', function(e){
-			console.log('hide modal');
-			document.querySelector('input[type="radio"]').checked = 'true';
-			switchWriteable(false);
-		});
-		*/
-		
 		console.log("product_no = "+product_no);
 		console.log("current_id = "+current_id);
 		console.log("seller_no = "+seller_no);

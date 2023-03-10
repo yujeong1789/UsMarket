@@ -108,5 +108,15 @@ public class ChatServiceImpl implements ChatService{
 		return chatMemberMap;
 	}
 
+	@Override
+	@Transactional(rollbackFor = SQLException.class, readOnly = true)
+	public int getNewChat(Integer member_no) throws Exception {
+		
+		int rowCnt = chatDao.searchNewChat(member_no);
+		logger.info("읽지 않은 메세지 = {}", rowCnt);
+		
+		return rowCnt;
+	}
+
 
 }

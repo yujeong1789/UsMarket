@@ -23,6 +23,7 @@
 							<a href="<c:url value='/member/mypage'/>">내상점</a>
 							<span>|</span>
 							<a href="<c:url value='/chat/list'/>">채팅</a>
+							<img src="<c:url value='/resources/customer/img/new_chat_icon.png'/>">
 						</div>
 					</div> <!-- hero__search -->
 				</div>
@@ -57,16 +58,17 @@
 		
 
 		fetch("/usMarket/fetch/category")
-			.then((response) => response.json())
-			.then((json) => {
-				json.forEach((el, i) => {
-					const li = document.createElement('li');
-					const innerHTML_ = '<a id='+el.PRODUCT_CATEGORY1_NO+' href=${pageContext.request.contextPath}/product/list?category1='+el.PRODUCT_CATEGORY1_NO+'>'+el.PRODUCT_CATEGORY1_NAME+'</a>'; 
-					li.innerHTML+=innerHTML_;
-					ul__allCategory.appendChild(li);
-				});
-			}).catch((error) => console.log("error: "+error)); // fetch
+		.then((response) => response.json())
+		.then((json) => {
+			json.forEach((el, i) => {
+				const li = document.createElement('li');
+				const innerHTML_ = '<a id='+el.PRODUCT_CATEGORY1_NO+' href=${pageContext.request.contextPath}/product/list?category1='+el.PRODUCT_CATEGORY1_NO+'>'+el.PRODUCT_CATEGORY1_NAME+'</a>'; 
+				li.innerHTML+=innerHTML_;
+				ul__allCategory.appendChild(li);
+			});
+		}).catch((error) => console.log("error: "+error)); // fetch
 			
+		
 		const searchForm = document.getElementById('searchForm');
 		searchForm.addEventListener('submit', function(e){
 			if(document.getElementById('searchKeyword').value.length < 2){
@@ -75,5 +77,15 @@
 			};
 		});
 		
+		
+		if(!isEmpty(document.getElementById('loginNo').getAttribute('data-no'))){
+			fetch("/usMarket/fetch/newchat")
+			.then((response) => response.text())
+			.then((text) => {
+				if(text > 0){
+					document.querySelector('.hero__search__mypage > img').style.visibility = 'visible';
+				}
+			}).catch((error) => console.log("error: "+error));
+		}
 	});
 </script>

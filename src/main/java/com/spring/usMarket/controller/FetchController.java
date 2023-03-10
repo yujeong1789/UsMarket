@@ -280,4 +280,19 @@ public class FetchController {
 		
 		return result;
 	}
+	
+	@GetMapping("/newchat")
+	public int newChat(HttpServletRequest request) {
+		
+		Integer member_no = Integer.parseInt(SessionParameters.getUserNo(request));
+		int result = 0;
+		
+		try {
+			result = chatService.getNewChat(member_no);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return result;
+	}
 }

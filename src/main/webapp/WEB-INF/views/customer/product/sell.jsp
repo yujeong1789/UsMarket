@@ -284,8 +284,10 @@
 		
 		if(fileArray.length > 4){
 			alert('첨부파일은 최대 5개까지 등록 가능합니다.');
+			this.value = '';
 		}else if(this.files[0].size > maxSize){
 			alert('첨부파일 사이즈는 5MB 이내로 등록 가능합니다.');
+			this.value = '';
 		} else{ 
 			// 파일 사이즈 유효성 검사 통과하면 미리보기 함수 호출
 			console.log('file size pass');
@@ -316,6 +318,7 @@
  					node.remove();
 				}); // delete click event
  				document.getElementById('product__img__preview').appendChild(node);
+				document.getElementById('product_img').value = '';
 			}; // onload
 			reader.readAsDataURL(value.files[0]);
 		} // if
