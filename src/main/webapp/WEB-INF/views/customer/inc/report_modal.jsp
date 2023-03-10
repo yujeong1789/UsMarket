@@ -150,12 +150,9 @@ document.querySelector('.modal-submit').addEventListener('click', function(e){
 			})
 			.then((response) => response.text())
 			.then((text) => {
-				console.log(text);
+				alert(text);
+				reportModal.hide();
 			}).catch((error) => console.log('error: '+error));
-			
-			
-			alert('신고가 정상적으로 접수되었습니다.');
-			reportModal.hide();
 		}
 	}
 });
