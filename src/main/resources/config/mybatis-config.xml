@@ -30,6 +30,9 @@
 		 	
 		<typeAlias type="com.spring.usMarket.domain.member.MemberDto"
 		 alias="memberDto"/>
+		 
+		<typeAlias type="com.spring.usMarket.domain.report.ReportInsertDto"
+		 alias="reportInsertDto"/>
 	</typeAliases>
 	
 </configuration>
