@@ -14,4 +14,5 @@ public interface ChatService {
 	int addChat(ChatDto dto) throws Exception;
 	List<ChatDto> getChatInfo(String room_no) throws Exception;
 	Map<String, Object> getChatMember(Integer member_no) throws Exception;
+	int getNewChat(Integer member_no) throws Exception;
 }
