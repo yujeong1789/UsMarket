@@ -1,6 +1,5 @@
 package com.spring.usMarket.controller;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -17,9 +16,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -29,6 +26,7 @@ import com.spring.usMarket.domain.report.ReportInsertDto;
 import com.spring.usMarket.service.chat.ChatService;
 import com.spring.usMarket.service.deal.DealService;
 import com.spring.usMarket.service.product.ProductService;
+import com.spring.usMarket.service.report.ReportFileService;
 import com.spring.usMarket.service.report.ReportService;
 import com.spring.usMarket.utils.SessionParameters;
 
@@ -41,7 +39,7 @@ public class FetchController {
 	@Autowired DealService dealService;
 	@Autowired ChatService chatService;
 	@Autowired ReportService reportService;
-	
+	@Autowired ReportFileService reportFileService;
 	
 	@PostMapping("/sessionCheck")
 	public String sessionCheck(HttpServletRequest request) {
@@ -257,12 +255,29 @@ public class FetchController {
 		return reportCategoryMap;
 	}
 	
-	@PostMapping("/report")
-	public void report(MultipartHttpServletRequest request, ReportInsertDto dto) {
-		if(request.getFile("image") != null) {			
-			logger.info("file.toString() = {}", request.getFile("image").toString());
-		}
-		dto.setMember_no(Integer.parseInt(SessionParameters.getUserNo(request)));
-		logger.info("dto.toString() = {}", dto.toString());
+	@PostMapping(value="/report", produces="text/plain; charset=UTF-8")
+	public String report(MultipartHttpServletRequest request, ReportInsertDto dto) {
+		
+		String result = "신고 등록에 실패했습니다.";
+		
+		// 이미지 업로드 작업
+		try {
+			if(request.getFile("image") != null) {
+				String realPath = reportFileService.upload(request.getFile("image"), dto.getReport_no());
+				dto.setReport_image(realPath);
+			} // if
+					
+			dto.setMember_no(Integer.parseInt(SessionParameters.getUserNo(request)));
+			logger.info("dto.toString() = {}", dto.toString());
+			
+			int rowCnt = reportService.addReport(dto);
+			
+			if(rowCnt == 1) result = "신고가 정상적으로 접수되었습니다.";
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		} // try-catch
+		
+		return result;
 	}
 }
