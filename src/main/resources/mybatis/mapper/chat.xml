@@ -61,4 +61,9 @@
 		 values(#{room_no}, #{chat_from}, #{chat_to}, #{chat_content}, #{chat_time}, #{chat_read})
 	</insert>
 	
+	<select id="searchNewChat" parameterType="int" resultType="int">
+		SELECT COUNT(*) AS NEW_CHAT FROM chat
+		 WHERE chat_to = #{member_no} AND chat_read = 'N'
+	</select>
+	
 </mapper>
