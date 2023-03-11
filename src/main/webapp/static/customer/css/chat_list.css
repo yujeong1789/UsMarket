@@ -10,7 +10,7 @@
 }
 
 .chat-list-layout > div{
-	width: 570px;
+	width: 50%;
 	height: 700px;
 }
 
@@ -227,7 +227,6 @@
 
 .chat_date{
 	display: flex;
-	flex-basis: 100%;
 	padding: 20px 0px 20px 0px;
 	color: #ababab;
 }
@@ -260,7 +259,7 @@
 
 .textarea{
 	height: 50px;
-	width: 520px;
+	width: 100%;
 	padding: 0px 20px 0px 20px;
 	border-radius: 25px;
 	background-color: #fafafa;

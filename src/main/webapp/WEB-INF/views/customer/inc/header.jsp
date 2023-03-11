@@ -19,35 +19,28 @@
 
     <!-- Header Section Begin -->
     <header class="header">
-        <div class="header__top">
-            <div class="container">
-                <div class="row">
-                    <div class="col-lg-6 col-md-6">
-                        <div class="header__top__left">
-                            <div class="header__top__left__favorite">
-                            	<img src="<c:url value='/resources/customer/img/favorite.png' />">
-                            	<a id="header_favorite" href="#">즐겨찾기</a>
+		<div class="row border__btm">
+           	<div class="container">
+				<div class="header__container">
+					<div class="header__top__left">
+						<div class="header__top__left__favorite">
+							<img src="<c:url value='/resources/customer/img/favorite.png' />">
+                           	<a id="header_favorite" href="#">즐겨찾기</a>
+						</div>
+					</div>
+					<div class="header__top__right">
+						<div class="header__top__right__auth">
+							<input type="hidden" id="loginId" data-id="${loginId }" />
+                            <input type="hidden" id="loginNo" data-no="${loginNo }" />
+                            <div>id = ${empty loginId ? '없음' : loginId}, no = ${empty loginNo ? '없음' : loginNo }</div> <!-- 확인용, 추후 삭제 -->
+                            <div class="header__top__right__auth__login">
+                            	<a href="<c:url value='${loginOutLink}' />">${loginOut }</a>
                             </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-6 col-md-6">
-                        <div class="header__top__right">
-                            <div class="header__top__right__auth">
-                            
-                            	<input type="hidden" id="loginId" data-id="${loginId }" />
-                            	<input type="hidden" id="loginNo" data-no="${loginNo }" />
-                            	
-                            	id = ${empty loginId ? '없음' : loginId}, no = ${empty loginNo ? '없음' : loginNo } <!-- 확인용, 추후 삭제 -->
-                            	
-                            	<div class="header__top__right__auth__login">
-                            		<a href="<c:url value='${loginOutLink}' />">${loginOut }</a>
-                            	</div>
-                            	<div><a href="#">고객센터</a></div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+                            <div><a href="#">고객센터</a></div>
+						</div>
+					</div>
+				</div>
+			</div>
         </div>
     </header>
 	<!-- Header Section End -->

@@ -7,6 +7,8 @@ import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import com.spring.usMarket.domain.report.ReportInsertDto;
+
 @Repository
 public class ReportDaoImpl implements ReportDao{
 	@Autowired
@@ -14,8 +16,8 @@ public class ReportDaoImpl implements ReportDao{
 	private static String namespace = "com.mybatis.mapper.report.";
 
 	@Override
-	public int insertReport(Map<String, Object> map) throws Exception {
-		return session.insert(namespace+"insertReport", map);
+	public int insertReport(ReportInsertDto dto) throws Exception {
+		return session.insert(namespace+"insertReport", dto);
 	}
 	
 	@Override

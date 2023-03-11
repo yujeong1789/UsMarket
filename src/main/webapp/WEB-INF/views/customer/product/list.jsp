@@ -8,10 +8,10 @@
 <c:set var="list" value="${productList }"/>
 
 <section class="products__section">
-	<div class="container">
-		<div class="row">
+	<div class="row">
+		<div class="container">
 		<c:if test="${empty param.keyword }">
-			<div class="col-lg-12">
+			<div class="d-flex">
 				<a class="home" href="<c:url value='/'/>">홈</a>
 				<span class="home__span"></span>
 				<div class="category__selected" id="category__selected">
