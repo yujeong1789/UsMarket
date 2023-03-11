@@ -376,9 +376,11 @@
 			const tagArr = tag.split(' ');
 			
 			tagArr.forEach((el) => {
-				let appendTag = "<a href='${pageContext.request.contextPath}/product/list?keyword="+el+"'>"+el+"</a>";
-				tagElement.innerHTML += appendTag;
-			});			
+				let appendTag = document.createElement('a');
+				appendTag.setAttribute('href', '${pageContext.request.contextPath}/product/list?keyword='+encodeURIComponent(el));
+				appendTag.textContent = el;
+				tagElement.appendChild(appendTag);
+			});		
 		}
 		
 	});
