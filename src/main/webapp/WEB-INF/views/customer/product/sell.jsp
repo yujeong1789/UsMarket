@@ -4,9 +4,7 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@taglib prefix='form' uri="http://www.springframework.org/tags/form"%>
 
-<link rel="stylesheet"
-	href="<c:url value='/resources/customer/css/product_sell.css'/>"
-	type="text/css">
+<link rel="stylesheet" href="<c:url value='/resources/customer/css/product_sell.css'/>" type="text/css">
 <section class="product__sell__section">
 	<div class="row">
 		<div class="container">

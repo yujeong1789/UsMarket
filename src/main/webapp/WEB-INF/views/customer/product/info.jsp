@@ -10,17 +10,14 @@
 	<input type="hidden" id="report_type" value="1">
 	<jsp:include page="/WEB-INF/views/customer/inc/report_modal.jsp"/>
 	
-	<div class="container">
-		<div class="row">
-			<!-- 신고하기 모달 -->
-			<div class="col-lg-12">
-				<!-- 카테고리 영역 -->
-				<a class="home" href="<c:url value='/'/>">홈</a>
-				<span class="home__span"></span>
-				<a id="info__category1" href="<c:url value='/product/list?category1=${productInfo.PRODUCT_CATEGORY1_NO }'/>">${productInfo.PRODUCT_CATEGORY1_NAME }</a>
-				<span class="before__span"></span>
-				<a id="info__category2" href="<c:url value='/product/list?category1=${productInfo.PRODUCT_CATEGORY1_NO }&category2=${productInfo.PRODUCT_CATEGORY2_NO }'/>">${productInfo.PRODUCT_CATEGORY2_NAME}</a>
-			</div>
+	<div class="row">
+		<div class="container">
+			<!-- 카테고리 영역 -->
+			<a class="home" href="<c:url value='/'/>">홈</a>
+			<span class="home__span"></span>
+			<a id="info__category1" href="<c:url value='/product/list?category1=${productInfo.PRODUCT_CATEGORY1_NO }'/>">${productInfo.PRODUCT_CATEGORY1_NAME }</a>
+			<span class="before__span"></span>
+			<a id="info__category2" href="<c:url value='/product/list?category1=${productInfo.PRODUCT_CATEGORY1_NO }&category2=${productInfo.PRODUCT_CATEGORY2_NO }'/>">${productInfo.PRODUCT_CATEGORY2_NAME}</a>
 			
 			<div class="product__info">
 				<!-- 상품 정보 영역 -->
@@ -112,13 +109,13 @@
 							
 							<!-- 판매 중이며 내 상품일 경우 보여질 버튼 -->
 							<div class="product__my__buttons" id="product__my__buttons">
-							<form id="productModifyForm" method="post" action="<c:url value='/product/remove'/>">
-								<input type="hidden" name="product_no">
-								<input type="hidden" name="product_state_no">
-							</form>
 								<div class="btn__my__store" id="btn__my__store">
 									<span>내 상점 관리하기</span>
 								</div>
+								<form id="productModifyForm" method="post" action="<c:url value='/product/remove'/>">
+									<input type="hidden" name="product_no">
+									<input type="hidden" name="product_state_no">
+								</form>
 								<div class="btn__product__delete" id="btn__product__delete">
 									<span>삭제하기</span>
 								</div>
@@ -379,9 +376,11 @@
 			const tagArr = tag.split(' ');
 			
 			tagArr.forEach((el) => {
-				let appendTag = "<a href='${pageContext.request.contextPath}/product/list?keyword="+el+"'>"+el+"</a>";
-				tagElement.innerHTML += appendTag;
-			});			
+				let appendTag = document.createElement('a');
+				appendTag.setAttribute('href', '${pageContext.request.contextPath}/product/list?keyword='+encodeURIComponent(el));
+				appendTag.textContent = el;
+				tagElement.appendChild(appendTag);
+			});		
 		}
 		
 	});
