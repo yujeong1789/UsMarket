@@ -12,15 +12,15 @@
 
 .product__info{
 	width: 100%;
-	margin: 50px 15px 0px 15px;
+	margin-top: 50px;
 	display: flex;
 	padding-bottom: 50px;
+	justify-content: space-between;
 }
 
 
 .product__info__img{
-	width: 50%;
-	margin-right: 50px;
+	width: 47%;
 	border: 1px solid #eeeeee; /* 임시 */
 }
 
@@ -28,12 +28,12 @@
 .product__info__img img{
 	width: 522px;
 	height: 492px;
-	object-fit: contain;
+	object-fit: cover;
 }
 
 
 .product__info__div{
-	width: 50%;
+	width: 47%;
 	display: flex;
 	flex-direction: column;
 	justify-content: space-between;
@@ -184,6 +184,11 @@
 	justify-content: space-between;
 }
 
+.product__my__buttons > form{
+	width: 0px;
+	height: 0px;
+}
+
 .product__my__buttons div{
 	height: 56px;
 	cursor: pointer;
@@ -229,7 +234,7 @@
 
 
 .product__buttons div{
-	width: 165px;
+	width: 150px;
 	height: 56px;
 	cursor: pointer;
 	display: flex;
@@ -279,7 +284,7 @@
 
 .product__content__layout{
 	width: 100%;
-	margin: 50px 15px 0px 15px;
+	margin-top: 50px;
 	display: flex;
 	border-top: 1px solid #eeeeee; 
 }
@@ -334,7 +339,7 @@
 
 .product__tag__content a{
 	font-size: 13px;
-	padding: 3px 5px 1px 5px;
+	padding: 3px 5px 2px 5px;
 	color: #1c1c1c;
 	background-color: #eeeeee;
 	margin-right: 10px;
@@ -347,18 +352,20 @@
 	padding: 20px 15px 20px 15px;
 	margin-bottom: 20px;
 	border-bottom: 1px solid #eeeeee;
+	justify-content: space-between;
 }
 
 
 .product__tag__content > a::before{
 	content: "#";
-	margin-right: 1px;
+	margin-right: 5px;
+	color: #828282;
 }
 
 
 .product__seller__profile{
 	display: flex;
-	width: 20%;
+	width: 25%;
 	height: 60px;
 	justify-content: center;
 	align-items: center;
@@ -373,6 +380,7 @@
 
 .product__seller__info{
 	display: flex;
+	width: 70%;
 	padding: 5px 0px 5px 0px;
 	flex-flow: column;
 	justify-content: space-around;
@@ -484,7 +492,7 @@
 .product__img__button{
 	position: absolute;
 	display: flex;
-	width: 542px;
+	width: 481px;
 	height: 492px;
 	padding-left: 10px;
 	padding-right: 10px;
