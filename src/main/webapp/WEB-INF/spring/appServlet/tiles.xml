@@ -3,8 +3,16 @@
        "-//Apache Software Foundation//DTD Tiles Configuration 3.0//EN"
        "http://tiles.apache.org/dtds/tiles-config_3_0.dtd">
 <tiles-definitions>
+
+	<!-- admin layout -->
+	<definition name="admin-main" template="/WEB-INF/views/admin/inc/layout.jsp">
+		<put-attribute name="title" value="어스마켓 관리자 페이지" />
+		<put-attribute name="header" value="/WEB-INF/views/admin/inc/header.jsp" />
+		<put-attribute name="aside" value="/WEB-INF/views/admin/inc/aside.jsp" />
+		<put-attribute name="body" value="" />
+	</definition>
 	
-	<!-- main layout -->
+	<!-- customer layout -->
 	<definition name="customer-main" template="/WEB-INF/views/customer/inc/layout.jsp">
 		<put-attribute name="title" value="우리의 지구를 위해, 어스마켓" />
 		<put-attribute name="header" value="/WEB-INF/views/customer/inc/header.jsp" />
@@ -14,16 +22,29 @@
 	</definition>
 	
 	
-	<!-- index -->
+	
+	<!-- admin body -->
+	<definition name="admin/*" extends="admin-main">
+		<put-attribute name="body" value="/WEB-INF/views/admin/{1}.jsp" />
+	</definition>
+	
+	<definition name="admin/*/*" extends="admin-main">
+		<put-attribute name="body" value="/WEB-INF/views/admin/{1}/{2}.jsp" />
+	</definition>
+	
+	<definition name="admin/*/*/*" extends="admin-main">
+		<put-attribute name="body" value="/WEB-INF/views/admin/{1}/{2}/{3}.jsp" />
+	</definition>
+
+	
+	<!-- customer body -->
 	<definition name="*" extends="customer-main">
 		<put-attribute name="body" value="/WEB-INF/views/customer/{1}.jsp" />
 	</definition>
 	
-	
 	<definition name="*/*" extends="customer-main">
 		<put-attribute name="body" value="/WEB-INF/views/customer/{1}/{2}.jsp" />		
 	</definition>
-	
 	
 	<definition name="*/*/*" extends="customer-main">
 		<put-attribute name="body" value="/WEB-INF/views/customer/{1}/{2}/{3}.jsp" />		
