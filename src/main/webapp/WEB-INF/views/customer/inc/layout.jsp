@@ -5,6 +5,7 @@
 <!DOCTYPE html>
 <html>
 
+<!-- customer layout -->
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <meta name="description" content="Ogani Template">
@@ -25,7 +26,7 @@
     <link rel="stylesheet" href="<c:url value='/resources/customer/css/owl.carousel.min.css'/>" type="text/css">
     <link rel="stylesheet" href="<c:url value='/resources/customer/css/slicknav.min.css'/>" type="text/css">
     <link rel="stylesheet" href="<c:url value='/resources/customer/css/style.css'/>" type="text/css">
-    <link rel="shortcut icon" type="image/x-icon" href="data:image/x-icon;," >
+    <link rel="icon" type="image/x-icon" href="<c:url value='/resources/customer/favicon/customer-favicon.ico'/>">
     
     <!-- bootstrap -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.min.js" integrity="sha384-cuYeSxntonz0PPNlHhBs68uyIAVpIIOZZ5JqeqvYYIcEL727kskC66kF92t6Xl2V" crossorigin="anonymous"></script>
