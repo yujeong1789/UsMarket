@@ -33,6 +33,9 @@
 		 
 		<typeAlias type="com.spring.usMarket.domain.report.ReportInsertDto"
 		 alias="reportInsertDto"/>
+		 
+		<typeAlias type="com.spring.usMarket.domain.admin.AdminDto"
+		 alias="adminDto"/>
 	</typeAliases>
 	
 </configuration>
