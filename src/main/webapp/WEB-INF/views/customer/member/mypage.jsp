@@ -10,16 +10,16 @@
 <link rel="stylesheet" href="<c:url value='/resources/customer/css/member_mypage.css'/>" type="text/css">
 
 <section class="member_info_section">
-	<div class="container">
-		<div class="row">
+	<div class="row">
+		<div class="container">
 			<div class="member_info">
 				<!-- 회원 정보 영역 -->
 				<div class="member_info_img">
 					<input type="file" id="profile" name="member_profile_image" accept="image/jpg, image/jpeg, image/png" style="display:none;"/>
 					<input type="image" id="profile_image" name="member_image" style="display:none;"/>
-					<label for="profile" style="width:100%">
+					<div class="profile_img_div">
 						<img id="profile_img" alt="프로필 이미지" src="<c:url value='${memberInfo.member_image}' />" >
-					</label>
+					</div>
 				</div>
 				
 				<c:choose>
@@ -79,6 +79,9 @@
 			<div class="member_mypage_content">
 				<div class="content_category">
 					<div class="category_head">
+						<button class="my_con_cate_product">
+							상품<span>${mypageProductList.size() }</span>
+						</button>
 						<a class="head_category" id="head_product" href="<c:url value="/member/mypage" />">
 							상품<span>${mypageProductList.size() }</span>
 						</a>
@@ -161,8 +164,20 @@
 
 <script type="text/javascript">
 	$(document).ready(function(){
-		
-	});
+		/* 닉네임 중복 검사 */
+		$('.my_con_cate_product').on("click", function(){
+			// fetch
+			fetch('/usMarket/fetch/report', {
+				method: 'POST',
+				body: formData,
+			})
+			.then((response) => response.text())
+			.then((text) => {
+				alert(text);
+				reportModal.hide();
+			}).catch((error) => console.log('error: '+error));
+		});	// click,function
+	}); //ready
 	
 	
 </script>
