@@ -79,7 +79,7 @@ public class MemberServiceImpl implements MemberService {
 		objectMetadata.setContentType(file.getContentType());
 					
 		// 요청 바디 작성
-		PutObjectRequest putObjectRequest = new PutObjectRequest(this.bucket, "profile"+getUUID(originalName), file.getInputStream(), objectMetadata)
+		PutObjectRequest putObjectRequest = new PutObjectRequest(this.bucket, "profile/"+getUUID(originalName), file.getInputStream(), objectMetadata)
 				.withCannedAcl(CannedAccessControlList.PublicRead);
 		
 		// s3에 저장
