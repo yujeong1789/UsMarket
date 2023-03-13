@@ -51,6 +51,7 @@
 			<mapping path="/product/buy/**"/>
 			<mapping path="/product/sell/**"/>
 			<mapping path="/chat/**"/>
+			<mapping path="/member/mypage/**"/>
 			<beans:bean class="com.spring.usMarket.common.LoginInterceptor" />
 		</interceptor>
 		<interceptor>
