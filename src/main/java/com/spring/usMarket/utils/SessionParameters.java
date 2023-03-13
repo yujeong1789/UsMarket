@@ -6,12 +6,14 @@ import javax.servlet.http.HttpServletRequest;
 
 public class SessionParameters {
 	
-	public static String getUserNo(HttpServletRequest request) { 
-        return (String) request.getSession().getAttribute("userNo");
+	public static String getUserNo(HttpServletRequest request) {
+		String userNo = String.valueOf(request.getSession().getAttribute("userNo")); 
+        return userNo;
     }
 	
 	public static String getUserId(HttpServletRequest request) {
-		return (String) request.getSession().getAttribute("userId");
+		String userId = String.valueOf(request.getSession().getAttribute("userId"));
+		return userId;
 	}
 
 	@SuppressWarnings("unchecked")
