@@ -53,6 +53,11 @@
 			<mapping path="/chat/**"/>
 			<beans:bean class="com.spring.usMarket.common.LoginInterceptor" />
 		</interceptor>
+		<interceptor>
+			<mapping path="/admin/**"/>
+			<exclude-mapping path="/admin/login"/>
+			<beans:bean class="com.spring.usMarket.common.AdminInterceptor" />
+		</interceptor>
 	</interceptors>
 	
 	<!-- websocket handler -->

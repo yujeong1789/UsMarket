@@ -5,13 +5,13 @@
 
 <c:set var="req" value="${pageContext.request }" />
 
-<c:set var="loginId" value="${empty req.getSession(false) ? '' : pageContext.request.session.getAttribute('adminId')}"/>
-<c:set var="loginNo" value="${empty req.getSession(false) ? '' : pageContext.request.session.getAttribute('adminNo')}"/>
-<c:set var="loginOutLink" value="${empty loginId ? '/admin/auth/login' : '/admin/auth/logout'}"/>
-<c:set var="loginOut" value="${empty loginId ? '로그인' : '로그아웃'}"/>
+<c:set var="admin" value="${empty req.getSession(false) ? '' : pageContext.request.session.getAttribute('admin')}"/>
 
 <header class="header-container base-layout border-b">
 	<div class="header-auth">
-		<a href="<c:url value='${loginOutLink}' />">${loginOut }</a>
+		<!-- 확인용, 추후 삭제 -->
+		<div>${empty admin ? '없음' : ('no = ' += admin.ADMIN_NO +=', id = ' += admin.ADMIN_ID += ', name = ' += admin.ADMIN_NAME)}</div>
+		<input type="hidden" id="admin_auth" data-no="${admin.ADMIN_NO }" data-id="${admin.ADMIN_ID }" data-name="${admin.ADMIN_NAME }" />
+		<a href="<c:url value='/admin/logout' />">로그아웃</a>
 	</div>
 </header>

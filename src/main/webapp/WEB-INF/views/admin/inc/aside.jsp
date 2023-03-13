@@ -34,8 +34,8 @@
 					<span>결제 관리</span>
 				</a>
 			</li>
-			<li class="payment">
-				<a href="<c:url value='/admin/payment/list'/>">
+			<li class="faq">
+				<a href="<c:url value='/admin/faq/list'/>">
 					<img src="<c:url value='/resources/admin/img/icon/faq.png'/>">
 					<span>공지사항</span>
 				</a>
@@ -50,8 +50,27 @@ document.addEventListener('DOMContentLoaded', function(){
 		document.querySelector('.selected').classList.remove('selected');		
 	}
 	
-	let path = window.location.pathname.split('/')[3]
+	let path = window.location.pathname.split('/')[3];
+	switch (path) {
+	case 'home':
+		setSelectedSidebar(path);
+		break;
+	case 'report':
+		setSelectedSidebar(path);
+		break;
+	case 'qna':
+		setSelectedSidebar(path);
+		break;
+	case 'payment':
+		setSelectedSidebar(path);
+		break;
+	case 'faq':
+		setSelectedSidebar(path);
+		break;
+	};
+});
+function setSelectedSidebar(path){
 	document.querySelector('.'+path).classList.add('selected');
 	document.querySelector('.'+path+' img').setAttribute('src', '${pageContext.request.contextPath}/resources/admin/img/icon/'+path+'-selected.png');
-});
+};
 </script>
