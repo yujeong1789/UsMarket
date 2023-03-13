@@ -1,5 +1,6 @@
 package com.spring.usMarket.dao.member;
 
+import java.util.List;
 import java.util.Map;
 
 import org.apache.ibatis.session.SqlSession;
@@ -8,6 +9,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 
 import com.spring.usMarket.domain.member.MemberDto;
+import com.spring.usMarket.domain.product.ProductDto;
 import com.spring.usMarket.service.member.MemberService;
 
 import lombok.RequiredArgsConstructor;
@@ -53,8 +55,17 @@ public class MemberDaoImpl implements MemberDao{
 	}
 
 	@Override
-	public Map<Integer, Object> memberSearche(Integer member_no) throws Exception {
-		return session.selectOne(namespace+"memberSearche", member_no);
+	public MemberDto memberSearch(Integer member_no) throws Exception {
+		return session.selectOne(namespace+"memberSearch", member_no);
 	}
 
+	@Override
+	public List<ProductDto> searchMypageProduct(Integer member_no) throws Exception {
+		return session.selectList(namespace+"searchMypageProduct", member_no);
+	}
+
+	@Override
+	public int searchMypageProductCount(Integer member_no) throws Exception {
+		return session.selectOne(namespace+"searchMypageProductCount", member_no);
+	}
 }

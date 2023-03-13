@@ -1,11 +1,13 @@
 package com.spring.usMarket.service.member;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.web.multipart.MultipartFile;
 
 import com.spring.usMarket.domain.member.MemberDto;
+import com.spring.usMarket.domain.product.ProductDto;
 
 public interface MemberService {
 	int addMember(MemberDto member);
@@ -14,5 +16,7 @@ public interface MemberService {
 	int checkEmail(String member_email);
 	Map<String, Object> loginCheckID(String member_id) throws Exception;
 	String upload(MultipartFile file)throws IOException;
-	Map<Integer, Object> getMemberInfo(Integer member_no) throws Exception;
+	MemberDto getMemberInfo(Integer member_no) throws Exception;
+	List<ProductDto> getMypageProduct(Integer member_no) throws Exception;
+	int getMypageProductCount(Integer member_no) throws Exception;
 }

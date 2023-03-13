@@ -1,8 +1,10 @@
 package com.spring.usMarket.dao.member;
 
+import java.util.List;
 import java.util.Map;
 
 import com.spring.usMarket.domain.member.MemberDto;
+import com.spring.usMarket.domain.product.ProductDto;
 
 public interface MemberDao {
 	int insertMember(MemberDto member);
@@ -11,5 +13,7 @@ public interface MemberDao {
 	int overlappedEmail(String member_email);
 	void overlapped(String joinMember);
 	Map<String, Object> idLogin(String member_id) throws Exception;
-	Map<Integer, Object> memberSearche(Integer member_no) throws Exception;
+	MemberDto memberSearch(Integer member_no) throws Exception;
+	List<ProductDto> searchMypageProduct(Integer member_no) throws Exception;
+	int searchMypageProductCount(Integer member_no) throws Exception;
 }
