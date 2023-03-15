@@ -177,27 +177,24 @@
 	
 	
 	<!-- 북마크 추가된 상품인지 검색 -->
-	<select id="searchBookmarkByInfo" parameterType="map" resultType="int">
+	<select id="searchBookmarkByInfo" parameterType="string" resultType="int">
 		SELECT count(*) 
 		 FROM bookmark  
-		 WHERE member_no = #{current_no} AND product_no = #{product_no} 
+		 WHERE bookmark_no = #{bookmark_no} 
 	</select>
 	
 	
 	<!-- 북마크 삭제 -->
-	<delete id="deleteBookmark" parameterType="map">
+	<delete id="deleteBookmark" parameterType="string">
 		DELETE FROM bookmark 
-		 WHERE member_no = #{member_no} AND product_no = ${product_no}
+		 WHERE bookmark_no = #{bookmark_no}
 	</delete>
 	
 	
 	<!-- 북마크 추가 -->
 	<insert id="insertBookmark" parameterType="map">
-		<selectKey keyProperty="bookmark_seq" resultType="int" order="BEFORE">
-			SELECT bookmark_seq.nextval FROM dual 
-		</selectKey>
 		INSERT INTO bookmark (bookmark_no, member_no, product_no) 
-		 values (#{bookmark_seq}, #{member_no}, #{product_no}) 
+		 values (#{bookmark_no}, #{member_no}, #{product_no}) 
 	</insert>
 	
 	
