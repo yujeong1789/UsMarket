@@ -55,7 +55,6 @@ public class AdminController { // 관리자 메인 페이지 출력
 			logger.info("로그인 성공");
 			HttpSession session = request.getSession();
 			session.setAttribute("admin", adminMap);
-			logger.info("session = {}", session.getAttribute("admiin") == null);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
