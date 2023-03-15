@@ -30,9 +30,9 @@ public interface ProductService {
 	
 	List<Map<String, Object>> getReviewByInfo(Integer seller_no) throws Exception;
 	
-	int getBookmarkByInfo(Integer current_no, String product_no) throws Exception;
+	int getBookmarkByInfo(String bookmark_no) throws Exception;
 	
-	int removeBookmark(Integer member_no, String product_no) throws Exception;
+	int removeBookmark(String bookmark_no) throws Exception;
 	
 	int addBookmark(Integer member_no, String product_no) throws Exception;
 	

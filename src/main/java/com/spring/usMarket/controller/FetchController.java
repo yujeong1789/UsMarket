@@ -35,6 +35,9 @@ import com.spring.usMarket.utils.SessionParameters;
 public class FetchController {
 	private static final Logger logger = LoggerFactory.getLogger(FetchController.class);
 	
+	private static final String NOT_ADDED = "0";
+	private static final String ADDED = "1";
+	
 	@Autowired ProductService productService;
 	@Autowired DealService dealService;
 	@Autowired ChatService chatService;
@@ -107,20 +110,30 @@ public class FetchController {
 	}
 	
 	
-	@GetMapping("/bookmark/{current_no}/{product_no}")
-	public int bookmark(@PathVariable Integer current_no, @PathVariable String product_no) {
+	@GetMapping("/bookmark/{product_no}/{bookmarkStatus}")
+	public String bookmark(@PathVariable String product_no, @PathVariable String bookmarkStatus, HttpServletRequest request) {
 		
-		int bookmarkStatus = 0;
+		Integer member_no = Integer.parseInt(String.valueOf(request.getSession().getAttribute("userNo")));
+		int rowCnt = 0;
 		
 		try {
-			bookmarkStatus = productService.getBookmarkByInfo(current_no, product_no);
+			if(bookmarkStatus.equals(ADDED) || bookmarkStatus == ADDED) {
+				rowCnt = productService.removeBookmark(member_no+product_no);
+				bookmarkStatus = NOT_ADDED;
+			} else if(bookmarkStatus.equals(NOT_ADDED) || bookmarkStatus == NOT_ADDED) {
+				rowCnt = productService.addBookmark(member_no, product_no);
+				bookmarkStatus = ADDED;
+			}
+			if(rowCnt == 0) throw new Exception();
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		
+		logger.info("after bookmarkStatus = {}, bookmark result = {}", (bookmarkStatus == ADDED ? "ADDED" : "NOT_ADDED"), (rowCnt == 1 ? "OK" : "FAIL"));
+		
 		return bookmarkStatus;
 	}
-	
 	
 	@GetMapping("/customerInfo/{customer_no}")
 	public Map<String, Object> customerInfo(@PathVariable String customer_no) {
