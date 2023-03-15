@@ -81,35 +81,19 @@ public class ProductController {
 			String jsonText = mapper.writeValueAsString(productImage);
 			
 			model.addAttribute("jsonText", jsonText);
-			model.addAttribute("productInfo", productInfo);
+			model.addAttribute("productInfo", productInfo); // 기존 - 2691ms
 			
-		} catch (Exception e) {
-			e.printStackTrace();
-		} // try-catch
-	}
-	
-	
-	@GetMapping("/like")
-	public String like(HttpServletRequest request, String product_no, Integer status) {
-		
-		Integer member_no = Integer.parseInt(String.valueOf(request.getSession().getAttribute("userNo")));
-		
-		logger.info("like, member_id = {}, member_no = {}", request.getSession().getAttribute("userId").toString(), member_no);
-		
-		try {
-			if(status == ADDED) {
-				// 이미 북마크 추가된 상태면 삭제
-				productService.removeBookmark(member_no, product_no);
-			}else if(status == NOT_ADDED) {
-				// 추가되지 않은 상태면 북마크 추가
-				productService.addBookmark(member_no, product_no);
+			int bookmarkStatus = 0;
+			if(request.getSession().getAttribute("userNo") != null) {
+				Integer member_no = Integer.parseInt(SessionParameters.getUserNo(request));
+				bookmarkStatus = productService.getBookmarkByInfo(member_no+product_no);
 			}
 			
+			model.addAttribute("bookmarkStatus", bookmarkStatus);
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 		} // try-catch
-		
-		return "redirect:/product/info?product_no="+product_no;
 	}
 	
 	
@@ -189,7 +173,6 @@ public class ProductController {
 			model.addAttribute("customer_no", customer_no);
 			model.addAttribute("productOrderInfo", productOrderInfo);
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
