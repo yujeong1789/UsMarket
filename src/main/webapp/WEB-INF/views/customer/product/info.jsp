@@ -86,8 +86,8 @@
 						<c:otherwise>
 							<!-- 판매 중이며 내 상품이 아닐 경우 보여질 버튼 -->
 							<div class="product__buttons" id="product__buttons">
-								<div id="btn__wish" data-url="/product/like?product_no=${productInfo.PRODUCT_NO}">
-									<img id="bookmark__status" alt="찜" src="<c:url value='/resources/customer/img/wish_icon_0.png' />">
+								<div id="btn__wish" data-status="${bookmarkStatus }">
+									<img id="bookmark__status" alt="찜" src="<c:url value='/resources/customer/img/wish_icon_${bookmarkStatus }.png' />">
 									<span>찜</span>
 									<span><c:out value="${productInfo.BOOKMARK_COUNT }"/></span>
 								</div>
@@ -193,30 +193,16 @@
 		const product_state = `${productInfo.PRODUCT_STATE_NO}`;
 		
 		console.log("product_no = "+product_no);
+		console.log("current_no = "+current_no);
 		console.log("current_id = "+current_id);
 		console.log("seller_no = "+seller_no);
 		
-		console.log("isEmpty() = "+isEmpty(current_id));
-		
-		if(!isEmpty(current_id)){
-			if(seller_id == current_id && product_state == 1){ // 내 상품이며 판매 중인 상품일 경우
+		if(!isEmpty(current_no) && product_state == 1 ){
+			if(seller_id == current_id){ // 내 상품이며 판매 중인 상품일 경우
 				document.getElementById('product__buttons').style.display = 'none'; // 찜, 구매, 채팅 숨기기
 				document.querySelector('.product__detail__1 > .right').style.visibility = 'hidden'; // 신고 버튼 숨기기
 				document.getElementById('product__my__buttons').style.display = 'flex'; // 내 상점 관리, 삭제 활성화
-			}else if(seller_id != current_id && product_state == 1){ // 내 상품이 아니며 판매 중인 상품일 경우
-				fetch('/usMarket/fetch/bookmark/'+current_no+'/'+product_no)
-				.then((response) => response.json())
-				.then((json) => {
-					let icon__element = document.getElementById('bookmark__status');
-					let data_url = document.getElementById('btn__wish').getAttribute('data-url')+'&status='+json;
-					document.getElementById('btn__wish').setAttribute('data-url', data_url);
-					
-					console.log(json == 0 ? 'NOT_ADDED' : 'ADDED');
-					
-					if(json == 1){
-						icon__element.setAttribute('src', '${pageContext.request.contextPath}/resources/customer/img/wish_icon_1.png');
-					}
-				}).catch((error) => console.log("error: "+error)); // fetch-1
+				
 			}
 		}
 		
@@ -306,7 +292,25 @@
 			
 			// 찜
 			document.getElementById('btn__wish').addEventListener('click', function(){
-				location.href = '${pageContext.request.contextPath}'+this.getAttribute('data-url');
+				let status = this.dataset.status; 
+				
+				if(this.dataset.status == '0'){
+					this.dataset.status = '1';
+					this.children[0].setAttribute('src', '${pageContext.request.contextPath}/resources/customer/img/wish_icon_1.png');
+					this.children[2].textContent = parseInt(this.children[2].textContent) + 1;
+					document.querySelector('.product__wish span').textContent = this.children[2].textContent; 
+				}else{
+					this.dataset.status = '0';
+					this.children[0].setAttribute('src', '${pageContext.request.contextPath}/resources/customer/img/wish_icon_0.png');
+					this.children[2].textContent = parseInt(this.children[2].textContent) - 1;
+					document.querySelector('.product__wish span').textContent = this.children[2].textContent; 
+				}
+				
+				fetch('/usMarket/fetch/bookmark/'+product_no+'/'+status)
+				.then((response) => response.text())
+				.then((text) => {
+					console.log('after status = '+text);
+				}).catch((error) => console.log("error: "+error));
 			});
 			
 			// 채팅하기
