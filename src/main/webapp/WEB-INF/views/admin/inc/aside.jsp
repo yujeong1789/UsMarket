@@ -16,22 +16,34 @@
 					<span>홈</span>
 				</a>
 			</li>
-			<li class="report">
-				<a href="<c:url value='/admin/report/list'/>">
-					<img src="<c:url value='/resources/admin/img/icon/report.png'/>">
-					<span>신고 관리</span>
+			<li class="stats">
+				<a href="<c:url value='/admin/stats/list'/>">
+					<img src="<c:url value='/resources/admin/img/icon/stats.png'/>">
+					<span>통계</span>
 				</a>
 			</li>
-			<li class="qna">
-				<a href="<c:url value='/admin/qna/list'/>">
-					<img src="<c:url value='/resources/admin/img/icon/qna.png'/>">
-					<span>문의 관리</span>
+			<li class="member">
+				<a href="<c:url value='/admin/member/list'/>">
+					<img src="<c:url value='/resources/admin/img/icon/member.png'/>">
+					<span>회원관리</span>
 				</a>
 			</li>
 			<li class="payment">
 				<a href="<c:url value='/admin/payment/list'/>">
 					<img src="<c:url value='/resources/admin/img/icon/payment.png'/>">
-					<span>결제 관리</span>
+					<span>결제관리</span>
+				</a>
+			</li>
+			<li class="report">
+				<a href="<c:url value='/admin/report/list'/>">
+					<img src="<c:url value='/resources/admin/img/icon/report.png'/>">
+					<span>신고관리</span>
+				</a>
+			</li>
+			<li class="qna">
+				<a href="<c:url value='/admin/qna/list'/>">
+					<img src="<c:url value='/resources/admin/img/icon/qna.png'/>">
+					<span>문의관리</span>
 				</a>
 			</li>
 			<li class="faq">
@@ -45,29 +57,17 @@
 </aside>
 
 <script type="text/javascript">
+const categories = ['home', 'stats', 'member', 'payment', 'report', 'qna', 'faq'];
+
 document.addEventListener('DOMContentLoaded', function(){
 	if(!isEmpty(document.querySelector('.selected'))){
 		document.querySelector('.selected').classList.remove('selected');		
 	}
 	
 	let path = window.location.pathname.split('/')[3];
-	switch (path) {
-	case 'home':
-		setSelectedSidebar(path);
-		break;
-	case 'report':
-		setSelectedSidebar(path);
-		break;
-	case 'qna':
-		setSelectedSidebar(path);
-		break;
-	case 'payment':
-		setSelectedSidebar(path);
-		break;
-	case 'faq':
-		setSelectedSidebar(path);
-		break;
-	};
+	if(categories.includes(path)){
+		setSelectedSidebar(categories[categories.indexOf(path)]);
+	}
 });
 function setSelectedSidebar(path){
 	document.querySelector('.'+path).classList.add('selected');
