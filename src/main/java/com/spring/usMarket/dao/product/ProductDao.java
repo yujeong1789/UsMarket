@@ -23,9 +23,9 @@ public interface ProductDao {
 	
 	List<Map<String, Object>> searchReviewByInfo(Integer seller_no) throws Exception;
 	
-	int searchBookmarkByInfo(Integer current_no, String product_no) throws Exception;
+	int searchBookmarkByInfo(String bookmark_no) throws Exception;
 	
-	int deleteBookmark(Integer member_no, String product_no) throws Exception;
+	int deleteBookmark(String bookmark_no) throws Exception;
 	
 	int insertBookmark(Integer member_no, String product_no) throws Exception;
 	
