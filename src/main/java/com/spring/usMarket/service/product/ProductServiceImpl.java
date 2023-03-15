@@ -137,9 +137,9 @@ public class ProductServiceImpl implements ProductService {
 
 	@Override
 	@Transactional(rollbackFor = SQLException.class, readOnly = true)
-	public int getBookmarkByInfo(Integer current_no, String product_no) throws Exception {
+	public int getBookmarkByInfo(String bookmark_no) throws Exception {
 		
-		int rowCnt = productDao.searchBookmarkByInfo(current_no, product_no); 
+		int rowCnt = productDao.searchBookmarkByInfo(bookmark_no); 
 		logger.info("북마크 추가 여부 = {}", (rowCnt == 1 ? "ADDED" : "NOT_ADDED"));
 		
 		return rowCnt;
@@ -148,9 +148,9 @@ public class ProductServiceImpl implements ProductService {
 
 	@Override
 	@Transactional(rollbackFor = SQLException.class)
-	public int removeBookmark(Integer member_no, String product_no) throws Exception {
+	public int removeBookmark(String bookmark_no) throws Exception {
 		
-		int rowCnt = productDao.deleteBookmark(member_no, product_no);
+		int rowCnt = productDao.deleteBookmark(bookmark_no);
 		logger.info("북마크 삭제 결과 = {}", getResult(rowCnt));
 		
 		return rowCnt;
