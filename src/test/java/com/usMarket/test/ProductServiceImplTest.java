@@ -62,13 +62,13 @@ public class ProductServiceImplTest {
 		}
 		
 		String randomProductNo = productNoList.get((int)((Math.random()*productNoList.size()))).toString();
-		int bookmarkStatus = productService.getBookmarkByInfo(member_no, randomProductNo);
+		int bookmarkStatus = productService.getBookmarkByInfo(member_no+randomProductNo);
 		
 		int result = 0;
 		if(bookmarkStatus == 0) {
 			result = productService.addBookmark(member_no, randomProductNo);
 		}else if(bookmarkStatus == 1) {
-			result = productService.removeBookmark(member_no, randomProductNo);
+			result = productService.removeBookmark(member_no+randomProductNo);
 		}
 		
 		System.out.println("setBookmarkTest = " + (result == 1 ? "PASS" : "FAIL"));
