@@ -8,4 +8,25 @@
 		WHERE admin_id = #{admin_id} AND admin_password = #{admin_password}
 	</select>
 	
+	<select id="searchMemberStatsPreview" parameterType="map" resultType="map">
+		<![CDATA[
+		SELECT TO_CHAR(b.dt, 'YYYY-MM') AS month
+			, NVL(SUM(a.cnt), 0) AS cnt
+		FROM ( SELECT TO_CHAR(member_regdate, 'YYYY-MM-DD') AS regdate
+				, COUNT(*) cnt
+			   FROM MEMBER
+			   WHERE member_regdate BETWEEN TO_DATE(#{startDate}, 'YYYY-MM-DD')
+			   AND TO_DATE(#{endDate}, 'YYYY-MM-DD') 
+			   GROUP BY member_regdate
+			 ) a
+			 , ( SELECT TO_DATE(#{startDate},'YYYY-MM-DD') + LEVEL - 1 AS dt
+				 FROM dual 
+				 CONNECT BY LEVEL <= (TO_DATE(#{endDate},'YYYY-MM-DD') 
+					- TO_DATE(#{startDate},'YYYY-MM-DD') + 1)
+			   ) b
+		WHERE b.dt = a.regdate(+)
+		GROUP BY TO_CHAR(b.dt, 'YYYY-MM')
+		ORDER BY TO_CHAR(b.dt, 'YYYY-MM')
+		]]>
+	</select>
 </mapper>
