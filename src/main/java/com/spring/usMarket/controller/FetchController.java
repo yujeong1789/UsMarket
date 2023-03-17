@@ -23,6 +23,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.spring.usMarket.domain.chat.ChatDto;
 import com.spring.usMarket.domain.deal.DealInsertDto;
 import com.spring.usMarket.domain.report.ReportInsertDto;
+import com.spring.usMarket.service.admin.AdminService;
 import com.spring.usMarket.service.chat.ChatService;
 import com.spring.usMarket.service.deal.DealService;
 import com.spring.usMarket.service.product.ProductService;
@@ -43,6 +44,7 @@ public class FetchController {
 	@Autowired ChatService chatService;
 	@Autowired ReportService reportService;
 	@Autowired ReportFileService reportFileService;
+	@Autowired AdminService adminService;
 	
 	@PostMapping("/sessionCheck")
 	public String sessionCheck(HttpServletRequest request) {
@@ -307,5 +309,19 @@ public class FetchController {
 		}
 		
 		return result;
+	}
+	
+	@GetMapping("/memberstats/{startDate}/{endDate}")
+	public List<Map<String, Object>> memberStats(@PathVariable String startDate, @PathVariable String endDate){
+		logger.info("startDate = {}, endDate = {}", startDate, endDate);
+		
+		List<Map<String, Object>> resultMap = new ArrayList<>();
+		try {
+			resultMap = adminService.getMemberStatsPreview(startDate, endDate);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return resultMap;	
 	}
 }
