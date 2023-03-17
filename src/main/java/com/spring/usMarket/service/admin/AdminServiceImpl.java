@@ -1,11 +1,14 @@
 package com.spring.usMarket.service.admin;
 
+import java.sql.SQLException;
+import java.util.List;
 import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.spring.usMarket.dao.admin.AdminDao;
 
@@ -21,12 +24,23 @@ public class AdminServiceImpl implements AdminService{
 	}
 	
 	@Override
+	@Transactional(rollbackFor = SQLException.class, readOnly = true)
 	public Map<String, Object> getAdmin(String admin_id, String admin_password) throws Exception {
 		
 		Map<String, Object> map = adminDao.searchAdmin(admin_id, admin_password);
 		logger.info("관리자 정보 조회 결과 = {}", (map == null ? "NOT_OK" : "OK"));
 		
 		return map;
+	}
+
+	@Override
+	@Transactional(rollbackFor = SQLException.class, readOnly = true)
+	public List<Map<String, Object>> getMemberStatsPreview(String startDate, String endDate) throws Exception {
+		
+		List<Map<String, Object>> listMap = adminDao.searchMemberStatsPreview(startDate, endDate);
+		logger.info("월별 신규 가입자 추이 조회 결과 = {}", listMap.toString());
+		
+		return listMap;
 	}
 
 }

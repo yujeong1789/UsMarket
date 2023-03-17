@@ -30,6 +30,10 @@
 </head>
 
 <body>
+    <!-- Js Plugins -->
+    <script src="<c:url value='/resources/customer/js/common.js'/>"></script>
+    
+    
 	<!-- Header begin -->
 	<tiles:insertAttribute name="header" />
 	<!-- Header end -->
@@ -42,10 +46,7 @@
 		<!-- body begin -->
 		<tiles:insertAttribute name="body" />
 		<!-- body end -->
-	</main> 
-
-    <!-- Js Plugins -->
-    <script src="<c:url value='/resources/customer/js/common.js'/>"></script>
+	</main>
 </body>
 
 </html>
