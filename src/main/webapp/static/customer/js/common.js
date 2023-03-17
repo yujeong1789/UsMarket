@@ -83,3 +83,23 @@ let getFileSize = function(filesize) {
     var e = Math.floor(Math.log(filesize) / Math.log(1024));
     return (filesize / Math.pow(1024, e)).toFixed(0) + text[e];
 };
+
+let getStartDate = function() {
+	var date = new Date();
+	var sel_month = -2; // 월을 조절하시면 됩니다. -1이면 전달을 +1이면 다음달을..
+	date.setMonth(date.getMonth() + sel_month ); 
+	
+	var year    = date.getFullYear();
+	var month   = ('0' + (date.getMonth() +  1 )).slice(-2);
+	return year+'-'+month+'-01';
+};
+
+let getEndDate = function() {
+	var date = new Date();
+	date.setMonth(date.getMonth() + 1); 
+	date.setDate(0); 
+	
+	var year    = date.getFullYear();
+	var month   = ('0' + (date.getMonth() +  1 )).slice(-2);
+	return year+'-'+month+'-'+date.getDate();
+};
