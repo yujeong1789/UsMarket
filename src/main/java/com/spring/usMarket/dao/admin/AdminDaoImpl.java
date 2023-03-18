@@ -32,5 +32,14 @@ public class AdminDaoImpl implements AdminDao{
 		
 		return session.selectList(namespace+"searchMemberStatsPreview", map);
 	}
+
+	@Override
+	public List<Map<String, Object>> searchDealStatsPreview(String startDate, String endDate) throws Exception {
+		Map<String, Object> map = new HashMap<>();
+		map.put("startDate", startDate);
+		map.put("endDate", endDate);
+		
+		return session.selectList(namespace+"searchDealStatsPreview", map);
+	}
 	
 }
