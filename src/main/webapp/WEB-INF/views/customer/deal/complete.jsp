@@ -32,7 +32,7 @@
 			location.href = '${pageContext.request.contextPath}/';
 		});
 		
-		document.querySelector('btn-deal-info').addEventListener('click', function(){
+		document.querySelector('.btn-deal-info').addEventListener('click', function(){
 			console.log('마이페이지 - 주문내역으로 이동');
 		});
 	});
