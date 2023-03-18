@@ -86,11 +86,11 @@ let getFileSize = function(filesize) {
 
 let getStartDate = function() {
 	var date = new Date();
-	var sel_month = -2; // 월을 조절하시면 됩니다. -1이면 전달을 +1이면 다음달을..
-	date.setMonth(date.getMonth() + sel_month ); 
+	var sel_month = -2;
+	date.setMonth(date.getMonth() + sel_month); 
 	
 	var year    = date.getFullYear();
-	var month   = ('0' + (date.getMonth() +  1 )).slice(-2);
+	var month   = leftPad(date.getMonth() + 1);
 	return year+'-'+month+'-01';
 };
 
@@ -100,6 +100,43 @@ let getEndDate = function() {
 	date.setDate(0); 
 	
 	var year    = date.getFullYear();
-	var month   = ('0' + (date.getMonth() +  1 )).slice(-2);
-	return year+'-'+month+'-'+date.getDate();
+	var month   = leftPad(date.getMonth() + 1);
+	var day = leftPad(date.getDate());
+	
+	return year+'-'+month+'-'+day;
+};
+
+let getStartDay = function(){
+	var date = new Date();
+	date.setDate(date.getDate() - 2);
+	
+	var year    = date.getFullYear();
+	var month   = leftPad(date.getMonth() + 1);
+	var day = leftPad(date.getDate());
+	
+	return year+'-'+month+'-'+day;
+}
+
+let getEndDay = function(){
+	var date = new Date();
+	
+	var year    = date.getFullYear();
+	var month   = leftPad(date.getMonth() + 1);
+	var day = leftPad(date.getDate());
+	
+	return year+'-'+month+'-'+day;
+};
+
+let setDateFormat = function(data){
+	var splitDate = data.split('-');
+	
+	if(splitDate.length > 2){
+		return (splitDate[1] < 10 ? splitDate[1].substr(1, 1) : splitDate[1])+'월 '+(splitDate[2] < 10 ? splitDate[2].substr(1, 1) : splitDate[2])+'일';
+	}else{
+		return 	splitDate[0]+'년 '+(splitDate[1] < 10 ? splitDate[1].substr(1, 1) : splitDate[1])+'월';
+	}
+};
+
+let getPriceFormat = function(price){
+	return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
 };
