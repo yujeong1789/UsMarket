@@ -324,4 +324,18 @@ public class FetchController {
 		
 		return resultMap;	
 	}
+	
+	@GetMapping("/dealstats/{startDate}/{endDate}")
+	public List<Map<String, Object>> deatStats(@PathVariable String startDate, @PathVariable String endDate){
+		logger.info("startDate = {}, endDate = {}", startDate, endDate);
+		
+		List<Map<String, Object>> resultMap = new ArrayList<>();
+		try {
+			resultMap = adminService.getDealStatsPreview(startDate, endDate);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return resultMap;	
+	}
 }
