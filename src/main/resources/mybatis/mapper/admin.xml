@@ -14,7 +14,7 @@
 			, NVL(SUM(a.cnt), 0) AS cnt
 		FROM ( SELECT TO_CHAR(member_regdate, 'YYYY-MM-DD') AS regdate
 				, COUNT(*) cnt
-			   FROM MEMBER
+			   FROM member
 			   WHERE member_regdate BETWEEN TO_DATE(#{startDate}, 'YYYY-MM-DD')
 			   AND TO_DATE(#{endDate}, 'YYYY-MM-DD') 
 			   GROUP BY member_regdate
@@ -27,6 +27,29 @@
 		WHERE b.dt = a.regdate(+)
 		GROUP BY TO_CHAR(b.dt, 'YYYY-MM')
 		ORDER BY TO_CHAR(b.dt, 'YYYY-MM')
+		]]>
+	</select>
+	
+	<select id="searchDealStatsPreview" parameterType="map" resultType="map">
+		<![CDATA[
+		SELECT TO_CHAR(b.dt, 'YYYY-MM-DD') AS day
+    		, NVL(SUM(a.price), 0) AS price
+  		FROM ( SELECT TO_CHAR(d.deal_start_date, 'YYYY-MM-DD') AS regdate
+				, sum(p.product_price) price
+           	   FROM deal d, product p
+			   WHERE d.product_no = p.product_no
+          	   AND (deal_start_date BETWEEN TO_DATE(#{startDate}, 'YYYY-MM-DD')
+						AND TO_DATE(#{endDate}, 'YYYY-MM-DD') + 1) 
+          	   GROUP BY deal_start_date
+        	 ) a
+			, ( SELECT TO_DATE(#{startDate},'YYYY-MM-DD') + LEVEL - 1 AS dt
+            	FROM dual 
+         		CONNECT BY LEVEL <= (TO_DATE(#{endDate},'YYYY-MM-DD') 
+                            - TO_DATE(#{startDate},'YYYY-MM-DD') + 1)
+        	  ) b
+		WHERE b.dt = a.regdate(+)
+		GROUP BY TO_CHAR(b.dt, 'YYYY-MM-DD')
+		ORDER BY TO_CHAR(b.dt, 'YYYY-MM-DD')
 		]]>
 	</select>
 </mapper>
