@@ -115,7 +115,7 @@ let getStartDay = function(){
 	var day = leftPad(date.getDate());
 	
 	return year+'-'+month+'-'+day;
-}
+};
 
 let getEndDay = function(){
 	var date = new Date();
@@ -125,18 +125,4 @@ let getEndDay = function(){
 	var day = leftPad(date.getDate());
 	
 	return year+'-'+month+'-'+day;
-};
-
-let setDateFormat = function(data){
-	var splitDate = data.split('-');
-	
-	if(splitDate.length > 2){
-		return (splitDate[1] < 10 ? splitDate[1].substr(1, 1) : splitDate[1])+'월 '+(splitDate[2] < 10 ? splitDate[2].substr(1, 1) : splitDate[2])+'일';
-	}else{
-		return 	splitDate[0]+'년 '+(splitDate[1] < 10 ? splitDate[1].substr(1, 1) : splitDate[1])+'월';
-	}
-};
-
-let getPriceFormat = function(price){
-	return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
 };
