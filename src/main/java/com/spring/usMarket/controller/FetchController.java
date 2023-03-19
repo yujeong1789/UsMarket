@@ -44,7 +44,6 @@ public class FetchController {
 	@Autowired ChatService chatService;
 	@Autowired ReportService reportService;
 	@Autowired ReportFileService reportFileService;
-	@Autowired AdminService adminService;
 	
 	@PostMapping("/sessionCheck")
 	public String sessionCheck(HttpServletRequest request) {
@@ -274,6 +273,7 @@ public class FetchController {
 	public String report(MultipartHttpServletRequest request, ReportInsertDto dto) {
 		
 		String result = "신고 등록에 실패했습니다.";
+		dto.setReport_image("");
 		
 		// 이미지 업로드 작업
 		try {
@@ -309,33 +309,5 @@ public class FetchController {
 		}
 		
 		return result;
-	}
-	
-	@GetMapping("/memberstats/{startDate}/{endDate}")
-	public List<Map<String, Object>> memberStats(@PathVariable String startDate, @PathVariable String endDate){
-		logger.info("startDate = {}, endDate = {}", startDate, endDate);
-		
-		List<Map<String, Object>> resultMap = new ArrayList<>();
-		try {
-			resultMap = adminService.getMemberStatsPreview(startDate, endDate);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		
-		return resultMap;	
-	}
-	
-	@GetMapping("/dealstats/{startDate}/{endDate}")
-	public List<Map<String, Object>> deatStats(@PathVariable String startDate, @PathVariable String endDate){
-		logger.info("startDate = {}, endDate = {}", startDate, endDate);
-		
-		List<Map<String, Object>> resultMap = new ArrayList<>();
-		try {
-			resultMap = adminService.getDealStatsPreview(startDate, endDate);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		
-		return resultMap;	
 	}
 }
