@@ -10,6 +10,7 @@ body {
 	font-family: "NanumBarunGothic", sans-serif;
 	-webkit-font-smoothing: antialiased;
 	font-smoothing: antialiased;
+	background-color: #F4F7FB;
 }
 
 h1,
@@ -99,8 +100,6 @@ li{
 	padding-left: 200px;
 	padding-top: 40px;
 	width: 100%;
-	/* height: 100%; */
-	background-color: #F4F7FB;
 }
 
 .base-layout{
@@ -143,8 +142,7 @@ li{
 	right: 0;
 	bottom: 0;
 	height: 40px;
-	/* left: 200px;
-	width: calc(100% - 200px); */
+	z-index: 1;
 	width: 100%;
 	padding-left: 200px;
 	display: flex;
@@ -169,6 +167,7 @@ li{
 /*----------------------------------------*/
 .aside-container{
 	position: fixed;
+	z-index: 1;
 	top: 0;
 	bottom: 0;
 	max-width: 200px;
@@ -262,6 +261,7 @@ li{
 	background-color: #FFFFFF;
 	border-radius: .375rem;
 	min-width: 310px;
+	min-height: 230px;
 	box-shadow: 0 2px 6px 0 rgba(67,89,113,.12);
 }
 
@@ -274,14 +274,16 @@ li{
 }
 
 .body-subtitle{
+	display: flex;
+	width: 100%;
+	justify-content: space-between;
 	font-size: 16px;
 	font-weight: 550;
 }
 
 .subtitle-unit{
-	margin-left: 5px;
-	font-size: 13px;
-	color: #787878;
+	font-size: 12px;
+	color: #A8A8A8;
 }
 
 .home-stats{
@@ -293,7 +295,9 @@ li{
 
 .home-stats > div{
 	position: absolute;
-	color: #A4A4A4;
+	font-weight: 600;
+	font-size: 17px;
+	color: #B0B0B0;
 	display: flex;
 	align-items: center;
 	justify-content: center;
@@ -302,4 +306,68 @@ li{
 
 .home-stats > canvas{
 	background-color: #FFFFFF;
+}
+
+.report-preview, .qna-preview{
+	margin-top: 10px;
+	width: 300px;
+	max-height: 300px;
+}
+
+.home-ul{
+	padding: 5px;
+	font-size: 13px;
+	color: #454545;
+}
+
+.home-ul > li{
+	padding: 5px;
+	border-radius: .375rem;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+}
+
+.home-ul > li:hover{
+	background-color: #F9F9FB;
+}
+
+.home-ul > li:not(li:last-child){	
+	border-bottom: 1px solid #f0f1f6;
+}
+
+.home-ul > li > a{
+	color: #6A6A6A;
+	font-weight: 550; 
+}
+
+.home-ul > li > span{
+	font-size: 12px;
+	color: #9D9D9D;
+}
+
+.home-ul > li > a > img{
+	width: 5px;
+	object-fit: contain;
+	margin-left: 5px;
+}
+
+.report-preview > span, .qna-preview > span{
+	justify-content: center;
+	align-items: center;
+	width: 300px;
+	min-height: 150px;
+	background-color: #FFFFFF;
+	font-weight: 600;
+	font-size: 17px;
+	color: #B0B0B0;
+}
+
+.loading{	
+	display: flex;
+	position: absolute;
+}
+
+.preview-empty{
+	display: none;
 }

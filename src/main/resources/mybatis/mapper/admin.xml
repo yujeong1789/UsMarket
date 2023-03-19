@@ -33,9 +33,9 @@
 	<select id="searchDealStatsPreview" parameterType="map" resultType="map">
 		<![CDATA[
 		SELECT TO_CHAR(b.dt, 'YYYY-MM-DD') AS day
-    		, NVL(SUM(a.price), 0) AS price
+    		, NVL(SUM(a.price), 0) AS price, NVL(SUM(a.count), 0) AS count
   		FROM ( SELECT TO_CHAR(d.deal_start_date, 'YYYY-MM-DD') AS regdate
-				, sum(p.product_price) price
+				, sum(p.product_price) price, COUNT(*) AS count
            	   FROM deal d, product p
 			   WHERE d.product_no = p.product_no
           	   AND (deal_start_date BETWEEN TO_DATE(#{startDate}, 'YYYY-MM-DD')
