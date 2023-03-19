@@ -8,8 +8,10 @@
 	</div>
 	<div class="body-dashboard">
 		<div>
-			<span class="body-subtitle">신규 가입자 추이</span>
-			<span class="subtitle-unit">단위: 명</span>
+			<div class="body-subtitle">
+				<span>신규 가입자 추이</span>
+				<span class="subtitle-unit">단위: 명</span>			
+			</div>
 			
 			<div class="home-stats">
 				<div class="member-stats-loading">로딩중</div>
@@ -17,8 +19,10 @@
 			</div>
 		</div>
 		<div>
-			<span class="body-subtitle">결제 추이</span>
-			<span class="subtitle-unit">단위: KRW</span>
+			<div class="body-subtitle">
+				<span>결제 추이</span>
+				<span class="subtitle-unit">단위: KRW</span>			
+			</div>
 			
 			<div class="home-stats">
 				<div class="deal-stats-loading">로딩중</div>
@@ -27,20 +31,18 @@
 		</div>
 		<div>
 			<span class="body-subtitle">최근 신고</span>
-			<span class="subtitle-unit">단위: 건</span>
-			
-			<div class="home-stats">
-				<div class="report-stats-loading">로딩중</div>
-				<canvas id="report_stats"></canvas>
+			<div class="report-preview">
+				<span class="loading">로딩중</span>
+				<span class="preview-empty">최근 접수된 신고가 없습니다.</span>
+				<ul class="home-ul report-ul"></ul>
 			</div>
 		</div>
 		<div>
 			<span class="body-subtitle">최근 문의</span>
-			<span class="subtitle-unit">단위: 건</span>
-			
-			<div class="home-stats">
-				<div class="qna-stats-loading">로딩중</div>
-				<canvas id="qna_stats"></canvas>
+			<div class="qna-preview">
+				<span class="loading">로딩중</span>
+				<span class="preview-empty">최근 접수된 문의가 없습니다.</span>
+				<ul class="home-ul qna-ul"></ul>
 			</div>
 		</div>
 	</div>
@@ -48,17 +50,11 @@
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
 <script>
-	const getMemberStats = function(){
-		return fetch('/usMarket/fetch/memberstats/'+getStartDate()+'/'+getEndDate())
-    			.then(response => response.json());
-	};
-	
-	const getDealStats = function(){
-		return fetch('/usMarket/fetch/dealstats/'+getStartDay()+'/'+getEndDay())
-    			.then(response => response.json());
-	};
-
-	getMemberStats().then(data  => {
+document.addEventListener('DOMContentLoaded', function(){
+	fetch('/usMarket/fetch/admin/memberstats/'+getStartDate()+'/'+getEndDate())
+	.then((response) => response.json())
+	.then((data) => {
+		console.log('member = '+data);
 		var ctx = document.getElementById('member_stats');		
 		document.querySelector('.member-stats-loading').style.visibility = 'hidden';
 		const myChart = new Chart(ctx, {
@@ -92,7 +88,7 @@
 					onComplete: function () {
 						var chartInstance = this.chart,
 							ctx = chartInstance.ctx;
-						ctx.font = Chart.helpers.fontString(Chart.defaults.global.defaultFontSize, 'bold', Chart.defaults.global.defaultFontFamily);
+						ctx.font = Chart.helpers.fontString(Chart.defaults.global.defaultFontSize, '500', Chart.defaults.global.defaultFontFamily);
 						ctx.fillStyle = 'rgba(123, 123, 123, 0.8)';
 						ctx.textAlign = 'center';
 						ctx.textBaseline = 'bottom';
@@ -138,34 +134,49 @@
 				}
 			}
 		});
-	}); // member-stats
+	}).catch((error) => console.log("error: "+error)); // memberStats
 	
 	
-	getDealStats().then(data  => {
+	
+	fetch('/usMarket/fetch/admin/dealstats/'+getStartDay()+'/'+getEndDay())
+	.then((response) => response.json())
+	.then((data) => {
+		console.log('deal '+data);
 		var ctx = document.getElementById('deal_stats');
 		document.querySelector('.deal-stats-loading').style.visibility = 'hidden';
 		const myChart = new Chart(ctx, {
-			type: 'line',
 			data: {
 				labels : [setDateFormat(data[0].DAY), setDateFormat(data[1].DAY), setDateFormat(data[2].DAY)],
 				datasets: [{
-		            label: '',
+					type: 'line',
+		            label: '발생 건수',
 		            data: [data[0].PRICE, data[1].PRICE, data[2].PRICE],
 		            backgroundColor: 'rgba(235, 242, 255, 0.8)',
 		            pointRadius: '4',
 		            borderColor: 'rgba(113, 155, 255, 0.8)',
 		            pointBorderColor: 'rgba(113, 155, 255, 0.8)',
 		            borderWidth: 2,
-		            borderRadius: 10,
+		            borderRadius: 2,
 		            pointBackgroundColor : 'white',
 	                pointBorderWidth : '2',
 	                pointHoverBorderWidth :'2',
-	                pointHoverBackgroundColor : 'white'
+	                pointHoverBackgroundColor : 'white',
+	                pointHitRadius: '10'
 				}]
 			},
 		    options: {
 		    	tooltips: {
-		        	enabled: false
+		    		backgroundColor: 'rgba(80, 80, 80, 0.8)',
+					caretPadding: 10,
+					displayColors: false,
+					bodyFontStyle: 'bold',
+					yPadding: 8,
+		    		callbacks: {
+						label: function(tooltipItem) {
+							var label = data[tooltipItem.index].COUNT+'건';
+							return label;
+		    	        }
+					}
 		        },
 		        hover: {
 		        	animationDuration: 0	
@@ -175,7 +186,7 @@
 					onComplete: function () {
 						var chartInstance = this.chart,
 							ctx = chartInstance.ctx;
-						ctx.font = Chart.helpers.fontString(Chart.defaults.global.defaultFontSize, 'bold', Chart.defaults.global.defaultFontFamily);
+						ctx.font = Chart.helpers.fontString(Chart.defaults.global.defaultFontSize, '500', Chart.defaults.global.defaultFontFamily);
 						ctx.fillStyle = 'rgba(123, 123, 123, 0.8)';
 						ctx.textAlign = 'center';
 						ctx.textBaseline = 'bottom';
@@ -183,7 +194,7 @@
 						this.data.datasets.forEach(function (dataset, i) {
 							var meta = chartInstance.controller.getDatasetMeta(i);
 							meta.data.forEach(function (bar, index) {
-								var data = getPriceFormat(dataset.data[index]);							
+								var data = getPriceFormat(dataset.data[index])+'원';							
 								ctx.fillText(data, bar._model.x, bar._model.y - 5);
 							});
 						});
@@ -221,8 +232,75 @@
 				}
 			}
 		});
-	}); // deal-stats
+	}).catch((error) => console.log("error: "+error)); // dealStats
 	
 	
 	
+	fetch('/usMarket/fetch/admin/reportlist')
+	.then((response) => response.json())
+	.then((data) => {
+		document.querySelector('.report-preview > .loading').style.visibility = 'hidden';
+		
+		if(data.length == 0){
+			document.querySelector('.report-preview > .preview-empty').style.display = 'flex';
+			return;
+		}
+		
+		data.forEach((el, i) => {
+			var li = document.createElement('li');
+			var a = document.createElement('a');
+			
+			a.setAttribute('href', '${pageContext.request.contextPath}/admin/report/info?report_no='+el.REPORT_NO);
+			a.textContent = el.REPORT_TITLE;
+			
+			if(el.REPORT_COMPLETE == 'N'){
+				var img = document.createElement('img');
+				img.setAttribute('src', '${pageContext.request.contextPath}/resources/admin/img/new_report.png');
+				a.appendChild(img);				
+			}			
+			li.appendChild(a);
+			
+			var span = document.createElement('span');
+			span.textContent = convert(el.REPORT_REGDATE);
+			li.appendChild(span);
+			
+			document.querySelector('.report-ul').appendChild(li);
+		});
+	}).catch((error) => console.log("error: "+error)); // reportList
+	
+	
+	
+	fetch('/usMarket/fetch/admin/qnalist')
+	.then((response) => response.json())
+	.then((data) => {
+		document.querySelector('.qna-preview > .loading').style.visibility = 'hidden';
+		
+		if(data.length == 0){
+			document.querySelector('.qna-preview > .preview-empty').style.display = 'flex';
+			return;
+		}
+		
+		data.forEach((el, i) => {
+			var li = document.createElement('li');
+			var a = document.createElement('a');
+			
+			a.setAttribute('href', '${pageContext.request.contextPath}/admin/qna/info?qna_no='+el.QNA_NO);
+			a.textContent = el.QNA_TITLE;
+			
+			if(el.QNA_COMPLETE == 'N'){
+				var img = document.createElement('img');
+				img.setAttribute('src', '${pageContext.request.contextPath}/resources/admin/img/new_report.png');
+				a.appendChild(img);				
+			}			
+			li.appendChild(a);
+			
+			var span = document.createElement('span');
+			span.textContent = convert(el.QNA_REGDATE);
+			li.appendChild(span);
+			
+			document.querySelector('.qna-ul').appendChild(li);
+		});
+	}).catch((error) => console.log("error: "+error)); // reportList
+
+});
 </script>
