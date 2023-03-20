@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.spring.usMarket.dao.admin.AdminDao;
+import com.spring.usMarket.utils.AdminSearchCondition;
 
 @Service
 public class AdminServiceImpl implements AdminService{
@@ -35,9 +36,9 @@ public class AdminServiceImpl implements AdminService{
 
 	@Override
 	@Transactional(rollbackFor = SQLException.class, readOnly = true)
-	public List<Map<String, Object>> getMemberStatsPreview(String startDate, String endDate) throws Exception {
+	public List<Map<String, Object>> getMemberStatsPreview(AdminSearchCondition adminSearchCondition) throws Exception {
 		
-		List<Map<String, Object>> listMap = adminDao.searchMemberStatsPreview(startDate, endDate);
+		List<Map<String, Object>> listMap = adminDao.searchMemberStatsPreview(adminSearchCondition);
 		logger.info("월별 신규 가입자 추이 조회 결과 = {}", listMap.toString());
 		
 		return listMap;
@@ -49,6 +50,26 @@ public class AdminServiceImpl implements AdminService{
 		
 		List<Map<String, Object>> listMap = adminDao.searchDealStatsPreview(startDate, endDate);
 		logger.info("일별 결제 추이 조회 결과 = {}", listMap.toString());
+		
+		return listMap;
+	}
+	
+	@Override
+	@Transactional(rollbackFor = SQLException.class, readOnly = true)
+	public List<Map<String, Object>> getReportList(String startPage, String endPage) throws Exception {
+		
+		List<Map<String, Object>> listMap = adminDao.searchReportList(startPage, endPage);
+		logger.info("신고 목록 조회 결과 = {}", listMap.size());
+		
+		return listMap;
+	}
+
+	@Override
+	@Transactional(rollbackFor = SQLException.class, readOnly = true)
+	public List<Map<String, Object>> getQnaList(String startPage, String endPage) throws Exception {
+		
+		List<Map<String, Object>> listMap = adminDao.searchQnaList(startPage, endPage);
+		logger.info("문의 목록 조회 결과 = {}", listMap.size());
 		
 		return listMap;
 	}
