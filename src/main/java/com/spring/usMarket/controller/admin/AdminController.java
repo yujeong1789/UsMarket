@@ -1,6 +1,8 @@
-package com.spring.usMarket.controller;
+package com.spring.usMarket.controller.admin;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -17,7 +19,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.spring.usMarket.service.admin.AdminService;
-import com.spring.usMarket.utils.SessionParameters;
 
 @Controller
 @RequestMapping("/admin")
@@ -27,8 +28,20 @@ public class AdminController { // 관리자 메인 페이지 출력
 	@Autowired AdminService adminService;
 	
 	@GetMapping("/home")
-	public void main() throws Exception {
+	public void main(Model model) {
 		logger.info("admin home");
+		
+		List<Map<String, Object>> qnaMap = new ArrayList<>();
+		List<Map<String, Object>> reportMap = new ArrayList<>();
+		try {
+			qnaMap = adminService.getQnaList("1", "5"); 
+			reportMap = adminService.getReportList("1", "5");
+			
+			model.addAttribute("qnaMap", qnaMap);
+			model.addAttribute("reportMap", reportMap);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 	
 	@GetMapping("/login")
@@ -44,10 +57,10 @@ public class AdminController { // 관리자 메인 페이지 출력
 		Map<String, Object> adminMap = new HashMap<>();
 		try {
 			adminMap = adminService.getAdmin(admin_id, admin_password);
-			ratt.addFlashAttribute("admin_id", admin_id);
 			
 			if(adminMap == null) {
 				ratt.addFlashAttribute("message", "false");
+				ratt.addFlashAttribute("admin_id", admin_id);
 				logger.info("로그인 실패");
 				return "redirect:/admin/login";
 			}
@@ -62,12 +75,13 @@ public class AdminController { // 관리자 메인 페이지 출력
 		return "redirect:/admin/home";
 	}
 	
-	@GetMapping("logout")
+	@GetMapping("/logout")
 	public String logout(HttpServletRequest request) {
 		
 		request.getSession().removeAttribute("admin");;
-		logger.info("로그아웃 {}", (SessionParameters.getAdmin(request) == null ? "성공" : "실패"));
+		logger.info("로그아웃 {}", (request.getSession().getAttribute("admin") == null ? "성공" : "실패"));
 		
 		return "redirect:/admin/home";
-	}
+	}	
+
 }
