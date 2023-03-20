@@ -8,6 +8,8 @@ import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import com.spring.usMarket.utils.AdminSearchCondition;
+
 @Repository
 public class AdminDaoImpl implements AdminDao{
 	
@@ -25,12 +27,8 @@ public class AdminDaoImpl implements AdminDao{
 	}
 
 	@Override
-	public List<Map<String, Object>> searchMemberStatsPreview(String startDate, String endDate) throws Exception {
-		Map<String, Object> map = new HashMap<>();
-		map.put("startDate", startDate);
-		map.put("endDate", endDate);
-		
-		return session.selectList(namespace+"searchMemberStatsPreview", map);
+	public List<Map<String, Object>> searchMemberStatsPreview(AdminSearchCondition adminSearchCondition) throws Exception {
+		return session.selectList(namespace+"searchMemberStatsPreview", adminSearchCondition);
 	}
 
 	@Override
@@ -40,6 +38,25 @@ public class AdminDaoImpl implements AdminDao{
 		map.put("endDate", endDate);
 		
 		return session.selectList(namespace+"searchDealStatsPreview", map);
+	}
+
+	@Override
+	public List<Map<String, Object>> searchReportList(String startPage, String endPage) throws Exception {
+		Map<String, Object> map = new HashMap<>();
+		map.put("startPage", startPage);
+		map.put("endPage", endPage);
+		
+		return session.selectList(namespace+"searchReportList", map);
+	}
+
+
+	@Override
+	public List<Map<String, Object>> searchQnaList(String startPage, String endPage) throws Exception {
+		Map<String, Object> map = new HashMap<>();
+		map.put("startPage", startPage);
+		map.put("endPage", endPage);
+		
+		return session.selectList(namespace+"searchQnaList", map);
 	}
 	
 }
