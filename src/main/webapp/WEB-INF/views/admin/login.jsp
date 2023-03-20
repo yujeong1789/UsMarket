@@ -35,6 +35,7 @@ document.addEventListener('DOMContentLoaded', function(){
 		document.getElementById('login-message').style.display = 'flex';
 	}
 	document.querySelector('aside').style.zIndex = '-1';
+	document.querySelector('aside').style.backgroundColor = '#F4F7FB';
 	document.querySelector('header').style.zIndex = '-1';
 	
 	document.querySelector('main').style.padding = '100px';

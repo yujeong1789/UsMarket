@@ -157,6 +157,13 @@ li{
 	font-size: 14px;
 }
 
+.header-auth div{
+	color: #525252;
+	font-size: 13px;
+	font-weight: 600;
+	padding-top: 2px;
+}
+
 .header-auth a{
 	padding-left: 10px;
 	color: #666666;
@@ -281,6 +288,15 @@ li{
 	font-weight: 550;
 }
 
+.body-subtitle > a{
+	color: #1C1C1C;
+}
+
+.body-subtitle > a:hover{
+	text-decoration: inherit;
+	color: #7988FD;
+}
+
 .subtitle-unit{
 	font-size: 12px;
 	color: #A8A8A8;
@@ -321,7 +337,7 @@ li{
 }
 
 .home-ul > li{
-	padding: 5px;
+	padding: 8px 6px 5px 6px;
 	border-radius: .375rem;
 	display: flex;
 	align-items: center;
@@ -353,6 +369,7 @@ li{
 }
 
 .report-preview > span, .qna-preview > span{
+	display: flex;
 	justify-content: center;
 	align-items: center;
 	width: 300px;
@@ -361,13 +378,4 @@ li{
 	font-weight: 600;
 	font-size: 17px;
 	color: #B0B0B0;
-}
-
-.loading{	
-	display: flex;
-	position: absolute;
-}
-
-.preview-empty{
-	display: none;
 }

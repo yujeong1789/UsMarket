@@ -7,8 +7,6 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -39,14 +37,14 @@ public class AdminFetchController {
 		return resultMap;	
 	}
 	
-	@GetMapping("/dealstats/{startDate}/{endDate}")
-	public List<Map<String, Object>> deatStats(@PathVariable String startDate, @PathVariable String endDate){
+	@PostMapping("/dealstats")
+	public List<Map<String, Object>> dealStats(@RequestBody AdminSearchCondition searchCondition){
 		
-		logger.info("startDate = {}, endDate = {}", startDate, endDate);
+		logger.info("searchCondition = {}", searchCondition.toString());
 		
 		List<Map<String, Object>> resultMap = new ArrayList<>();
 		try {
-			resultMap = adminService.getDealStatsPreview(startDate, endDate);
+			resultMap = adminService.getDealStatsPreview(searchCondition);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

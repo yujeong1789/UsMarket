@@ -46,9 +46,9 @@ public class AdminServiceImpl implements AdminService{
 
 	@Override
 	@Transactional(rollbackFor = SQLException.class, readOnly = true)
-	public List<Map<String, Object>> getDealStatsPreview(String startDate, String endDate) throws Exception {
+	public List<Map<String, Object>> getDealStatsPreview(AdminSearchCondition adminSearchCondition) throws Exception {
 		
-		List<Map<String, Object>> listMap = adminDao.searchDealStatsPreview(startDate, endDate);
+		List<Map<String, Object>> listMap = adminDao.searchDealStatsPreview(adminSearchCondition);
 		logger.info("일별 결제 추이 조회 결과 = {}", listMap.toString());
 		
 		return listMap;
