@@ -1,6 +1,9 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
+<%@ page import="com.spring.usMarket.utils.TimeConvert"%>
 
 <div class="body-container">
 	<div class="body-title">
@@ -9,7 +12,7 @@
 	<div class="body-dashboard">
 		<div>
 			<div class="body-subtitle">
-				<span>신규 가입자 추이</span>
+				<a href="<c:url value='/admin/member/list'/>">가입자 추이</a>
 				<span class="subtitle-unit">단위: 명</span>			
 			</div>
 			
@@ -20,7 +23,7 @@
 		</div>
 		<div>
 			<div class="body-subtitle">
-				<span>결제 추이</span>
+				<a href="<c:url value='/admin/payment/list'/>">결제 추이</a>
 				<span class="subtitle-unit">단위: KRW</span>			
 			</div>
 			
@@ -30,19 +33,53 @@
 			</div>
 		</div>
 		<div>
-			<span class="body-subtitle">최근 신고</span>
+			<span class="body-subtitle">
+				<a href="<c:url value='/admin/report/list'/>">최근 신고</a>
+			</span>
 			<div class="report-preview">
-				<span class="loading">로딩중</span>
+			<c:if test="${empty reportMap }">
 				<span class="preview-empty">최근 접수된 신고가 없습니다.</span>
-				<ul class="home-ul report-ul"></ul>
+			</c:if>
+			<c:if test="${!empty reportMap }">
+				<ul class="home-ul report-ul">
+					<c:forEach var="report" items="${reportMap }">
+						<li>
+							<a href="<c:url value='/admin/report/info?report_no=${report.REPORT_NO }'/>">
+								${report.REPORT_TITLE }
+								<c:if test="${report.REPORT_COMPLETE eq 'N' }">
+									<img src="<c:url value='/resources/admin/img/new_report.png'/>">
+								</c:if>
+							</a>
+							<span>${TimeConvert.calculateTime(report.REPORT_REGDATE)}</span>
+						</li>
+					</c:forEach>
+				</ul>
+			</c:if>
 			</div>
 		</div>
 		<div>
-			<span class="body-subtitle">최근 문의</span>
+			<span class="body-subtitle">
+				<a href="<c:url value='/admin/report/list'/>">최근 문의</a>
+			</span>
 			<div class="qna-preview">
-				<span class="loading">로딩중</span>
-				<span class="preview-empty">최근 접수된 문의가 없습니다.</span>
-				<ul class="home-ul qna-ul"></ul>
+				<c:if test="${empty qnaMap }">
+					<span class="preview-empty">최근 접수된 문의가 없습니다.</span>
+				</c:if>
+				<c:if test="${!empty qnaMap }">
+					<ul class="home-ul qna-ul">
+						<c:forEach var="qna" items="${qnaMap }">
+							<li>
+								<a href="<c:url value='/admin/qna/info?qna_no=${report.QNA_NO }'/>">
+									${qna.QNA_TITLE }
+									<c:if test="${qna.QNA_COMPLETE eq 'N' }">
+										<img src="<c:url value='/resources/admin/img/new_report.png'/>">
+									</c:if>
+								</a>
+								<span>${TimeConvert.calculateTime(qna.QNA_REGDATE)}</span>
+							</li>
+						</c:forEach>
+					</ul>
+				</c:if>
 			</div>
 		</div>
 	</div>
@@ -51,7 +88,19 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
 <script>
 document.addEventListener('DOMContentLoaded', function(){
-	fetch('/usMarket/fetch/admin/memberstats/'+getStartDate()+'/'+getEndDate())
+	const memberStatsParam = {
+			'startDate': getStartDate(),
+			'endDate': '',
+			'condition': ''
+	};
+	
+	fetch('/usMarket/fetch/admin/memberstats', {
+		method: 'POST',
+		headers: {
+			'Content-type' : 'application/json'
+		},
+		body: JSON.stringify(memberStatsParam),
+	})
 	.then((response) => response.json())
 	.then((data) => {
 		console.log('member = '+data);
@@ -60,25 +109,37 @@ document.addEventListener('DOMContentLoaded', function(){
 		const myChart = new Chart(ctx, {
 			type: 'line',
 			data: {
-				labels : [setDateFormat(data[0].MONTH), setDateFormat(data[1].MONTH), setDateFormat(data[2].MONTH)],
+				labels : [setDateFormat(data[0].DATE), setDateFormat(data[1].DATE), setDateFormat(data[2].DATE)],
 				datasets: [{
-		            label: '',
-		            data: [data[0].CNT, data[1].CNT, data[2].CNT],
+		            label: '신규 가입 회원',
 		            backgroundColor: 'rgba(235, 242, 255, 0.8)',
 		            pointRadius: '4',
 		            borderColor: 'rgba(113, 155, 255, 0.8)',
 		            pointBorderColor: 'rgba(113, 155, 255, 0.8)',
-		            borderWidth: 2,
-		            borderRadius: 10,
+		            borderWidth: '2',
+		            borderRadius: '2',
 		            pointBackgroundColor : 'white',
 	                pointBorderWidth : '2',
 	                pointHoverBorderWidth :'2',
-	                pointHoverBackgroundColor : 'white'
+	                pointHoverBackgroundColor : 'white',
+	                pointHitRadius: '10',
+	                tension: 0,
+		            data: [data[0].CNT, data[1].CNT, data[2].CNT]
 				}]
 			},
 		    options: {
 		        tooltips: {
-		        	enabled: false
+		    		backgroundColor: 'rgba(80, 80, 80, 0.8)',
+					caretPadding: 10,
+					displayColors: false,
+					bodyFontStyle: 'bold',
+					yPadding: 8,
+		    		callbacks: {
+						label: function(tooltipItem) {
+							var label = (data[tooltipItem.index].INCREASE >= 0 ? '+' : '-')+getPriceFormat(data[tooltipItem.index].INCREASE)+'명';
+							return label;
+		    	        }
+					}
 		        },
 		        hover: {
 		        	animationDuration: 0	
@@ -92,22 +153,21 @@ document.addEventListener('DOMContentLoaded', function(){
 						ctx.fillStyle = 'rgba(123, 123, 123, 0.8)';
 						ctx.textAlign = 'center';
 						ctx.textBaseline = 'bottom';
-
-						this.data.datasets.forEach(function (dataset, i) {
-							var meta = chartInstance.controller.getDatasetMeta(i);
-							meta.data.forEach(function (bar, index) {
-								var data = dataset.data[index];							
-								ctx.fillText(data, bar._model.x, bar._model.y - 5);
-							});
+						
+						var dataset = this.data.datasets[0];
+						var meta = chartInstance.controller.getDatasetMeta(0);
+						meta.data.forEach(function (bar, index) {
+							var data = getPriceFormat(dataset.data[index])+'명';
+							ctx.fillText(data, bar._model.x, bar._model.y - 5);
 						});
 					}
 				},
 				legend: {
 	                display: true,
 	                labels: {
-	                boxWidth: 0,
-	                fontColor: 'rgba(0,0,0,0)',
-	                fontSize: 20
+	                	boxWidth: 0,
+		                fontColor: 'rgba(0,0,0,0)',
+		                fontSize: 1
 	                }
 	            },
 	            scales: {
@@ -117,19 +177,19 @@ document.addEventListener('DOMContentLoaded', function(){
 	                        fontColor: 'rgba(49, 51, 68, 0.8)'
 	                    },
 	                    gridLines: {
-	                        display:false,
-	                        lineWidth:0
+	                        display: false,
+	                        lineWidth: 0
 	                    }
 	                }],
 	                yAxes: [{
 	                    ticks: {
 	                        display: false,
-	                        beginAtZero: false
+	                        beginAtZero: true
 	                    },
 	                    gridLines: {
-							display:false,
-							lineWidth:0
-						}   
+							display: false,
+							lineWidth: 0
+						} 
 					}]
 				}
 			}
@@ -137,11 +197,16 @@ document.addEventListener('DOMContentLoaded', function(){
 	}).catch((error) => console.log("error: "+error)); // memberStats
 	
 	
-	
-	fetch('/usMarket/fetch/admin/dealstats/'+getStartDay()+'/'+getEndDay())
+	fetch('/usMarket/fetch/admin/dealstats/', {
+		method: 'POST',
+		headers: {
+			'Content-type' : 'application/json'
+		},
+		body: JSON.stringify(memberStatsParam),
+	})
 	.then((response) => response.json())
 	.then((data) => {
-		console.log('deal '+data);
+		console.log('deal = '+data);
 		var ctx = document.getElementById('deal_stats');
 		document.querySelector('.deal-stats-loading').style.visibility = 'hidden';
 		const myChart = new Chart(ctx, {
@@ -150,18 +215,19 @@ document.addEventListener('DOMContentLoaded', function(){
 				datasets: [{
 					type: 'line',
 		            label: '발생 건수',
-		            data: [data[0].PRICE, data[1].PRICE, data[2].PRICE],
 		            backgroundColor: 'rgba(235, 242, 255, 0.8)',
 		            pointRadius: '4',
 		            borderColor: 'rgba(113, 155, 255, 0.8)',
 		            pointBorderColor: 'rgba(113, 155, 255, 0.8)',
-		            borderWidth: 2,
-		            borderRadius: 2,
+		            borderWidth: '2',
+		            borderRadius: '2',
 		            pointBackgroundColor : 'white',
 	                pointBorderWidth : '2',
 	                pointHoverBorderWidth :'2',
 	                pointHoverBackgroundColor : 'white',
-	                pointHitRadius: '10'
+	                pointHitRadius: '10',
+	                tension: 0,
+		            data: [data[0].PRICE, data[1].PRICE, data[2].PRICE]
 				}]
 			},
 		    options: {
@@ -179,7 +245,7 @@ document.addEventListener('DOMContentLoaded', function(){
 					}
 		        },
 		        hover: {
-		        	animationDuration: 0	
+		        	animationDuration: 0
 		        },
 		        animation: {
 					duration: 1000,
@@ -203,9 +269,9 @@ document.addEventListener('DOMContentLoaded', function(){
 				legend: {
 	                display: true,
 	                labels: {
-	                boxWidth: 0,
-	                fontColor: 'rgba(0,0,0,0)',
-	                fontSize: 20
+		                boxWidth: 0,
+		                fontColor: 'rgba(0,0,0,0)',
+		                fontSize: 1
 	                }
 	            },
 	            scales: {
@@ -215,8 +281,8 @@ document.addEventListener('DOMContentLoaded', function(){
 	                        fontColor: 'rgba(49, 51, 68, 0.8)'
 	                    },
 	                    gridLines: {
-	                        display:false,
-	                        lineWidth:0
+	                        display: false,
+	                        lineWidth: 0
 	                    }
 	                }],
 	                yAxes: [{
@@ -225,82 +291,13 @@ document.addEventListener('DOMContentLoaded', function(){
 	                        beginAtZero: false
 	                    },
 	                    gridLines: {
-							display:false,
-							lineWidth:0
+							display: false,
+							lineWidth: 0
 						}   
 					}]
 				}
 			}
 		});
 	}).catch((error) => console.log("error: "+error)); // dealStats
-	
-	
-	
-	fetch('/usMarket/fetch/admin/reportlist')
-	.then((response) => response.json())
-	.then((data) => {
-		document.querySelector('.report-preview > .loading').style.visibility = 'hidden';
-		
-		if(data.length == 0){
-			document.querySelector('.report-preview > .preview-empty').style.display = 'flex';
-			return;
-		}
-		
-		data.forEach((el, i) => {
-			var li = document.createElement('li');
-			var a = document.createElement('a');
-			
-			a.setAttribute('href', '${pageContext.request.contextPath}/admin/report/info?report_no='+el.REPORT_NO);
-			a.textContent = el.REPORT_TITLE;
-			
-			if(el.REPORT_COMPLETE == 'N'){
-				var img = document.createElement('img');
-				img.setAttribute('src', '${pageContext.request.contextPath}/resources/admin/img/new_report.png');
-				a.appendChild(img);				
-			}			
-			li.appendChild(a);
-			
-			var span = document.createElement('span');
-			span.textContent = convert(el.REPORT_REGDATE);
-			li.appendChild(span);
-			
-			document.querySelector('.report-ul').appendChild(li);
-		});
-	}).catch((error) => console.log("error: "+error)); // reportList
-	
-	
-	
-	fetch('/usMarket/fetch/admin/qnalist')
-	.then((response) => response.json())
-	.then((data) => {
-		document.querySelector('.qna-preview > .loading').style.visibility = 'hidden';
-		
-		if(data.length == 0){
-			document.querySelector('.qna-preview > .preview-empty').style.display = 'flex';
-			return;
-		}
-		
-		data.forEach((el, i) => {
-			var li = document.createElement('li');
-			var a = document.createElement('a');
-			
-			a.setAttribute('href', '${pageContext.request.contextPath}/admin/qna/info?qna_no='+el.QNA_NO);
-			a.textContent = el.QNA_TITLE;
-			
-			if(el.QNA_COMPLETE == 'N'){
-				var img = document.createElement('img');
-				img.setAttribute('src', '${pageContext.request.contextPath}/resources/admin/img/new_report.png');
-				a.appendChild(img);				
-			}			
-			li.appendChild(a);
-			
-			var span = document.createElement('span');
-			span.textContent = convert(el.QNA_REGDATE);
-			li.appendChild(span);
-			
-			document.querySelector('.qna-ul').appendChild(li);
-		});
-	}).catch((error) => console.log("error: "+error)); // reportList
-
 });
 </script>
