@@ -8,48 +8,100 @@
 		WHERE admin_id = #{admin_id} AND admin_password = #{admin_password}
 	</select>
 	
-	<select id="searchMemberStatsPreview" parameterType="map" resultType="map">
-		<![CDATA[
-		SELECT TO_CHAR(b.dt, 'YYYY-MM') AS month
-			, NVL(SUM(a.cnt), 0) AS cnt
-		FROM ( SELECT TO_CHAR(member_regdate, 'YYYY-MM-DD') AS regdate
-				, COUNT(*) cnt
-			   FROM member
-			   WHERE member_regdate BETWEEN TO_DATE(#{startDate}, 'YYYY-MM-DD')
-			   AND TO_DATE(#{endDate}, 'YYYY-MM-DD') 
-			   GROUP BY member_regdate
-			 ) a
-			 , ( SELECT TO_DATE(#{startDate},'YYYY-MM-DD') + LEVEL - 1 AS dt
-				 FROM dual 
-				 CONNECT BY LEVEL <= (TO_DATE(#{endDate},'YYYY-MM-DD') 
-					- TO_DATE(#{startDate},'YYYY-MM-DD') + 1)
-			   ) b
-		WHERE b.dt = a.regdate(+)
-		GROUP BY TO_CHAR(b.dt, 'YYYY-MM')
-		ORDER BY TO_CHAR(b.dt, 'YYYY-MM')
-		]]>
+	<select id="searchMemberStatsPreview" parameterType="adminSearchCondition" resultType="map">
+		SELECT*
+		FROM( SELECT "DATE", increase, SUM(increase) OVER (ORDER BY "DATE") AS cnt
+			  FROM (SELECT TO_CHAR(b.dt, 'YYYY-MM') AS "DATE"
+						  , NVL(SUM(a.increase), 0) AS increase
+				    FROM ( SELECT TO_CHAR(member_regdate, 'YYYY-MM-DD') AS regdate
+						    , COUNT(*) increase
+				  	       FROM member 
+				  	       <if test='condition!=null and condition!=""'> 
+					  		   WHERE member_state_no = #{condition} 
+						   </if>
+					       GROUP BY member_regdate
+					     ) a
+					     , ( SELECT TO_DATE('2022-04-01','YYYY-MM-DD') + LEVEL - 1 AS dt
+						     FROM dual 
+							 <![CDATA[
+							 CONNECT BY LEVEL <= (CURRENT_DATE - TO_DATE('2022-04-01','YYYY-MM-DD') + 1)
+							 ]]>
+					       ) b
+				    WHERE b.dt = a.regdate(+)
+				    GROUP BY TO_CHAR(b.dt, 'YYYY-MM')
+				    ORDER BY TO_CHAR(b.dt, 'YYYY-MM')
+			  )
+			)			
+		<choose>
+			<when test='endDate==null or endDate==""'>
+				 WHERE TO_DATE("DATE", 'YYYY-MM') BETWEEN TO_DATE(#{startDate}, 'YYYY-MM-DD') AND CURRENT_DATE 
+			</when>
+			<otherwise>
+				 WHERE TO_DATE("DATE", 'YYYY-MM') BETWEEN TO_DATE(#{startDate}, 'YYYY-MM-DD') AND TO_DATE(#{endDate}, 'YYYY-MM-DD')
+			</otherwise>
+		</choose>
 	</select>
 	
-	<select id="searchDealStatsPreview" parameterType="map" resultType="map">
-		<![CDATA[
-		SELECT TO_CHAR(b.dt, 'YYYY-MM-DD') AS day
-    		, NVL(SUM(a.price), 0) AS price, NVL(SUM(a.count), 0) AS count
-  		FROM ( SELECT TO_CHAR(d.deal_start_date, 'YYYY-MM-DD') AS regdate
-				, sum(p.product_price) price, COUNT(*) AS count
-           	   FROM deal d, product p
-			   WHERE d.product_no = p.product_no
-          	   AND (deal_start_date BETWEEN TO_DATE(#{startDate}, 'YYYY-MM-DD')
-						AND TO_DATE(#{endDate}, 'YYYY-MM-DD') + 1) 
-          	   GROUP BY deal_start_date
-        	 ) a
-			, ( SELECT TO_DATE(#{startDate},'YYYY-MM-DD') + LEVEL - 1 AS dt
-            	FROM dual 
-         		CONNECT BY LEVEL <= (TO_DATE(#{endDate},'YYYY-MM-DD') 
-                            - TO_DATE(#{startDate},'YYYY-MM-DD') + 1)
-        	  ) b
-		WHERE b.dt = a.regdate(+)
-		GROUP BY TO_CHAR(b.dt, 'YYYY-MM-DD')
-		ORDER BY TO_CHAR(b.dt, 'YYYY-MM-DD')
-		]]>
+	
+	
+	<select id="searchDealStatsPreview" parameterType="adminSearchCondition" resultType="map">
+		
+		SELECT *
+		FROM( SELECT TO_CHAR(b.dt, 'YYYY-MM') AS day
+				, NVL(SUM(a.price), 0) AS price, NVL(SUM(a.count), 0) AS count
+		  	  FROM ( SELECT TO_CHAR(d.deal_start_date, 'YYYY-MM-DD') AS regdate
+						, sum(p.product_price) price, COUNT(*) AS count
+		           	 FROM deal d, product p
+					 WHERE d.product_no = p.product_no
+		          	 GROUP BY deal_start_date
+		           ) a
+				   , ( SELECT TO_DATE('2022-04-01','YYYY-MM-DD') + LEVEL - 1 AS dt
+		               FROM dual 
+		         	   <![CDATA[
+		         	   CONNECT BY LEVEL <= (CURRENT_DATE - TO_DATE('2022-04-01','YYYY-MM-DD') + 1)
+		         	   ]]>
+		        	 ) b
+			  WHERE b.dt = a.regdate(+)
+			  GROUP BY TO_CHAR(b.dt, 'YYYY-MM')
+			  ORDER BY TO_CHAR(b.dt, 'YYYY-MM')
+		    )
+		<choose>
+			<when test='endDate==null or endDate==""'>
+				WHERE TO_DATE(day, 'YYYY-MM') BETWEEN TO_DATE(#{startDate}, 'YYYY-MM-DD') AND CURRENT_DATE 
+			</when>
+			<otherwise>
+				WHERE TO_DATE(day, 'YYYY-MM') BETWEEN TO_DATE(#{startDate}, 'YYYY-MM-DD') AND TO_DATE(#{endDate}, 'YYYY-MM-DD')
+			</otherwise>
+		</choose>
+	</select>
+	
+	
+	<select id="searchReportList" parameterType="map" resultType="map">
+		SELECT *
+		FROM ( SELECT rownum AS num, A.*
+				FROM (	SELECT r.report_no, r.report_regdate, r.report_complete
+							,( SELECT c1.report_category1_name FROM report_category1 c1
+							   WHERE c1.report_category1_no = r.report_category1_no
+							 )||' | '||
+							 ( SELECT c2.report_category2_name FROM report_category2 c2
+							   WHERE c2.report_category1_no = r.report_category1_no AND c2.report_category2_no = r.report_category2_no
+							 ) AS report_title
+						FROM report r
+						ORDER BY report_regdate DESC
+					 ) A
+			 )
+		WHERE num BETWEEN #{startPage} AND #{endPage}
+	</select>
+	
+	
+	<select id="searchQnaList" parameterType="map" resultType="map">
+		SELECT *
+		FROM ( SELECT rownum AS num, A.*
+				FROM (	SELECT qna_no, qna_title, qna_complete, qna_regdate
+						FROM qna
+						ORDER BY qna_regdate DESC
+					 ) A
+			 )
+		WHERE num BETWEEN #{startPage} AND #{endPage}
 	</select>
 </mapper>
