@@ -16,12 +16,6 @@
 					<span>홈</span>
 				</a>
 			</li>
-			<li class="stats">
-				<a href="<c:url value='/admin/stats/list'/>">
-					<img src="<c:url value='/resources/admin/img/icon/stats.png'/>">
-					<span>통계</span>
-				</a>
-			</li>
 			<li class="member">
 				<a href="<c:url value='/admin/member/list'/>">
 					<img src="<c:url value='/resources/admin/img/icon/member.png'/>">
@@ -57,7 +51,7 @@
 </aside>
 
 <script type="text/javascript">
-const categories = ['home', 'stats', 'member', 'payment', 'report', 'qna', 'faq'];
+const categories = ['home', 'member', 'payment', 'report', 'qna', 'faq'];
 
 document.addEventListener('DOMContentLoaded', function(){
 	if(!isEmpty(document.querySelector('.selected'))){
