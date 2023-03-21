@@ -8,72 +8,31 @@
 		WHERE admin_id = #{admin_id} AND admin_password = #{admin_password}
 	</select>
 	
-	<select id="searchMemberStatsPreview" parameterType="adminSearchCondition" resultType="map">
-		SELECT*
-		FROM( SELECT "DATE", increase, SUM(increase) OVER (ORDER BY "DATE") AS cnt
-			  FROM (SELECT TO_CHAR(b.dt, 'YYYY-MM') AS "DATE"
-						  , NVL(SUM(a.increase), 0) AS increase
-				    FROM ( SELECT TO_CHAR(member_regdate, 'YYYY-MM-DD') AS regdate
-						    , COUNT(*) increase
-				  	       FROM member 
-				  	       <if test='condition!=null and condition!=""'> 
-					  		   WHERE member_state_no = #{condition} 
-						   </if>
-					       GROUP BY member_regdate
-					     ) a
-					     , ( SELECT TO_DATE('2022-04-01','YYYY-MM-DD') + LEVEL - 1 AS dt
-						     FROM dual 
-							 <![CDATA[
-							 CONNECT BY LEVEL <= (CURRENT_DATE - TO_DATE('2022-04-01','YYYY-MM-DD') + 1)
-							 ]]>
-					       ) b
-				    WHERE b.dt = a.regdate(+)
-				    GROUP BY TO_CHAR(b.dt, 'YYYY-MM')
-				    ORDER BY TO_CHAR(b.dt, 'YYYY-MM')
-			  )
-			)			
-		<choose>
-			<when test='endDate==null or endDate==""'>
-				 WHERE TO_DATE("DATE", 'YYYY-MM') BETWEEN TO_DATE(#{startDate}, 'YYYY-MM-DD') AND CURRENT_DATE 
-			</when>
-			<otherwise>
-				 WHERE TO_DATE("DATE", 'YYYY-MM') BETWEEN TO_DATE(#{startDate}, 'YYYY-MM-DD') AND TO_DATE(#{endDate}, 'YYYY-MM-DD')
-			</otherwise>
-		</choose>
-	</select>
-	
-	
-	
-	<select id="searchDealStatsPreview" parameterType="adminSearchCondition" resultType="map">
-		
+	<select id="searchMemberStatsByDate" parameterType="adminSearchCondition" resultType="map">
 		SELECT *
-		FROM( SELECT TO_CHAR(b.dt, 'YYYY-MM') AS day
-				, NVL(SUM(a.price), 0) AS price, NVL(SUM(a.count), 0) AS count
-		  	  FROM ( SELECT TO_CHAR(d.deal_start_date, 'YYYY-MM-DD') AS regdate
-						, sum(p.product_price) price, COUNT(*) AS count
-		           	 FROM deal d, product p
-					 WHERE d.product_no = p.product_no
-		          	 GROUP BY deal_start_date
-		           ) a
-				   , ( SELECT TO_DATE('2022-04-01','YYYY-MM-DD') + LEVEL - 1 AS dt
-		               FROM dual 
-		         	   <![CDATA[
-		         	   CONNECT BY LEVEL <= (CURRENT_DATE - TO_DATE('2022-04-01','YYYY-MM-DD') + 1)
-		         	   ]]>
-		        	 ) b
-			  WHERE b.dt = a.regdate(+)
-			  GROUP BY TO_CHAR(b.dt, 'YYYY-MM')
-			  ORDER BY TO_CHAR(b.dt, 'YYYY-MM')
-		    )
-		<choose>
-			<when test='endDate==null or endDate==""'>
-				WHERE TO_DATE(day, 'YYYY-MM') BETWEEN TO_DATE(#{startDate}, 'YYYY-MM-DD') AND CURRENT_DATE 
-			</when>
-			<otherwise>
-				WHERE TO_DATE(day, 'YYYY-MM') BETWEEN TO_DATE(#{startDate}, 'YYYY-MM-DD') AND TO_DATE(#{endDate}, 'YYYY-MM-DD')
-			</otherwise>
-		</choose>
+		FROM member_stats_date
+		WHERE TO_DATE("DATE", 'YYYY-MM-DD') BETWEEN TO_DATE(#{startDate}, 'YYYY-MM-DD') AND TO_DATE(#{endDate}, 'YYYY-MM-DD')
 	</select>
+	
+	<select id="searchMemberStatsByMonth" parameterType="adminSearchCondition" resultType="map">
+		SELECT *
+		FROM member_stats_month
+		WHERE TO_DATE("DATE", 'YYYY-MM') BETWEEN TO_DATE(#{startDate}, 'YYYY-MM-DD') AND TO_DATE(#{endDate}, 'YYYY-MM-DD')
+	</select>
+	
+	<select id="searchDealStatsByDate" parameterType="adminSearchCondition" resultType="map">
+		SELECT *
+		FROM deal_stats_date
+		WHERE TO_DATE(day, 'YYYY-MM-DD') BETWEEN TO_DATE(#{startDate}, 'YYYY-MM-DD') AND TO_DATE(#{endDate}, 'YYYY-MM-DD')
+	</select>
+	
+	<select id="searchDealStatsByMonth" parameterType="adminSearchCondition" resultType="map">
+		SELECT *
+		FROM deal_stats_month
+		WHERE TO_DATE(day, 'YYYY-MM') BETWEEN TO_DATE(#{startDate}, 'YYYY-MM-DD') AND TO_DATE(#{endDate}, 'YYYY-MM-DD')
+	</select>
+	
+
 	
 	
 	<select id="searchReportList" parameterType="map" resultType="map">

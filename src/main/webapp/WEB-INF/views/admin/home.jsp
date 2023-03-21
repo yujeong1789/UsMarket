@@ -89,9 +89,8 @@
 <script>
 document.addEventListener('DOMContentLoaded', function(){
 	const memberStatsParam = {
-			'startDate': getStartDate(),
-			'endDate': '',
-			'condition': ''
+		'startDate': getStartDate(2),
+		'endDate': getCurrentEndDate()
 	};
 	
 	fetch('/usMarket/fetch/admin/memberstats', {
@@ -99,7 +98,11 @@ document.addEventListener('DOMContentLoaded', function(){
 		headers: {
 			'Content-type' : 'application/json'
 		},
-		body: JSON.stringify(memberStatsParam),
+		body: JSON.stringify({
+			'startDate': getStartDate(2),
+			'endDate': getEndDay(),
+			'mode': 'month'
+		}),
 	})
 	.then((response) => response.json())
 	.then((data) => {
@@ -109,11 +112,11 @@ document.addEventListener('DOMContentLoaded', function(){
 		const myChart = new Chart(ctx, {
 			type: 'line',
 			data: {
-				labels : [setDateFormat(data[0].DATE), setDateFormat(data[1].DATE), setDateFormat(data[2].DATE)],
+				labels : [getDateFormat(data[0].DATE), getDateFormat(data[1].DATE), getDateFormat(data[2].DATE)],
 				datasets: [{
 		            label: '신규 가입 회원',
 		            backgroundColor: 'rgba(235, 242, 255, 0.8)',
-		            pointRadius: '4',
+		            pointRadius: '3',
 		            borderColor: 'rgba(113, 155, 255, 0.8)',
 		            pointBorderColor: 'rgba(113, 155, 255, 0.8)',
 		            borderWidth: '2',
@@ -197,12 +200,16 @@ document.addEventListener('DOMContentLoaded', function(){
 	}).catch((error) => console.log("error: "+error)); // memberStats
 	
 	
-	fetch('/usMarket/fetch/admin/dealstats/', {
+	fetch('/usMarket/fetch/admin/dealstats', {
 		method: 'POST',
 		headers: {
 			'Content-type' : 'application/json'
 		},
-		body: JSON.stringify(memberStatsParam),
+		body: JSON.stringify({
+			'startDate': getStartDay(2),
+			'endDate': getEndDay(),
+			'mode': 'date'
+		}),
 	})
 	.then((response) => response.json())
 	.then((data) => {
@@ -211,12 +218,12 @@ document.addEventListener('DOMContentLoaded', function(){
 		document.querySelector('.deal-stats-loading').style.visibility = 'hidden';
 		const myChart = new Chart(ctx, {
 			data: {
-				labels : [setDateFormat(data[0].DAY), setDateFormat(data[1].DAY), setDateFormat(data[2].DAY)],
+				labels : [getDateFormat(data[0].DAY), getDateFormat(data[1].DAY), getDateFormat(data[2].DAY)],
 				datasets: [{
 					type: 'line',
 		            label: '발생 건수',
 		            backgroundColor: 'rgba(235, 242, 255, 0.8)',
-		            pointRadius: '4',
+		            pointRadius: '3',
 		            borderColor: 'rgba(113, 155, 255, 0.8)',
 		            pointBorderColor: 'rgba(113, 155, 255, 0.8)',
 		            borderWidth: '2',
