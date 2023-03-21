@@ -84,17 +84,16 @@ let getFileSize = function(filesize) {
     return (filesize / Math.pow(1024, e)).toFixed(0) + text[e];
 };
 
-let getStartDate = function() {
+let getStartDate = function(month) {
 	var date = new Date();
-	var sel_month = -2;
-	date.setMonth(date.getMonth() + sel_month); 
+	date.setMonth(date.getMonth() - month); 
 	
 	var year    = date.getFullYear();
 	var month   = leftPad(date.getMonth() + 1);
 	return year+'-'+month+'-01';
 };
 
-let getEndDate = function() {
+let getCurrentEndDate = function() {
 	var date = new Date();
 	date.setMonth(date.getMonth() + 1); 
 	date.setDate(0); 
@@ -106,12 +105,23 @@ let getEndDate = function() {
 	return year+'-'+month+'-'+day;
 };
 
-let getStartDay = function(){
+let getStartDay = function(day){
 	var date = new Date();
-	date.setDate(date.getDate() - 2);
+	date.setDate(date.getDate() - day);
 	
 	var year    = date.getFullYear();
 	var month   = leftPad(date.getMonth() + 1);
+	var day = leftPad(date.getDate());
+	
+	return year+'-'+month+'-'+day;
+};
+
+let getStartMonth = function(month){
+	var date = new Date();
+	date.setMonth(date.getMonth() + 1 - month);
+	
+	var year    = date.getFullYear();
+	var month   = leftPad(date.getMonth());
 	var day = leftPad(date.getDate());
 	
 	return year+'-'+month+'-'+day;
@@ -127,7 +137,7 @@ let getEndDay = function(){
 	return year+'-'+month+'-'+day;
 };
 
-let setDateFormat = function(data){
+let getDateFormat = function(data){
 	var splitDate = data.split('-');
 	
 	if(splitDate.length > 2){
@@ -135,6 +145,12 @@ let setDateFormat = function(data){
 	}else{
 		return 	splitDate[0]+'년 '+(splitDate[1] < 10 ? splitDate[1].substr(1, 1) : splitDate[1])+'월';
 	}
+};
+
+let getMonthFormat = function(data){
+	var splitDate = data.split('-');
+	
+	return (splitDate[1] < 10 ? splitDate[1].substr(1, 1) : splitDate[1])+'월';
 };
 
 let getPriceFormat = function(price){
