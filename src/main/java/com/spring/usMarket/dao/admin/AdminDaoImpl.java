@@ -27,13 +27,39 @@ public class AdminDaoImpl implements AdminDao{
 	}
 
 	@Override
-	public List<Map<String, Object>> searchMemberStatsPreview(AdminSearchCondition adminSearchCondition) throws Exception {
-		return session.selectList(namespace+"searchMemberStatsPreview", adminSearchCondition);
+	public List<Map<String, Object>> searchMemberStatsByDate(String startDate, String endDate) throws Exception {
+		Map<String, Object> map = new HashMap<>();
+		map.put("startDate", startDate);
+		map.put("endDate", endDate);
+		
+		return session.selectList(namespace+"searchMemberStatsByDate", map);
 	}
 
 	@Override
-	public List<Map<String, Object>> searchDealStatsPreview(AdminSearchCondition adminSearchCondition) throws Exception {
-		return session.selectList(namespace+"searchDealStatsPreview", adminSearchCondition);
+	public List<Map<String, Object>> searchMemberStatsByMonth(String startDate, String endDate) throws Exception {
+		Map<String, Object> map = new HashMap<>();
+		map.put("startDate", startDate);
+		map.put("endDate", endDate);
+		
+		return session.selectList(namespace+"searchMemberStatsByMonth", map);
+	}
+
+	@Override
+	public List<Map<String, Object>> searchDealStatsByDate(String startDate, String endDate) throws Exception {
+		Map<String, Object> map = new HashMap<>();
+		map.put("startDate", startDate);
+		map.put("endDate", endDate);
+		
+		return session.selectList(namespace+"searchDealStatsByDate", map);
+	}
+
+	@Override
+	public List<Map<String, Object>> searchDealStatsByMonth(String startDate, String endDate) throws Exception {
+		Map<String, Object> map = new HashMap<>();
+		map.put("startDate", startDate);
+		map.put("endDate", endDate);
+		
+		return session.selectList(namespace+"searchDealStatsByMonth", map);
 	}
 
 	@Override
