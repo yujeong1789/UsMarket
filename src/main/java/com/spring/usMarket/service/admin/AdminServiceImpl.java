@@ -36,20 +36,40 @@ public class AdminServiceImpl implements AdminService{
 
 	@Override
 	@Transactional(rollbackFor = SQLException.class, readOnly = true)
-	public List<Map<String, Object>> getMemberStatsPreview(AdminSearchCondition adminSearchCondition) throws Exception {
+	public List<Map<String, Object>> getMemberStatsByDate(String startDate, String endDate) throws Exception {
 		
-		List<Map<String, Object>> listMap = adminDao.searchMemberStatsPreview(adminSearchCondition);
-		logger.info("월별 신규 가입자 추이 조회 결과 = {}", listMap.toString());
+		List<Map<String, Object>> listMap = adminDao.searchMemberStatsByDate(startDate, endDate);
+		logger.info("일별 가입자 추이 조회 결과 = {}", listMap.toString());
 		
 		return listMap;
 	}
 
 	@Override
 	@Transactional(rollbackFor = SQLException.class, readOnly = true)
-	public List<Map<String, Object>> getDealStatsPreview(AdminSearchCondition adminSearchCondition) throws Exception {
+	public List<Map<String, Object>> getMemberStatsByMonth(String startDate, String endDate) throws Exception {
+
+		List<Map<String, Object>> listMap = adminDao.searchMemberStatsByMonth(startDate, endDate);
+		logger.info("월별 가입자 추이 조회 결과 = {}", listMap.toString());
 		
-		List<Map<String, Object>> listMap = adminDao.searchDealStatsPreview(adminSearchCondition);
+		return listMap;
+	}
+
+	@Override
+	@Transactional(rollbackFor = SQLException.class, readOnly = true)
+	public List<Map<String, Object>> getDealStatsByDate(String startDate, String endDate) throws Exception {
+		
+		List<Map<String, Object>> listMap = adminDao.searchDealStatsByDate(startDate, endDate);
 		logger.info("일별 결제 추이 조회 결과 = {}", listMap.toString());
+		
+		return listMap;
+	}
+
+	@Override
+	@Transactional(rollbackFor = SQLException.class, readOnly = true)
+	public List<Map<String, Object>> getDealStatsByMonth(String startDate, String endDate) throws Exception {
+
+		List<Map<String, Object>> listMap = adminDao.searchDealStatsByMonth(startDate, endDate);
+		logger.info("월별 결제 추이 조회 결과 = {}", listMap.toString());
 		
 		return listMap;
 	}
@@ -73,5 +93,4 @@ public class AdminServiceImpl implements AdminService{
 		
 		return listMap;
 	}
-
 }
