@@ -10,6 +10,8 @@ public interface AdminService {
 	
 	List<Map<String, Object>> getMemberStatsByDate(String startDate, String endDate) throws Exception;
 	List<Map<String, Object>> getMemberStatsByMonth(String startDate, String endDate) throws Exception;
+	List<Map<String, Object>> getMemberList(AdminSearchCondition sc) throws Exception;
+	int getMemberCnt(String startDate, String endDate, String condition) throws Exception;
 	
 	List<Map<String, Object>> getDealStatsByDate(String startDate, String endDate) throws Exception;
 	List<Map<String, Object>> getDealStatsByMonth(String startDate, String endDate) throws Exception;

@@ -53,6 +53,17 @@ public class AdminServiceImpl implements AdminService{
 		
 		return listMap;
 	}
+	
+
+	@Override
+	@Transactional(rollbackFor = SQLException.class, readOnly = true)
+	public int getMemberCnt(String startDate, String endDate, String condition) throws Exception {
+		
+		int totalCnt = adminDao.searchMemberCnt(startDate, endDate, condition);
+		logger.info("회원수 조회 결과 = {}", totalCnt);
+		
+		return totalCnt;
+	}
 
 	@Override
 	@Transactional(rollbackFor = SQLException.class, readOnly = true)
@@ -90,6 +101,16 @@ public class AdminServiceImpl implements AdminService{
 		
 		List<Map<String, Object>> listMap = adminDao.searchQnaList(startPage, endPage);
 		logger.info("문의 목록 조회 결과 = {}", listMap.size());
+		
+		return listMap;
+	}
+
+	@Override
+	@Transactional(rollbackFor = SQLException.class, readOnly = true)
+	public List<Map<String, Object>> getMemberList(AdminSearchCondition sc) throws Exception {
+		
+		List<Map<String, Object>> listMap = adminDao.searchMemberList(sc);
+		logger.info("회원 목록 조회 결과 = {}", listMap.toString());
 		
 		return listMap;
 	}
