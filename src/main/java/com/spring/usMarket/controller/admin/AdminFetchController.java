@@ -7,12 +7,15 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.spring.usMarket.service.admin.AdminService;
+import com.spring.usMarket.utils.AdminPageHandler;
+import com.spring.usMarket.utils.AdminSearchCondition;
 
 @RestController
 @RequestMapping("/fetch/admin")
@@ -48,6 +51,30 @@ public class AdminFetchController {
 		logger.info("startDate = {}, endDate = {}", startDate, endDate);
 		
 		return resultMap;	
+	}
+	
+	
+	@PostMapping("/memberlist")
+	public void memberList(@RequestBody AdminSearchCondition sc, Model model){
+		
+		sc.setPageSize(10);
+		logger.info("adminSearchCondition = {}", sc.toString());
+		
+		List<Map<String, Object>> memberList = new ArrayList<>();
+		int totalCnt = 0;
+		try {
+			 memberList = adminService.getMemberList(sc);
+			 totalCnt = adminService.getMemberCnt(sc.getStartDate(), sc.getEndDate(), sc.getCondition());
+			 AdminPageHandler pageHandler = new AdminPageHandler(totalCnt, sc);
+			 
+			 model.addAttribute("memberList", memberList);
+			 model.addAttribute("page", sc.getPage());
+			 model.addAttribute("pageSize", sc.getPageSize());
+			 model.addAttribute("ph", pageHandler);
+			 
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 	
 	@PostMapping("/dealstats")

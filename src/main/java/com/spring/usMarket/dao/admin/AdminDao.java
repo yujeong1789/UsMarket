@@ -10,6 +10,8 @@ public interface AdminDao {
 	
 	List<Map<String, Object>> searchMemberStatsByDate(String startDate, String endDate) throws Exception;
 	List<Map<String, Object>> searchMemberStatsByMonth(String startDate, String endDate) throws Exception;
+	List<Map<String, Object>> searchMemberList(AdminSearchCondition sc) throws Exception;
+	int searchMemberCnt(String startDate, String endDate, String condition) throws Exception;
 	
 	List<Map<String, Object>> searchDealStatsByDate(String startDate, String endDate) throws Exception;
 	List<Map<String, Object>> searchDealStatsByMonth(String startDate, String endDate) throws Exception;

@@ -3,6 +3,37 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.mybatis.mapper.admin">
 
+	<sql id="searchCondition">
+		<choose>
+			<when test="condition == '1'">
+				AND member_state_no = 1
+			</when>
+			<when test="condition == '2'">
+				AND member_state_no = 2
+			</when>
+			<when test="condition == '3'">
+				AND member_state_no = 3
+			</when>
+		</choose>
+	</sql>
+	
+	<sql id="searchOrder">
+		<choose>
+			<when test="order == 'regdate'">
+				ORDER BY m.member_regdate
+			</when>
+			<when test="order == 'product'">
+				ORDER BY product_count
+			</when>
+			<when test="order == 'product_desc'">
+				ORDER BY product_count DESC
+			</when>
+			<otherwise>
+				ORDER BY m.member_regdate DESC
+			</otherwise>
+		</choose>
+	</sql>
+
 	<select id="searchAdmin" parameterType="map" resultType="map">
 		SELECT admin_no, admin_id, admin_name FROM admin 
 		WHERE admin_id = #{admin_id} AND admin_password = #{admin_password}
@@ -32,8 +63,46 @@
 		WHERE TO_DATE(day, 'YYYY-MM') BETWEEN TO_DATE(#{startDate}, 'YYYY-MM-DD') AND TO_DATE(#{endDate}, 'YYYY-MM-DD')
 	</select>
 	
-
+	<select id="searchMemberList" parameterType="adminSearchCondition" resultType="map">
+		SELECT *
+		FROM ( SELECT rownum AS num, A.*
+			   FROM ( SELECT m.member_no
+						, m.member_name
+						, m.member_nickname
+						, m.member_id
+						, m.member_regdate
+						, m.member_state_no
+						, ms.member_state_name 
+						, ( SELECT COUNT(*) 
+							FROM product p 
+							WHERE p.seller_no = m.member_no
+					  	  ) AS product_count
+			   		  FROM MEMBER m, member_state ms
+			   		  WHERE m.member_state_no = ms.member_state_no
+			   		  AND m.member_regdate BETWEEN TO_DATE(#{startDate}, 'YYYY-MM-DD') AND TO_DATE(#{endDate}, 'YYYY-MM-DD')
+					  <choose>
+					  	<when test="condition == '1'">
+							AND m.member_state_no = 1
+						</when>
+						<when test="condition == '2'">
+							AND m.member_state_no = 2
+						</when>
+						<when test="condition == '3'">
+							AND m.member_state_no = 3
+						</when>
+					  </choose>
+					  <include refid="searchOrder" />
+			 		) A
+			 )
+		WHERE num BETWEEN #{startPage} AND #{endPage}
+	</select>
 	
+	<select id="searchMemberCnt" parameterType="map" resultType="int">
+		SELECT COUNT(*)
+		FROM MEMBER
+		WHERE member_regdate BETWEEN TO_DATE(#{startDate}, 'YYYY-MM-DD') AND TO_DATE(#{endDate}, 'YYYY-MM-DD')
+		<include refid="searchCondition" /> 
+	</select>
 	
 	<select id="searchReportList" parameterType="map" resultType="map">
 		SELECT *
