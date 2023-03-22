@@ -3,7 +3,6 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
-
 <link rel="stylesheet" href="<c:url value='/resources/admin/css/member_list.css'/>" type="text/css">
 
 <div class="member-list-container">
@@ -15,18 +14,88 @@
 			<canvas id="member_canvas"></canvas>		
 		</div>
 		<div>
-			<div class="date-picker">
-				<label for="startDate">시작일</label>
-				<input type="date" name="startDate" id="startDate" min="2022-04-01" required>
-				<label for="endDate">종료일</label>
-				<input type="date" name="endDate" id="endDate" min="2022-04-01" required>
-				<div class="date-btn" id="week">1주</div>
-				<div class="date-btn" id="month">1개월</div>
-				<div class="date-btn" id="half-month">6개월</div>
-				<div class="date-btn" id="year">1년</div>
+			<div class="options-container">
+				<div class="date-picker">
+					<label for="startDate">시작일</label>
+					<input type="date" name="startDate" id="startDate" min="2022-04-01" required>
+					<label for="endDate">종료일</label>
+					<input type="date" name="endDate" id="endDate" min="2022-04-01" required>
+					<div class="date-btn" id="week">1주</div>
+					<div class="date-btn" id="month">1개월</div>
+					<div class="date-btn" id="half-month">6개월</div>
+					<div class="date-btn" id="year">1년</div>
+				</div>
+				<div class="order-condition">
+					<div class="order-dropdown">
+						<span>정렬</span>
+						<div class="dropdown-content">
+							<ul>
+								<li class="order-selected" data-order="regdate_desc">가입일 내림차순</li>
+								<li data-order="regdate_desc">가입일 오름차순</li>
+								<li data-order="product_desc">판매상품 많은순</li>
+								<li data-order="product">판매상품 적은순</li>							
+							</ul>
+						</div>
+					</div>
+					<div class="condition-dropdown">
+						<span>가입상태</span>
+						<div class="dropdown-content">
+							<ul>
+								<li class="condition-selected" data-condition="">전체</li>
+								<li data-condition="1">정상</li>					
+								<li data-condition="2">정지</li>					
+								<li data-condition="3">탈퇴</li>					
+							</ul>
+						</div>
+					</div>
+				</div>			
 			</div>
+
 			<div class="member-list">
-			
+				<c:if test="${empty memberList }">
+					<span>가입 회원이 존재하지 않습니다.</span>
+				</c:if>
+				<c:if test="${not empty memberList }">
+					<table>
+						<tr class="head">
+							<th>아이디</th>
+							<th>닉네임</th>
+							<th>판매상품 수</th>
+							<th>가입상태</th>
+							<th>가입일</th>
+						</tr>
+						<c:forEach var="member" items="${memberList }">
+							<tr class="body" id="${member.MEMBER_NO }" data-num="${member.NUM }">
+								<td>${member.MEMBER_ID }</td>
+								<td>${member.MEMBER_NICKNAME }</td>
+								<td>${member.PRODUCT_COUNT }</td>
+								<td>${member.MEMBER_STATE_NAME }</td>
+								<td><fmt:formatDate value="${member.MEMBER_REGDATE }" pattern="yyyy년 MM월 dd일 HH:mm"/></td>
+							</tr>
+						</c:forEach>
+					</table>
+					<div class="paging">
+						<c:if test="${ph.totalCnt != null || ph.totalCnt != 0 }">
+							<c:if test="${ph.showPrev }">
+								<div class="paging-prev">
+									&lt;&lt;
+								</div>
+							</c:if>
+							<c:forEach var="i" begin="${ph.beginPage }" end="${ph.endPage }">
+								<div class="paging-box ${i eq ph.sc.page ? 'current-page' : 'not-current-page' }">
+									<input id="pageValue" type="hidden" value="${i }">
+									${i}
+								</div>
+							</c:forEach>
+							<c:if test="${ph.showNext }">
+								<div class="paging-next">
+									&gt;&gt;
+								</div>
+							</c:if>
+						</c:if>
+					</div>
+					
+				</c:if>
 			</div>
 		</div>
 	</div>
@@ -53,8 +122,9 @@ document.getElementById('endDate').addEventListener('change', function(e){
 
 document.querySelectorAll('.date-btn').forEach(el => {
 	el.addEventListener('click', function(e){
-		var endDate = getEndDay();
+		const endDate = getEndDay();
 		var startDate;
+		
 		switch (e.target.id) {
 		case 'week':
 			startDate = getStartDay(7);
@@ -208,5 +278,28 @@ let getMemberChart = function(startDate, endDate){
 		}); // myChart
 		
 	}).catch((error) => console.log('error: '+error)); // fetch end
-};
+}; // getMemberChart
+
+
+
+let getMemberList = function(startDate, endDate, condition, order){
+	let params = {
+			'startDate': startDate,
+			'endDate': endDate,
+			'condition': condition,
+			'order': order
+	};
+	
+	fetch('/usMarket/fetch/admin/memberlist', {
+		method: 'POST',
+		headers: {
+			'Content-type' : 'application/json'
+		},
+		body: JSON.stringify(params),
+	})
+	.then((response) => response.json())
+	.then((data) => {
+		console.log(data.ph);
+	}).catch((error) => console.log('error: '+error)); // fetch end
+}; // getMemberList
 </script>
