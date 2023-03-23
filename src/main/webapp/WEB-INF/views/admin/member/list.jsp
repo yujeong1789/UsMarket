@@ -31,7 +31,7 @@
 						<div class="dropdown-content">
 							<ul>
 								<li class="order-selected" data-order="regdate_desc">가입일 내림차순</li>
-								<li data-order="regdate_desc">가입일 오름차순</li>
+								<li data-order="regdate">가입일 오름차순</li>
 								<li data-order="product_desc">판매상품 많은순</li>
 								<li data-order="product">판매상품 적은순</li>							
 							</ul>
@@ -41,7 +41,7 @@
 						<span>가입상태</span>
 						<div class="dropdown-content">
 							<ul>
-								<li class="condition-selected" data-condition="">전체</li>
+								<li class="condition-selected" data-condition="0">전체</li>
 								<li data-condition="1">정상</li>					
 								<li data-condition="2">정지</li>					
 								<li data-condition="3">탈퇴</li>					
@@ -53,26 +53,30 @@
 
 			<div class="member-list">
 				<c:if test="${empty memberList }">
-					<span>가입 회원이 존재하지 않습니다.</span>
+					<span>회원이 존재하지 않습니다.</span>
 				</c:if>
 				<c:if test="${not empty memberList }">
 					<table>
-						<tr class="head">
-							<th>아이디</th>
-							<th>닉네임</th>
-							<th>판매상품 수</th>
-							<th>가입상태</th>
-							<th>가입일</th>
-						</tr>
-						<c:forEach var="member" items="${memberList }">
-							<tr class="body" id="${member.MEMBER_NO }" data-num="${member.NUM }">
-								<td>${member.MEMBER_ID }</td>
-								<td>${member.MEMBER_NICKNAME }</td>
-								<td>${member.PRODUCT_COUNT }</td>
-								<td>${member.MEMBER_STATE_NAME }</td>
-								<td><fmt:formatDate value="${member.MEMBER_REGDATE }" pattern="yyyy년 MM월 dd일 HH:mm"/></td>
+						<thead>
+							<tr class="head">
+								<th>아이디</th>
+								<th>닉네임</th>
+								<th>판매상품 수</th>
+								<th>가입상태</th>
+								<th>가입일</th>
 							</tr>
-						</c:forEach>
+						</thead>
+						<tbody>
+							<c:forEach var="member" items="${memberList }">
+								<tr class="body" id="${member.MEMBER_NO }" data-num="${member.NUM }">
+									<td>${member.MEMBER_ID }</td>
+									<td>${member.MEMBER_NICKNAME }</td>
+									<td>${member.PRODUCT_COUNT }</td>
+									<td>${member.MEMBER_STATE_NAME }</td>
+									<td><fmt:formatDate value="${member.MEMBER_REGDATE }" pattern="yyyy년 MM월 dd일 HH:mm"/></td>
+								</tr>
+							</c:forEach>
+						</tbody>
 					</table>
 					<div class="paging">
 						<c:if test="${ph.totalCnt != null || ph.totalCnt != 0 }">
@@ -82,7 +86,7 @@
 								</div>
 							</c:if>
 							<c:forEach var="i" begin="${ph.beginPage }" end="${ph.endPage }">
-								<div class="paging-box ${i eq ph.sc.page ? 'current-page' : 'not-current-page' }">
+								<div class="paging-box ${i eq ph.sc.page ? 'current-page' : 'not-current-page' }" onclick="${i eq ph.sc.page ? '' : 'getMemberList(' += i += ')'}">
 									<input id="pageValue" type="hidden" value="${i }">
 									${i}
 								</div>
@@ -108,16 +112,39 @@ const btns = ['week', 'month', 'half-month', 'year'];
 document.addEventListener('DOMContentLoaded', function(){
 	dateInit();
 	getMemberChart(document.getElementById('startDate').value, document.getElementById('endDate').value);
+	
 });
 
 document.getElementById('startDate').addEventListener('change', function(e){
 	document.getElementById('endDate').setAttribute('min', this.value);
 	getMemberChart(this.value, document.getElementById('endDate').value);
+	getMemberList(1);
 });
 
 document.getElementById('endDate').addEventListener('change', function(e){
 	document.getElementById('startDate').setAttribute('max', this.value);
 	getMemberChart(document.getElementById('startDate').value, this.value);
+	getMemberList(1);
+});
+
+document.querySelectorAll('.order-dropdown li').forEach(el => {
+	el.addEventListener('click', function(){
+		document.querySelector('.order-selected').classList.remove('order-selected');
+		this.className = 'order-selected';
+		console.log(this.dataset.order);
+		
+		getMemberList(1);
+	});
+});
+
+document.querySelectorAll('.condition-dropdown li').forEach(el => {
+	el.addEventListener('click', function(){
+		document.querySelector('.condition-selected').classList.remove('condition-selected');
+		this.className = 'condition-selected';
+		console.log(this.dataset.condition);
+		
+		getMemberList(1);
+	});
 });
 
 document.querySelectorAll('.date-btn').forEach(el => {
@@ -282,24 +309,30 @@ let getMemberChart = function(startDate, endDate){
 
 
 
-let getMemberList = function(startDate, endDate, condition, order){
+let getMemberList = function(page){
 	let params = {
-			'startDate': startDate,
-			'endDate': endDate,
-			'condition': condition,
-			'order': order
+			'page': page,
+			'pageSize': 10,
+			'startDate': document.getElementById('startDate').value,
+			'endDate': document.getElementById('endDate').value,
+			'condition': document.querySelector('.condition-selected').dataset.condition,
+			'order': document.querySelector('.order-selected').dataset.order
 	};
 	
-	fetch('/usMarket/fetch/admin/memberlist', {
+	console.log(params);
+	
+	fetch('/usMarket/admin/member/list', {
 		method: 'POST',
 		headers: {
 			'Content-type' : 'application/json'
 		},
 		body: JSON.stringify(params),
 	})
-	.then((response) => response.json())
+	.then((response) => response.text())
 	.then((data) => {
-		console.log(data.ph);
+		var result = document.createElement('div');
+		result.innerHTML = data;
+		document.querySelector('.member-list').innerHTML = result.querySelector('.member-list').innerHTML;
 	}).catch((error) => console.log('error: '+error)); // fetch end
 }; // getMemberList
 </script>

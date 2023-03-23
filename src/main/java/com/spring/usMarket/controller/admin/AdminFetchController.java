@@ -1,6 +1,7 @@
 package com.spring.usMarket.controller.admin;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -52,30 +53,7 @@ public class AdminFetchController {
 		
 		return resultMap;	
 	}
-	
-	
-	@PostMapping("/memberlist")
-	public void memberList(@RequestBody AdminSearchCondition sc, Model model){
-		
-		sc.setPageSize(10);
-		logger.info("adminSearchCondition = {}", sc.toString());
-		
-		List<Map<String, Object>> memberList = new ArrayList<>();
-		int totalCnt = 0;
-		try {
-			 memberList = adminService.getMemberList(sc);
-			 totalCnt = adminService.getMemberCnt(sc.getStartDate(), sc.getEndDate(), sc.getCondition());
-			 AdminPageHandler pageHandler = new AdminPageHandler(totalCnt, sc);
-			 
-			 model.addAttribute("memberList", memberList);
-			 model.addAttribute("page", sc.getPage());
-			 model.addAttribute("pageSize", sc.getPageSize());
-			 model.addAttribute("ph", pageHandler);
-			 
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
+
 	
 	@PostMapping("/dealstats")
 	public List<Map<String, Object>> dealStats(@RequestBody Map<String, Object> map){

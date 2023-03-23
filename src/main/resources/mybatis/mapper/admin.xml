@@ -5,13 +5,13 @@
 
 	<sql id="searchCondition">
 		<choose>
-			<when test="condition == '1'">
+			<when test="condition == 1">
 				AND member_state_no = 1
 			</when>
-			<when test="condition == '2'">
+			<when test="condition == 2">
 				AND member_state_no = 2
 			</when>
-			<when test="condition == '3'">
+			<when test="condition == 3">
 				AND member_state_no = 3
 			</when>
 		</choose>
@@ -79,18 +79,18 @@
 					  	  ) AS product_count
 			   		  FROM MEMBER m, member_state ms
 			   		  WHERE m.member_state_no = ms.member_state_no
-			   		  AND m.member_regdate BETWEEN TO_DATE(#{startDate}, 'YYYY-MM-DD') AND TO_DATE(#{endDate}, 'YYYY-MM-DD')
 					  <choose>
-					  	<when test="condition == '1'">
-							AND m.member_state_no = 1
+					  	<when test="condition == 1">
+							AND m.member_state_no = 1 
 						</when>
-						<when test="condition == '2'">
-							AND m.member_state_no = 2
+						<when test="condition == 2">
+							AND m.member_state_no = 2 
 						</when>
-						<when test="condition == '3'">
-							AND m.member_state_no = 3
+						<when test="condition == 3">
+							AND m.member_state_no = 3 
 						</when>
 					  </choose>
+					  AND m.member_regdate BETWEEN TO_DATE(#{startDate}, 'YYYY-MM-DD') AND TO_DATE(#{endDate}, 'YYYY-MM-DD')
 					  <include refid="searchOrder" />
 			 		) A
 			 )
@@ -100,7 +100,7 @@
 	<select id="searchMemberCnt" parameterType="map" resultType="int">
 		SELECT COUNT(*)
 		FROM MEMBER
-		WHERE member_regdate BETWEEN TO_DATE(#{startDate}, 'YYYY-MM-DD') AND TO_DATE(#{endDate}, 'YYYY-MM-DD')
+		WHERE member_regdate BETWEEN TO_DATE(#{startDate}, 'YYYY-MM-DD') AND TO_DATE(#{endDate}, 'YYYY-MM-DD') 
 		<include refid="searchCondition" /> 
 	</select>
 	

@@ -108,6 +108,17 @@ input[type='date']{
 	margin-top: 50px
 }
 
+.member-list > span{
+	display: flex;
+	width: 100%;
+	height: 300px;
+	justify-content: center;
+	align-items: center;
+	font-size: 18px;
+	color: #A8A8A8;
+	font-weight: 600;
+}
+
 .member-list > table{
 	width: 100%;
 	text-align: center;
@@ -120,6 +131,19 @@ input[type='date']{
 	color: #525252;
 	font-weight: 550;
 }
+
+.member-list thead th:first-child, .member-list thead th:nth-child(2){
+	width: 20%
+}
+
+.member-list thead th:nth-child(3), .member-list thead th:nth-child(3){
+	width: 15%
+}
+
+.member-list thead th:last-child{
+	width: 30%;
+}
+
 
 .member-list > table tr{
 	height: 40px;
