@@ -53,7 +53,7 @@
 
 			<div class="member-list">
 				<c:if test="${empty memberList }">
-					<span>가입 회원이 존재하지 않습니다.</span>
+					<span>회원이 존재하지 않습니다.</span>
 				</c:if>
 				<c:if test="${not empty memberList }">
 					<table>
@@ -118,11 +118,13 @@ document.addEventListener('DOMContentLoaded', function(){
 document.getElementById('startDate').addEventListener('change', function(e){
 	document.getElementById('endDate').setAttribute('min', this.value);
 	getMemberChart(this.value, document.getElementById('endDate').value);
+	getMemberList(1);
 });
 
 document.getElementById('endDate').addEventListener('change', function(e){
 	document.getElementById('startDate').setAttribute('max', this.value);
 	getMemberChart(document.getElementById('startDate').value, this.value);
+	getMemberList(1);
 });
 
 document.querySelectorAll('.order-dropdown li').forEach(el => {
