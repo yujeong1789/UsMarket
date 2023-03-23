@@ -7,7 +7,7 @@
 <html>
 <div class="member-list">
 	<c:if test="${empty memberList }">
-		<span>가입 회원이 존재하지 않습니다.</span>
+		<span>회원이 존재하지 않습니다.</span>
 	</c:if>
 	<c:if test="${not empty memberList }">
 		<table>
