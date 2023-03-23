@@ -100,7 +100,7 @@
 	<select id="searchMemberCnt" parameterType="map" resultType="int">
 		SELECT COUNT(*)
 		FROM MEMBER
-		WHERE member_regdate BETWEEN TO_DATE(#{startDate}, 'YYYY-MM-DD') AND TO_DATE(#{endDate}, 'YYYY-MM-DD')
+		WHERE member_regdate BETWEEN TO_DATE(#{startDate}, 'YYYY-MM-DD') AND TO_DATE(#{endDate}, 'YYYY-MM-DD') 
 		<include refid="searchCondition" /> 
 	</select>
 	
