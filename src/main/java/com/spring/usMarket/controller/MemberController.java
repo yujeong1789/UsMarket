@@ -85,9 +85,11 @@ public class MemberController {
 
 	@GetMapping("/logout")
 	public String logout(HttpServletRequest request) throws Exception {
-		logger.info("logout메서드 진입");
-		HttpSession session = request.getSession();
-		session.invalidate();
+		request.getSession().removeAttribute("userId");
+		request.getSession().removeAttribute("userNo");
+		logger.info("로그아웃 {}", (request.getSession().getAttribute("userId") == null && 
+				request.getSession().getAttribute("userNo") == null ? "성공" : "실패"));
+
 		return "redirect:" + request.getHeader("Referer");
 	}
 
@@ -122,6 +124,62 @@ public class MemberController {
 		return "redirect:" + request.getSession().getAttribute("prevPage");
 	}
 
+	
+	@GetMapping("/mypage")
+	public String info(HttpServletRequest request, Model model, SearchCondition sc) {
+		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy년 MM월 dd일");
+		sc.setPageSize(15);
+		int totalCnt = 0;
+		try {
+			Integer member_no = Integer.parseInt(String.valueOf(request.getSession().getAttribute("userNo")));
+			logger.info("member_id = {}, member_no = {}", request.getSession().getAttribute("userId").toString(), member_no);
+			//session으로 넘어온 회원 정보
+						
+			MemberDto memberInfo = memberService.getMemberInfo(member_no);
+			model.addAttribute("memberInfo", memberInfo);
+			model.addAttribute("regdate",dateFormat.format(memberInfo.getMember_regdate()));
+			//session에서 읽은 정보로 회원 정보 불러옴
+			List<ProductDto> mypageProductList = memberService.getMypageProduct2(member_no);
+			logger.info("mypageProductList : "+mypageProductList);
+			totalCnt = mypageProductList.size();
+			//memberService.getMypageProductCount(member_no);
+			logger.info("mypageProductList.size = "+mypageProductList.size());
+			
+			PageHandler pageHandler = new PageHandler(totalCnt, sc);
+			//마이페이지 제품 리스트
+			
+			model.addAttribute("mypageProductList", mypageProductList);
+			model.addAttribute("Page", sc.getPage());
+			model.addAttribute("PageSize", sc.getPageSize());
+			model.addAttribute("ph", pageHandler);
+			//마이페이지 상품 정보
+		} catch (Exception e) {
+			e.printStackTrace();
+		} // try-catch
+		return "member/mypage";
+	}
+	
+	@ResponseBody
+	@PostMapping("/MyBookmark")
+	public List<ProductDto> MyBookmark(@RequestBody Integer member_no) throws Exception {
+		logger.info("member_No= " + member_no);
+		List<ProductDto> mypageBookmarkList = memberService.getMypageBookmark(member_no);
+		logger.info("북마크 리스트 = " + mypageBookmarkList);
+		
+		return mypageBookmarkList;
+	}
+
+	@PostMapping("/MyProductList")
+	public String MyProductList(@RequestBody String member_no, Model model) throws Exception {
+		logger.info("member_No = {}", member_no);
+		
+		List<Map<String, Object>> mypageProductList = memberService.getMypageProduct(Integer.parseInt(member_no));
+		logger.info("마이페이지 상품 리스트 = " + mypageProductList);
+		model.addAttribute("mypageList", mypageProductList);
+		
+		return "member/viewajax";
+	}
+	
 	@ResponseBody
 	@PostMapping("/nickCheck")
 	public String NickCheck(@RequestBody String member_nick) throws Exception {
@@ -153,7 +211,7 @@ public class MemberController {
 	}
 
 	@ResponseBody
-	@GetMapping("/emailCheck")
+	@PostMapping("/sendEmail")
 	public int sendMailTest(String member_email, String randomPassword) throws Exception {
 
 		logger.info("이메일 데이터 전송 확인");
@@ -187,34 +245,5 @@ public class MemberController {
 		}
 	} // end sendMailTest()
 
-	@GetMapping("/mypage")
-	public String info(HttpServletRequest request, Model model, SearchCondition sc) {
-		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy년 MM월 dd일");
-		sc.setPageSize(15);
-		try {
-			Integer member_no = Integer.parseInt(String.valueOf(request.getSession().getAttribute("userNo")));
-			logger.info("member_id = {}, member_no = {}", request.getSession().getAttribute("userId").toString(), member_no);
-			//session으로 넘어온 회원 정보
-						
-			MemberDto memberInfo = memberService.getMemberInfo(member_no);
-			model.addAttribute("memberInfo", memberInfo);
-			model.addAttribute("regdate",dateFormat.format(memberInfo.getMember_regdate()));
-			//session에서 읽은 정보로 회원 정보 불러옴
-
-			List<ProductDto> mypageProductList = memberService.getMypageProduct(member_no);
-			int totalCnt = memberService.getMypageProductCount(member_no);
-			
-			PageHandler pageHandler = new PageHandler(totalCnt, sc);
-			
-			model.addAttribute("mypageProductList", mypageProductList);
-			model.addAttribute("Page", sc.getPage());
-			model.addAttribute("PageSize", sc.getPageSize());
-			model.addAttribute("ph", pageHandler);
-			//마이페이지 상품 정보
-		} catch (Exception e) {
-			e.printStackTrace();
-		} // try-catch
-		return "member/mypage";
-	}
 	
 }

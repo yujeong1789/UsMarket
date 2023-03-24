@@ -14,6 +14,12 @@ public interface MemberDao {
 	void overlapped(String joinMember);
 	Map<String, Object> idLogin(String member_id) throws Exception;
 	MemberDto memberSearch(Integer member_no) throws Exception;
-	List<ProductDto> searchMypageProduct(Integer member_no) throws Exception;
+	
+	List<Map<String, Object>> searchMypageProduct(Integer member_no) throws Exception;
+	List<ProductDto> searchMypageProduct2(Integer member_no) throws Exception;
 	int searchMypageProductCount(Integer member_no) throws Exception;
+	
+	List<ProductDto> searchMypageBookmark(Integer member_no) throws Exception;
+	int searchMypageBookmarkCount(Integer member_no) throws Exception;
+	
 }

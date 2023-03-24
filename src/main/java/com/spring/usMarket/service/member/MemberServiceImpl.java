@@ -127,9 +127,19 @@ public class MemberServiceImpl implements MemberService {
 
 	@Override
 	@Transactional(rollbackFor = SQLException.class, readOnly = true)
-	public List<ProductDto> getMypageProduct(Integer member_no) throws Exception {
+	public List<Map<String, Object>> getMypageProduct(Integer member_no) throws Exception {
 		
-		List<ProductDto> mypageProduct = memberDAO.searchMypageProduct(member_no);
+		List<Map<String, Object>> mypageProduct = memberDAO.searchMypageProduct(member_no);
+		logger.info("마이 페이지 상품.size() = {}", mypageProduct.size());
+		
+		return mypageProduct;
+	}
+	
+	@Override
+	@Transactional(rollbackFor = SQLException.class, readOnly = true)
+	public List<ProductDto> getMypageProduct2(Integer member_no) throws Exception {
+		
+		List<ProductDto> mypageProduct = memberDAO.searchMypageProduct2(member_no);
 		logger.info("마이 페이지 상품.size() = {}", mypageProduct.size());
 		
 		return mypageProduct;
@@ -143,5 +153,25 @@ public class MemberServiceImpl implements MemberService {
 		logger.info("전체 상품 수 = {}", productCount);
 		
 		return productCount;
+	}
+
+	@Override
+	@Transactional(rollbackFor = SQLException.class, readOnly = true)
+	public List<ProductDto> getMypageBookmark(Integer member_no) throws Exception {
+		
+		List<ProductDto> mypageBookmark= memberDAO.searchMypageBookmark(member_no);
+		logger.info("마이 페이지 찜.size() = {}", mypageBookmark.size());
+		
+		return null;
+	}
+
+	@Override
+	@Transactional(rollbackFor = SQLException.class, readOnly = true)
+	public int getMypageBookmarkCount(Integer member_no) throws Exception {
+		
+		int BookmarkCount = memberDAO.searchMypageBookmarkCount(member_no);
+		logger.info("전체 상품 수 = {}", BookmarkCount);
+	
+		return 0;
 	}
 }

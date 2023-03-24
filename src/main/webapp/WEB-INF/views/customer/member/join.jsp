@@ -372,8 +372,8 @@
 		    let member_email = $('#email').val();
 		    
 		    $.ajax({
-				type : 'GET',
-	 			url : "${pageContext.request.contextPath}/member/emailCheck?member_email=" +member_email,
+				type : 'POST',
+	 			url : "${pageContext.request.contextPath}/member/sendEmail?member_email=" +member_email,
 				async: false,
 				success:function(data){
 					console.log("data : " +  data);
