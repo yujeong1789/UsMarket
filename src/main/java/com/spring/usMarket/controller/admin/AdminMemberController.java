@@ -1,6 +1,7 @@
 package com.spring.usMarket.controller.admin;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -88,5 +89,20 @@ public class AdminMemberController {
 	@GetMapping("/info")
 	public void memberInfo(Model model) {
 		logger.info("member/info");
+	}
+	
+	@PostMapping("/info")
+	public void memberInfoPost(String member_no, Model model) {
+		
+		logger.info("info member_no = {}", member_no);
+		
+		Map<String, Object> infoMap = new HashMap<>();
+		try {
+			infoMap = adminService.getMemberInfo(member_no);
+			model.addAttribute("infoMap", infoMap);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
 	}
 }

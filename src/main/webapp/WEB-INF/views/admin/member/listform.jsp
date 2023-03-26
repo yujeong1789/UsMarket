@@ -22,16 +22,20 @@
 			</thead>
 			<tbody>
 				<c:forEach var="member" items="${memberList }">
-					<tr class="body" id="${member.MEMBER_NO }" data-num="${member.NUM }">
+					<tr class="body" id="${member.MEMBER_NO }" data-num="${member.NUM }" onclick="memberInfoSubmit(this)">
 						<td>${member.MEMBER_ID }</td>
 						<td>${member.MEMBER_NICKNAME }</td>
 						<td>${member.PRODUCT_COUNT }</td>
 						<td>${member.MEMBER_STATE_NAME }</td>
 						<td><fmt:formatDate value="${member.MEMBER_REGDATE }" pattern="yyyy년 MM월 dd일 HH:mm"/></td>
 					</tr>
+					
 				</c:forEach>
 			</tbody>
 		</table>
+		<form id="memberInfoForm" name="memberInfoForm" action="<c:url value='/admin/member/info'/>" method="post">
+			<input type="hidden" id="member_no" name="member_no" value="">
+		</form>
 		<div class="paging">
 			<c:if test="${ph.totalCnt != null || ph.totalCnt != 0 }">
 				<c:if test="${ph.showPrev }">
