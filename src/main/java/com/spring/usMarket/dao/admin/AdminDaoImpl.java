@@ -60,6 +60,16 @@ public class AdminDaoImpl implements AdminDao{
 	}
 
 	@Override
+	public Map<String, Object> searchMemberInfo(String member_no) throws Exception {
+		return session.selectOne(namespace+"searchMemberInfo", member_no);
+	}
+	
+	@Override
+	public List<Map<String, Object>> searchMemberProductList(String member_no) throws Exception {
+		return session.selectList(namespace+"searchMemberProductList", member_no);
+	}	
+	
+	@Override
 	public List<Map<String, Object>> searchDealStatsByDate(String startDate, String endDate) throws Exception {
 		Map<String, Object> map = new HashMap<>();
 		map.put("startDate", startDate);
@@ -86,7 +96,6 @@ public class AdminDaoImpl implements AdminDao{
 		return session.selectList(namespace+"searchReportList", map);
 	}
 
-
 	@Override
 	public List<Map<String, Object>> searchQnaList(String startPage, String endPage) throws Exception {
 		Map<String, Object> map = new HashMap<>();
@@ -95,5 +104,4 @@ public class AdminDaoImpl implements AdminDao{
 		
 		return session.selectList(namespace+"searchQnaList", map);
 	}
-	
 }
