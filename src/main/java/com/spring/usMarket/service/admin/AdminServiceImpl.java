@@ -1,6 +1,7 @@
 package com.spring.usMarket.service.admin;
 
 import java.sql.SQLException;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -52,8 +53,7 @@ public class AdminServiceImpl implements AdminService{
 		logger.info("월별 가입자 추이 조회 결과 = {}", listMap.toString());
 		
 		return listMap;
-	}
-	
+	}	
 
 	@Override
 	@Transactional(rollbackFor = SQLException.class, readOnly = true)
@@ -63,6 +63,24 @@ public class AdminServiceImpl implements AdminService{
 		logger.info("회원수 조회 결과 = {}", totalCnt);
 		
 		return totalCnt;
+	}
+	
+	@Override
+	@Transactional(rollbackFor = SQLException.class, readOnly = true)
+	public Map<String, Object> getMemberInfo(String member_no) throws Exception {
+		
+		Map<String, Object> infoMap = new HashMap<>();
+		
+		Map<String, Object> memberInfo = adminDao.searchMemberInfo(member_no);
+		logger.info("회원 상세조회 결과 = {}", memberInfo.toString());
+		infoMap.put("memberInfo", memberInfo);
+		
+		List<Map<String, Object>> productList = adminDao.searchMemberProductList(member_no);
+		logger.info("회원 상품 리스트 조회 결과 = {}", productList.toString());
+		infoMap.put("productList", productList);
+		
+		
+		return infoMap;
 	}
 
 	@Override
@@ -114,4 +132,5 @@ public class AdminServiceImpl implements AdminService{
 		
 		return listMap;
 	}
+
 }
