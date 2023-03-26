@@ -78,6 +78,9 @@
 							</c:forEach>
 						</tbody>
 					</table>
+					<form id="memberInfoForm" name="memberInfoForm" action="<c:url value='/admin/member/info'/>" method="post">
+						<input type="hidden" id="member_no" name="member_no" value="">
+					</form>
 					<div class="paging">
 						<c:if test="${ph.totalCnt != null || ph.totalCnt != 0 }">
 							<c:if test="${ph.showPrev }">
@@ -170,6 +173,17 @@ document.querySelectorAll('.date-btn').forEach(el => {
 		getMemberChart(startDate, endDate);
 	});
 });
+
+document.querySelectorAll('.member-list .body').forEach(el => {
+	el.addEventListener('click', function(){
+		memberInfoSubmit(this);
+	});
+});
+
+let memberInfoSubmit = function(element){
+	document.getElementById('member_no').value = element.id;
+	document.getElementById('memberInfoForm').submit();
+};
 
 
 let dateInit = function(){
