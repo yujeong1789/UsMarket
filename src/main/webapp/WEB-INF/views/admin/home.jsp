@@ -295,7 +295,7 @@ document.addEventListener('DOMContentLoaded', function(){
 	                yAxes: [{
 	                    ticks: {
 	                        display: false,
-	                        beginAtZero: false
+	                        beginAtZero: true
 	                    },
 	                    gridLines: {
 							display: false,
