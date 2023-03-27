@@ -103,7 +103,7 @@ public class MemberController {
 	public String join(@ModelAttribute MemberDto member,MultipartHttpServletRequest request,Model model) {
 		try {
 			// 1. 파일 업로드
-			String img = "/resource/customer/img/profile.png";
+			String img = "/resources/customer/img/default_profile.png";
 			if(request.getFile("member_profile_image").getSize() != 0) {
 				img = memberService.upload(request.getFile("member_profile_image"));
 			}
