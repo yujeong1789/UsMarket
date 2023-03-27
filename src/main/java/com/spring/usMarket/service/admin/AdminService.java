@@ -15,7 +15,9 @@ public interface AdminService {
 	List<Map<String, Object>> getMemberStatsByMonth(String startDate, String endDate) throws Exception;
 	List<Map<String, Object>> getMemberList(AdminSearchCondition sc) throws Exception;
 	int getMemberCnt(String startDate, String endDate, String condition) throws Exception;
-	Map<String, Object> getMemberInfo(String member_no) throws Exception;
+	Map<String, Object> getMemberInfo(AdminSearchCondition sc) throws Exception;
+	List<Map<String, Object>> getMemberProductList(AdminSearchCondition sc) throws Exception;
+	int getMemberProductCnt(String member_no, String condition) throws Exception;
 	
 	
 	// deal
