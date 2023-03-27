@@ -139,10 +139,12 @@ public class MemberController {
 			model.addAttribute("memberInfo", memberInfo);
 			model.addAttribute("regdate",dateFormat.format(memberInfo.getMember_regdate()));
 			//session에서 읽은 정보로 회원 정보 불러옴
+			
 			List<ProductDto> mypageProductList = memberService.getMypageProduct2(member_no);
 			logger.info("mypageProductList : "+mypageProductList);
 			totalCnt = mypageProductList.size();
 			//memberService.getMypageProductCount(member_no);
+			
 			logger.info("mypageProductList.size = "+mypageProductList.size());
 			
 			PageHandler pageHandler = new PageHandler(totalCnt, sc);
@@ -170,12 +172,23 @@ public class MemberController {
 	}
 
 	@PostMapping("/MyProductList")
-	public String MyProductList(@RequestBody String member_no, Model model) throws Exception {
+	public String MyProductList(@RequestBody String member_no, Model model, SearchCondition sc) throws Exception {
+		sc.setPageSize(15);
+		int totalCnt = 0;
+		
 		logger.info("member_No = {}", member_no);
 		
-		List<Map<String, Object>> mypageProductList = memberService.getMypageProduct(Integer.parseInt(member_no));
+		List<Map<String, Object>> mypageProductList = memberService.getMypageProduct(member_no);
 		logger.info("마이페이지 상품 리스트 = " + mypageProductList);
+		totalCnt = mypageProductList.size();
+		PageHandler pageHandler = new PageHandler(totalCnt, sc);
+		
+		
 		model.addAttribute("mypageList", mypageProductList);
+		model.addAttribute("mypageProductList", mypageProductList);
+		model.addAttribute("Page", sc.getPage());
+		model.addAttribute("PageSize", sc.getPageSize());
+		model.addAttribute("ph", pageHandler);
 		
 		return "member/viewajax";
 	}
