@@ -80,13 +80,13 @@
 				<div class="content_category">
 					<div class="category_head">
 						<button class="head_category" id="head_product" data-status="selected">
-							상품<span>${mypageProductList.size() }</span>
+							<span class="product_name">상품${mypageProductList.size() }</span>
 						</button>
 						<button class="head_category" id="head_review">
-							상점후기<span></span>
+							<span class="review_name">상점후기</span><span></span>
 						</button>
 						<button class="head_category" id="head_bookmark">
-							찜<span></span>
+							<span class="bookmark_name">찜</span><span></span>
 						</button>
 					</div>
 				</div>
@@ -170,23 +170,33 @@
 		let member_no = ${memberInfo.member_no};
 	    let method = null;
 	    let list = null;
+	    
+	    let btn_p = $("#head_product");
+	    let btn_r = $("#head_review");
+	    let btn_b = $("#head_bookmark");
 		
 		/* 마이페이지 상품 리스트 */
-		$("#head_product").click(function(){
+		btn_p.click(function(){
 			method = "MyProductList";
 			myCategory(method);
+			optOut();
+			selectButton(btn_p,$(".product_name"));
 		}); // .click이벤트
 
 		/* 마이페이지 상품후기 리스트 */
-		$("#head_review").click(function(){
+		btn_r.click(function(){
 			method = "MyReview";
 			myCategory(method);
+			optOut();
+			selectButton(btn_r,$(".review_name"));
 		}); // .click이벤트
 
 		/* 마이페이지 찜 리스트 */
-		$("#head_bookmark").click(function(){
+		btn_b.click(function(){
 			method = "MyBookmark";
 			myCategory(method);
+			optOut();
+			selectButton(btn_b,$(".bookmark_name"));			
 		}); // .click이벤트
 
 		
@@ -201,8 +211,8 @@
 				async: false,
 				success:function(data){
 					var result = $('<div></div>').html(data);
-					var productBox = $(result).find('.product__box').html();
-					$('#product__area').html(productBox);
+					var productBox = $(result).find('.mypage_category_content').html();
+					$('.mypage_category_content').html(productBox);
 				},
 				error: function(jqXHR, textStatus, errorThrown){
 					alert("오류가 발생했습니다.");
@@ -210,6 +220,15 @@
 			}); // ajax
 		} // function
 		
+		function selectButton(btn,font){
+			btn.css('background','#16A7F1');
+			font.css('color','white');
+		}
+		
+		function optOut(){
+			$('.head_category').css('background','rgb(250, 250, 250)');
+			$("span").css('color','black');
+		}
 	}); //ready
 	
 </script>
