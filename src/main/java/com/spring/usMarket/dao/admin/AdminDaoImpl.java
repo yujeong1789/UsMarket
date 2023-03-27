@@ -65,9 +65,18 @@ public class AdminDaoImpl implements AdminDao{
 	}
 	
 	@Override
-	public List<Map<String, Object>> searchMemberProductList(String member_no) throws Exception {
-		return session.selectList(namespace+"searchMemberProductList", member_no);
+	public List<Map<String, Object>> searchMemberProductList(AdminSearchCondition sc) throws Exception {
+		return session.selectList(namespace+"searchMemberProductList", sc);
 	}	
+	
+	@Override
+	public int searchMemberProductCnt(String member_no, String condition) throws Exception {
+		Map<String, Object> map = new HashMap<>();
+		map.put("member_no", member_no);
+		map.put("condition", condition);
+		
+		return session.selectOne(namespace+"searchMemberProductCnt", map);
+	}
 	
 	@Override
 	public List<Map<String, Object>> searchDealStatsByDate(String startDate, String endDate) throws Exception {

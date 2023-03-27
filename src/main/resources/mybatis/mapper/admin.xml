@@ -110,11 +110,72 @@
 		AND member_no = #{member_no}
 	</select>
 	
+<!-- 	
 	<select id="searchMemberProductList" parameterType="string" resultType="map">
 		SELECT *
 		FROM product_view
 		WHERE seller_no = #{member_no}
 		AND product_state_no != 4
+	</select>
+	
+ -->
+ 
+ 	<select id="searchMemberProductList" parameterType="adminSearchCondition" resultType="map">
+		SELECT * 
+		FROM ( SELECT rownum AS num, A.*
+			   FROM ( SELECT*
+					  FROM product_view
+					  WHERE seller_no = #{member_no}
+					  AND product_state_no != 4 
+					  <choose>
+					  	<when test="condition == 1">
+							AND product_state_no = 1 
+						</when>
+						<when test="condition == 2">
+							AND product_state_no = 2  
+						</when>
+						<when test="condition == 3">
+							AND product_state_no = 3  
+						</when>
+					  </choose> 
+					  <choose>
+					  	<when test="order == 'regdate_desc'">
+							ORDER BY product_regdate DESC 
+						</when>
+						<when test="order == 'regdate'">
+							ORDER BY product_regdate  
+						</when>
+						<when test="order == 'view_desc'">
+							ORDER BY product_view DESC 
+						</when>
+						<when test="order == 'view'">
+							ORDER BY product_view 
+						</when>
+						<otherwise>
+							ORDER BY product_regdate DESC 
+						</otherwise>
+					  </choose>
+					) A
+			 )
+		WHERE num BETWEEN #{startPage} AND #{endPage}
+	</select>
+		
+	<select id="searchMemberProductCnt" parameterType="map" resultType="int">
+		SELECT COUNT(*)
+		FROM product_view
+		WHERE seller_no = #{member_no}
+		AND product_state_no != 4 
+		<choose>
+			<when test="condition == 1">
+				AND product_state_no = 1 
+			</when>
+			<when test="condition == 2">
+				AND product_state_no = 2  
+			</when>
+			<when test="condition == 3">
+				AND product_state_no = 3  
+			</when>
+		</choose> 
 	</select>
 		
 	<select id="searchDealStatsByDate" parameterType="adminSearchCondition" resultType="map">

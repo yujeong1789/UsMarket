@@ -92,17 +92,57 @@ public class AdminMemberController {
 	}
 	
 	@PostMapping("/info")
-	public void memberInfoPost(String member_no, Model model) {
-		
-		logger.info("info member_no = {}", member_no);
+	public void memberInfoPost(AdminSearchCondition sc, Model model) {
+		sc.setPageSize(10);
+		logger.info("info AdminSearchCondition = {}", sc.toString());
 		
 		Map<String, Object> infoMap = new HashMap<>();
+		int totalCnt = 0;
+		
 		try {
-			infoMap = adminService.getMemberInfo(member_no);
+			infoMap = adminService.getMemberInfo(sc);
+			totalCnt = adminService.getMemberProductCnt(sc.getMember_no(), sc.getCondition());
+			AdminPageHandler pageHandler = new AdminPageHandler(totalCnt, sc);
+			
 			model.addAttribute("infoMap", infoMap);
+			model.addAttribute("totalCnt", totalCnt);
+			model.addAttribute("ph", pageHandler);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		
+	}
+	
+	@PostMapping("/reinfo")
+	public String memberReInfo(@RequestBody AdminSearchCondition sc, RedirectAttributes ratt) {
+		sc.setPageSize(10);
+		logger.info("post adminSearchCondition = {}", sc.toString());
+		
+		List<Map<String, Object>> productList = new ArrayList<>();
+		int totalCnt = 0;
+		
+		try {
+			productList = adminService.getMemberProductList(sc);
+			 
+			totalCnt = adminService.getMemberProductCnt(sc.getMember_no(), sc.getCondition());
+			AdminPageHandler pageHandler = new AdminPageHandler(totalCnt, sc);
+			 
+			ratt.addFlashAttribute("productList", productList);
+			ratt.addFlashAttribute("page", sc.getPage());
+			ratt.addFlashAttribute("pageSize", sc.getPageSize());
+			ratt.addFlashAttribute("condition", sc.getOrder());
+			ratt.addFlashAttribute("order", sc.getOrder());
+			ratt.addFlashAttribute("ph", pageHandler);
+			 
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return "redirect:/admin/member/infoform";
+	}
+	
+	@GetMapping("/infoform")
+	public void infoform() throws Exception{
+		logger.info("infoform");
 	}
 }

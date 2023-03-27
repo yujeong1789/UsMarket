@@ -11,17 +11,19 @@ public class AdminSearchCondition {
 	private String endDate = new SimpleDateFormat("yyyy-MM-dd").format(new Date()).toString();
 	private String condition = "";
 	private String order = "";
+	private String member_no = "";
 	
 	public AdminSearchCondition() {}
 
 	public AdminSearchCondition(Integer page, Integer pageSize, String startDate, String endDate, String condition,
-			String order) {
+			String order, String member_no) {
 		this.page = page;
 		this.pageSize = pageSize;
 		this.startDate = startDate;
 		this.endDate = endDate;
 		this.condition = condition;
 		this.order = order;
+		this.member_no = member_no;
 	}
 	
 	public Integer getStartPage() {
@@ -80,9 +82,17 @@ public class AdminSearchCondition {
 		this.order = order;
 	}
 
+	public String getMember_no() {
+		return member_no;
+	}
+
+	public void setMember_no(String member_no) {
+		this.member_no = member_no;
+	}
+
 	@Override
 	public String toString() {
 		return "AdminSearchCondition [page=" + page + ", startPage=" + getStartPage() + ", endPage=" + getEndPage() + ", pageSize=" + pageSize + ", startDate=" + startDate
-				+ ", endDate=" + endDate + ", condition=" + condition + ", order=" + order + "]";
+				+ ", endDate=" + endDate + ", condition=" + condition + ", order=" + order + ", member_no=" + member_no +"]";
 	}
 }

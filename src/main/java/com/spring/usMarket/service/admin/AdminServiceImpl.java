@@ -67,20 +67,29 @@ public class AdminServiceImpl implements AdminService{
 	
 	@Override
 	@Transactional(rollbackFor = SQLException.class, readOnly = true)
-	public Map<String, Object> getMemberInfo(String member_no) throws Exception {
+	public Map<String, Object> getMemberInfo(AdminSearchCondition sc) throws Exception {
 		
 		Map<String, Object> infoMap = new HashMap<>();
 		
-		Map<String, Object> memberInfo = adminDao.searchMemberInfo(member_no);
+		Map<String, Object> memberInfo = adminDao.searchMemberInfo(sc.getMember_no());
 		logger.info("회원 상세조회 결과 = {}", memberInfo.toString());
 		infoMap.put("memberInfo", memberInfo);
 		
-		List<Map<String, Object>> productList = adminDao.searchMemberProductList(member_no);
+		List<Map<String, Object>> productList = adminDao.searchMemberProductList(sc);
 		logger.info("회원 상품 리스트 조회 결과 = {}", productList.toString());
 		infoMap.put("productList", productList);
 		
-		
 		return infoMap;
+	}
+	
+	@Override
+	@Transactional(rollbackFor = SQLException.class, readOnly = true)
+	public int getMemberProductCnt(String member_no, String condition) throws Exception {
+		
+		int totalCnt = adminDao.searchMemberProductCnt(member_no, condition);
+		logger.info("상품 수 조회 결과 = {}", totalCnt);
+		
+		return totalCnt;
 	}
 
 	@Override
@@ -129,6 +138,16 @@ public class AdminServiceImpl implements AdminService{
 		
 		List<Map<String, Object>> listMap = adminDao.searchMemberList(sc);
 		logger.info("회원 목록 조회 결과 = {}", listMap.toString());
+		
+		return listMap;
+	}
+
+	@Override
+	@Transactional(rollbackFor = SQLException.class, readOnly = true)
+	public List<Map<String, Object>> getMemberProductList(AdminSearchCondition sc) throws Exception {
+		
+		List<Map<String, Object>> listMap = adminDao.searchMemberProductList(sc);
+		logger.info("회원 상품 조회 결과 = {}", listMap.toString());
 		
 		return listMap;
 	}

@@ -5,6 +5,7 @@
 	display: flex;
 	flex-direction: column;
 	width: 100%;
+	min-width: 900px;
 	align-items: center;	
 }
 
@@ -28,7 +29,7 @@
 
 .member-info-container > .dashboard > div{
 	width: calc(100% - 50px);
-	min-width: 600px;
+	min-width: 810px;
 	max-width: 810px;
 	background-color: #FFFFFF;
 	margin-bottom: 30px;
@@ -85,9 +86,15 @@
 .sub-title{
 	width: 100%;
 	padding-left: 10px;
-	font-weight: 600;
-	font-size: 20px;
 	margin-bottom: 10px;
+	display: flex;
+	justify-content: space-between;
+	flex-wrap: wrap;
+}
+
+.sub-title > span{
+	font-size: 20px;
+	font-weight: 600;
 }
 
 
@@ -134,6 +141,71 @@
 	font-weight: 600;	
 }
 
+.dropdown {
+	font-size: 13px;
+	height: 30px;
+	min-width: 50px;
+	cursor: pointer;
+	border-radius: .375rem;
+	box-shadow: 0 2px 6px 0 rgba(67,89,113,.12);
+  	position: relative;
+  	display: inline-block;
+}
+
+.condition-dropdown, .order-dropdown{
+	width: 90px;
+} 
+
+.dropdown-content {
+	display: none;
+	width: 100%;
+	position: absolute;
+	background-color: #FFFFFF;
+	border-radius: .375rem;
+	box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+	z-index: 1;
+}
+
+.dropdown-content ul > li{
+	height: 30px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+
+.dropdown-content ul > li:hover{
+	background-color: #F9F9FA;
+}
+
+.status-selected{
+	background-color: #f5f9ff;
+	color: #7988FD;	
+}
+
+.condition-selected{
+	background-color: #f5f9ff;
+	color: #7988FD;	
+}
+
+.order-selected{
+	background-color: #f5f9ff;
+	color: #7988FD;	
+}
+
+.dropdown:hover .dropdown-content{
+	display: block;
+}
+
+.dropdown > span{
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	height: 100%;
+	padding-right: 10px;
+	padding-left: 10px;
+}
+
 .info-1 > .info-price span::after{
 	content: "원";
 	font-size: 12px;
@@ -152,4 +224,31 @@
 	color: #AFAFAF;
 	font-size: 18px;
 	font-weight: 600;
+}
+
+.paging{
+	display: flex;
+	justify-content: center;
+	margin-bottom: 15px;
+}
+
+.paging > div{
+	display: flex;
+	min-width: 30px;
+	height: 30px;
+	justify-content: center;
+	align-items: center;
+	font-size: 13px;
+	border-radius: 100%;;
+	box-shadow: 0 2px 6px 0 rgba(67,89,113,.12);
+	margin: 5px;
+	font-weight: 600;
+}
+
+.current-page{
+	color: #7988FD;
+}
+
+.not-current-page{
+	cursor: pointer;
 }
