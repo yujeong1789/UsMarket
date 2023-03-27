@@ -29,7 +29,6 @@
 						<td>${member.MEMBER_STATE_NAME }</td>
 						<td><fmt:formatDate value="${member.MEMBER_REGDATE }" pattern="yyyy년 MM월 dd일 HH:mm"/></td>
 					</tr>
-					
 				</c:forEach>
 			</tbody>
 		</table>
