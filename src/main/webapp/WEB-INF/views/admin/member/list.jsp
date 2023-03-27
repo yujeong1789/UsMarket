@@ -136,6 +136,7 @@ document.querySelectorAll('.order-dropdown li').forEach(el => {
 		this.className = 'order-selected';
 		console.log(this.dataset.order);
 		
+		document.getElementById('pageValue').value = 1;
 		getMemberList(1);
 	});
 });
@@ -146,6 +147,7 @@ document.querySelectorAll('.condition-dropdown li').forEach(el => {
 		this.className = 'condition-selected';
 		console.log(this.dataset.condition);
 		
+		document.getElementById('pageValue').value = 1;
 		getMemberList(1);
 	});
 });
@@ -170,7 +172,9 @@ document.querySelectorAll('.date-btn').forEach(el => {
 			console.log('year');
 			break;
 		};
+		document.getElementById('pageValue').value = 1;
 		getMemberChart(startDate, endDate);
+		getMemberList(1);
 	});
 });
 
