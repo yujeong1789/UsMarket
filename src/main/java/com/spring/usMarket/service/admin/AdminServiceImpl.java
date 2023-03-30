@@ -114,6 +114,36 @@ public class AdminServiceImpl implements AdminService{
 	
 	@Override
 	@Transactional(rollbackFor = SQLException.class, readOnly = true)
+	public List<Map<String, Object>> getDealList(AdminSearchCondition sc) throws Exception {
+		
+		List<Map<String, Object>> listMap = adminDao.searchDealList(sc);
+		logger.info("결제 리스트 조회 결과 = {}", listMap.toString());
+		
+		return listMap;
+	}
+
+	@Override
+	@Transactional(rollbackFor = SQLException.class, readOnly = true)
+	public int getDealCnt(String startDate, String endDate, String condition) throws Exception {
+		
+		int totalCnt = adminDao.searchDealCnt(startDate, endDate, condition);
+		logger.info("결제 수 조회 결과 = {}", totalCnt);
+		
+		return totalCnt;
+	}
+
+	@Override
+	@Transactional(rollbackFor = SQLException.class, readOnly = true)
+	public Map<String, Object> getDealInfo(String deal_no) throws Exception {
+		
+		Map<String, Object> map = adminDao.searchDealInfo(deal_no);
+		logger.info("결제내역 조회 결과 = {}", map.toString());
+		
+		return map;
+	}
+	
+	@Override
+	@Transactional(rollbackFor = SQLException.class, readOnly = true)
 	public List<Map<String, Object>> getReportList(String startPage, String endPage) throws Exception {
 		
 		List<Map<String, Object>> listMap = adminDao.searchReportList(startPage, endPage);
