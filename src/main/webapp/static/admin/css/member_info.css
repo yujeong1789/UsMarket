@@ -141,6 +141,19 @@
 	font-weight: 600;	
 }
 
+.info-view{
+	display: flex;
+	align-items: center;
+	color: #888888;
+	font-size: 11px;
+}
+
+.info-view > img{
+	width: 12px;
+	object-fit: contain;
+	margin-right: 3px;
+}
+
 .dropdown {
 	font-size: 13px;
 	height: 30px;

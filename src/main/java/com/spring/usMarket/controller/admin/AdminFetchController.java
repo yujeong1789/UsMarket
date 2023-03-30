@@ -61,14 +61,15 @@ public class AdminFetchController {
 		logger.info("startDate = {}, endDate = {}, mode = {}"
 				, map.get("startDate")
 				, map.get("endDate")
-				, (map.get("mode") == "month" ? "month" : "date"));
+				, map.get("mode"));
 		
 		String startDate = map.get("startDate").toString();
 		String endDate = map.get("endDate").toString();
+		String mode = map.get("mode").toString();
 		
 		List<Map<String, Object>> resultMap = new ArrayList<>();
 		try {
-			if(map.get("mode") == "month") {
+			if(mode == "month" || mode.equals("month")) {
 				startDate = startDate.substring(0, 8)+"01";
 				resultMap = adminService.getDealStatsByMonth(startDate, endDate);				
 			}else {				

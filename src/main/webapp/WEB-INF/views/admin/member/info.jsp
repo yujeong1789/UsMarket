@@ -33,7 +33,7 @@
 					</div>
 					<div>
 						<div class="title">아이디</div>
-						<div class="info">${memberInfo.MEMBER_ID }</div>
+						<div class="info member-id">${memberInfo.MEMBER_ID }</div>
 					</div>
 					<div>
 						<div class="title">닉네임</div>
@@ -60,22 +60,7 @@
 					</div>
 					<div>
 						<div class="title">가입상태</div>
-						<div class="info">
-							<c:if test="${memberInfo.MEMBER_STATE_NO eq 3}">
-								${memberInfo.MEMBER_STATE_NAME }
-							</c:if>
-							<c:if test="${memberInfo.MEMBER_STATE_NO ne 3}">
-								<div class="dropdown status-dropdown">
-									<span data-status="${memberInfo.MEMBER_STATE_NO }">${memberInfo.MEMBER_STATE_NAME }</span>
-									<div class="dropdown-content">
-										<ul>
-											<li class="${memberInfo.MEMBER_STATE_NO eq 1 ? 'status-selected' : '' }" data-status="1">정상</li>					
-											<li class="${memberInfo.MEMBER_STATE_NO eq 2 ? 'status-selected' : '' }" data-status="2">정지</li>					
-										</ul>
-									</div>
-								</div>
-							</c:if>
-						</div>
+						<div class="info">${memberInfo.MEMBER_STATE_NAME }</div>
 					</div>
 				</div> <!-- member-info-2 -->
 			</div>
@@ -117,6 +102,7 @@
 				<div class="product-area">
 					<c:if test="${empty productList }">
 						<span class="product-empty">판매 중인 상품이 존재하지 않습니다.</span>
+						<input id="pageValue" type="hidden">
 					</c:if>
 					<c:if test="${not empty productList }">
 						<c:forEach var="product" items="${productList }">
@@ -144,6 +130,10 @@
 									<div class="info-regdate">
 										<fmt:formatDate value="${product.PRODUCT_REGDATE }" pattern="yyyy년 MM월 dd일 HH:mm"/>
 									</div> <!-- regdate -->
+									<div class="info-view">
+										<img src="<c:url value='/resources/customer/img/view.png'/>">
+										<span>${product.PRODUCT_VIEW }</span>
+									</div> <!-- product_view -->
 								</div>
 							</div> <!-- product__box -->
 						</c:forEach>
@@ -171,16 +161,6 @@
 </div>
 
 <script type="text/javascript">
-document.querySelectorAll('.status-dropdown li').forEach(el => {
-	el.addEventListener('click', function(e){
-		if(this.dataset.status == document.querySelector('.status-selected').dataset.status) return;
-		
-		if(confirm('해당 회원 상태를 변경하시겠습니까?')){
-			alert('모달 창 띄우기');
-		}
-	});
-});
-
 document.querySelectorAll('.order-dropdown li').forEach(el => {
 	el.addEventListener('click', function(){
 		document.querySelector('.order-selected').classList.remove('order-selected');
