@@ -9,6 +9,7 @@
 				<div class="product-area">
 					<c:if test="${empty productList }">
 						<span class="product-empty">판매 중인 상품이 존재하지 않습니다.</span>
+						<input id="pageValue" type="hidden">
 					</c:if>
 					<c:if test="${not empty productList }">
 						<c:forEach var="product" items="${productList }">
@@ -36,6 +37,10 @@
 									<div class="info-regdate">
 										<fmt:formatDate value="${product.PRODUCT_REGDATE }" pattern="yyyy년 MM월 dd일 HH:mm"/>
 									</div> <!-- regdate -->
+									<div class="info-view">
+										<img src="<c:url value='/resources/customer/img/view.png'/>">
+										<span>${product.PRODUCT_VIEW }</span>
+									</div> <!-- product_view -->
 								</div>
 							</div> <!-- product__box -->
 						</c:forEach>
