@@ -144,6 +144,11 @@
 					document.getElementById('customer_zipcode').style.border = '1px solid #e7e7e7';
 					
 					document.getElementById('customer_address').value = data.roadAddress;
+					
+					if(!isEmpty(data.buildingName)){
+						document.getElementById('customer_address').value += ' ('+data.buildingName+')'; 
+					}
+					
 					document.getElementById('customer_address').style.border = '1px solid #e7e7e7';
 					
 					document.getElementById('customer_address_detail').value = '';
