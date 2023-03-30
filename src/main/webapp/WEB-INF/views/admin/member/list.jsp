@@ -54,6 +54,7 @@
 			<div class="member-list">
 				<c:if test="${empty memberList }">
 					<span>회원이 존재하지 않습니다.</span>
+					<input id="pageValue" type="hidden">
 				</c:if>
 				<c:if test="${not empty memberList }">
 					<table>
