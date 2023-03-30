@@ -97,6 +97,26 @@ public class AdminDaoImpl implements AdminDao{
 	}
 
 	@Override
+	public List<Map<String, Object>> searchDealList(AdminSearchCondition sc) throws Exception {
+		return session.selectList(namespace+"searchDealList", sc);
+	}
+
+	@Override
+	public int searchDealCnt(String startDate, String endDate, String condition) throws Exception {
+		Map<String, Object> map = new HashMap<>();
+		map.put("startDate", startDate);
+		map.put("endDate", endDate);
+		map.put("condition", condition);
+		
+		return session.selectOne(namespace+"searchDealCnt", map);
+	}
+	
+	@Override
+	public Map<String, Object> searchDealInfo(String deal_no) throws Exception {
+		return session.selectOne(namespace+"searchDealInfo", deal_no);
+	}
+
+	@Override
 	public List<Map<String, Object>> searchReportList(String startPage, String endPage) throws Exception {
 		Map<String, Object> map = new HashMap<>();
 		map.put("startPage", startPage);
@@ -113,4 +133,5 @@ public class AdminDaoImpl implements AdminDao{
 		
 		return session.selectList(namespace+"searchQnaList", map);
 	}
+
 }

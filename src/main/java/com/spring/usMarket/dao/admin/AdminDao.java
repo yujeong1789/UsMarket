@@ -22,7 +22,9 @@ public interface AdminDao {
 	// deal
 	List<Map<String, Object>> searchDealStatsByDate(String startDate, String endDate) throws Exception;
 	List<Map<String, Object>> searchDealStatsByMonth(String startDate, String endDate) throws Exception;
-	
+	List<Map<String, Object>> searchDealList(AdminSearchCondition sc) throws Exception;
+	int searchDealCnt(String startDate, String endDate, String condition) throws Exception;
+	Map<String, Object> searchDealInfo(String deal_no) throws Exception;
 	
 	// report
 	List<Map<String, Object>> searchReportList(String startPage, String endPage) throws Exception;
