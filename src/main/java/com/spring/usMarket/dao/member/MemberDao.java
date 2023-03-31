@@ -19,7 +19,7 @@ public interface MemberDao {
 	List<ProductDto> searchMypageProduct2(Integer member_no) throws Exception;
 	int searchMypageProductCount(Integer member_no) throws Exception;
 	
-	List<ProductDto> searchMypageBookmark(Integer member_no) throws Exception;
+	List<Map<String, Object>> searchMypageBookmark(Integer member_no) throws Exception;
 	int searchMypageBookmarkCount(Integer member_no) throws Exception;
 	
 }
