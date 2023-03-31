@@ -4,7 +4,7 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 
 <c:set var="req" value="${pageContext.request }" />
-<c:set var="loginOn" value="${req.getSession(false) == null ? '' : pageContext.request.session.getAttribute('userId')}"/>
+<c:set var="loginOn" value="${req.getSession(false) == null ? '' : pageContext.request.session.getAttribute('userNo')}"/>
 <c:set var="con" value="1"/>
 
 <link rel="stylesheet" href="<c:url value='/resources/customer/css/member_mypage.css'/>" type="text/css">
@@ -35,39 +35,49 @@
 							<c:out value="${memberInfo.member_nickname }"/>
 						</div>
 							<div class="member_detail">
+								<c:if test="${loginOn != memberInfo.member_no}">
+									<div class="member_report">
+										<div class="right">
+											<div class="member_detail_icon">
+												<img alt="신고하기" src="<c:url value='/resources/customer/img/report.png'/>">
+											</div>
+											<span id="member_report">신고하기</span>
+										</div>
+									</div>
+								</c:if>
 								<div class="member_regdate">
 									<div class="member_label">상점 오픈일</div>
 									<span><c:out value="${regdate }"/></span>
 								</div>
-								<div class="member_regdate">
-									<div class="member_label">이름</div>
-									<span><c:out value="${memberInfo.member_name }"/></span>
-								</div>
-								<div class="member_id">
-									<div class="member_label">아이디</div>
-									<span><c:out value="${memberInfo.member_id }"/></span>
-								</div>
-								<div class="member_email">
-									<div class="member_label">이메일</div>
-									<span><c:out value="${memberInfo.member_email }"/></span>
-								</div>
-								<div class="member_hp">
-									<div class="member_label">전화번호</div>
-									<span><c:out value="${memberInfo.member_hp }"/></span>
-								</div>					
-								
+								<c:if test="${loginOn == memberInfo.member_no}">
+									<div class="member_name">
+										<div class="member_label">이름</div>
+										<span><c:out value="${memberInfo.member_name }"/></span>
+									</div>
+									<div class="member_id">
+										<div class="member_label">아이디</div>
+										<span><c:out value="${memberInfo.member_id }"/></span>
+									</div>
+									<div class="member_email">
+										<div class="member_label">이메일</div>
+										<span><c:out value="${memberInfo.member_email }"/></span>
+									</div>
+									<div class="member_hp">
+										<div class="member_label">전화번호</div>
+										<span><c:out value="${memberInfo.member_hp }"/></span>
+									</div>					
+								</c:if>
 								<div class="member_option">
 									<div class="left">
-										<c:if test="${loginOn eq memberInfo.member_id}">
+										<c:if test="${loginOn eq memberInfo.member_no}">
 											<a href="<c:url value='#'/>">회원 정보 수정</a>
 										</c:if>	
 									</div>
-									<div class="right">
-										<div class="member_detail_icon">
-											<img alt="신고하기" src="<c:url value='/resources/customer/img/report.png'/>">
+									<c:if test="${memberInfo.member_nickname eq 'test15' }">
+										<div>
+											<a href="<c:url value='/member/mypage?member_no=${deNo}'/>">다른 회원보기</a>
 										</div>
-										<span id="member_report">신고하기</span>
-									</div>
+									</c:if>
 								</div>
 								
 							</div>  <!-- member_detail -->
@@ -80,13 +90,13 @@
 				<div class="content_category">
 					<div class="category_head">
 						<button class="head_category" id="head_product" data-status="selected">
-							<span class="product_name">상품${mypageProductList.size() }</span>
+							<span class="product_name">상품${product }</span>
 						</button>
 						<button class="head_category" id="head_review">
 							<span class="review_name">상점후기</span><span></span>
 						</button>
 						<button class="head_category" id="head_bookmark">
-							<span class="bookmark_name">찜</span><span></span>
+							<span class="bookmark_name">찜${bookmark }</span>
 						</button>
 					</div>
 				</div>
@@ -99,28 +109,28 @@
 						<c:forEach var="product" items="${mypageProductList }">
 							<div class="product__box">
 								<div class="product__img">
-									<a href="<c:url value='/product/info?product_no=${product.product_no}' />"> 
-										<c:if test="${product.product_state_no == 2}">
+									<a href="<c:url value='/product/info?product_no=${product.PRODUCT_NO}' />"> 
+										<c:if test="${product.PRODUCT_STATE_NO == 2}">
 											<img class="product__img__top" src="${pageContext.request.contextPath}/resources/customer/img/product/reserve.png">
 										</c:if>
-										<c:if test="${product.product_state_no == 3}">
+										<c:if test="${product.PRODUCT_STATE_NO == 3}">
 											<img class="product__img__top" src="${pageContext.request.contextPath}/resources/customer/img/product/complete.png">
 										</c:if>
-										<img src="https://usmarket.s3.ap-northeast-2.amazonaws.com/${product.product_img_path}">
+										<img src="https://usmarket.s3.ap-northeast-2.amazonaws.com/${product.PRODUCT_IMG_PATH}">
 									</a>
 								</div>
 								<div class="product__info__1">
 									<div class="product__title">
-										<a href="<c:url value='/product/info?product_no=${product.product_no}' />">
-											<c:out value="${product.product_name }" />
+										<a href="<c:url value='/product/info?product_no=${product.PRODUCT_NO}' />">
+											<c:out value="${product.PRODUCT_NAME }" />
 										</a>
 									</div>
 									<div class="product__info__2">
 										<div class="product__price">
-											<span><fmt:formatNumber value="${product.product_price }" pattern="#,###"/></span>
+											<span><fmt:formatNumber value="${product.PRODUCT_PRICE }" pattern="#,###"/></span>
 										</div>
 										<div class="product__regdate">
-											<c:out value="${product.product_regdate}" />
+											<c:out value="${product.PRODUCT_REGDATE}" />
 										</div>
 									</div>
 								</div>
@@ -170,41 +180,36 @@
 		let member_no = ${memberInfo.member_no};
 	    let method = null;
 	    let list = null;
-	    
+	    	    
 	    let btn_p = $("#head_product");
 	    let btn_r = $("#head_review");
 	    let btn_b = $("#head_bookmark");
 		
 		/* 마이페이지 상품 리스트 */
 		btn_p.click(function(){
-			method = "MyProductList";
-			myCategory(method);
+			myCategory("MyProductList");
 			optOut();
 			selectButton(btn_p,$(".product_name"));
 		}); // .click이벤트
 
 		/* 마이페이지 상품후기 리스트 */
 		btn_r.click(function(){
-			method = "MyReview";
-			myCategory(method);
+			myCategory("MyReview");
 			optOut();
 			selectButton(btn_r,$(".review_name"));
 		}); // .click이벤트
 
 		/* 마이페이지 찜 리스트 */
 		btn_b.click(function(){
-			method = "MyBookmark";
-			myCategory(method);
+			myCategory("MyBookmark");
 			optOut();
 			selectButton(btn_b,$(".bookmark_name"));			
 		}); // .click이벤트
 
-		
-		function myCategory(method){
-			alert(member_no);
+		function myCategory(MyProductList){
 		    $.ajax({
 				type : 'POST',
-	 			url : "${pageContext.request.contextPath}/member/"+method,
+	 			url : "${pageContext.request.contextPath}/member/"+MyProductList,
 	 			headers : {"content-type": "application/json"},
 	 			data: JSON.stringify(member_no),
 	 			dataType: "text",
