@@ -140,7 +140,7 @@
 					</c:if>
 				</div> <!-- prduct-area -->
 				<div class="paging">
-					<c:if test="${ph.totalCnt != null || ph.totalCnt != 0 }">
+					<c:if test="${ph.totalCnt != null}">
 						<c:if test="${ph.showPrev }">
 							<div class="paging-prev">&lt;&lt;</div>
 						</c:if>
