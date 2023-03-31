@@ -25,6 +25,7 @@ public interface AdminDao {
 	List<Map<String, Object>> searchDealList(AdminSearchCondition sc) throws Exception;
 	int searchDealCnt(String startDate, String endDate, String condition) throws Exception;
 	Map<String, Object> searchDealInfo(String deal_no) throws Exception;
+	Map<String, Object> searchReviewInfo(String deal_no) throws Exception;
 	
 	// report
 	List<Map<String, Object>> searchReportList(String startPage, String endPage) throws Exception;

@@ -5,6 +5,13 @@
 
 <link rel="stylesheet" href="<c:url value='/resources/customer/css/product_info.css'/>" type="text/css">
 <section class="product__info__section">
+	
+	<c:if test="${empty productInfo}">
+		<script type="text/javascript">
+			alert('존재하지 않는 상품입니다.');
+			location.href = '${pageContext.request.contextPath}/';
+		</script>
+	</c:if>
 
 	<!-- 신고하기 모달 -->
 	<input type="hidden" id="report_type" value="1">

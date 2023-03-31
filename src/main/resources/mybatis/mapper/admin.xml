@@ -189,13 +189,13 @@
 					  AND d.deal_start_date BETWEEN TO_DATE(#{startDate}, 'YYYY-MM-DD') AND TO_DATE(#{endDate}, 'YYYY-MM-DD')+1
 					  <choose>
 					  	<when test="condition == 1">
-							AND d.deal_delivery_state = 1 
+							AND d.deal_state = 1 
 						</when>
 					  	<when test="condition == 2">
-							AND d.deal_delivery_state = 2 
+							AND d.deal_state = 2 
 						</when>
 					  	<when test="condition == 3">
-							AND d.deal_delivery_state = 3 
+							AND d.deal_state = 3 
 						</when>
 					  </choose>
 					  <choose>
@@ -235,11 +235,24 @@
 	</select>
 	
 	<select id="searchDealInfo" resultType="map" parameterType="string">
-		SELECT d.*
-				, (SELECT member_id FROM MEMBER m WHERE m.member_no = d.seller_no) AS seller_id
-				, (SELECT member_id FROM MEMBER m WHERE m.member_no = d.customer_no) AS customer_id
-		FROM deal d
-		WHERE d.deal_no = #{deal_no}
+		SELECT (SELECT member_name FROM MEMBER m WHERE m.member_no = d.seller_no) AS seller_name
+				, p.product_name
+				, p.product_price
+				, d.*
+		FROM deal d, product p
+		WHERE d.product_no = p.product_no
+		AND d.deal_no = #{deal_no}
+	</select>
+	
+	<select id="searchReviewInfo" resultType="map" parameterType="string">
+		SELECT d.customer_no
+			   , m.member_nickname
+			   , m.member_image
+			   , r.*
+		FROM review r, deal d, member m
+		WHERE r.deal_no = d.deal_no
+		AND d.customer_no = m.member_no
+		AND d.deal_no = #{deal_no}
 	</select>
 	
 	<select id="searchReportList" parameterType="map" resultType="map">
