@@ -157,3 +157,35 @@
     color: black;
 }
 
+.member_report{ 
+	color: #cccccc;
+	display: flex;
+	justify-content: space-between;
+}
+
+.member_report > div{
+	width: 100%;
+	display: flex;
+	align-items: center;
+}
+
+.member_report span{
+	margin-top: 3px;
+}
+
+.member_detail_icon{
+	width: 16px;
+	margin-right: 6px;
+}
+
+.member_detail_icon img{
+	object-fit: cover;
+}
+
+.member_report > .right {
+    justify-content: flex-end;
+    visibility: visible;
+}
+
+
+
