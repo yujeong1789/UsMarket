@@ -25,6 +25,7 @@ import com.amazonaws.util.IOUtils;
 import com.spring.usMarket.dao.member.MemberDao;
 import com.spring.usMarket.domain.member.MemberDto;
 import com.spring.usMarket.domain.product.ProductDto;
+import com.spring.usMarket.utils.TimeConvert;
 
 import lombok.RequiredArgsConstructor;
 
@@ -127,12 +128,17 @@ public class MemberServiceImpl implements MemberService {
 
 	@Override
 	@Transactional(rollbackFor = SQLException.class, readOnly = true)
-	public List<Map<String, Object>> getMypageProduct(Integer member_no) throws Exception {
+	public List<Map<String, Object>> getMypageProduct(String member_no) throws Exception {
+		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMdd");
 		
-		List<Map<String, Object>> mypageProduct = memberDAO.searchMypageProduct(member_no);
-		logger.info("마이 페이지 상품.size() = {}", mypageProduct.size());
-		
-		return mypageProduct;
+		List<Map<String, Object>> productList = memberDAO.searchMypageProduct(Integer.parseInt(member_no));
+		for(Map<String, Object> product : productList) {
+		    Object regdate = product.get("PRODUCT_REGDATE");
+		    dateFormat.format(regdate);
+		    product.put("PRODUCT_REGDATE", TimeConvert.calculateTime((Date)regdate));
+		};
+		logger.info("Service단 = "+productList);
+	    return productList;
 	}
 	
 	@Override

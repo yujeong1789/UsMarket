@@ -18,7 +18,7 @@ public interface MemberService {
 	String upload(MultipartFile file)throws IOException;
 	MemberDto getMemberInfo(Integer member_no) throws Exception;
 	
-	List<Map<String, Object>> getMypageProduct(Integer member_no) throws Exception;
+	List<Map<String, Object>> getMypageProduct(String member_no) throws Exception;
 	List<ProductDto> getMypageProduct2(Integer member_no) throws Exception;
 	int getMypageProductCount(Integer member_no) throws Exception;
 	
