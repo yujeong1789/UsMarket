@@ -42,7 +42,8 @@
 			<input type="hidden" id="deal_no" name="deal_no" value="">
 		</form>
 		<div class="paging">
-			<c:if test="${ph.totalCnt != null || ph.totalCnt != 0 }">
+			<input id="pageValue" type="hidden">
+			<c:if test="${ph.totalCnt != null}">
 				<c:if test="${ph.showPrev }">
 					<div class="paging-prev">
 						&lt;&lt;
