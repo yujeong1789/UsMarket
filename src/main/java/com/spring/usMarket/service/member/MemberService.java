@@ -16,13 +16,12 @@ public interface MemberService {
 	int checkEmail(String member_email);
 	Map<String, Object> loginCheckID(String member_id) throws Exception;
 	String upload(MultipartFile file)throws IOException;
-	MemberDto getMemberInfo(Integer member_no) throws Exception;
+	MemberDto getMemberInfo(String member_no) throws Exception;
 	
 	List<Map<String, Object>> getMypageProduct(String member_no) throws Exception;
-	List<ProductDto> getMypageProduct2(Integer member_no) throws Exception;
-	int getMypageProductCount(Integer member_no) throws Exception;
+	int getMypageProductCount(String member_no) throws Exception;
 	
-	List<ProductDto> getMypageBookmark(Integer member_no) throws Exception;
-	int getMypageBookmarkCount(Integer member_no) throws Exception;
+	List<Map<String, Object>> getMypageBookmark(String member_no) throws Exception;
+	int getMypageBookmarkCount(String member_no) throws Exception;
 	
 }

@@ -45,19 +45,10 @@
 		<![CDATA[ 
 		SELECT product_no, product_name, product_price, product_img_path, product_regdate, product_state_no
 		 FROM product_view 
-		 WHERE seller_no = #{member_no} AND member_state_no = 1
+		 WHERE seller_no IN #{member_no} AND member_state_no = 1 AND rownum <= 15
 		]]>
 	</select>
-	
-	<!-- 마이페이지 상품 출력 -->
-	<select id="searchMypageProduct2" parameterType="Integer" resultType="ProductDto">
-		<![CDATA[ 
-		SELECT product_no, product_name, product_price, product_img_path, product_regdate, product_state_no
-		 FROM product_view 
-		 WHERE seller_no = #{member_no} AND member_state_no = 1
-		]]>
-	</select>
-	
+		
 	<!-- 마이페이지 판매 중인 상품 수 출력 -->
 	<select id="searchMypageProductCount" parameterType="Integer" resultType="int">
 		SELECT count(*) 
@@ -66,16 +57,16 @@
 	</select>
 	
 	<!-- 마이페이지 찜 출력 -->
-	<select id="searchMypageBookmark" parameterType="Integer" resultType="productDto">
+	<select id="searchMypageBookmark" parameterType="Integer" resultType="map">
 		<![CDATA[ 
-		SELECT product_no, product_name, product_price, product_img_path, product_regdate 
+		SELECT product_no, product_name, product_price, product_img_path, product_regdate, product_state_no
 		FROM product_view
-		WHERE product_no=(select product_no from bookmark where member_no = #{member_no}) AND member_state_no = 1 AND rownum <= 15 
+		WHERE product_no IN (select DISTINCT(product_no) from bookmark where member_no = #{member_no}) AND member_state_no = 1 AND rownum <= 15
 		]]>		
 	</select>
 	
 	<!-- 마이페이지 찜 중인 상품 수 출력 -->
 	<select id="searchMypageBookmarkCount" parameterType="Integer" resultType="int">
-		SELECT COUNT(product_no) FROM bookmark WHERE member_no = #{member_no}
+		SELECT COUNT(DISTINCT(product_no)) FROM bookmark WHERE member_no = #{member_no}
 	</select>
 </mapper>
