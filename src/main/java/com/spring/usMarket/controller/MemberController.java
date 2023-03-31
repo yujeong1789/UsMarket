@@ -53,6 +53,8 @@ public class MemberController {
 	@PostMapping("/login")
 	public String loginCheck(HttpServletRequest request, String member_id, String member_password, Model model)
 			throws Exception {
+		Object result= null;
+		
 		logger.info("ID 입력 정보 = " + member_id + ", PW 입력 정보 = " + member_password);
 		
 		BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
@@ -71,7 +73,12 @@ public class MemberController {
 			logger.info("로그인 성공");
 			httpSession.setAttribute("userId", member_id);
 			httpSession.setAttribute("userNo", member.get("MEMBER_NO"));
-			return "redirect:" + request.getSession().getAttribute("prevPage");
+			if(request.getSession().getAttribute("prevPage") == null) {
+				result = "/";
+			}else {
+				result = request.getSession().getAttribute("prevPage");
+			}
+			return "redirect:" + result;
 		} else {
 			logger.info("비밀번호 오류");
 			String msg = "잘못된 입력입니다.";
@@ -128,47 +135,64 @@ public class MemberController {
 	@GetMapping("/mypage")
 	public String info(HttpServletRequest request, Model model, SearchCondition sc) {
 		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy년 MM월 dd일");
-		sc.setPageSize(15);
+		
+		String member_no = String.valueOf(request.getSession().getAttribute("userNo"));
+		logger.info("member_id = {}, member_no = {}", request.getSession().getAttribute("userId").toString(), member_no);
+		//session으로 넘어온 회원 정보
+
 		int totalCnt = 0;
+		sc.setPageSize(15);		
+
 		try {
-			Integer member_no = Integer.parseInt(String.valueOf(request.getSession().getAttribute("userNo")));
-			logger.info("member_id = {}, member_no = {}", request.getSession().getAttribute("userId").toString(), member_no);
-			//session으로 넘어온 회원 정보
-						
-			MemberDto memberInfo = memberService.getMemberInfo(member_no);
+			String memberNo = member_no;
+		    if (request.getParameter("member_no") != null) {
+		    	memberNo = request.getParameter("member_no");
+		    }
+			MemberDto memberInfo = memberService.getMemberInfo(memberNo);//Mypage_member
+
+			List<Map<String, Object>> mypageProductList = memberService.getMypageProduct(memberNo);
+			int ProductCount = memberService.getMypageProductCount(memberNo);//Mypage_product
+
+			int bookmarkCount = memberService.getMypageBookmarkCount(memberNo);//Mypage_Bookmark
+
+			PageHandler pageHandler = new PageHandler(totalCnt, sc);
+
+			model.addAttribute("deNo", 211);
+			
 			model.addAttribute("memberInfo", memberInfo);
 			model.addAttribute("regdate",dateFormat.format(memberInfo.getMember_regdate()));
-			//session에서 읽은 정보로 회원 정보 불러옴
-			
-			List<ProductDto> mypageProductList = memberService.getMypageProduct2(member_no);
-			logger.info("mypageProductList : "+mypageProductList);
-			totalCnt = mypageProductList.size();
-			//memberService.getMypageProductCount(member_no);
-			
-			logger.info("mypageProductList.size = "+mypageProductList.size());
-			
-			PageHandler pageHandler = new PageHandler(totalCnt, sc);
-			//마이페이지 제품 리스트
-			
-			model.addAttribute("mypageProductList", mypageProductList);
+			model.addAttribute("mypageList", mypageProductList);
+			model.addAttribute("product", ProductCount);
+			model.addAttribute("bookmark", bookmarkCount);
 			model.addAttribute("Page", sc.getPage());
 			model.addAttribute("PageSize", sc.getPageSize());
 			model.addAttribute("ph", pageHandler);
-			//마이페이지 상품 정보
+			
 		} catch (Exception e) {
 			e.printStackTrace();
-		} // try-catch
+		}
 		return "member/mypage";
 	}
 	
-	@ResponseBody
 	@PostMapping("/MyBookmark")
-	public List<ProductDto> MyBookmark(@RequestBody Integer member_no) throws Exception {
-		logger.info("member_No= " + member_no);
-		List<ProductDto> mypageBookmarkList = memberService.getMypageBookmark(member_no);
-		logger.info("북마크 리스트 = " + mypageBookmarkList);
+	public String MyBookmark(@RequestBody String member_no, Model model, SearchCondition sc) throws Exception {
+		sc.setPageSize(15);
+		int totalCnt = 0;
 		
-		return mypageBookmarkList;
+		logger.info("member_No = {}", member_no);
+		
+		List<Map<String, Object>> mypageBookmarkList = memberService.getMypageBookmark(member_no);
+		logger.info("북마크 리스트 = " + mypageBookmarkList);
+		totalCnt = mypageBookmarkList.size();
+		PageHandler pageHandler = new PageHandler(totalCnt, sc);
+		
+		model.addAttribute("MyList", "MyBookmark");
+		model.addAttribute("mypageList", mypageBookmarkList);
+		model.addAttribute("Page", sc.getPage());
+		model.addAttribute("PageSize", sc.getPageSize());
+		model.addAttribute("ph", pageHandler);
+		
+		return "member/viewajax";
 	}
 
 	@PostMapping("/MyProductList")
@@ -183,9 +207,8 @@ public class MemberController {
 		totalCnt = mypageProductList.size();
 		PageHandler pageHandler = new PageHandler(totalCnt, sc);
 		
-		
+		model.addAttribute("MyList", "MyProductList");
 		model.addAttribute("mypageList", mypageProductList);
-		model.addAttribute("mypageProductList", mypageProductList);
 		model.addAttribute("Page", sc.getPage());
 		model.addAttribute("PageSize", sc.getPageSize());
 		model.addAttribute("ph", pageHandler);
