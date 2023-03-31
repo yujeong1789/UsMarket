@@ -28,9 +28,9 @@ public interface AdminDao {
 	Map<String, Object> searchReviewInfo(String deal_no) throws Exception;
 	
 	// report
-	List<Map<String, Object>> searchReportList(String startPage, String endPage) throws Exception;
-	
+	List<Map<String, Object>> searchReportList(AdminSearchCondition sc) throws Exception;
+	int searchReportCnt(String condition, String complete) throws Exception;
 	
 	// qna
-	List<Map<String, Object>> searchQnaList(String startPage, String endPage) throws Exception;
+	List<Map<String, Object>> searchQnaList(AdminSearchCondition sc) throws Exception;
 }

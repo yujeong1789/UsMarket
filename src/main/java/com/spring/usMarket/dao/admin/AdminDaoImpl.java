@@ -122,21 +122,23 @@ public class AdminDaoImpl implements AdminDao{
 	}
 
 	@Override
-	public List<Map<String, Object>> searchReportList(String startPage, String endPage) throws Exception {
+	public List<Map<String, Object>> searchReportList(AdminSearchCondition sc) throws Exception {
+		return session.selectList(namespace+"searchReportList", sc);
+	}
+	
+	@Override
+	public int searchReportCnt(String condition, String complete) throws Exception {
 		Map<String, Object> map = new HashMap<>();
-		map.put("startPage", startPage);
-		map.put("endPage", endPage);
+		map.put("condition", condition);
+		map.put("complete", complete);
 		
-		return session.selectList(namespace+"searchReportList", map);
+		return session.selectOne(namespace+"searchReportCnt", map);
 	}
 
 	@Override
-	public List<Map<String, Object>> searchQnaList(String startPage, String endPage) throws Exception {
-		Map<String, Object> map = new HashMap<>();
-		map.put("startPage", startPage);
-		map.put("endPage", endPage);
+	public List<Map<String, Object>> searchQnaList(AdminSearchCondition sc) throws Exception {
 		
-		return session.selectList(namespace+"searchQnaList", map);
+		return session.selectList(namespace+"searchQnaList", sc);
 	}
 
 }
