@@ -75,7 +75,7 @@ public class MemberDaoImpl implements MemberDao{
 	}
 
 	@Override
-	public List<ProductDto> searchMypageBookmark(Integer member_no) throws Exception {
+	public List<Map<String, Object>> searchMypageBookmark(Integer member_no) throws Exception {
 		return session.selectList(namespace+"searchMypageBookmark", member_no);
 	}
 
