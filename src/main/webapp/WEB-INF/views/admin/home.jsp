@@ -43,17 +43,20 @@
 			<c:if test="${!empty reportMap }">
 				<ul class="home-ul report-ul">
 					<c:forEach var="report" items="${reportMap }">
-						<li>
-							<a href="<c:url value='/admin/report/info?report_no=${report.REPORT_NO }'/>">
-								${report.REPORT_TITLE }
+						<li data-no="${report.REPORT_NO }">
+							<span>
+								${report.REPORT_CATEGORY1_NAME += ' | ' += report.REPORT_CATEGORY2_NAME }
 								<c:if test="${report.REPORT_COMPLETE eq 'N' }">
 									<img src="<c:url value='/resources/admin/img/new_report.png'/>">
 								</c:if>
-							</a>
+							</span>
 							<span>${TimeConvert.calculateTime(report.REPORT_REGDATE)}</span>
 						</li>
 					</c:forEach>
 				</ul>
+				<form id="reportInfoForm" action="<c:url value='/admin/report/info'/>" method="post">
+					<input type="hidden" id="report_no" name="report_no">
+				</form>
 			</c:if>
 			</div>
 		</div>
@@ -68,13 +71,13 @@
 				<c:if test="${!empty qnaMap }">
 					<ul class="home-ul qna-ul">
 						<c:forEach var="qna" items="${qnaMap }">
-							<li>
-								<a href="<c:url value='/admin/qna/info?qna_no=${report.QNA_NO }'/>">
+							<li data-no="${qna.QNA_NO }">
+								<span>
 									${qna.QNA_TITLE }
 									<c:if test="${qna.QNA_COMPLETE eq 'N' }">
 										<img src="<c:url value='/resources/admin/img/new_report.png'/>">
 									</c:if>
-								</a>
+								</span>
 								<span>${TimeConvert.calculateTime(qna.QNA_REGDATE)}</span>
 							</li>
 						</c:forEach>
@@ -88,6 +91,24 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
 <script>
 document.addEventListener('DOMContentLoaded', function(){
+	if(document.querySelector('.report-ul') != null){
+		document.querySelectorAll('.report-ul > li').forEach(el => {
+			el.addEventListener('click', function(e){
+				 document.getElementById('report_no').value = this.dataset.no;
+				 document.getElementById('reportInfoForm').submit();
+			});
+		});
+	}
+	
+	if(document.querySelector('.qna-ul') != null){
+		document.querySelectorAll('.qna-ul > li').forEach(el => {
+			el.addEventListener('click', function(e){
+				 document.getElementById('qna_no').value = this.dataset.no;
+				 document.getElementById('qnaInfoForm').submit();
+			});
+		});
+	}
+	
 	const memberStatsParam = {
 		'startDate': getStartDate(2),
 		'endDate': getCurrentEndDate()
