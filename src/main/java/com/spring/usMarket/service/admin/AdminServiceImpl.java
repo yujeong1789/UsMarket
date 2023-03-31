@@ -57,6 +57,26 @@ public class AdminServiceImpl implements AdminService{
 
 	@Override
 	@Transactional(rollbackFor = SQLException.class, readOnly = true)
+	public List<Map<String, Object>> getMemberList(AdminSearchCondition sc) throws Exception {
+		
+		List<Map<String, Object>> listMap = adminDao.searchMemberList(sc);
+		logger.info("회원 목록 조회 결과 = {}", listMap.toString());
+		
+		return listMap;
+	}
+
+	@Override
+	@Transactional(rollbackFor = SQLException.class, readOnly = true)
+	public List<Map<String, Object>> getMemberProductList(AdminSearchCondition sc) throws Exception {
+		
+		List<Map<String, Object>> listMap = adminDao.searchMemberProductList(sc);
+		logger.info("회원 상품 조회 결과 = {}", listMap.toString());
+		
+		return listMap;
+	}
+
+	@Override
+	@Transactional(rollbackFor = SQLException.class, readOnly = true)
 	public int getMemberCnt(String startDate, String endDate, String condition) throws Exception {
 		
 		int totalCnt = adminDao.searchMemberCnt(startDate, endDate, condition);
@@ -154,40 +174,30 @@ public class AdminServiceImpl implements AdminService{
 	
 	@Override
 	@Transactional(rollbackFor = SQLException.class, readOnly = true)
-	public List<Map<String, Object>> getReportList(String startPage, String endPage) throws Exception {
+	public List<Map<String, Object>> getReportList(AdminSearchCondition sc) throws Exception {
 		
-		List<Map<String, Object>> listMap = adminDao.searchReportList(startPage, endPage);
+		List<Map<String, Object>> listMap = adminDao.searchReportList(sc);
 		logger.info("신고 목록 조회 결과 = {}", listMap.size());
 		
 		return listMap;
 	}
+	
+	@Override
+	@Transactional(rollbackFor = SQLException.class, readOnly = true)
+	public int getReportCnt(String condition, String complete) throws Exception {
+
+		int totalCnt = adminDao.searchReportCnt(condition, complete);
+		logger.info("신고 수 조회 결과 = {}", totalCnt);
+		
+		return totalCnt;
+	}
 
 	@Override
 	@Transactional(rollbackFor = SQLException.class, readOnly = true)
-	public List<Map<String, Object>> getQnaList(String startPage, String endPage) throws Exception {
+	public List<Map<String, Object>> getQnaList(AdminSearchCondition sc) throws Exception {
 		
-		List<Map<String, Object>> listMap = adminDao.searchQnaList(startPage, endPage);
+		List<Map<String, Object>> listMap = adminDao.searchQnaList(sc);
 		logger.info("문의 목록 조회 결과 = {}", listMap.size());
-		
-		return listMap;
-	}
-
-	@Override
-	@Transactional(rollbackFor = SQLException.class, readOnly = true)
-	public List<Map<String, Object>> getMemberList(AdminSearchCondition sc) throws Exception {
-		
-		List<Map<String, Object>> listMap = adminDao.searchMemberList(sc);
-		logger.info("회원 목록 조회 결과 = {}", listMap.toString());
-		
-		return listMap;
-	}
-
-	@Override
-	@Transactional(rollbackFor = SQLException.class, readOnly = true)
-	public List<Map<String, Object>> getMemberProductList(AdminSearchCondition sc) throws Exception {
-		
-		List<Map<String, Object>> listMap = adminDao.searchMemberProductList(sc);
-		logger.info("회원 상품 조회 결과 = {}", listMap.toString());
 		
 		return listMap;
 	}

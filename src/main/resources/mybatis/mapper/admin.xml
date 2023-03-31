@@ -255,21 +255,55 @@
 		AND d.deal_no = #{deal_no}
 	</select>
 	
-	<select id="searchReportList" parameterType="map" resultType="map">
+	<select id="searchReportList" parameterType="adminSearchCondition" resultType="map">
 		SELECT *
 		FROM ( SELECT rownum AS num, A.*
-				FROM (	SELECT r.report_no, r.report_regdate, r.report_complete
-							,( SELECT c1.report_category1_name FROM report_category1 c1
-							   WHERE c1.report_category1_no = r.report_category1_no
-							 )||' | '||
-							 ( SELECT c2.report_category2_name FROM report_category2 c2
-							   WHERE c2.report_category1_no = r.report_category1_no AND c2.report_category2_no = r.report_category2_no
-							 ) AS report_title
-						FROM report r
-						ORDER BY report_regdate DESC
+				FROM (	SELECT r.report_no
+							   , r.report_regdate
+							   , r.report_complete
+							   , r.report_category1_no
+							   , c1.report_category1_name
+							   , r.report_category2_no
+							   , ( SELECT c2.REPORT_CATEGORY2_NAME
+								   FROM report_category2 c2
+								   WHERE c2.report_category1_no = r.report_category1_no
+								   AND c2.report_category2_no = r.report_category2_no
+								 ) AS report_category2_name
+						FROM report r, report_category1 c1
+						WHERE r.report_category1_no = c1.report_category1_no
+						<if test="condition != null and condition != '' and condition != 0">
+							AND r.report_category1_no = #{condition} 
+						</if>
+						<if test="complete != null and complete != ''">
+							AND r.report_complete = #{complete} 
+						</if>
+						<choose>
+							<when test="order == 'regdate'">
+								ORDER BY r.report_regdate 
+							</when>
+							<otherwise>
+								ORDER BY r.report_regdate DESC 
+							</otherwise>
+						</choose>
 					 ) A
 			 )
 		WHERE num BETWEEN #{startPage} AND #{endPage}
+	</select>
+	
+	<select id="searchReportCnt" resultType="int" parameterType="map">
+		SELECT COUNT(*)
+		FROM report 
+		<choose>
+			<when test="condition != null and condition != ''">
+				WHERE report_category1_no = #{condition} 
+			</when>
+			<otherwise>
+				WHERE report_category1_no IN (1, 2, 3, 4, 5) 
+			</otherwise>
+		</choose>
+		<if test="complete != null and complete != ''">
+			AND report_complete = #{complete} 
+		</if>
 	</select>
 	
 	

@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.spring.usMarket.service.admin.AdminService;
+import com.spring.usMarket.utils.AdminSearchCondition;
 
 @Controller
 @RequestMapping("/admin")
@@ -29,13 +30,17 @@ public class AdminController { // 관리자 메인 페이지 출력
 	
 	@GetMapping("/home")
 	public void main(Model model) {
-		logger.info("admin home");
+		
+		AdminSearchCondition sc = new AdminSearchCondition();
+		sc.setPageSize(5);
+		
+		logger.info("adminSearchCondition = {}", sc.toString());
 		
 		List<Map<String, Object>> qnaMap = new ArrayList<>();
 		List<Map<String, Object>> reportMap = new ArrayList<>();
 		try {
-			qnaMap = adminService.getQnaList("1", "5"); 
-			reportMap = adminService.getReportList("1", "5");
+			qnaMap = adminService.getQnaList(sc); 
+			reportMap = adminService.getReportList(sc);
 			
 			model.addAttribute("qnaMap", qnaMap);
 			model.addAttribute("reportMap", reportMap);

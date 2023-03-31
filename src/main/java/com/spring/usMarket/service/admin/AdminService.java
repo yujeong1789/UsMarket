@@ -29,9 +29,9 @@ public interface AdminService {
 	Map<String, Object> getReviewInfo(String deal_no) throws Exception;
 	
 	// report
-	List<Map<String, Object>> getReportList(String startPage, String endPage) throws Exception;
-	
+	List<Map<String, Object>> getReportList(AdminSearchCondition sc) throws Exception;
+	int getReportCnt(String condition, String complete) throws Exception;
 	
 	// qna
-	List<Map<String, Object>> getQnaList(String startPage, String endPage) throws Exception;
+	List<Map<String, Object>> getQnaList(AdminSearchCondition sc) throws Exception;
 }

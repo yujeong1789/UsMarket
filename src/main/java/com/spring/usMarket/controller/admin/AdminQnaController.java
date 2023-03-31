@@ -5,6 +5,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
@@ -17,7 +18,7 @@ public class AdminQnaController {
 		logger.info("qna/list");
 	}
 	
-	@GetMapping("/info")
+	@PostMapping("/info")
 	public void qnaInfo(Model model, String qna_no) {
 		logger.info("qna_no = {}", qna_no);
 	}

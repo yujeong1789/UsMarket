@@ -12,11 +12,12 @@ public class AdminSearchCondition {
 	private String condition = "";
 	private String order = "";
 	private String member_no = "";
+	private String complete = "";
 	
 	public AdminSearchCondition() {}
 
 	public AdminSearchCondition(Integer page, Integer pageSize, String startDate, String endDate, String condition,
-			String order, String member_no) {
+			String order, String member_no, String complete) {
 		this.page = page;
 		this.pageSize = pageSize;
 		this.startDate = startDate;
@@ -24,6 +25,7 @@ public class AdminSearchCondition {
 		this.condition = condition;
 		this.order = order;
 		this.member_no = member_no;
+		this.complete = complete;
 	}
 	
 	public Integer getStartPage() {
@@ -89,10 +91,21 @@ public class AdminSearchCondition {
 	public void setMember_no(String member_no) {
 		this.member_no = member_no;
 	}
+	
+	
 
+	public String getComplete() {
+		return complete;
+	}
+
+	public void setComplete(String complete) {
+		this.complete = complete;
+	}
+
+	
 	@Override
 	public String toString() {
 		return "AdminSearchCondition [page=" + page + ", startPage=" + getStartPage() + ", endPage=" + getEndPage() + ", pageSize=" + pageSize + ", startDate=" + startDate
-				+ ", endDate=" + endDate + ", condition=" + condition + ", order=" + order + ", member_no=" + member_no +"]";
+				+ ", endDate=" + endDate + ", condition=" + condition + ", order=" + order + ", member_no=" + member_no + ", complete=" + complete + "]";
 	}
 }
