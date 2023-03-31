@@ -26,6 +26,7 @@ public interface AdminService {
 	List<Map<String, Object>> getDealList(AdminSearchCondition sc) throws Exception;
 	int getDealCnt(String startDate, String endDate, String condition) throws Exception;
 	Map<String, Object> getDealInfo(String deal_no) throws Exception;
+	Map<String, Object> getReviewInfo(String deal_no) throws Exception;
 	
 	// report
 	List<Map<String, Object>> getReportList(String startPage, String endPage) throws Exception;
