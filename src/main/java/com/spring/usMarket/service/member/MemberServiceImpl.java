@@ -119,8 +119,8 @@ public class MemberServiceImpl implements MemberService {
 	}
 
 	@Override
-	public MemberDto getMemberInfo(Integer member_no) throws Exception {
-		MemberDto member = memberDAO.memberSearch(member_no);
+	public MemberDto getMemberInfo(String member_no) throws Exception {
+		MemberDto member = memberDAO.memberSearch(Integer.parseInt(member_no));
 		logger.info("회원정보 = {}", member.toString());
 		
 		return member;
@@ -137,25 +137,15 @@ public class MemberServiceImpl implements MemberService {
 		    dateFormat.format(regdate);
 		    product.put("PRODUCT_REGDATE", TimeConvert.calculateTime((Date)regdate));
 		};
-		logger.info("Service단 = "+productList);
+
 	    return productList;
 	}
 	
 	@Override
 	@Transactional(rollbackFor = SQLException.class, readOnly = true)
-	public List<ProductDto> getMypageProduct2(Integer member_no) throws Exception {
+	public int getMypageProductCount(String member_no) throws Exception {
 		
-		List<ProductDto> mypageProduct = memberDAO.searchMypageProduct2(member_no);
-		logger.info("마이 페이지 상품.size() = {}", mypageProduct.size());
-		
-		return mypageProduct;
-	}
-
-	@Override
-	@Transactional(rollbackFor = SQLException.class, readOnly = true)
-	public int getMypageProductCount(Integer member_no) throws Exception {
-		
-		int productCount = memberDAO.searchMypageProductCount(member_no);
+		int productCount = memberDAO.searchMypageProductCount(Integer.parseInt(member_no));
 		logger.info("전체 상품 수 = {}", productCount);
 		
 		return productCount;
@@ -163,21 +153,26 @@ public class MemberServiceImpl implements MemberService {
 
 	@Override
 	@Transactional(rollbackFor = SQLException.class, readOnly = true)
-	public List<ProductDto> getMypageBookmark(Integer member_no) throws Exception {
+	public List<Map<String, Object>> getMypageBookmark(String member_no) throws Exception {
+		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMdd");
 		
-		List<ProductDto> mypageBookmark= memberDAO.searchMypageBookmark(member_no);
-		logger.info("마이 페이지 찜.size() = {}", mypageBookmark.size());
+		List<Map<String, Object>> bookmarkList = memberDAO.searchMypageBookmark(Integer.parseInt(member_no));
+		for(Map<String, Object> bookmark : bookmarkList) {
+		    Object regdate = bookmark.get("PRODUCT_REGDATE");
+		    dateFormat.format(regdate);
+		    bookmark.put("PRODUCT_REGDATE", TimeConvert.calculateTime((Date)regdate));
+		};
 		
-		return null;
+		return bookmarkList;
 	}
 
 	@Override
 	@Transactional(rollbackFor = SQLException.class, readOnly = true)
-	public int getMypageBookmarkCount(Integer member_no) throws Exception {
+	public int getMypageBookmarkCount(String member_no) throws Exception {
 		
-		int BookmarkCount = memberDAO.searchMypageBookmarkCount(member_no);
-		logger.info("전체 상품 수 = {}", BookmarkCount);
+		int BookmarkCount = memberDAO.searchMypageBookmarkCount(Integer.parseInt(member_no));
+		logger.info("BookmarkCount 상품 수 = {}", BookmarkCount);
 	
-		return 0;
+		return BookmarkCount;
 	}
 }
