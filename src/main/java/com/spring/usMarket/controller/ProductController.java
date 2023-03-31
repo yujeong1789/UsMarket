@@ -1,5 +1,6 @@
 package com.spring.usMarket.controller;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -73,23 +74,27 @@ public class ProductController {
 	
 	@GetMapping("/info")
 	public void info(String product_no, HttpServletRequest request, Model model) {
+		
+		Map<String, Object> productInfo = new HashMap<>();
 		try {
-			Map<String, Object> productInfo = productService.getProductInfo(product_no);
+			productInfo = productService.getProductInfo(product_no);
+			model.addAttribute("productInfo", productInfo);
 			
-			List<String> productImage = productService.getProductImage(product_no);
-			ObjectMapper mapper = new ObjectMapper();
-			String jsonText = mapper.writeValueAsString(productImage);
-			
-			model.addAttribute("jsonText", jsonText);
-			model.addAttribute("productInfo", productInfo); // 기존 - 2691ms
-			
-			int bookmarkStatus = 0;
-			if(request.getSession().getAttribute("userNo") != null) {
-				Integer member_no = Integer.parseInt(SessionParameters.getUserNo(request));
-				bookmarkStatus = productService.getBookmarkByInfo(member_no+product_no);
+			if(productInfo != null) {
+				List<String> productImage = productService.getProductImage(product_no);
+				ObjectMapper mapper = new ObjectMapper();
+				String jsonText = mapper.writeValueAsString(productImage);
+				
+				model.addAttribute("jsonText", jsonText);	
+				
+				int bookmarkStatus = 0;
+				if(request.getSession().getAttribute("userNo") != null) {
+					Integer member_no = Integer.parseInt(SessionParameters.getUserNo(request));
+					bookmarkStatus = productService.getBookmarkByInfo(member_no+product_no);
+				}
+				
+				model.addAttribute("bookmarkStatus", bookmarkStatus);
 			}
-			
-			model.addAttribute("bookmarkStatus", bookmarkStatus);
 			
 		} catch (Exception e) {
 			e.printStackTrace();
