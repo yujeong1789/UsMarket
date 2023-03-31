@@ -342,6 +342,7 @@ li{
 	display: flex;
 	align-items: center;
 	justify-content: space-between;
+	cursor: pointer;
 }
 
 .home-ul > li:hover{
@@ -352,17 +353,16 @@ li{
 	border-bottom: 1px solid #f0f1f6;
 }
 
-.home-ul > li > a{
+.home-ul > li > span:first-child{
 	color: #6A6A6A;
-	font-weight: 550; 
+	font-weight: 550;
 }
-
-.home-ul > li > span{
+.home-ul > li > span:last-child{
 	font-size: 12px;
 	color: #9D9D9D;
 }
 
-.home-ul > li > a > img{
+.home-ul > li > span > img{
 	width: 5px;
 	object-fit: contain;
 	margin-left: 5px;
