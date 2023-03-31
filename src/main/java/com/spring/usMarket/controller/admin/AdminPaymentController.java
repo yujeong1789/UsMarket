@@ -101,7 +101,13 @@ public class AdminPaymentController {
 		try {
 			infoMap = adminService.getDealInfo(deal_no);
 			model.addAttribute("infoMap", infoMap);
-			model.addAttribute("deal_no", deal_no);
+			
+			String deal_state = infoMap.get("DEAL_STATE").toString();
+			String deal_review = infoMap.get("DEAL_REVIEW").toString();
+			if((deal_state == "2" || deal_state.equals("2")) && (deal_review == "Y" || deal_review.equals("Y"))) {
+				Map<String, Object> reviewMap = adminService.getReviewInfo(deal_no);
+				model.addAttribute("reviewMap", reviewMap);
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
