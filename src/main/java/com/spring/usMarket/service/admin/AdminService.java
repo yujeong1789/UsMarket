@@ -3,6 +3,7 @@ package com.spring.usMarket.service.admin;
 import java.util.List;
 import java.util.Map;
 
+import com.spring.usMarket.domain.admin.ReportHistoryDto;
 import com.spring.usMarket.utils.AdminSearchCondition;
 
 public interface AdminService {
@@ -33,6 +34,8 @@ public interface AdminService {
 	int getReportCnt(String condition, String complete) throws Exception;
 	Map<String, Object> getReportInfo(String report_no) throws Exception;
 	List<Map<String, Object>> getChatLog(String room_no) throws Exception;
+	String getReportHistory(String member_no) throws Exception;
+	int addReportHistory(ReportHistoryDto dto) throws Exception;
 	
 	// qna
 	List<Map<String, Object>> getQnaList(AdminSearchCondition sc) throws Exception;
