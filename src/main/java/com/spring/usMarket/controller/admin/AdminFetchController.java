@@ -110,5 +110,19 @@ public class AdminFetchController {
 		
 		return endDate;
 	}
-
+	
+	@PostMapping("/report/reg")
+	public int reportReg(@RequestBody ReportHistoryDto dto) {
+		
+		logger.info("ReportHistoryDto = {}", dto.toString());
+		
+		int result = 0;
+		try {
+			result = adminService.addReportHistory(dto);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return result;
+	}
 }
