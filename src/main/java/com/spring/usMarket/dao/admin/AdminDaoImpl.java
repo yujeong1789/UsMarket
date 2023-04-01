@@ -8,6 +8,7 @@ import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import com.spring.usMarket.domain.admin.ReportHistoryDto;
 import com.spring.usMarket.utils.AdminSearchCondition;
 
 @Repository
@@ -144,10 +145,24 @@ public class AdminDaoImpl implements AdminDao{
 	public List<Map<String, Object>> searchChatLog(String room_no) throws Exception {
 		return session.selectList(namespace+"searchChatLog", room_no);
 	}
+	
+	@Override
+	public String searchReportHistory(String member_no) throws Exception {
+		return session.selectOne(namespace+"searchReportHistory", member_no);
+	}
+
+	@Override
+	public int updateReport(String report_no) throws Exception {
+		return session.update(namespace+"updateReport", report_no);
+	}
+	
+	@Override
+	public int insertReportHistory(ReportHistoryDto dto) throws Exception {
+		return session.insert(namespace+"insertReportHistory", dto);
+	}
 
 	@Override
 	public List<Map<String, Object>> searchQnaList(AdminSearchCondition sc) throws Exception {
-		
 		return session.selectList(namespace+"searchQnaList", sc);
 	}
 
