@@ -1,0 +1,63 @@
+@charset "UTF-8";
+
+
+#chatModal{
+	overscroll-behavior: none;
+}
+
+.modal-dialog{
+	top: 150px;
+	max-width: 400px;
+}
+
+.modal-content{
+	background-color: #FFFFFF;
+}
+
+.modal-header{
+	padding-left: 20px;
+	background-color: #FFFFFF;
+	border-bottom: none;
+}
+
+.modal-title{
+	font-size: 16px;
+	font-weight: 600;
+}
+
+.modal-body{
+	display: flex;
+	flex-direction: column;
+	padding: 5px 20px 20px 20px;
+}
+
+.modal-body .chat-title{
+	font-weight: 700;
+	font-size: 16px;
+}
+
+.modal-body{
+	width: 100%;
+	padding: 20px;
+	max-height: 400px;
+}
+
+.modal-body .chat-info{
+	padding: 15px 20px 15px 20px;
+}
+
+.modal-body > div{
+	padding: 10px;
+	border-radius: .375rem;
+	box-shadow: 0 2px 6px 0 rgba(67,89,113,.12);
+	overflow: scroll;
+}
+
+.modal-body th, .modal-body td{
+	text-align: left;
+	padding: 5px;
+}
+
+.modal-body thead > tr{
+	height: 30px;
+}
