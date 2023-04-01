@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.spring.usMarket.domain.admin.ReportHistoryDto;
 import com.spring.usMarket.service.admin.AdminService;
 
 @RestController
@@ -93,5 +94,35 @@ public class AdminFetchController {
 		}
 		
 		return chatList;
+	}
+	
+	@GetMapping("/report/history/{member_no}")
+	public String reportHistory(@PathVariable String member_no) {
+		
+		logger.info("member_no = {}", member_no);
+		
+		String endDate = "";
+		try {
+			endDate = adminService.getReportHistory(member_no);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return endDate;
+	}
+	
+	@PostMapping("/report/reg")
+	public int reportReg(@RequestBody ReportHistoryDto dto) {
+		
+		logger.info("ReportHistoryDto = {}", dto.toString());
+		
+		int result = 0;
+		try {
+			result = adminService.addReportHistory(dto);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return result;
 	}
 }

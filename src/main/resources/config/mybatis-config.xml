@@ -39,6 +39,9 @@
 		 
 		<typeAlias type="com.spring.usMarket.utils.AdminSearchCondition"
 		 alias="adminSearchCondition"/>
+		 
+		<typeAlias type="com.spring.usMarket.domain.admin.ReportHistoryDto"
+		 alias="reportHistoryDto"/>
 	</typeAliases>
 	
 </configuration>

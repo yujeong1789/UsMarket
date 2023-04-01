@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.spring.usMarket.dao.admin.AdminDao;
+import com.spring.usMarket.domain.admin.ReportHistoryDto;
 import com.spring.usMarket.utils.AdminSearchCondition;
 
 @Service
@@ -22,7 +23,7 @@ public class AdminServiceImpl implements AdminService{
 	
 	
 	public String getResult(int rowCnt) {
-		return rowCnt == 1 ? "OK" : "NOT_OK";
+		return rowCnt == 1 ? "OK" : "FAIL";
 	}
 	
 	@Override
@@ -30,7 +31,7 @@ public class AdminServiceImpl implements AdminService{
 	public Map<String, Object> getAdmin(String admin_id, String admin_password) throws Exception {
 		
 		Map<String, Object> map = adminDao.searchAdmin(admin_id, admin_password);
-		logger.info("관리자 정보 조회 결과 = {}", (map == null ? "NOT_OK" : "OK"));
+		logger.info("관리자 정보 조회 결과 = {}", (map == null ? "FAIL" : "OK"));
 		
 		return map;
 	}
@@ -211,6 +212,29 @@ public class AdminServiceImpl implements AdminService{
 		
 		return listMap;
 	}
+	
+	@Override
+	@Transactional(rollbackFor = SQLException.class, readOnly = true)
+	public String getReportHistory(String member_no) throws Exception {
+		
+		String endDate = adminDao.searchReportHistory(member_no);
+		logger.info("제재 이력 = {}", (endDate == null ? "없음" : endDate+" 종료"));
+		
+		return endDate;
+	}
+
+	@Override
+	@Transactional(rollbackFor = SQLException.class)
+	public int addReportHistory(ReportHistoryDto dto) throws Exception {
+		
+		int rowCnt = adminDao.updateReport(dto.getReport_no());
+		logger.info("신고 처리여부 업데이트 결과 = {}", getResult(rowCnt));
+		
+		rowCnt += adminDao.insertReportHistory(dto);
+		logger.info("제재 등록 결과 = {}", (rowCnt == 2 ? "OK" : "FAIL"));
+		
+		return rowCnt;
+	}
 
 	@Override
 	@Transactional(rollbackFor = SQLException.class, readOnly = true)
@@ -221,5 +245,4 @@ public class AdminServiceImpl implements AdminService{
 		
 		return listMap;
 	}
-
 }

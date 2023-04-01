@@ -3,6 +3,7 @@ package com.spring.usMarket.dao.admin;
 import java.util.List;
 import java.util.Map;
 
+import com.spring.usMarket.domain.admin.ReportHistoryDto;
 import com.spring.usMarket.utils.AdminSearchCondition;
 
 public interface AdminDao {
@@ -32,6 +33,9 @@ public interface AdminDao {
 	int searchReportCnt(String condition, String complete) throws Exception;
 	Map<String, Object> searchReportInfo(String report_no) throws Exception;
 	List<Map<String, Object>> searchChatLog(String room_no) throws Exception;
+	String searchReportHistory(String member_no) throws Exception;
+	int updateReport(String report_no) throws Exception;
+	int insertReportHistory(ReportHistoryDto dto) throws Exception;
 	
 	// qna
 	List<Map<String, Object>> searchQnaList(AdminSearchCondition sc) throws Exception;

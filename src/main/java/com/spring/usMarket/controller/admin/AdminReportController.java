@@ -5,6 +5,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.spring.usMarket.domain.admin.ReportHistoryDto;
 import com.spring.usMarket.service.admin.AdminService;
 import com.spring.usMarket.utils.AdminPageHandler;
 import com.spring.usMarket.utils.AdminSearchCondition;
@@ -91,8 +94,13 @@ public class AdminReportController {
 		logger.info("listform");
 	}
 	
+	@GetMapping("/info")
+	public void reportInfo() {
+		logger.info("report/info");
+	}
+	
 	@PostMapping("/info")
-	public void reportInfo(String report_no, Model model) {
+	public void reportInfoPost(String report_no, Model model) {
 		
 		logger.info("report_no = {}", report_no);
 		

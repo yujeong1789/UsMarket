@@ -327,6 +327,26 @@
 		ORDER BY c.chat_time
 	</select>
 	
+	<select id="searchReportHistory" parameterType="string" resultType="string">
+		SELECT TO_CHAR(sanction_enddate, 'YYYY-MM-DD') AS enddate
+		FROM report_history
+		WHERE member_no = #{member_no}
+		AND rownum = 1
+		AND sanction_enddate > CURRENT_DATE
+		ORDER BY sanction_enddate DESC
+	</select>
+	
+	<insert id="insertReportHistory" parameterType="reportHistoryDto">
+		INSERT INTO report_history (report_no, admin_no, member_no, sanction_category_no, sanction_startdate, sanction_enddate)
+		values(#{report_no}, #{admin_no}, #{member_no}, #{sanction_category_no}, #{sanction_startdate}, #{sanction_enddate})
+	</insert>
+	
+	<update id="updateReport" parameterType="string">
+		UPDATE report
+		SET report_complete = 'Y'
+		WHERE report_no = #{report_no}
+	</update>
+	
 	<select id="searchQnaList" parameterType="map" resultType="map">
 		SELECT *
 		FROM ( SELECT rownum AS num, A.*
