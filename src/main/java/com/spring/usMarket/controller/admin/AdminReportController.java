@@ -98,6 +98,19 @@ public class AdminReportController {
 		
 		Map<String, Object> infoMap = new HashMap<>();
 		
+		try {
+			infoMap = adminService.getReportInfo(report_no);
+			/*
+			String report_complete = infoMap.get("REPORT_COMPLETE").toString();
+			if(report_complete == "Y" || report_complete.equals("Y")) {
+				Map<String, Object> historyMap = new HashMap<>();
+				model.addAttribute("historyMap", historyMap);
+			}
+			*/
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
 		model.addAttribute("infoMap", infoMap);
 	}
 
