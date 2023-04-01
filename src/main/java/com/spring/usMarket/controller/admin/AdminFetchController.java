@@ -7,6 +7,8 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -76,5 +78,20 @@ public class AdminFetchController {
 		}
 		
 		return resultMap;	
+	}
+	
+	@GetMapping("/chatlog/{room_no}")
+	public List<Map<String, Object>> chatLog(@PathVariable String room_no){
+		
+		logger.info("room_no = {}", room_no);
+		
+		List<Map<String, Object>> chatList = new ArrayList<>();
+		try {
+			chatList = adminService.getChatLog(room_no);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return chatList;
 	}
 }

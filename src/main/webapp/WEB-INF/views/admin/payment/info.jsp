@@ -42,28 +42,30 @@
 					</div>
 					<div class="info">
 						<div class="info-title">판매자</div>
-						<div class="info-info" data-no="${infoMap.SELLER_NO }">
-							<a href="#" onclick="alert('마이페이지 이동 링크 추가할 것')">
-								<span>${infoMap.SELLER_NAME }</span>
+						<div class="info-info">
+							<span class="frm" data-no="${infoMap.SELLER_NO }">
+								${infoMap.SELLER_NAME }
 								<img src="<c:url value='/resources/admin/img/icon/redirect.png'/>">
-							</a>
+							</span>
 						</div>
 					</div>
 					<div class="info">
 						<div class="info-title">구매자</div>
-						<div class="info-info" data-no="${infoMap.CUSTOMER_NO }">
-							<a href="#" onclick="alert('마이페이지 이동 링크 추가할 것')">
-								<span>${infoMap.CUSTOMER_NAME }</span>
+						<div class="info-info">
+							<span class="frm" data-no="${infoMap.CUSTOMER_NO }">
+								${infoMap.CUSTOMER_NAME }
 								<img src="<c:url value='/resources/admin/img/icon/redirect.png'/>">
-							</a>
+							</span>
 						</div>
 					</div>
 					<div class="info">
 						<div class="info-title">구매상품</div>
 						<div class="info-info">
 							<a href="<c:url value='/product/info?product_no=${infoMap.PRODUCT_NO}' />">
-								<span>${infoMap.PRODUCT_NAME }</span>
-								<img src="<c:url value='/resources/admin/img/icon/redirect.png'/>">
+								<span>
+									${infoMap.PRODUCT_NAME }
+									<img src="<c:url value='/resources/admin/img/icon/redirect.png'/>">
+								</span>
 							</a>
 						</div>
 					</div>
@@ -71,6 +73,9 @@
 						<div class="info-title">결제금액</div>
 						<div class="info-info"><fmt:formatNumber type="number" value="${infoMap.PRODUCT_PRICE }"/>원</div>
 					</div>
+					<form id="memberInfoForm" action="<c:url value='/admin/member/info'/>" method="post">
+						<input type="hidden" id="member_no" name="member_no">
+					</form>
 				</div> <!-- payment-info -->
 				
 				
@@ -112,22 +117,20 @@
 				<div class="payment-review">
 					<div class="sub-title">작성 리뷰</div>
 					<div class="review-info">
-						<div class="left">
-							<a href="#" onclick="alert('마이페이지 이동 링크 추가할 것')">
-								<c:if test="${reviewMap.MEMBER_IMAGE eq '/resources/customer/img/default_profile.png' }">
-									<img src="<c:url value='${reviewMap.MEMBER_IMAGE }'/>">
-								</c:if>
-								<c:if test="${reviewMap.MEMBER_IMAGE ne '/resources/customer/img/default_profile.png' }">
-									<img src="${reviewMap.MEMBER_IMAGE }">
-								</c:if>
-							</a>
+						<div class="left frm" data-no="${reviewMap.CUSTOMER_NO }">
+							<c:if test="${reviewMap.MEMBER_IMAGE eq '/resources/customer/img/default_profile.png' }">
+								<img src="<c:url value='${reviewMap.MEMBER_IMAGE }'/>">
+							</c:if>
+							<c:if test="${reviewMap.MEMBER_IMAGE ne '/resources/customer/img/default_profile.png' }">
+								<img src="${reviewMap.MEMBER_IMAGE }">
+							</c:if>
 						</div>
 						<div class="right">
 							<div class="review-nickname">
-								<a href="#" onclick="alert('마이페이지 이동 링크 추가할 것')">
-									<span>${reviewMap.MEMBER_NICKNAME }</span>
+								<span class="frm" data-no="${reviewMap.CUSTOMER_NO }">
+									${reviewMap.MEMBER_NICKNAME }
 									<img src="<c:url value='/resources/admin/img/icon/redirect.png'/>">
-								</a>
+								</span>
 							</div>
 							<div class="review-score">
 								<c:forEach begin="0" end="4" step="1" varStatus="status">
@@ -151,4 +154,10 @@
 </div> <!-- payment-info-container -->
 
 <script type="text/javascript">
+document.querySelectorAll('.frm').forEach(el => {
+	el.addEventListener('click', function(e){
+		document.getElementById('member_no').value = this.dataset.no;
+		document.getElementById('memberInfoForm').submit();
+	});
+});
 </script>

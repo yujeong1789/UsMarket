@@ -30,21 +30,30 @@
 
 .report-info-container > .dashboard > div{
 	display: flex;
+	flex-wrap: wrap;
 	width: 100%;
 	background-color: #FFFFFF;
 	margin-bottom: 30px;
-	padding-top: 30px;
-	padding-bottom: 30px;
+	padding: 30px;
 	border-radius: .375rem;
 	box-shadow: 0 2px 6px 0 rgba(67,89,113,.12);
 }
 
-.report-info, .delivery-info{
-	display: flex;
+.report-info-container > .dashboard > div:not(div:last-child){
+	justify-content: space-between;	
+}
+
+.report-info-container > .dashboard > div:last-child{
 	flex-direction: column;
-	width: 50%;
-	padding-left: 30px;
-	padding-right: 30px;
+}
+
+.report-info-container > .dashboard > div:last-child .title{
+	width: 100%;
+	display: flex;
+	justify-content: space-between;
+	margin-bottom: 20px;
+	font-size: 16px;
+	font-weight: 600;
 }
 
 .sub-title{
@@ -69,18 +78,32 @@
 	padding: 3px;
 }
 
-.report-info{
-	border-right: 1px solid #e7e6ed;
-}
-
 .info{
 	display: flex;
 	justify-content: space-between;
 	font-size: 13px;
-	
+	width: 260px;
+	margin-bottom: 10px;
 }
 
-.info:not(.info:last-child){
+.info:last-child{
+	width: 100%;
+	margin-top: 5px;
+	padding: 10px;
+	display: flex;
+	flex-direction: column;
+	border-radius: .375rem;
+	box-shadow: 0 2px 6px 0 rgba(67,89,113,.12);
+}
+
+.info:last-child > .info-info{
+	text-align: left;
+	margin-top: 8px;
+	display: flex;
+	flex-direction: column;
+}
+
+.info:last-child img{
 	margin-bottom: 10px;
 }
 
@@ -105,7 +128,7 @@
 	word-break: break-all;
 }
 
-.info > .info-info > a:hover{
+.info:not(.info:last-child) > .info-info > a:hover{
 	color: #7988FD;
 }
 
@@ -114,4 +137,62 @@
 	object-fit: contain;
 	margin-left: 2px;
 	padding-bottom: 1px;
+}
+
+.info > form{
+	display: none;
+}
+
+.info:not(.info:last-child) > .info-info span{
+	cursor: pointer;
+}
+
+.info > .info-info img{
+	width: 14px;
+	object-fit: contain;
+	margin-left: 2px;
+	padding-bottom: 1px;
+}
+
+.info:not(.info:last-child) > .info-info > span:hover{
+	color: #7988FD;
+}
+
+.sanction-category{
+	display: flex;
+	justify-content: space-between;
+}
+
+.sanction-category select {
+	width: 80%;
+	border: none;
+	border-radius: .375rem;
+	box-shadow: 0 2px 6px 0 rgba(67,89,113,.12);
+	font-size: 14px;
+}
+
+.sanction-date{
+	font-size: 14px;
+	visibility: hidden;
+	font-weight: 500;
+}
+
+.sanction-date input[type="date"]{
+	border: none;
+	background-color: #FFFFFF;
+	color: #8E8E8E;
+}
+
+.report-submit{
+	width: 100px;
+	background-color: #FFFFFF;
+	color: #7988FD;
+	font-size: 16px;
+	font-weight: 700;
+	border-radius: .375rem;
+	box-shadow: 0 2px 6px 0 rgba(67,89,113,.12);
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	cursor: pointer;
 }

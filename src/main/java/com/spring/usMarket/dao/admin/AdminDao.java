@@ -30,6 +30,8 @@ public interface AdminDao {
 	// report
 	List<Map<String, Object>> searchReportList(AdminSearchCondition sc) throws Exception;
 	int searchReportCnt(String condition, String complete) throws Exception;
+	Map<String, Object> searchReportInfo(String report_no) throws Exception;
+	List<Map<String, Object>> searchChatLog(String room_no) throws Exception;
 	
 	// qna
 	List<Map<String, Object>> searchQnaList(AdminSearchCondition sc) throws Exception;

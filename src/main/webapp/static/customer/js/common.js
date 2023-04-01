@@ -156,3 +156,8 @@ let getMonthFormat = function(data){
 let getPriceFormat = function(price){
 	return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
 };
+
+let getFullTimeFormat = function(time){
+	var d = new Date(time);
+	return d.getFullYear() + '-' + leftPad(d.getMonth()+1) + '-' + leftPad(d.getDate()) + ' (' + leftPad(d.getHours()) + ':' + leftPad(d.getMinutes()) + ':' + d.getSeconds()+')';
+};
