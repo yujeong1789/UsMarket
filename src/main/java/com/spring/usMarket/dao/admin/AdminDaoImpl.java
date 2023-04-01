@@ -134,6 +134,16 @@ public class AdminDaoImpl implements AdminDao{
 		
 		return session.selectOne(namespace+"searchReportCnt", map);
 	}
+	
+	@Override
+	public Map<String, Object> searchReportInfo(String report_no) throws Exception {
+		return session.selectOne(namespace+"searchReportInfo", report_no);
+	}
+	
+	@Override
+	public List<Map<String, Object>> searchChatLog(String room_no) throws Exception {
+		return session.selectList(namespace+"searchChatLog", room_no);
+	}
 
 	@Override
 	public List<Map<String, Object>> searchQnaList(AdminSearchCondition sc) throws Exception {
