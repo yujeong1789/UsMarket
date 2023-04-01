@@ -111,17 +111,22 @@
 						</div>
 					</div>
 					<div class="sanction-category">
-						<select class="custom-select" id="sanction_category_no" name="sanction_category_no">
-							<option selected="selected">선택</option>
+						<select class="custom-select" id="sanction_category_no" name="sanction_category_no" required="required">
+							<option selected="selected" value="">선택</option>
 							<option value="0">제재요건미충족</option>
-							<option value="1">7일 정지</option>
-							<option value="2">15일 정지</option>
-							<option value="3">30일 정지</option>
-							<option value="4">영구정지</option>
+							<option value="1" data-date="7">7일 정지</option>
+							<option value="2" data-date="15">15일 정지</option>
+							<option value="3" data-date="30">30일 정지</option>
 						</select>
 						<div class="report-submit">등록</div>
 					</div>
+					<form id="reportInfoForm" name="reportInfoForm" action="<c:url value='/admin/report/info'/>" method="post">
+						<input type="hidden" name="report_no" value="${infoMap.REPORT_NO }">
+					</form>
 				</div>
+			</c:if>
+			<c:if test="${infoMap.REPORT_COMPLETE eq 'Y' }">
+				<div>report history</div>
 			</c:if>
 		</div> <!-- dashboard -->
 		
@@ -130,9 +135,6 @@
 </div> <!-- report-info-container -->
 
 <script type="text/javascript">
-document.addEventListener('DOMContentLoaded', function(){
-	document.getElementById('sanction_startdate').value = getEndDay();
-});
 
 document.querySelectorAll('.frm > span').forEach(el => {
 	el.addEventListener('click', function(e){
@@ -146,11 +148,55 @@ if(document.querySelector('.info-chat') != null){
 	});
 }
 
-document.querySelector('.sanction-category > select').addEventListener('change', function(){
-	if(this.value > 0){
-		document.querySelector('.sanction-date').style.visibility = 'visible';
-	}else{
-		document.querySelector('.sanction-date').style.visibility = 'hidden';
-	}
-});
+if(document.querySelector('.sanction-category > select') != null){
+	const member_no = `${infoMap.REPORT_MEMBER_NO }`;
+	
+	fetch('/usMarket/fetch/admin/report/history/'+member_no)
+	.then((response) => response.text())
+	.then((text) => {
+		console.log(text);
+		document.getElementById('sanction_startdate').value = (isEmpty(text) ? getEndDay() : text);
+	}).catch((error) => console.log("error: "+error));
+	
+	document.querySelector('.sanction-category > select').addEventListener('change', function(e){
+		if(this.value > 0){
+			let endDate = new Date(document.getElementById('sanction_startdate').value);
+			endDate.setDate(endDate.getDate() + parseInt(e.target[e.target.selectedIndex].dataset.date));
+			document.getElementById('sanction_enddate').value = endDate.getFullYear() + '-' + leftPad(endDate.getMonth() + 1) + '-'+leftPad(endDate.getDate());
+			document.querySelector('.sanction-date').style.visibility = 'visible';
+		}else{
+			document.querySelector('.sanction-date').style.visibility = 'hidden';
+		}
+	});
+	
+	document.querySelector('.report-submit').addEventListener('click', function(){
+		if(isEmpty(document.getElementById('sanction_category_no').value)){
+			alert('제재 기간을 선택하세요.');
+		}else{
+			let params = {
+					report_no: `${infoMap.REPORT_NO}`,
+					admin_no: document.getElementById('admin_auth').dataset.no,
+					member_no: `${infoMap.REPORT_MEMBER_NO}`,
+					sanction_category_no: document.getElementById('sanction_category_no').value,
+					sanction_startdate: (document.getElementById('sanction_category_no').value == 0 ? '' : document.getElementById('sanction_startdate').value),
+					sanction_enddate: (document.getElementById('sanction_category_no').value == 0 ? '' : document.getElementById('sanction_enddate').value)
+				};
+			
+			fetch('/usMarket/fetch/admin/report/reg', {
+				method: 'POST',
+				headers: {
+					'Content-type' : 'application/json'
+				},
+				body: JSON.stringify(params),
+			})
+			.then((response) => response.text())
+			.then((text) => {
+				if(text == '2'){
+					alert('제재 등록이 완료되었습니다.');
+					document.getElementById('reportInfoForm').submit();
+				}
+			}).catch((error) => console.log('error: '+error));			
+		}
+	});
+}
 </script>
