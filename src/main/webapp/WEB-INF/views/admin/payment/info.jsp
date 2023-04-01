@@ -8,7 +8,7 @@
 <div class="payment-info-container">
 	<c:if test="${empty infoMap}">
 		<script type="text/javascript">
-			alert('회원정보를 찾을 수 없습니다.');
+			alert('결제내역을 찾을 수 없습니다.');
 			location.href = '${pageContext.request.contextPath}/admin/payment/list';
 		</script>
 	</c:if>
