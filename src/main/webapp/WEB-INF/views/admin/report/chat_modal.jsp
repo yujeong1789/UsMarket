@@ -56,7 +56,7 @@ document.addEventListener('DOMContentLoaded', function(){
 			td3.textContent = el.CHAT_CONTENT;
 			document.querySelector('.modal-body tbody > tr').appendChild(td3);
 		});
-	}).catch((error) => console.log("error: "+error)); // fetch-3
+	}).catch((error) => console.log("error: "+error));
 
 	// modal show event
 	chatModalEl.addEventListener('show.bs.modal', function(e){
