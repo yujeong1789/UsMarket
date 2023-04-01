@@ -191,6 +191,26 @@ public class AdminServiceImpl implements AdminService{
 		
 		return totalCnt;
 	}
+	
+	@Override
+	@Transactional(rollbackFor = SQLException.class, readOnly = true)
+	public Map<String, Object> getReportInfo(String report_no) throws Exception {
+		
+		Map<String, Object> map = adminDao.searchReportInfo(report_no);
+		logger.info("신고 내용 조회 결과 = {}", map.toString());
+		
+		return map;
+	}
+	
+	@Override
+	@Transactional(rollbackFor = SQLException.class, readOnly = true)
+	public List<Map<String, Object>> getChatLog(String room_no) throws Exception {
+		
+		List<Map<String, Object>> listMap = adminDao.searchChatLog(room_no);
+		logger.info("채팅 로그 조회 결과 = {}", listMap.size());
+		
+		return listMap;
+	}
 
 	@Override
 	@Transactional(rollbackFor = SQLException.class, readOnly = true)

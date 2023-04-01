@@ -31,6 +31,8 @@ public interface AdminService {
 	// report
 	List<Map<String, Object>> getReportList(AdminSearchCondition sc) throws Exception;
 	int getReportCnt(String condition, String complete) throws Exception;
+	Map<String, Object> getReportInfo(String report_no) throws Exception;
+	List<Map<String, Object>> getChatLog(String room_no) throws Exception;
 	
 	// qna
 	List<Map<String, Object>> getQnaList(AdminSearchCondition sc) throws Exception;
