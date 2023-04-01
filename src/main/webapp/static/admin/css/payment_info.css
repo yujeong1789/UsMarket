@@ -105,11 +105,12 @@
 	word-break: break-all;
 }
 
-.info > .info-info > a:hover{
+.info > .info-info a:hover, .info > .info-info span:hover{
+	cursor: pointer;
 	color: #7988FD;
 }
 
-.info > .info-info > a > img{
+.info > .info-info img{
 	width: 14px;
 	object-fit: contain;
 	margin-left: 2px;
@@ -157,19 +158,24 @@
 	margin-top: 10px;
 }
 
-.review-nickname > a{
+.review-nickname > span{
 	font-size: 15px;
 	font-weight: 500;
 	color: #1C1C1C;
+	cursor: pointer;
 }
 
-.review-nickname > a:hover{
+.review-nickname > span:hover{
 	color: #7988FD;
 }
 
-.review-nickname > a > img{
+.review-nickname img{
 	width: 15px;
 	object-fit: contain;
 	margin-left: 1px;
 	padding-bottom: 2px;
+}
+
+.review-info > .left{
+	cursor: pointer;
 }
