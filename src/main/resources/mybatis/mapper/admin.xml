@@ -306,6 +306,26 @@
 		</if>
 	</select>
 	
+	<select id="searchReportInfo" resultType="map" parameterType="string">
+		SELECT *
+		FROM report_view
+		WHERE report_no = #{report_no}
+	</select>
+	
+	<select id="searchChatLog" resultType="map" parameterType="string">
+		SELECT c.*
+			   , ( SELECT m1.member_id
+				   FROM member m1
+				   WHERE c.chat_from = m1.member_no
+				 ) AS chat_from_id
+			   , ( SELECT m2.member_id
+			   	   FROM member m2
+			   	   WHERE c.chat_to = m2.member_no
+			   	 ) AS chat_to_id
+		FROM chat c
+		WHERE c.room_no = #{room_no}
+		ORDER BY c.chat_time
+	</select>
 	
 	<select id="searchQnaList" parameterType="map" resultType="map">
 		SELECT *
