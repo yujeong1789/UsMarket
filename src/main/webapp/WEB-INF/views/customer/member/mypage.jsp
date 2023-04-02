@@ -70,7 +70,7 @@
 								<c:if test="${loginOn eq memberInfo.member_no}">
 									<div class="member_option">
 										<div class="left">
-											<a href="<c:url value='/member/update'/>">회원 정보 수정</a>
+											<a href="<c:url value='/member/join?mode=modify'/>">회원 정보 수정</a>
 										</div>
 										<div>
 											<a href="<c:url value='/member/transactionhistory'/>">거래 내역</a>
