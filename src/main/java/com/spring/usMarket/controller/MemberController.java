@@ -216,6 +216,16 @@ public class MemberController {
 		return "member/viewajax";
 	}
 	
+	@GetMapping("/update")
+	public String modify(HttpServletRequest request) {
+		return "member/update";
+	}
+	
+	@GetMapping("/transactionhistory")
+	public String transactionhistory(HttpServletRequest request) {
+		return "member/transactionhistory";
+	}
+	
 	@ResponseBody
 	@PostMapping("/nickCheck")
 	public String NickCheck(@RequestBody String member_nick) throws Exception {
