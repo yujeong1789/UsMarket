@@ -1,0 +1,68 @@
+@charset "UTF-8";
+
+.qna-info-container{
+	padding-top: 100px;
+	padding-bottom: 100px;
+}
+
+.qna-info-container > .row > .container > .title{
+	font-size: 25px;
+	margin-bottom: 25px;
+	font-weight: 550;
+}
+
+.qna-info{
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	width: 100%;
+	padding: 40px 50px 40px 50px;
+	border-radius: .375rem;
+	box-shadow: 0 2px 6px 0 rgba(67,89,113,.12);
+}
+
+.qna-info > form{
+	width: 100%;
+}
+
+.qna-info > form > div{
+	display: flex;
+	justify-content: space-between;
+	padding-top: 15px;
+	padding-bottom: 15px;
+}
+
+.qna-info > form > div > .info-title{
+	width: 10%;
+	font-size: 18px;
+	font-weight: 500;
+	padding-top: 5px;
+	padding-left: 5px;
+}
+
+.qna-info > form > div > .essential:after{
+	content: "*";
+	color: red;
+	margin-left: 5px;
+}
+
+.qna-info > form > div > .info{
+	width: 90%;
+}
+
+.qna-info > form > div > .info > .input{
+	width: 100%;
+	border: 1px solid #FAFAFA;
+	border-radius: .375rem;
+	box-shadow: 0 2px 6px 0 rgba(67,89,113,.12);
+	padding: 10px;
+}
+
+.qna-info > form > div > .info > .input > .frmData{
+	width: 100%;
+	border: none;
+}
+
+.qna-info > form > div > .info > .input > textarea{
+	resize: none;
+}
