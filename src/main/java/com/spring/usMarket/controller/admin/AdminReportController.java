@@ -108,13 +108,13 @@ public class AdminReportController {
 		
 		try {
 			infoMap = adminService.getReportInfo(report_no);
-			/*
+			
 			String report_complete = infoMap.get("REPORT_COMPLETE").toString();
 			if(report_complete == "Y" || report_complete.equals("Y")) {
-				Map<String, Object> historyMap = new HashMap<>();
+				Map<String, Object> historyMap = adminService.getReportHistory(report_no);
 				model.addAttribute("historyMap", historyMap);
 			}
-			*/
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
