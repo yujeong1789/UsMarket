@@ -1,0 +1,117 @@
+@charset "UTF-8";
+
+.qna-list-container{
+	padding-top: 100px;
+	padding-bottom: 100px;
+}
+
+.qna-list-container > .row > .container > .title{
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	align-items: flex-end;
+	margin-bottom: 25px;
+	font-weight: 550;
+}
+
+.qna-list-container > .row > .container > .title > span{
+	font-size: 25px;
+}
+
+.qna-list-container > .row > .container > .title > a{
+	width: 150px;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	padding: 15px 25px 13px 25px;
+	color: #1C1C1C;
+	font-size: 16px;
+	border-radius: .375rem;
+	box-shadow: 0 2px 6px 0 rgba(67,89,113,.12);
+	margin-left: 20px;
+}
+
+.qna-list-container > .row > .container > .title > a:hover{
+	color: #16A7F1;
+}
+
+.qna-list-container > .row > .container > .title > a > span{
+	display: flex;
+	justify-content: center;
+}
+
+
+.qna-list{
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	width: 100%;
+	padding: 30px;
+	border-radius: .375rem;
+	box-shadow: 0 2px 6px 0 rgba(67,89,113,.12);
+}
+
+.qna-list > .empty{
+	font-size: 20px;
+	font-weight: 550;
+	color: #ababab;	
+}
+
+.qna-list > .paging{
+	display: flex;
+	justify-content: center;
+	margin-bottom: 15px;
+}
+
+.qna-list > .paging > div{
+	display: flex;
+	min-width: 30px;
+	height: 30px;
+	justify-content: center;
+	align-items: center;
+	font-size: 13px;
+	border-radius: 100%;;
+	box-shadow: 0 2px 6px 0 rgba(67,89,113,.12);
+	margin: 5px;
+	font-weight: 600;
+}
+
+.qna-list > table{
+	width: 100%;
+	text-align: center;
+	margin-bottom: 20px;
+}
+
+.qna-list > table th{
+	height: 50px;
+	font-size: 14px;
+	color: #525252;
+	font-weight: 550;
+}
+
+.qna-list thead th:first-child, .qna-list thead th:last-child{
+	width: 30%
+}
+
+.qna-list thead th:nth-child(2), .qna-list thead th:nth-child(4){
+	width: 10%;
+}
+
+.qna-list thead th:nth-child(3){
+	width: 20%;
+}
+
+
+.qna-list > table tr{
+	height: 40px;
+	font-size: 13px;
+}
+
+.qna-list > table .body{
+	cursor: pointer;
+}
+
+.qna-list > table .body:hover{
+	background-color: #f5f9ff;
+	color: #7988FD;
+}
