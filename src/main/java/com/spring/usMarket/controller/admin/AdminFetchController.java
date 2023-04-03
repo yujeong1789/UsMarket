@@ -103,7 +103,7 @@ public class AdminFetchController {
 		
 		String endDate = "";
 		try {
-			endDate = adminService.getReportHistory(member_no);
+			endDate = adminService.getReportEndDate(member_no);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
