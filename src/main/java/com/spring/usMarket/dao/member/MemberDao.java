@@ -8,10 +8,13 @@ import com.spring.usMarket.domain.product.ProductDto;
 
 public interface MemberDao {
 	int insertMember(MemberDto member);
+	int updateMember(MemberDto member);
+	
 	int overlappedID(String member_id);
 	int overlappedNick(String member_nick);
 	int overlappedEmail(String member_email);
 	void overlapped(String joinMember);
+	
 	Map<String, Object> idLogin(String member_id) throws Exception;
 	MemberDto memberSearch(Integer member_no) throws Exception;
 	
