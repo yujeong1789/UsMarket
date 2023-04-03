@@ -1,0 +1,52 @@
+@charset "UTF-8";
+
+.help-container{
+	padding-top: 100px;
+	padding-bottom: 100px;
+}
+
+.help-container > .row > .container > .help-title > span:first-child{
+	display: flex;
+	justify-content: center;
+	font-size: 40px;
+	font-weight: 700;
+}
+
+.help-container > .row > .container > .help-title{
+	display: flex;
+	flex-direction: column;
+	margin-bottom: 50px;
+}
+
+.help-btn{
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	padding-left: 50px;
+	padding-right: 50px;
+}
+
+.help-btn > div{
+	width: 30%;
+	border-radius: .375rem;
+	box-shadow: 0 2px 6px 0 rgba(67,89,113,.12);
+	color: #1C1C1C;
+}
+
+.help-btn > div > a{
+	color: #535353;	
+	width: 100%;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	padding: 25px 30px 25px 30px;
+}
+
+.help-btn > div > a:hover{
+	color: #16A7F1;
+}
+
+.help-btn > div > a > span{
+	font-weight: 600;
+	font-size: 18px;
+} 

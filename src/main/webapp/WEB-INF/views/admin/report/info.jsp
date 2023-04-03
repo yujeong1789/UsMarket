@@ -125,8 +125,36 @@
 					</form>
 				</div>
 			</c:if>
-			<c:if test="${infoMap.REPORT_COMPLETE eq 'Y' }">
-				<div>report history</div>
+			<c:if test="${infoMap.REPORT_COMPLETE eq 'Y' and not empty historyMap}">
+				<div>
+					<div class="title">
+						<span>제재내역</span>
+					</div>
+					<div class="report-history">
+						<div class="info">
+							<div class="info-title">관리자</div>
+							<div class="info-info">${historyMap.ADMIN_NAME += ' (' +=  historyMap.ADMIN_ID += ')'}</div>
+						</div>
+						<div class="info">
+							<div class="info-title">제재분류</div>
+							<div class="info-info">${historyMap.SANCTION_CATEGORY_NAME }</div>
+						</div>
+						<c:if test="${not empty historyMap.SANCTION_STARTDATE and not empty historyMap.SANCTION_ENDDATE }">
+							<div class="info">
+								<div class="info-title">제재시작일</div>
+								<div class="info-info"><fmt:formatDate value="${historyMap.SANCTION_STARTDATE }" pattern="yyyy/MM/dd (HH:mm:ss)" /></div>
+							</div>
+							<div class="info">
+								<div class="info-title">제재종료일</div>
+								<div class="info-info"><fmt:formatDate value="${historyMap.SANCTION_ENDDATE }" pattern="yyyy/MM/dd (HH:mm:ss)" /></div>
+							</div>
+						</c:if>
+						<div class="info">
+							<div class="info-title">처리일</div>
+							<div class="info-info"><fmt:formatDate value="${historyMap.SANCTION_REGDATE }" pattern="yyyy/MM/dd (HH:mm:ss)" /></div>
+						</div>
+					</div>
+				</div>
 			</c:if>
 		</div> <!-- dashboard -->
 		

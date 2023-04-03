@@ -327,7 +327,7 @@
 		ORDER BY c.chat_time
 	</select>
 	
-	<select id="searchReportHistory" parameterType="string" resultType="string">
+	<select id="searchReportEndDate" parameterType="string" resultType="string">
 		SELECT TO_CHAR(sanction_enddate, 'YYYY-MM-DD') AS enddate
 		FROM report_history
 		WHERE member_no = #{member_no}
@@ -346,6 +346,21 @@
 		SET report_complete = 'Y'
 		WHERE report_no = #{report_no}
 	</update>
+	
+	<select id="searchReportHistory" parameterType="string" resultType="map">
+		SELECT a.admin_id
+			   , a.admin_name
+			   , r.sanction_startdate
+			   , r.sanction_enddate
+			   , r.sanction_regdate
+			   , ( SELECT c.sanction_category_name
+				   FROM sanction_category c
+				   WHERE r.sanction_category_no = c.sanction_category_no
+				 ) AS sanction_category_name
+		FROM report_history r, admin a
+		WHERE r.admin_no = a.admin_no
+		AND r.report_no = #{report_no}
+	</select>
 	
 	<select id="searchQnaList" parameterType="map" resultType="map">
 		SELECT *

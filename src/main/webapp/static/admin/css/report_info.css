@@ -56,6 +56,24 @@
 	font-weight: 600;
 }
 
+.report-info-container > .dashboard > div > .report-history{
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+	flex-wrap: wrap;
+}
+
+.report-info-container > .dashboard > div > .report-history > .info{
+	flex-direction: row;
+	width: 260px;
+	box-shadow: none;
+	padding: 0;
+}
+
+.report-info-container > .dashboard > div > .report-history > .info .info-info{
+	margin: 0;
+}
+
 .sub-title{
 	display: flex;
 	justify-content: space-between;
@@ -88,7 +106,6 @@
 
 .info:last-child{
 	width: 100%;
-	margin-top: 5px;
 	padding: 10px;
 	display: flex;
 	flex-direction: column;

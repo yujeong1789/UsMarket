@@ -36,7 +36,7 @@
                             <div class="header__top__right__auth__login">
                             	<a href="<c:url value='${loginOutLink}' />">${loginOut }</a>
                             </div>
-                            <div><a href="#">고객센터</a></div>
+                            <div><a href="<c:url value='/help'/>">고객센터</a></div>
 						</div>
 					</div>
 				</div>
