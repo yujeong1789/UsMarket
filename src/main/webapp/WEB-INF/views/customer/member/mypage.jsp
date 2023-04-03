@@ -67,18 +67,16 @@
 										<span><c:out value="${memberInfo.member_hp }"/></span>
 									</div>					
 								</c:if>
-								<div class="member_option">
-									<div class="left">
-										<c:if test="${loginOn eq memberInfo.member_no}">
-											<a href="<c:url value='#'/>">회원 정보 수정</a>
-										</c:if>	
-									</div>
-									<c:if test="${memberInfo.member_nickname eq 'test15' }">
-										<div>
-											<a href="<c:url value='/member/mypage?member_no=${deNo}'/>">다른 회원보기</a>
+								<c:if test="${loginOn eq memberInfo.member_no}">
+									<div class="member_option">
+										<div class="left">
+											<a href="<c:url value='/member/join?mode=modify'/>">회원 정보 수정</a>
 										</div>
-									</c:if>
-								</div>
+										<div>
+											<a href="<c:url value='/member/transactionhistory'/>">거래 내역</a>
+										</div>
+									</div>
+								</c:if>	
 								
 							</div>  <!-- member_detail -->
 						</div> <!-- member_info_div -->
@@ -103,10 +101,10 @@
 				<div class="mypage_category_content">
 					<c:if test="list">
 					</c:if>
-					<c:if test="${! empty mypageProductList }">
+					<c:if test="${! empty mypageList }">
 						<div class="product__area" id="product__area">
 						
-						<c:forEach var="product" items="${mypageProductList }">
+						<c:forEach var="product" items="${mypageList }">
 							<div class="product__box">
 								<div class="product__img">
 									<a href="<c:url value='/product/info?product_no=${product.PRODUCT_NO}' />"> 
@@ -141,7 +139,7 @@
 						</div> <!-- product__area -->
 					</c:if>
 					
-					<c:if test="${empty mypageProductList }">
+					<c:if test="${empty mypageList }">
 						<div class="no__item">등록된 상품이 없습니다.</div> <!-- 이미지 만들 것 -->				
 					</c:if>
 					

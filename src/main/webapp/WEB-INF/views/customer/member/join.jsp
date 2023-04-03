@@ -19,7 +19,14 @@
 			<input type="image" id="profile_image" name="member_image" style="display:none;"/>
 			<div class="profile_box">
 				<label for="profile" id="preview">
-					<img id="profile_img" alt="프로필 이미지" src="<c:url value='/resources/customer/img/profile.png'/>">
+					<c:choose>
+						<c:when test="${mode == 'modify' }" >
+							<img id="profile_img" alt="프로필 이미지" src="<c:url value='${memberInfo.member_image}'/>">
+						</c:when>
+						<c:otherwise>
+							<img id="profile_img" alt="프로필 이미지" src="<c:url value='/resources/customer/img/default_profile.png'/>">
+						</c:otherwise>
+					</c:choose>
 				</label>
 				<img class="file__img__delete" src="<c:url value='/resources/customer/img/delete_icon.png'/>">
 			</div>
@@ -30,53 +37,60 @@
 			<div class="int-area">
 			</div>
 			<div class="int-area">
-				<input type="text" name="member_name" id="name" autocomplete="off" required title="이름을 입력해주세요.">
+				<input type="text" name="member_name" id="name" autocomplete="off" required title="이름을 입력해주세요." value="${memberInfo.member_name }">
 				<label for="name">이름<text> *</text></label>
 			</div>
 
 			<div class="int-area">
 				<input type="text" oninput="this.value = this.value.replace(/[^a-z|A-Z|0-9|ㄱ-ㅎ|ㅏ-ㅣ|가-힣]/g, '').replace(/(\..*)\./g, '$1');"
-				name="member_nickname" id="nick" autocomplete="off" required title="닉네임을 입력해주세요.">
+				name="member_nickname" id="nick" autocomplete="off" required title="닉네임을 입력해주세요." value="${memberInfo.member_nickname }">
 				<label for="nick">닉네임<text> *</text></label>
 				<span style="display:block; font-size:13px">특수문자 사용불가(3~10자리 입력)</span>
 				<span class="nick_status"></span>
 			</div>
-
-			<div class="int-area">
-				<input type="text" oninput="this.value = this.value.replace(/[^a-z|A-Z|0-9]/g, '').replace(/(\..*)\./g, '$1');"
-				name="member_id" id="id" autocomplete="off" required title="아아디를 입력해주세요.">
-				<label for="id">아이디<text> *</text></label>
-				<span style="display:block; font-size:13px">영문자+숫자(4~10자리 입력)</span>
-				<span class= "id_status"></span>
-			</div>
-
-			<div class="int-area">
-				<input type="password" oninput="this.value = this.value.replace(/[^a-z|A-Z|0-9|!@#$%^*+=-]/g, '').replace(/(\..*)\./g, '$1');"
-				name="member_password" id="pw1" autocomplete="off" required title="비밀번호를 입력해주세요.">
-				<label for="pw1">비밀번호<text> *</text></label>
-				<span style="display:block; font-size:13px">영문자+숫자+특수조합(8~25자리 입력, ! @ # $ % ^ * + = -)</span>
-				<span class="pw_status"></span>
-			</div>
-
-			<div class="int-area">
-				<input type="password" name="pw2" id="pw2" autocomplete="off" required title="비밀번호를 재입력해주세요.">
-				<label for="pw2">비밀번호 재확인<text> *</text></label>
-				<span class="pw_no"></span>
-			</div>
+			
+			<c:choose>
+				<c:when test="${mode == 'modify' }" >
+				</c:when>
+				<c:otherwise>
+					<div class="int-area">
+						<input type="text" oninput="this.value = this.value.replace(/[^a-z|A-Z|0-9]/g, '').replace(/(\..*)\./g, '$1');"
+						name="member_id" id="id" autocomplete="off" required title="아아디를 입력해주세요." value="${memberInfo.member_id }">
+						<label for="id">아이디<text> *</text></label>
+						<span style="display:block; font-size:13px">영문자+숫자(4~10자리 입력)</span>
+						<span class= "id_status"></span>
+					</div>
+		
+					<div class="int-area">
+						<input type="password" oninput="this.value = this.value.replace(/[^a-z|A-Z|0-9|!@#$%^*+=-]/g, '').replace(/(\..*)\./g, '$1');"
+						name="member_password" id="pw1" autocomplete="off" required title="비밀번호를 입력해주세요." >
+						<label for="pw1">비밀번호<text> *</text></label>
+						<span style="display:block; font-size:13px">영문자+숫자+특수조합(8~25자리 입력, ! @ # $ % ^ * + = -)</span>
+						<span class="pw_status"></span>
+					</div>
+		
+					<div class="int-area">
+						<input type="password" name="pw2" id="pw2" autocomplete="off" required title="비밀번호를 재입력해주세요.">
+						<label for="pw2">비밀번호 재확인<text> *</text></label>
+						<span class="pw_no"></span>
+					</div>
+				</c:otherwise>
+			</c:choose>
+			
 			<div class="int-area">
 				<div class="int-area-addressCheck">
-					<input type="text" name="member_zipcode" id="zipcode" required="required" readonly="readonly">
+					<input type="text" name="member_zipcode" id="zipcode" required="required" readonly="readonly" value="${memberInfo.member_zipcode }">
 					<label for="zipcode" id="zipcode_label">주소<text> *</text></label>
 					<button type="button" class="address_btn" id="address_btn" >우편번호 찾기</button>
 				</div>
-				<input type="hidden" name="member_address" id="address" readonly="readonly" required="required">
+				<input type="text" name="member_address" id="address" readonly="readonly" required="required" value="${memberInfo.member_address }">
 			</div>
 			<div class="int-area">
-				<input type="hidden" name="member_address_detail" id="address_detail" readonly="readonly" required="required">
+				<input type="text" name="member_address_detail" id="address_detail" readonly="readonly" required="required" value="${memberInfo.member_address_detail }">
 				<label for="address_detail" id="address_detail_label" style="display:none;">상세주소<text>*</text></label>
 			</div>
 			<div class="int-area">
-				<input type="text" name="member_email" id="email" autocomplete="off" required title="이메일을 입력해주세요.">
+				<input type="text" name="member_email" id="email" autocomplete="off" required title="이메일을 입력해주세요." value="${memberInfo.member_email }">
 				<label for="email">이메일<text> *</text></label>
 				<span class="email_status"></span>
 				<div class="int-area-emailCheck">
@@ -87,7 +101,7 @@
 			</div>
 			<div class="int-area" id="hp-area">
 				<input type="text" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');"
-				name="member_hp" id="hp" autocomplete="off" maxlength="11" required title="전화번호를 입력해주세요.">
+				name="member_hp" id="hp" autocomplete="off" maxlength="11" required title="전화번호를 입력해주세요." value="${memberInfo.member_hp }">
 				<label for="hp">전화번호<text> *</text></label>
 				<span class="hp_status"></span>
 			</div>
@@ -113,6 +127,10 @@
 		let hp3Ck = false;
 		let code="";
 		
+		if("${mode}" == "join"){
+			$("#address").css('display', "none");
+			$("#address_detail").css('display', "none");
+		}
 		/* 에러 function */
 		function name_error(){
 			$('#name').next('label').addClass('warning');
@@ -213,7 +231,11 @@
 			console.log('input{type: file} : '+	$("#profile").val());
 			$("#profile").val(null);
 			$(".file__img__delete").css('display',"none");
-			$('#profile_img').attr('src', '<c:url value='/resources/customer/img/profile.png'/>');
+			if("${mode}" == "modify"){
+				$('#profile_img').attr('src', '<c:url value='${memberInfo.member_image}'/>');
+			}else {
+				$('#profile_img').attr('src', '<c:url value='/resources/customer/img/default_profile.png'/>');				
+			}
 			console.log('input{type: file} : '+	$("#profile").val());
 		});
 				

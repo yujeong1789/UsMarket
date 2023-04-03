@@ -1,5 +1,6 @@
 package com.spring.usMarket.controller;
 
+import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.Map;
@@ -53,15 +54,24 @@ public class MemberController {
 	@PostMapping("/login")
 	public String loginCheck(HttpServletRequest request, String member_id, String member_password, Model model)
 			throws Exception {
-		Object result= null;
-		
-		logger.info("ID 입력 정보 = " + member_id + ", PW 입력 정보 = " + member_password);
-		
 		BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 		Map<String, Object> member = memberService.loginCheckID(member_id);
-		logger.info("회원정보 = " + member);
-
 		HttpSession httpSession = request.getSession(true);
+		Object result= null;
+
+		String prevPage = (String)request.getSession().getAttribute("prevPage");
+		
+		logger.info("ID 입력 정보 = " + member_id + ", PW 입력 정보 = " + member_password);
+		logger.info("회원정보 = " + member);
+		
+		if(prevPage.substring(prevPage.length()-4, prevPage.length()).equals("join")){
+			result = request.getSession().getAttribute("prevPage")+"?mode=modify";
+		}else if(request.getSession().getAttribute("prevPage") != null){
+			result = request.getSession().getAttribute("prevPage");			
+		}else {
+			result = "/";
+		}
+		
 		if (member == null) {
 			logger.info("아이디 없음");
 			String msg = "잘못된 입력입니다.";
@@ -73,12 +83,8 @@ public class MemberController {
 			logger.info("로그인 성공");
 			httpSession.setAttribute("userId", member_id);
 			httpSession.setAttribute("userNo", member.get("MEMBER_NO"));
-			if(request.getSession().getAttribute("prevPage") == null) {
-				result = "/";
-			}else {
-				result = request.getSession().getAttribute("prevPage");
-			}
-			return "redirect:" + result;
+			logger.info("result = "+result);
+			return "redirect:"+result;
 		} else {
 			logger.info("비밀번호 오류");
 			String msg = "잘못된 입력입니다.";
@@ -92,18 +98,49 @@ public class MemberController {
 
 	@GetMapping("/logout")
 	public String logout(HttpServletRequest request) throws Exception {
+		String referer = request.getHeader("Referer");
+		
 		request.getSession().removeAttribute("userId");
 		request.getSession().removeAttribute("userNo");
 		logger.info("로그아웃 {}", (request.getSession().getAttribute("userId") == null && 
 				request.getSession().getAttribute("userNo") == null ? "성공" : "실패"));
-
-		return "redirect:" + request.getHeader("Referer");
+		
+		logger.info("referer.substring = "+referer.substring(referer.length()-6, referer.length()));
+		
+		if(referer.substring(referer.length()-6, referer.length()).equals("modify") ||
+				referer.substring(referer.length()-6, referer.length()).equals("mypage")) {
+			referer = "/";
+		};
+		return "redirect:" + referer;
 	}
 
 	@GetMapping("/join")
-	public String join(HttpServletRequest request) {
-		logger.info("prevPage : "+request.getSession().getAttribute("prevPage"));
-		return "member/join";
+	public String join(HttpServletRequest request, Model model) {
+		String member_no = null;
+		if (request.getSession().getAttribute("userNo") != null) {
+			BigDecimal memNo= (BigDecimal) request.getSession().getAttribute("userNo");
+			member_no = memNo.toString();
+		}
+	    MemberDto memberInfo = null;
+	    String mode = "join";
+
+	    try {
+	        if (request.getParameter("mode") != null) {
+	            mode = request.getParameter("mode");
+	        }
+
+	        if (member_no != null) {
+	            memberInfo = memberService.getMemberInfo(member_no);//Mypage_member
+	            logger.info("memberInfo = {}", memberInfo);
+	            model.addAttribute("memberInfo", memberInfo);
+	        }
+	        logger.info(mode);
+	        model.addAttribute("mode", mode);
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	    }
+
+	    return "member/join";
 	}
 
 	@PostMapping("/join")
@@ -214,6 +251,16 @@ public class MemberController {
 		model.addAttribute("ph", pageHandler);
 		
 		return "member/viewajax";
+	}
+	
+	@GetMapping("/update")
+	public String modify(HttpServletRequest request) {
+		return "member/update";
+	}
+	
+	@GetMapping("/transactionhistory")
+	public String transactionhistory(HttpServletRequest request) {
+		return "member/transactionhistory";
 	}
 	
 	@ResponseBody
