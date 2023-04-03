@@ -215,9 +215,9 @@ public class AdminServiceImpl implements AdminService{
 	
 	@Override
 	@Transactional(rollbackFor = SQLException.class, readOnly = true)
-	public String getReportHistory(String member_no) throws Exception {
+	public String getReportEndDate(String member_no) throws Exception {
 		
-		String endDate = adminDao.searchReportHistory(member_no);
+		String endDate = adminDao.searchReportEndDate(member_no);
 		logger.info("제재 이력 = {}", (endDate == null ? "없음" : endDate+" 종료"));
 		
 		return endDate;
@@ -234,6 +234,16 @@ public class AdminServiceImpl implements AdminService{
 		logger.info("제재 등록 결과 = {}", (rowCnt == 2 ? "OK" : "FAIL"));
 		
 		return rowCnt;
+	}
+	
+	@Override
+	@Transactional(rollbackFor = SQLException.class, readOnly = true)
+	public Map<String, Object> getReportHistory(String report_no) throws Exception {
+		
+		Map<String, Object> map = adminDao.searchReportHistory(report_no);
+		logger.info("제재내역 조회 결과 = {}", map.toString());
+		
+		return map;
 	}
 
 	@Override
