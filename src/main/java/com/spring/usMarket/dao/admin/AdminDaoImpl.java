@@ -147,8 +147,8 @@ public class AdminDaoImpl implements AdminDao{
 	}
 	
 	@Override
-	public String searchReportHistory(String member_no) throws Exception {
-		return session.selectOne(namespace+"searchReportHistory", member_no);
+	public String searchReportEndDate(String member_no) throws Exception {
+		return session.selectOne(namespace+"searchReportEndDate", member_no);
 	}
 
 	@Override
@@ -159,6 +159,11 @@ public class AdminDaoImpl implements AdminDao{
 	@Override
 	public int insertReportHistory(ReportHistoryDto dto) throws Exception {
 		return session.insert(namespace+"insertReportHistory", dto);
+	}
+	
+	@Override
+	public Map<String, Object> searchReportHistory(String report_no) throws Exception {
+		return session.selectOne(namespace+"searchReportHistory", report_no);
 	}
 
 	@Override
