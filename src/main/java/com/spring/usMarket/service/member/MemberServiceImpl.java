@@ -49,17 +49,6 @@ public class MemberServiceImpl implements MemberService {
 		return rowCnt == 1 ? "OK" : "NOT_OK";
 	}
 
-	@Transactional
-	@Override
-	public int addMember(MemberDto member) {
-		logger.info("/ Service / memberDto = {}",member.toString());
-		member.setMember_password(BCrypt.hashpw(member.getMember_password(), BCrypt.gensalt()));
-		int rowCnt = memberDAO.insertMember(member);
-		logger.info("회원 등록 결과 = {}", getResult(rowCnt));
-
-		return rowCnt;
-	}
-	
 	public String getPath() {
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd/");
 		Date date = new Date();
@@ -92,6 +81,28 @@ public class MemberServiceImpl implements MemberService {
 		// https://usmarket.s3.ap-northeast-2.amazonaws.com/2023/01/24/2da9322b-f45f-428a-b1b3-bde87f88d052_IMG_5402.PNG
 		
 		return realPath;
+	}
+	
+	@Transactional
+	@Override
+	public int addMember(MemberDto member) {
+		logger.info("/ Service / memberDto = {}",member.toString());
+		member.setMember_password(BCrypt.hashpw(member.getMember_password(), BCrypt.gensalt()));
+		int rowCnt = memberDAO.insertMember(member);
+		logger.info("회원 등록 결과 = {}", getResult(rowCnt));
+
+		return rowCnt;
+	}
+	
+	@Transactional
+	@Override
+	public int modifyMember(MemberDto member) {
+		logger.info("/ Service / memberDto = {}",member.toString());
+		member.setMember_password(BCrypt.hashpw(member.getMember_password(), BCrypt.gensalt()));
+		int rowCnt = memberDAO.updateMember(member);
+		logger.info("회원 등록 결과 = {}", getResult(rowCnt));
+
+		return rowCnt;
 	}
 
 	@Transactional
