@@ -29,4 +29,12 @@ public class IndexController { // 메인 페이지 출력
 
 		return "index";
 	}
+	
+	@GetMapping("/help")
+	public String help(Model m) throws Exception {
+		
+		logger.info("help");
+		
+		return "/help/help";
+	}
 }
