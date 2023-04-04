@@ -27,7 +27,6 @@
 
 .qna-info > form > div{
 	display: flex;
-	justify-content: space-between;
 	padding-top: 15px;
 	padding-bottom: 15px;
 }
@@ -50,7 +49,16 @@
 	width: 90%;
 }
 
+.qna-info > form > div > .info > select{
+	border-radius: .375rem;
+	box-shadow: 0 2px 6px 0 rgba(67,89,113,.12);
+	border: 1px solid #FAFAFA;
+	height: 49px;
+}
+
 .qna-info > form > div > .info > .input{
+	display: flex;
+	justify-content: space-between;
 	width: 100%;
 	border: 1px solid #FAFAFA;
 	border-radius: .375rem;
@@ -58,11 +66,87 @@
 	padding: 10px;
 }
 
+.qna-info > form > div > .info > .input > div{
+	display: flex;
+	align-items: center;
+}
+
+.qna-info > form > div > .info > .ta{
+	flex-direction: column;
+}
+
+.qna-info > form > div > .info > .ta > div{
+	justify-content: flex-end;
+}
+
+.qna-info > form > div > .info > .input > div > p{
+	margin: 0;
+}
+
 .qna-info > form > div > .info > .input > .frmData{
-	width: 100%;
+	width: 90%;
 	border: none;
+	color: #495057;
 }
 
 .qna-info > form > div > .info > .input > textarea{
 	resize: none;
+}
+
+.qna_btn{
+	width: 100%;
+	margin-top: 50px;
+	border-radius: 30px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	padding-top: 15px;
+	padding-bottom: 15px;
+	cursor: pointer;
+	background-color: #16A7F1;
+	color: #FFFFFF;
+	font-weight: 600;
+	font-size: 20px;
+}
+
+.qna-file{
+	display: flex;
+	align-items: center;
+	min-height: 30px;
+}
+
+.qna-file label{
+	color: #495057;
+	margin-right: 15px;
+	font-size: 15px;
+	background-color: #FFFFFF;
+	border-radius: .375rem;
+	box-shadow: 0 2px 6px 0 rgba(67,89,113,.12);
+	border: 1px solid #FAFAFA;
+	padding: 5px 10px 5px 10px;
+	cursor: pointer;
+}
+
+.qna-file input[type="file"]{
+	position: absolute;
+	width: 0;
+	height: 0;
+	padding: 0;
+	overflow: hidden;
+	border: 0;
+}
+
+.qna-file .upload-name{
+	max-width: 280px;
+	white-space: pre-line;
+	border: none;
+	margin-right: 3px;
+}
+
+.qna-file img{
+	width: 13px;
+	object-fit: contain;
+	cursor: pointer;
+	padding-top: 2px;
+	visibility: hidden;
 }
