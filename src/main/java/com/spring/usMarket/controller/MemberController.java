@@ -168,6 +168,10 @@ public class MemberController {
 		return "redirect:" + request.getSession().getAttribute("prevPage");
 	}
 
+	@PostMapping("/modify")
+	public String modify(@ModelAttribute MemberDto member,MultipartHttpServletRequest request,Model model) {
+		return "redirect:/member/mypage";
+	}
 	
 	@GetMapping("/mypage")
 	public String info(HttpServletRequest request, Model model, SearchCondition sc) {
@@ -251,11 +255,6 @@ public class MemberController {
 		model.addAttribute("ph", pageHandler);
 		
 		return "member/viewajax";
-	}
-	
-	@GetMapping("/update")
-	public String modify(HttpServletRequest request) {
-		return "member/update";
 	}
 	
 	@GetMapping("/transactionhistory")

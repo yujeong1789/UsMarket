@@ -106,7 +106,15 @@
 				<span class="hp_status"></span>
 			</div>
 			<div class="btn-area">
-				<button name="btn" id="btn">회원가입</button>
+				<c:choose>
+					<c:when test="${mode == 'modify' }" >
+						<button name="btn" id="modify_btn">회원 정보 변경</button>
+					</c:when>
+					<c:otherwise>
+						<button name="btn" id="join_btn">회원가입</button>
+					</c:otherwise>
+				</c:choose>
+
 				<p align="center" style="color: red;">${message }</p>
 			</div>
 		</form>
@@ -431,7 +439,7 @@
 		});// blur
 		
 		/* 공백 검사 and 회원가입 */
-		$('#btn').on("click", function(){
+		$('#join_btn').on("click", function(){
 			/* 이름 */
 			if($('#name').val()=="" || $('#name').val()==null){
 				name_error();
@@ -516,7 +524,13 @@
 				joinForm.action="${pageContext.request.contextPath}/member/join";
 				joinForm.submit(); 
  			} 
-		}); //submitCheck
+		}); //join_submitCheck
+		
+		$('#modify_btn').on("click", function(){
+			joinForm.method="POST";
+			joinForm.action="${pageContext.request.contextPath}/member/modify";
+			joinForm.submit();
+		});
 		
 	}); // ready
 	</script>

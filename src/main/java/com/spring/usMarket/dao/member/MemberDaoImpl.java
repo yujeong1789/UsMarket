@@ -29,6 +29,11 @@ public class MemberDaoImpl implements MemberDao{
 	}
 
 	@Override
+	public int updateMember(MemberDto member) {
+		return session.insert(namespace+"updateMember", member);
+	}
+	
+	@Override
 	public int overlappedID(String member_id) {
 		return session.selectOne(namespace+"overlappedID", member_id);
 	}

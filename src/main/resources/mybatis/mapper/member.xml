@@ -5,15 +5,32 @@
 	<!-- 회원 등록 -->
 	<insert id="insertMember" parameterType="memberDto">
 		<selectKey keyProperty="member_no" resultType="Integer" order="BEFORE">
-			select member_seq.nextval from dual
+			SELECT member_seq.nextval FROM dual
 		</selectKey>
-		insert into member (MEMBER_NO,MEMBER_NAME,MEMBER_ID,MEMBER_PASSWORD,MEMBER_IMAGE,
-		MEMBER_EMAIL,MEMBER_HP,MEMBER_NICKNAME,
+		INSERT INTO member (MEMBER_NO,MEMBER_NAME,MEMBER_ID,
+		MEMBER_PASSWORD,MEMBER_IMAGE,MEMBER_EMAIL,MEMBER_HP,MEMBER_NICKNAME,
 		MEMBER_ZIPCODE,MEMBER_ADDRESS,MEMBER_ADDRESS_DETAIL) 
-		values (#{member_no},#{member_name},#{member_id},#{member_password},#{member_image},
+		VALUES (#{member_no},#{member_name},#{member_id},#{member_password},#{member_image},
 		#{member_email},#{member_hp},#{member_nickname},
 		#{member_zipcode},#{member_address},#{member_address_detail})
 	</insert>
+
+	<!-- 회원 정보 변경 -->
+	<update id="updateMember" parameterType="memberDto">
+		UPDATE member 
+		SET 
+			member_name = #{member_name},
+			member_id = #{member_id},
+			member_password = #{member_password},
+			member_image = #{member_image},
+			member_email = #{member_email},
+			member_hp = #{member_hp},
+			member_nickname = #{member_nickname},
+			member_zipcode = #{member_zipcode},
+			member_address = #{member_address},
+			member_address_detail = #{member_address_detail}
+		WHERE member_no = #{member_no}
+	</update>
 
 	<!-- 닉네임 중복 검사 -->
 	<select id="overlappedNick" parameterType="String" resultType="int">
