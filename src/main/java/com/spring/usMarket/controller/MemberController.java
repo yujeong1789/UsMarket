@@ -170,6 +170,26 @@ public class MemberController {
 
 	@PostMapping("/modify")
 	public String modify(@ModelAttribute MemberDto member,MultipartHttpServletRequest request,Model model) {
+		String img=null;
+		
+		try {
+			if(request.getFile("member_profile_image").getSize() != 0) {
+				img = memberService.upload(request.getFile("member_profile_image"));
+				member.setMember_image(img);
+			}
+			
+			// 1. 회원 정보 변경
+			logger.info("memberDto = {}",member.toString());
+			int result = memberService.modifyMember(member);
+			if(result != 1) {
+				model.addAttribute("message", "빈칸을 확인해 주세요.");
+				return "redirect:/member/join?mode=modify";
+			}
+		} catch (Exception e) {
+			model.addAttribute("message", "정보 변경에 실패하였습니다.");
+			e.printStackTrace();
+			return "member/join?mode=modify";
+		}// try-catch
 		return "redirect:/member/mypage";
 	}
 	
@@ -266,10 +286,10 @@ public class MemberController {
 	@PostMapping("/nickCheck")
 	public String NickCheck(@RequestBody String member_nick) throws Exception {
 		logger.info("memberNick= " + member_nick);
-		Integer result = memberService.checkNick(member_nick);
-		logger.info("nickCheck result= " + result);
+		String result = memberService.checkNick(member_nick);
+		logger.info("checkNick / result= " + result);
 
-		return String.valueOf(result);
+		return result;
 	}
 
 	@ResponseBody
@@ -286,10 +306,10 @@ public class MemberController {
 	@PostMapping("/emailCheck")
 	public String EmailCheck(@RequestBody String member_email) throws Exception {
 		logger.info("memberEmail= " + member_email);
-		Integer result = memberService.checkEmail(member_email);
+		String result = memberService.checkEmail(member_email);
 		logger.info("emailCheck result= " + result);
 
-		return String.valueOf(result);
+		return result;
 	}
 
 	@ResponseBody
