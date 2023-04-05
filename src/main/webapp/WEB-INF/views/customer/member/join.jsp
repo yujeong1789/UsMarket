@@ -15,10 +15,25 @@
 	<section class="login-form">
 		<h1>회원가입</h1>
 		<form name="joinForm" enctype="multipart/form-data" onsubmit="return false">
+			
+			<c:if test="${mode == 'modify' }">
+			<input type="hidden" name="member_no" value="${memberInfo.member_no }">
+			</c:if>
+			
 			<input type="file" id="profile" name="member_profile_image" accept="image/jpg, image/jpeg, image/png" style="display:none;"/>
-			<input type="image" id="profile_image" name="member_image" style="display:none;"/>
+			
+			<c:choose>
+				<c:when test="${mode == 'modify' }" >
+					<input type="text" id="profile_image" name="member_image" style="display:none;" value="${memberInfo.member_image }"/>
+				</c:when>
+				<c:otherwise>
+					<input type="image" id="profile_image" name="member_image" style="display:none;"/>
+				</c:otherwise>
+			</c:choose>
+			
 			<div class="profile_box">
 				<label for="profile" id="preview">
+				
 					<c:choose>
 						<c:when test="${mode == 'modify' }" >
 							<img id="profile_img" alt="프로필 이미지" src="<c:url value='${memberInfo.member_image}'/>">
@@ -27,6 +42,7 @@
 							<img id="profile_img" alt="프로필 이미지" src="<c:url value='/resources/customer/img/default_profile.png'/>">
 						</c:otherwise>
 					</c:choose>
+				
 				</label>
 				<img class="file__img__delete" src="<c:url value='/resources/customer/img/delete_icon.png'/>">
 			</div>
@@ -282,22 +298,24 @@
 					type : 'POST',
 		 			url : "${pageContext.request.contextPath}/member/nickCheck",
 					data : member_nickname,
-					dataType : 'text',
+					dataType: 'text',
 					async: false,
-					headers : {"content-type": "application/json"}, 
-					success : function(rec){ //컨트롤러에서 넘어온 rec값을 받는다 
-						
-					    if(rec == '0'){ //rec가 1이 아니면(=0일 경우) -> 사용 가능한 닉네임
+					contentType: 'application/json', 
+					success : function(result){ //컨트롤러에서 넘어온 rec값을 받는다 
+						console.log("result : "+result);
+						if(result == "") { // nick_cnt가 0이면 사용 가능한 닉네임
 							$('.nick_status').html('사용 가능한 닉네임입니다.');
-							$('.nick_status').css('color','green');
-							nickCk = true;
-
-					    } else if(rec == '1'){ // rec가 1일 경우 -> 사용 중인 닉네임
-							$('.nick_status').html('사용 중인 닉네임입니다.');
-							$('.nick_status').css('color','red');
-							nickCk = false;
-							nick_error();
-					    }; 
+				            $('.nick_status').css('color', 'green');
+				            nickCk = true;
+				        } else if(result == "${memberInfo.member_nickname }"){ // 기존 닉네임과 같음
+				        	$('.nick_status').html('');
+				        	nickCk = true;
+				        } else { // nick_cnt가 1 이상이면 사용 중인 닉네임
+				        	$('.nick_status').html('사용 중인 닉네임입니다.');
+				            $('.nick_status').css('color', 'red');
+				            nickCk = false;
+				            nick_error();
+				        };
    	
 					}, //success function
 					error:function(error){
@@ -376,15 +394,21 @@
 		            headers : {"content-type": "application/json"}, 
 		            success : function(rec){ //컨트롤러에서 넘어온 rec값을 받는다 
 		            	
-		                if(rec == '0'){ //rec가 1이 아니면(=0일 경우) -> 사용 가능한 아이디 
+		                if(rec == ''){ //rec가 1이 아니면(=0일 경우) -> 사용 가능한 아이디 
 		                    $('.email_status').html('사용 가능한 이메일입니다.');
 		    				$('.email_status').css('color','green');
-		                    $('.email_check_btn').attr('disabled', false);		    				
-		                } else if(rec == '1'){ // rec가 1일 경우 -> 이미 존재하는 아이디
+		                    $('.email_check_btn').attr('disabled', false);
+		                    emailCk = false;
+		                } else if(rec == "${memberInfo.member_email }"){ // rec가 1일 경우 -> 이미 존재하는 아이디
+				        	$('.email_status').html('');
+				        	$('.email_check_btn').attr('disabled', true);
+				        	emailCk = true;
+		                } else {
 		                    $('.email_status').html('이미 사용중인 이메일입니다.');
 		    				$('.email_status').css('color','red');
 		                    $('.email_check_btn').attr('disabled', true);
 		                    email_error();
+		                    emailCk = false;
 		                }; 
 		            	
 		            }, //success function
@@ -395,6 +419,7 @@
 			}; // if				
 		        console.log("member_email = "+ member_email);
 		}); // emailcheck
+		
 		
 		/* 인증번호 이메일 전송 */
 		$("button[name='email_check_btn']").click(function(){
@@ -431,7 +456,7 @@
 				emailCk = true;
 
 			}else{
-				$resultMsg.html('인증번호가 불일치 합니다. 다시 확인해주세요!.');
+				$resultMsg.html('인증번호가 일치하지 않습니다.');
 				$resultMsg.css('color','red');
 				emailCk = false;
 
@@ -527,9 +552,41 @@
 		}); //join_submitCheck
 		
 		$('#modify_btn').on("click", function(){
-			joinForm.method="POST";
-			joinForm.action="${pageContext.request.contextPath}/member/modify";
-			joinForm.submit();
+			if($('#name').val()=="" || $('#name').val()==null){ /* 이름 */
+				name_error();
+				nameCk = false;
+			}else {nameCk = true;}
+			
+			if($('#nick').val()=="" || $('#nick').val()==null){	/* 닉네임 */
+				nick_error();
+			}else {nickCk = true;}
+			
+			if($('#zipcode').val()=="" || $('#address').val()=="" || $('#address_detail').val()=="" ){	/* 주소 */
+				address_error();
+				addressCk = false;
+			}else {addressCk = true;}
+			
+			if($('#email').val()==""|| $('#email').val()==null){							/* 이메일 */
+				email_error();
+				emailCk = false;
+			}else {emailCk = true;}
+			
+			if($('#hp').val().length == 11){ 					/* 전화번호 */
+				hpCk = true;
+			}else if($('#hp').val()==""){
+				hp_error();
+				hpCk = false;
+			}else {
+				hpCk = false;
+				hp_error_message();
+			}
+			console.log("name : "+nameCk+", nick : "+nickCk+", address : "+addressCk+", email : "+emailCk+", hp : "+hpCk);
+			
+			if(nameCk && nickCk && addressCk && emailCk && hpCk){
+				joinForm.method="POST";
+				joinForm.action="${pageContext.request.contextPath}/member/modify";
+				joinForm.submit();
+			}
 		});
 		
 	}); // ready
