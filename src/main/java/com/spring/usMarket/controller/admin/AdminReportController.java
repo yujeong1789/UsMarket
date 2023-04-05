@@ -5,8 +5,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.servlet.http.HttpServletRequest;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +16,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import com.spring.usMarket.domain.admin.ReportHistoryDto;
 import com.spring.usMarket.service.admin.AdminService;
 import com.spring.usMarket.utils.AdminPageHandler;
 import com.spring.usMarket.utils.AdminSearchCondition;
@@ -61,8 +58,6 @@ public class AdminReportController {
 
 	@PostMapping("list")
 	public String reportListPost(@RequestBody AdminSearchCondition sc, RedirectAttributes ratt) {
-		
-		sc.setPageSize(10);
 		
 		logger.info("post adminSearchCondition = {}", sc.toString());
 		
