@@ -20,7 +20,7 @@ public class ReportServiceImpl implements ReportService{
 	@Autowired ReportDao reportDao;
 
 	public String getResult(int rowCnt) {
-		return rowCnt == 1 ? "OK" : "NOT_OK";
+		return rowCnt == 1 ? "SUCCESS" : "FAIL";
 	}
 	
 	@Override
