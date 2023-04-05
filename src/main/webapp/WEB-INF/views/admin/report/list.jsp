@@ -161,7 +161,7 @@ let reportInfoSubmit = function(element){
 let getReportList = function(page){
 	let params = {
 			'page': page,
-			'pageSize': 2,
+			'pageSize': 10,
 			'condition': document.querySelector('.condition-selected').dataset.condition,
 			'complete': document.querySelector('.complete-selected').dataset.complete,
 			'order': document.querySelector('.order-selected').dataset.order
