@@ -40,8 +40,14 @@
 		<typeAlias type="com.spring.usMarket.utils.AdminSearchCondition"
 		 alias="adminSearchCondition"/>
 		 
+		<typeAlias type="com.spring.usMarket.utils.QnaSearchCondition"
+		 alias="qnaSearchCondition"/>
+		 
 		<typeAlias type="com.spring.usMarket.domain.admin.ReportHistoryDto"
 		 alias="reportHistoryDto"/>
+		 
+		<typeAlias type="com.spring.usMarket.domain.qna.QnaInsertDto"
+		 alias="qnaInsertDto"/>
 	</typeAliases>
 	
 </configuration>

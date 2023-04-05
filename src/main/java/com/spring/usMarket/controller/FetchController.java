@@ -22,13 +22,15 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.spring.usMarket.domain.chat.ChatDto;
 import com.spring.usMarket.domain.deal.DealInsertDto;
+import com.spring.usMarket.domain.qna.QnaInsertDto;
 import com.spring.usMarket.domain.report.ReportInsertDto;
 import com.spring.usMarket.service.admin.AdminService;
 import com.spring.usMarket.service.chat.ChatService;
 import com.spring.usMarket.service.deal.DealService;
 import com.spring.usMarket.service.product.ProductService;
-import com.spring.usMarket.service.report.ReportFileService;
+import com.spring.usMarket.service.qna.QnaService;
 import com.spring.usMarket.service.report.ReportService;
+import com.spring.usMarket.utils.SingleFileService;
 import com.spring.usMarket.utils.SessionParameters;
 
 @RestController
@@ -43,7 +45,8 @@ public class FetchController {
 	@Autowired DealService dealService;
 	@Autowired ChatService chatService;
 	@Autowired ReportService reportService;
-	@Autowired ReportFileService reportFileService;
+	@Autowired SingleFileService fileService;
+	@Autowired QnaService qnaService;
 	
 	@PostMapping("/sessionCheck")
 	public String sessionCheck(HttpServletRequest request) {
@@ -278,7 +281,7 @@ public class FetchController {
 		// 이미지 업로드 작업
 		try {
 			if(request.getFile("image") != null) {
-				String realPath = reportFileService.upload(request.getFile("image"), dto.getReport_no());
+				String realPath = fileService.upload(request.getFile("image"), dto.getReport_no(), "report");
 				dto.setReport_image(realPath);
 			} // if
 					
@@ -309,5 +312,35 @@ public class FetchController {
 		}
 		
 		return result;
+	}
+	
+	@PostMapping(value="/qna/reg")
+	public Map<String, Object> qnaReg(QnaInsertDto dto, MultipartHttpServletRequest request) {
+		
+		logger.info("QnaInsertDto = {}", dto.toString());
+		String msg = "문의 등록에 실패했습니다.";
+		Map<String, Object> resultMap = new HashMap<>();
+		
+		// 이미지 업로드 작업
+		try {
+			if(request.getFile("image") != null) {
+				String realPath = fileService.upload(request.getFile("image"), dto.getQna_no(), "qna");
+				dto.setQna_image(realPath);
+			} // if
+					
+			dto.setMember_no(Integer.parseInt(SessionParameters.getUserNo(request)));
+			logger.info("dto.toString() = {}", dto.toString());
+			
+			int rowCnt = qnaService.addQna(dto);
+			
+			if(rowCnt == 1) msg = "문의가 정상적으로 접수되었습니다.";
+			
+			resultMap.put("msg", msg);
+			resultMap.put("qna_no", dto.getQna_no());
+		} catch (Exception e) {
+			e.printStackTrace();
+		} // try-catch
+		
+		return resultMap;
 	}
 }

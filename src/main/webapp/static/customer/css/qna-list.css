@@ -1,7 +1,7 @@
 @charset "UTF-8";
 
 .qna-list-container{
-	padding-top: 100px;
+	padding-top: 30px;
 	padding-bottom: 100px;
 }
 
@@ -12,6 +12,29 @@
 	align-items: flex-end;
 	margin-bottom: 25px;
 	font-weight: 550;
+}
+
+.list-title{
+	margin-bottom: 70px;
+	font-size: 16px;
+	color: #1C1C1C;
+}
+
+.list-title > a{
+	color: #1C1C1C;
+	font-weight: 500;  
+}
+
+.list-title > a:after{
+	content: ">";
+	color: #989898;
+	font-weight: 800;
+	margin-left: 15px;
+	margin-right: 10px;
+}
+
+.list-title > a:hover{
+	color: #00a9ff;
 }
 
 .qna-list-container > .row > .container > .title > span{
@@ -46,7 +69,8 @@
 	flex-direction: column;
 	align-items: center;
 	width: 100%;
-	padding: 30px;
+	padding-top: 20px;
+	padding-bottom: 20px;
 	border-radius: .375rem;
 	box-shadow: 0 2px 6px 0 rgba(67,89,113,.12);
 }
@@ -90,15 +114,15 @@
 }
 
 .qna-list thead th:first-child, .qna-list thead th:last-child{
-	width: 30%
+	width: 25%
 }
 
-.qna-list thead th:nth-child(2), .qna-list thead th:nth-child(4){
-	width: 10%;
+.qna-list thead th:nth-child(2){
+	width: 40%;
 }
 
 .qna-list thead th:nth-child(3){
-	width: 20%;
+	width: 10%;
 }
 
 
@@ -112,6 +136,33 @@
 }
 
 .qna-list > table .body:hover{
-	background-color: #f5f9ff;
-	color: #7988FD;
+	background-color: #f5fbff;
+	color: #00a9ff;
+}
+
+.qna-list > .paging{
+	display: flex;
+	justify-content: center;
+	margin-bottom: 15px;
+}
+
+.qna-list > .paging > div{
+	display: flex;
+	min-width: 30px;
+	height: 30px;
+	justify-content: center;
+	align-items: center;
+	font-size: 13px;
+	border-radius: 100%;;
+	box-shadow: 0 2px 6px 0 rgba(67,89,113,.12);
+	margin: 5px;
+	font-weight: 600;
+}
+
+.current-page{
+	color: #00a9ff;
+}
+
+.not-current-page{
+	cursor: pointer;
 }

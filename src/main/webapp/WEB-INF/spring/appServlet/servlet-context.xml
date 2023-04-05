@@ -52,6 +52,7 @@
 			<mapping path="/product/sell/**"/>
 			<mapping path="/chat/**"/>
 			<mapping path="/member/mypage/**"/>
+			<mapping path="/qna/**"/>
 			<beans:bean class="com.spring.usMarket.common.LoginInterceptor" />
 		</interceptor>
 		<interceptor>

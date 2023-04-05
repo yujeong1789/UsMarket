@@ -1,4 +1,4 @@
-package com.spring.usMarket.service.report;
+package com.spring.usMarket.utils;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,8 +16,8 @@ import com.amazonaws.util.IOUtils;
 
 @Service
 @PropertySource("classpath:props/fileUpload.properties")
-public class ReportFileService {
-	private static final Logger logger = LoggerFactory.getLogger(ReportFileService.class);
+public class SingleFileService {
+	private static final Logger logger = LoggerFactory.getLogger(SingleFileService.class);
 	
 	@Autowired
 	private AmazonS3 s3Client;
@@ -28,7 +28,7 @@ public class ReportFileService {
 	@Value("${cloud.aws.region}")
 	private String region;
 	
-	public String upload(MultipartFile file, String report_no) throws Exception{
+	public String upload(MultipartFile file, String no, String path) throws Exception{
 		byte[] bytes = IOUtils.toByteArray(file.getInputStream());
 		
 		ObjectMetadata objectMetadata = new ObjectMetadata();
@@ -36,7 +36,7 @@ public class ReportFileService {
 		objectMetadata.setContentType(file.getContentType());
 					
 		// 요청 바디 작성 (bucket, 경로+파일명, inputStream, objectMetadata)
-		PutObjectRequest putObjectRequest = new PutObjectRequest(this.bucket, "report/"+report_no, file.getInputStream(), objectMetadata)
+		PutObjectRequest putObjectRequest = new PutObjectRequest(this.bucket, path+"/"+no, file.getInputStream(), objectMetadata)
 				.withCannedAcl(CannedAccessControlList.PublicRead);
 		
 		// s3에 저장
