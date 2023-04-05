@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mybatis.mapper.qna">
+	<insert id="insertQna" parameterType="qnaInsertDto">
+		INSERT INTO qna(qna_no, member_no, qna_category1_no, qna_title, qna_image, qna_content)
+		values(#{qna_no}, #{member_no}, #{qna_category1_no}, #{qna_title}, #{qna_image}, #{qna_content})
+	</insert>
+	
+	<select id="searchQnaInfo" parameterType="string" resultType="map">
+		SELECT *
+		FROM qna q, qna_category1 c
+		WHERE q.qna_category1_no = c.qna_category1_no
+		AND q.qna_no = #{qna_no}
+	</select>
+	
+	<select id="searchQnaList" parameterType="qnaSearchCondition" resultType="map">
+		SELECT*
+		FROM ( SELECT rownum AS num, A.*
+			   FROM ( SELECT q.qna_no
+			   				 , q.qna_category1_no
+			   				 , c.qna_category1_name
+			   				 , q.qna_title
+			   				 , q.qna_regdate
+			   				 , q.qna_complete
+					  FROM qna q, qna_category1 c
+					  WHERE q.qna_category1_no = c.qna_category1_no
+					  AND q.member_no = #{member_no}
+					  ORDER BY q.qna_regdate desc
+					) A
+			 )
+		WHERE num BETWEEN #{startPage} AND #{endPage}
+	</select>
+	
+	<select id="searchQnaCnt" parameterType="string" resultType="int">
+		SELECT COUNT(*)
+		FROM qna
+		WHERE member_no = #{member_no}
+	</select>
+</mapper>
