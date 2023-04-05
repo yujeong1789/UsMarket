@@ -39,12 +39,12 @@ public class MemberDaoImpl implements MemberDao{
 	}
 
 	@Override
-	public int overlappedNick(String member_nick) {
+	public String overlappedNick(String member_nick) {
 		return session.selectOne(namespace+"overlappedNick", member_nick);
 	}
 
 	@Override
-	public int overlappedEmail(String member_email) {
+	public String overlappedEmail(String member_email) {
 		return session.selectOne(namespace+"overlappedEmail", member_email);
 	}
 	
