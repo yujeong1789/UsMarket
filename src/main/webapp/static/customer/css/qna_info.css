@@ -33,21 +33,15 @@
 }
 
 .qna-info > form > div > .info-title{
-	width: 10%;
+	width: 13%;
 	font-size: 18px;
 	font-weight: 500;
 	padding-top: 5px;
 	padding-left: 5px;
 }
 
-.qna-info > form > div > .essential:after{
-	content: "*";
-	color: red;
-	margin-left: 5px;
-}
-
 .qna-info > form > div > .info{
-	width: 90%;
+	width: 87%;
 }
 
 .qna-info > form > div > .info > select{
@@ -74,6 +68,7 @@
 
 .qna-info > form > div > .info > .ta{
 	flex-direction: column;
+	height: 300px;
 }
 
 .qna-info > form > div > .info > .ta > img{
@@ -82,11 +77,11 @@
 	margin-bottom: 30px;
 }
 
-.qna-info > form > div > .info > .ta > div{
+.qna-info > form > div > .info > .ta > .current-count{
 	justify-content: flex-end;
 }
 
-.qna-info > form > div > .info > .input > div > p{
+.qna-info > form > div > .info > .input > .current-count > p{
 	margin: 0;
 }
 
@@ -98,6 +93,8 @@
 
 .qna-info > form > div > .info > .input > textarea{
 	resize: none;
+	height: 100%;
+	border: none;
 }
 
 .qna-btn{
@@ -160,4 +157,8 @@
 
 .current_count{
 	visibility: hidden;
+}
+
+.info-reply{
+	margin-top: 70px;
 }
