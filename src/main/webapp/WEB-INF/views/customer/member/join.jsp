@@ -13,7 +13,15 @@
 <body>
 <div class="login-body">
 	<section class="login-form">
-		<h1>회원가입</h1>
+	<c:choose>
+		<c:when test="${mode == 'modify' }" >
+			<h1>내 정보</h1>
+		</c:when>
+		<c:otherwise>
+			<h1>회원가입</h1>
+		</c:otherwise>
+	</c:choose>
+		
 		<form name="joinForm" enctype="multipart/form-data" onsubmit="return false">
 			
 			<c:if test="${mode == 'modify' }">
