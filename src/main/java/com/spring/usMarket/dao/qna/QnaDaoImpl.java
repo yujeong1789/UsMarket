@@ -36,4 +36,9 @@ public class QnaDaoImpl implements QnaDao {
 		return session.selectOne(namespace+"searchQnaCnt", member_no);
 	}
 
+	@Override
+	public Map<String, Object> searchQnaReply(String qna_no) throws Exception {
+		return session.selectOne(namespace+"searchQnaReply", qna_no);
+	}
+
 }

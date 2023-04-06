@@ -82,6 +82,9 @@
 							</li>
 						</c:forEach>
 					</ul>
+					<form id="qnaInfoForm" action="<c:url value='/admin/qna/info'/>" method="post">
+						<input type="hidden" id="qna_no" name="qna_no">
+					</form>
 				</c:if>
 			</div>
 		</div>

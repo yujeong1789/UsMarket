@@ -8,6 +8,7 @@ import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import com.spring.usMarket.domain.admin.QnaReplyInsertDto;
 import com.spring.usMarket.domain.admin.ReportHistoryDto;
 import com.spring.usMarket.utils.AdminSearchCondition;
 
@@ -169,6 +170,31 @@ public class AdminDaoImpl implements AdminDao{
 	@Override
 	public List<Map<String, Object>> searchQnaList(AdminSearchCondition sc) throws Exception {
 		return session.selectList(namespace+"searchQnaList", sc);
+	}
+
+	@Override
+	public int searchQnaCnt(String condition) throws Exception {
+		return session.selectOne(namespace+"searchQnaCnt", condition);
+	}
+
+	@Override
+	public Map<String, Object> searchQnaInfo(String qna_no) throws Exception {
+		return session.selectOne(namespace+"searchQnaInfo", qna_no);
+	}
+
+	@Override
+	public int insertQnaReply(QnaReplyInsertDto dto) throws Exception {
+		return session.insert(namespace+"insertQnaReply", dto);
+	}
+
+	@Override
+	public int updateQna(String qna_no) throws Exception {
+		return session.update(namespace+"updateQna", qna_no);
+	}
+
+	@Override
+	public Map<String, Object> searchQnaReply(String qna_no) throws Exception {
+		return session.selectOne(namespace+"searchQnaReply", qna_no);
 	}
 
 }

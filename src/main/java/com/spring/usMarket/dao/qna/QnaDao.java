@@ -11,4 +11,5 @@ public interface QnaDao {
 	Map<String, Object> searchQnaInfo(String qna_no) throws Exception;
 	List<Map<String, Object>> searchQnaList(QnaSearchCondition sc) throws Exception;
 	int searchQnaCnt(String member_no) throws Exception;
+	Map<String, Object> searchQnaReply(String qna_no) throws Exception;
 }

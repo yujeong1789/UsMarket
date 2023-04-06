@@ -362,14 +362,65 @@
 		AND r.report_no = #{report_no}
 	</select>
 	
-	<select id="searchQnaList" parameterType="map" resultType="map">
+	<select id="searchQnaList" parameterType="adminSearchCondition" resultType="map">
 		SELECT *
 		FROM ( SELECT rownum AS num, A.*
-				FROM (	SELECT qna_no, qna_title, qna_complete, qna_regdate
-						FROM qna
-						ORDER BY qna_regdate DESC
+				FROM (	SELECT q.qna_no
+	   				 		   , q.qna_category1_no
+	   				 		   , c.qna_category1_name
+	   				 		   , q.qna_regdate
+	   				 		   , q.qna_complete
+	   				 		   , q.qna_title
+			  			FROM qna q, qna_category1 c
+			  			WHERE q.qna_category1_no = c.qna_category1_no 
+			  			<if test="complete != null and complete != ''">
+							AND q.qna_complete = #{complete}  
+						</if>
+						<choose>
+							<when test="order == 'regdate'">
+								ORDER BY q.qna_regdate 
+							</when>
+							<otherwise>
+								ORDER BY q.qna_regdate DESC 
+							</otherwise>
+						</choose>
 					 ) A
 			 )
 		WHERE num BETWEEN #{startPage} AND #{endPage}
+	</select>
+	
+	<select id="searchQnaCnt" parameterType="string" resultType="int">
+		SELECT COUNT(*)  
+		FROM qna 
+		<if test="complete != null and complete != ''">
+			WHERE qna_complete = #{complete}  
+		</if>
+	</select>
+	
+	<select id="searchQnaInfo" parameterType="string" resultType="map">
+		SELECT *
+		FROM qna_view
+		WHERE qna_no = #{qna_no}
+	</select>
+	
+	<insert id="insertQnaReply" parameterType="qnaReplyInsertDto">
+		INSERT INTO qna_reply(qna_no, admin_no, qna_reply_content)
+		values(#{qna_no}, #{admin_no}, #{qna_reply_content})
+	</insert>
+	
+	<update id="updateQna" parameterType="string">
+		UPDATE qna
+		SET qna_complete = 'Y'
+		WHERE qna_no = #{qna_no}
+	</update>
+	
+	<select id="searchQnaReply" parameterType="string" resultType="map">
+		SELECT a.admin_id
+			  , a.admin_name
+			  , q.qna_reply_content
+			  , q.qna_reply_regdate
+		FROM qna_reply q, admin a
+		WHERE q.admin_no = a.admin_no
+		AND q.qna_no = #{qna_no}
 	</select>
 </mapper>

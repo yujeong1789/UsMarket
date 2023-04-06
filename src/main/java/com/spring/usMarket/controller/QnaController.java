@@ -95,19 +95,25 @@ public class QnaController {
 	}
 	
 	@GetMapping("/read")
-	public String qnaInfo(String qna_no, Model model) {
+	public String qnaInfo(String qna_no, Model model, HttpServletRequest request) {
 		
 		logger.info("qna_no = {}", qna_no);
 		model.addAttribute("mode", "read");
+		
 		Map<String, Object> qnaInfo = new HashMap<>();
 		try {
 			qnaInfo = qnaService.getQnaInfo(qna_no);
-			model.addAttribute("qnaInfo", qnaInfo);
 			
-			String qna_complete = qnaInfo.get("QNA_COMPLETE").toString();
-			if(qna_complete == "Y" || qna_complete.equals("Y")) {
-				Map<String, Object> qnaReply = new HashMap<>();
-				model.addAttribute("qnaReply", qnaReply);
+			String member_no = qnaInfo.get("MEMBER_NO").toString(); // 해당 문의 작성한 회원 번호
+			String current_no = SessionParameters.getUserNo(request); // 현재 접속 중인 회원 번호
+			if(current_no == member_no || current_no.equals(member_no)) {
+				model.addAttribute("qnaInfo", qnaInfo);
+				
+				String qna_complete = qnaInfo.get("QNA_COMPLETE").toString();
+				if(qna_complete == "Y" || qna_complete.equals("Y")) {
+					Map<String, Object> replyInfo = qnaService.getQnaReply(qna_no);
+					model.addAttribute("replyInfo", replyInfo);
+				}
 			}
 			
 		} catch (Exception e) {
