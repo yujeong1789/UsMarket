@@ -26,7 +26,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import com.spring.usMarket.domain.member.MemberDto;
-import com.spring.usMarket.domain.product.ProductDto;
 import com.spring.usMarket.service.member.MemberService;
 import com.spring.usMarket.utils.PageHandler;
 import com.spring.usMarket.utils.SearchCondition;
@@ -116,14 +115,15 @@ public class MemberController {
 
 	@GetMapping("/join")
 	public String join(HttpServletRequest request, Model model) {
-		String member_no = null;
-		if (request.getSession().getAttribute("userNo") != null) {
+		MemberDto memberInfo = null;
+	    String member_no = null;
+		String mode = "join";
+	    
+	    if (request.getSession().getAttribute("userNo") != null) {
 			BigDecimal memNo= (BigDecimal) request.getSession().getAttribute("userNo");
 			member_no = memNo.toString();
 		}
-	    MemberDto memberInfo = null;
-	    String mode = "join";
-
+	    
 	    try {
 	        if (request.getParameter("mode") != null) {
 	            mode = request.getParameter("mode");
@@ -203,23 +203,23 @@ public class MemberController {
 
 		int totalCnt = 0;
 		sc.setPageSize(15);		
-
+		logger.info("queryString = "+sc.getQueryString(sc.getPage()));
+		
 		try {
-			String memberNo = member_no;
-		    if (request.getParameter("member_no") != null) {
-		    	memberNo = request.getParameter("member_no");
+			if (request.getParameter("member_no") != null) {
+		    	member_no = request.getParameter("member_no");
 		    }
-			MemberDto memberInfo = memberService.getMemberInfo(memberNo);//Mypage_member
+			
+			MemberDto memberInfo = memberService.getMemberInfo(member_no);//Mypage_member
+			
+			List<Map<String, Object>> mypageProductList = memberService.getMypageProduct(member_no);
+			int ProductCount = memberService.getMypageProductCount(member_no);//Mypage_product
 
-			List<Map<String, Object>> mypageProductList = memberService.getMypageProduct(memberNo);
-			int ProductCount = memberService.getMypageProductCount(memberNo);//Mypage_product
-
-			int bookmarkCount = memberService.getMypageBookmarkCount(memberNo);//Mypage_Bookmark
-
+			int bookmarkCount = memberService.getMypageBookmarkCount(member_no);//Mypage_Bookmark
+			
+			totalCnt = ProductCount;
 			PageHandler pageHandler = new PageHandler(totalCnt, sc);
 
-			model.addAttribute("deNo", 211);
-			
 			model.addAttribute("memberInfo", memberInfo);
 			model.addAttribute("regdate",dateFormat.format(memberInfo.getMember_regdate()));
 			model.addAttribute("mypageList", mypageProductList);
