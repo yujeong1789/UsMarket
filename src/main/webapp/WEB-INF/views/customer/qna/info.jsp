@@ -4,7 +4,7 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 
-<link rel="stylesheet" href="<c:url value='/resources/customer/css/qna-info.css'/>" type="text/css">
+<link rel="stylesheet" href="<c:url value='/resources/customer/css/qna_info.css'/>" type="text/css">
 <c:set var="status" value="${mode eq 'new' ? '' : 'readonly' }" />
 <c:set var="title" value="${mode eq 'new' ? '1:1문의하기' : '1:1문의 조회' }" />
 
@@ -24,7 +24,7 @@
 				<form id="qnaInsertForm" action="<c:url value='/qna/new'/>" method="post" enctype="multipart/form-data">
 					<input type="hidden" name="qna_no" id="qna_no">
 					<div>
-						<div class="info-title essential">제목</div>
+						<div class="info-title">제목</div>
 						<div class="info">
 							<div class="input">
 								<input class="frmData not-pass" data-alert="제목을 입력해 주세요." type="text" name="qna_title" id="qna_title" maxlength="50" value="${qnaInfo.QNA_TITLE }" ${status }>
@@ -33,7 +33,7 @@
 						</div>
 					</div>
 					<div>
-						<div class="info-title essential">분류</div>
+						<div class="info-title">분류</div>
 						<div class="info">
 							<c:if test="${mode eq 'new' }">
 								<select class="custom-select not-pass" data-alert="분류를 선택해 주세요." id="qna_category1_no" name="qna_category1_no" class="not-pass">
@@ -53,7 +53,7 @@
 						</div>
 					</div>
 					<div>
-						<div class="info-title essential">내용</div>
+						<div class="info-title">내용</div>
 						<div class="info">
 							<div class="input ta">
 								<c:if test="${not empty qnaInfo.QNA_IMAGE }">
@@ -84,32 +84,36 @@
 					<!-- 문의 조회일 경우 -->
 					<c:if test="${mode eq 'read' }">
 						<div>
-							<div class="info-title">등록일</div>
+							<div class="info-title">문의등록일</div>
 							<div class="info">
 								<div class="input">
 									<div><fmt:formatDate value="${qnaInfo.QNA_REGDATE }" pattern="yyyy/MM/dd (HH:mm:ss)" /></div>
 								</div>
 							</div>
 						</div>
-						<div>
-							<div class="info-title">처리여부</div>
-							<div class="info">
-								<div class="input">
-									<div>${qnaInfo.QNA_COMPLETE eq 'N' ? '답변대기중' : '답변완료' }</div>
+						<c:if test="${qnaInfo.QNA_COMPLETE eq 'Y' and not empty replyInfo}">
+							<div class="info-reply">
+								<div class="info-title">답변</div>
+								<div class="info">
+									<div class="input ta">
+										<textarea readonly>${replyInfo.QNA_REPLY_CONTENT }</textarea>
+									</div>
 								</div>
 							</div>
-						</div>
+							<div>
+								<div class="info-title">답변등록일</div>
+								<div class="info">
+									<div class="input">
+										<div><fmt:formatDate value="${replyInfo.QNA_REPLY_REGDATE }" pattern="yyyy/MM/dd (HH:mm:ss)" /></div>
+									</div>
+								</div>
+							</div>
+						</c:if>
 						<div class="qna-btn" id="qna-list-btn" onclick="location.href='<c:url value="/qna/list"/>'">목록</div>
 					</c:if>
 					
 				</form> <!-- form -->
 			</div> <!-- qna_info -->
-			
-			<c:if test="${not empty replyInfo }">
-				<div class="title">1:1문의 답변</div>
-				<div class="qna-reply">
-				</div> <!-- qna_reply -->
-			</c:if>
 			
 		</div> <!-- container -->
 	</div> <!-- row -->
