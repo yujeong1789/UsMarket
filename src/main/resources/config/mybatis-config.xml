@@ -46,6 +46,9 @@
 		<typeAlias type="com.spring.usMarket.domain.admin.ReportHistoryDto"
 		 alias="reportHistoryDto"/>
 		 
+		<typeAlias type="com.spring.usMarket.domain.admin.QnaReplyInsertDto"
+		 alias="qnaReplyInsertDto"/>
+		 
 		<typeAlias type="com.spring.usMarket.domain.qna.QnaInsertDto"
 		 alias="qnaInsertDto"/>
 	</typeAliases>
