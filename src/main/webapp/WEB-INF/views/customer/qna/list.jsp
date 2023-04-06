@@ -4,7 +4,7 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 
-<link rel="stylesheet" href="<c:url value='/resources/customer/css/qna-list.css'/>" type="text/css">
+<link rel="stylesheet" href="<c:url value='/resources/customer/css/qna_list.css'/>" type="text/css">
 
 <div class="qna-list-container">
 	<div class="row">
