@@ -3,6 +3,7 @@ package com.spring.usMarket.service.admin;
 import java.util.List;
 import java.util.Map;
 
+import com.spring.usMarket.domain.admin.QnaReplyInsertDto;
 import com.spring.usMarket.domain.admin.ReportHistoryDto;
 import com.spring.usMarket.utils.AdminSearchCondition;
 
@@ -40,4 +41,8 @@ public interface AdminService {
 	
 	// qna
 	List<Map<String, Object>> getQnaList(AdminSearchCondition sc) throws Exception;
+	int getQnaCnt(String condition) throws Exception;
+	Map<String, Object> getQnaInfo(String qna_no) throws Exception;
+	int addQnaReply(QnaReplyInsertDto dto) throws Exception;
+	Map<String, Object> getQnaReply(String qna_no) throws Exception;
 }

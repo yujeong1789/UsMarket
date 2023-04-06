@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.spring.usMarket.dao.admin.AdminDao;
+import com.spring.usMarket.domain.admin.QnaReplyInsertDto;
 import com.spring.usMarket.domain.admin.ReportHistoryDto;
 import com.spring.usMarket.utils.AdminSearchCondition;
 
@@ -23,7 +24,7 @@ public class AdminServiceImpl implements AdminService{
 	
 	
 	public String getResult(int rowCnt) {
-		return rowCnt == 1 ? "OK" : "FAIL";
+		return rowCnt == 1 ? "SUCCESS" : "FAIL";
 	}
 	
 	@Override
@@ -31,7 +32,7 @@ public class AdminServiceImpl implements AdminService{
 	public Map<String, Object> getAdmin(String admin_id, String admin_password) throws Exception {
 		
 		Map<String, Object> map = adminDao.searchAdmin(admin_id, admin_password);
-		logger.info("관리자 정보 조회 결과 = {}", (map == null ? "FAIL" : "OK"));
+		logger.info("관리자 정보 조회 결과 = {}", (map == null ? "FAIL" : "SUCCESS"));
 		
 		return map;
 	}
@@ -231,7 +232,7 @@ public class AdminServiceImpl implements AdminService{
 		logger.info("신고 처리여부 업데이트 결과 = {}", getResult(rowCnt));
 		
 		rowCnt += adminDao.insertReportHistory(dto);
-		logger.info("제재 등록 결과 = {}", (rowCnt == 2 ? "OK" : "FAIL"));
+		logger.info("제재 등록 결과 = {}", (rowCnt == 2 ? "SUCCESS" : "FAIL"));
 		
 		return rowCnt;
 	}
@@ -254,5 +255,48 @@ public class AdminServiceImpl implements AdminService{
 		logger.info("문의 목록 조회 결과 = {}", listMap.size());
 		
 		return listMap;
+	}
+
+	@Override
+	@Transactional(rollbackFor = SQLException.class, readOnly = true)
+	public int getQnaCnt(String condition) throws Exception {
+
+		int rowCnt = adminDao.searchQnaCnt(condition);
+		logger.info("문의 수 조회 결과 = {}", rowCnt);
+		
+		return rowCnt;
+	}
+
+	@Override
+	@Transactional(rollbackFor = SQLException.class, readOnly = true)
+	public Map<String, Object> getQnaInfo(String qna_no) throws Exception {
+	
+		Map<String, Object> map = adminDao.searchQnaInfo(qna_no);
+		logger.info("문의 내용 조회 결과 = {}", map.toString());
+		
+		return map;
+	}
+
+	@Override
+	@Transactional(rollbackFor = SQLException.class)
+	public int addQnaReply(QnaReplyInsertDto dto) throws Exception {
+		
+		int rowCnt = adminDao.updateQna(dto.getQna_no());
+		logger.info("문의 처리여부 업데이트 결과 = {}", getResult(rowCnt));
+		
+		rowCnt += adminDao.insertQnaReply(dto);
+		logger.info("답변 등록 결과 = {}", (rowCnt == 2 ? "SUCCESS" : "FAIL"));
+		
+		return rowCnt;
+	}
+
+	@Override
+	@Transactional(rollbackFor = SQLException.class, readOnly = true)
+	public Map<String, Object> getQnaReply(String qna_no) throws Exception {
+		
+		Map<String, Object> map = adminDao.searchQnaReply(qna_no);
+		logger.info("문의 답변 조회 결과 = {}", map.toString());
+		
+		return map;
 	}
 }
