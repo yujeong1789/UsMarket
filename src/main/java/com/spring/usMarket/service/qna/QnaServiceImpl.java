@@ -64,4 +64,14 @@ public class QnaServiceImpl implements QnaService{
 		return totalCnt;
 	}
 
+	@Override
+	@Transactional(rollbackFor = SQLException.class, readOnly = true)
+	public Map<String, Object> getQnaReply(String qna_no) throws Exception {
+		
+		Map<String, Object> map = qnaDao.searchQnaReply(qna_no);
+		logger.info("문의 답변 조회 결과 = {}", map.toString());
+		
+		return map;
+	}
+
 }

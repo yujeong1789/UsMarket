@@ -11,4 +11,5 @@ public interface QnaService {
 	Map<String, Object> getQnaInfo(String qna_no) throws Exception;
 	List<Map<String, Object>> getQnaList(QnaSearchCondition sc) throws Exception;
 	int getQnaCnt(String member_no) throws Exception;
+	Map<String, Object> getQnaReply(String qna_no) throws Exception;
 }
