@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.spring.usMarket.domain.admin.QnaReplyInsertDto;
 import com.spring.usMarket.domain.admin.ReportHistoryDto;
 import com.spring.usMarket.service.admin.AdminService;
 
@@ -119,6 +120,21 @@ public class AdminFetchController {
 		int result = 0;
 		try {
 			result = adminService.addReportHistory(dto);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return result;
+	}
+	
+	@PostMapping("/qna/reg")
+	public int qnaReg(@RequestBody QnaReplyInsertDto dto) {
+		
+		logger.info("QnaReplyInsertDto = {}", dto.toString());
+		
+		int result = 0;
+		try {
+			result = adminService.addQnaReply(dto);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
