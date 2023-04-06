@@ -143,6 +143,11 @@
     border: 0px solid #eeeeee;
 }
 
+#head_product{
+	background : #16A7F1;
+	color : white;
+}
+
 .head_category {
     flex: 1 1 0%;
     -webkit-box-align: center;
