@@ -11,8 +11,8 @@ public interface MemberDao {
 	int updateMember(MemberDto member);
 	
 	int overlappedID(String member_id);
-	int overlappedNick(String member_nick);
-	int overlappedEmail(String member_email);
+	String overlappedNick(String member_nick);
+	String overlappedEmail(String member_email);
 	void overlapped(String joinMember);
 	
 	Map<String, Object> idLogin(String member_id) throws Exception;

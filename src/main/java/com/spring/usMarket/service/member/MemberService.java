@@ -12,9 +12,9 @@ public interface MemberService {
 	int addMember(MemberDto member);
 	int modifyMember (MemberDto member);
 	
-	int checkNick(String member_nick);
+	String checkNick(String member_nick);
 	int checkID(String member_id);
-	int checkEmail(String member_email);
+	String checkEmail(String member_email);
 	
 	Map<String, Object> loginCheckID(String member_id) throws Exception;
 	String upload(MultipartFile file)throws IOException;

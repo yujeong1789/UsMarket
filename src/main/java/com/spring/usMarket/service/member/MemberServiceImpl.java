@@ -107,7 +107,7 @@ public class MemberServiceImpl implements MemberService {
 
 	@Transactional
 	@Override
-	public int checkNick(String member_nick) {
+	public String checkNick(String member_nick) {
 		return memberDAO.overlappedNick(member_nick);
 	}
 
@@ -119,7 +119,7 @@ public class MemberServiceImpl implements MemberService {
 
 	@Transactional
 	@Override
-	public int checkEmail(String member_email) {
+	public String checkEmail(String member_email) {
 		return memberDAO.overlappedEmail(member_email);
 	}
 
