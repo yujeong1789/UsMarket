@@ -37,4 +37,11 @@
 		FROM qna
 		WHERE member_no = #{member_no}
 	</select>
+	
+	<select id="searchQnaReply" parameterType="string" resultType="map">
+		SELECT qna_reply_content
+			  , qna_reply_regdate
+		FROM qna_reply
+		WHERE qna_no = #{qna_no}
+	</select>
 </mapper>
