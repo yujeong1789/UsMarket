@@ -99,8 +99,6 @@
 					</div>
 				</div>
 				<div class="mypage_category_content">
-					<c:if test="list">
-					</c:if>
 					<c:if test="${! empty mypageList }">
 						<div class="product__area" id="product__area">
 						
@@ -147,20 +145,20 @@
 							<c:if test="${ph.totalCnt != null || ph.totalCnt != 0 }">
 								<c:if test="${ph.showPrev }">
 									<div class="paging__box">
-										<a class="paging__href" href="<c:url value='/product/list${ph.sc.getQueryString(ph.beginPage-1)}'/>">&lt;</a>								
+										<a class="paging__href" href="<c:url value='/member/mypage${ph.sc.getQueryString(ph.beginPage-1)}'/>">&lt;</a>								
 									</div>
 								</c:if>
 								<c:forEach var="i" begin="${ph.beginPage }" end="${ph.endPage }">
 								<input id="pageValue" type="hidden" value="${i }">
 									<div class="paging__box">
-										<a class="paging__href ${i==ph.sc.page ? 'paging-active' : ''}" href="<c:url value="/product/list${ph.sc.getQueryString(i)} " />">
+										<a class="paging__href ${i==ph.sc.page ? 'paging-active' : ''}" href="<c:url value="/member/mypage${ph.sc.getQueryString(i)}&member_no=211" />">
 											${i}
 										</a>															
 									</div>
 								</c:forEach>
 								<c:if test="${ph.showNext }">
 									<div class="paging__box">
-										<a class="paging__href" href="<c:url value='/product/list${ph.sc.getQueryString(ph.endPage+1)}'/>">&gt;</a>								
+										<a class="paging__href" href="<c:url value='/member/mypage${ph.sc.getQueryString(ph.endPage+1)}'/>">&gt;</a>								
 									</div>
 								</c:if>
 							</c:if>
@@ -232,6 +230,24 @@
 			$('.head_category').css('background','rgb(250, 250, 250)');
 			$("span").css('color','black');
 		}
+		
+		/* $(".paging__href").click(function(event) {
+			event.preventDefault(); // 기본 이벤트 취소
+			var url = "/member/mypage" + $(this).attr('href'); // 이동할 URL 생성
+			console.log("url : "+url);
+			$.ajax({
+				url: url,
+				type: 'GET',
+				success: function(response) { // 요청 완료 시
+				  $('#your-page-content').html(response); // 페이지 업데이트
+				  $('#your-page-content').scrollTop(0); // 페이지 맨 위로 스크롤
+				},
+				error: function(error) {
+					console.log(error);
+				}
+			});
+		}); */
+		
 	}); //ready
 	
 </script>
