@@ -56,7 +56,7 @@ public class AdminReportController {
 	}
 	
 
-	@PostMapping("list")
+	@PostMapping("/list")
 	public String reportListPost(@RequestBody AdminSearchCondition sc, RedirectAttributes ratt) {
 		
 		logger.info("post adminSearchCondition = {}", sc.toString());
