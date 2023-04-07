@@ -423,4 +423,65 @@
 		WHERE q.admin_no = a.admin_no
 		AND q.qna_no = #{qna_no}
 	</select>
+	
+	<select id="searchNoticeList" parameterType="adminSearchCondition" resultType="map">
+		SELECT *
+		FROM ( SELECT rownum AS num, A.*
+			   FROM ( SELECT notice_no
+							 , notice_title
+							 , notice_view
+							 , notice_regdate
+							 , notice_status
+					   FROM notice 
+					   <choose>
+						  	<when test="condition != null and condition != ''">
+						   		WHERE notice_status = #{condition} 
+						   	</when>
+						  	<otherwise>
+								WHERE notice_status IN (0, 1) 
+							</otherwise>
+					   </choose>
+					   <choose>
+							<when test="order == 'regdate_desc'">
+								ORDER BY notice_regdate DESC 
+							</when>
+							<when test="order == 'regdate'">
+								ORDER BY notice_regdate 
+							</when>
+							<when test="order == 'view_desc'">
+								ORDER BY notice_view DESC, notice_regdate DESC 
+							</when>
+							<when test="order == 'view'">
+								ORDER BY notice_view, notice_regdate DESC 
+							</when>
+							<otherwise>
+								ORDER BY notice_regdate DESC 
+							</otherwise>
+					   </choose>
+					 ) A
+			 )
+		WHERE num BETWEEN #{startPage} AND #{endPage}
+	</select>
+	
+	<select id="searchNoticeCnt" parameterType="string" resultType="int">
+		SELECT COUNT(*)
+		FROM notice 
+		<choose>
+			<when test="condition != null and condition != ''">
+				WHERE notice_status = #{condition} 
+			</when>
+			<otherwise>
+				WHERE notice_status IN (0, 1) 
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="searchNoticeInfo" parameterType="string" resultType="map">
+		SELECT a.admin_id
+			  , a.admin_name
+			  , n.*
+		FROM notice n, admin a
+		WHERE n.admin_no = a.admin_no
+		AND n.notice_no = #{notice_no}
+	</select>
 </mapper>

@@ -40,9 +40,9 @@
 					<span>문의관리</span>
 				</a>
 			</li>
-			<li class="faq">
-				<a href="<c:url value='/admin/faq/list'/>">
-					<img src="<c:url value='/resources/admin/img/icon/faq.png'/>">
+			<li class="notice">
+				<a href="<c:url value='/admin/notice/list'/>">
+					<img src="<c:url value='/resources/admin/img/icon/notice.png'/>">
 					<span>공지사항</span>
 				</a>
 			</li>
@@ -51,7 +51,7 @@
 </aside>
 
 <script type="text/javascript">
-const categories = ['home', 'member', 'payment', 'report', 'qna', 'faq'];
+const categories = ['home', 'member', 'payment', 'report', 'qna', 'notice'];
 
 document.addEventListener('DOMContentLoaded', function(){
 	if(!isEmpty(document.querySelector('.selected'))){
