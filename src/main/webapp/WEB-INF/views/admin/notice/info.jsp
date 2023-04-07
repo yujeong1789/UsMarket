@@ -90,13 +90,13 @@ document.querySelector('.modify').addEventListener('click', function(e){
 	document.getElementById('notice_title').focus();
 	
 	// 에디터 초기화
-	ClassicEditor
+/* 	ClassicEditor
 		.create(document.getElementById('notice_content'), {
 			licenseKey: '',
 		})
 		.catch(error => {
 			console.log(error);
-		});
+		}); */
 	
 	// 수정 삭제 목록 버튼 삭제, 등록 버튼 활성화
 	e.target.parentElement.style.display = 'none';
