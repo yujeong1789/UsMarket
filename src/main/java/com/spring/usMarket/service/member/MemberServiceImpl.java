@@ -24,7 +24,7 @@ import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.amazonaws.util.IOUtils;
 import com.spring.usMarket.dao.member.MemberDao;
 import com.spring.usMarket.domain.member.MemberDto;
-import com.spring.usMarket.domain.product.ProductDto;
+import com.spring.usMarket.utils.AdminSearchCondition;
 import com.spring.usMarket.utils.TimeConvert;
 
 import lombok.RequiredArgsConstructor;
@@ -139,10 +139,10 @@ public class MemberServiceImpl implements MemberService {
 
 	@Override
 	@Transactional(rollbackFor = SQLException.class, readOnly = true)
-	public List<Map<String, Object>> getMypageProduct(String member_no) throws Exception {
+	public List<Map<String, Object>> getMypageProduct(AdminSearchCondition sc) throws Exception {
 		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMdd");
 		
-		List<Map<String, Object>> productList = memberDAO.searchMypageProduct(Integer.parseInt(member_no));
+		List<Map<String, Object>> productList = memberDAO.searchMypageProduct(sc);
 		for(Map<String, Object> product : productList) {
 		    Object regdate = product.get("PRODUCT_REGDATE");
 		    dateFormat.format(regdate);

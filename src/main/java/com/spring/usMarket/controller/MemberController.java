@@ -27,6 +27,8 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import com.spring.usMarket.domain.member.MemberDto;
 import com.spring.usMarket.service.member.MemberService;
+import com.spring.usMarket.utils.AdminPageHandler;
+import com.spring.usMarket.utils.AdminSearchCondition;
 import com.spring.usMarket.utils.PageHandler;
 import com.spring.usMarket.utils.SearchCondition;
 
@@ -194,7 +196,7 @@ public class MemberController {
 	}
 	
 	@GetMapping("/mypage")
-	public String info(HttpServletRequest request, Model model, SearchCondition sc) {
+	public String info(HttpServletRequest request, Model model, AdminSearchCondition sc) {
 		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy년 MM월 dd일");
 		
 		String member_no = String.valueOf(request.getSession().getAttribute("userNo"));
@@ -203,7 +205,7 @@ public class MemberController {
 
 		int totalCnt = 0;
 		sc.setPageSize(15);		
-		logger.info("queryString = "+sc.getQueryString(sc.getPage()));
+		logger.info("queryString = "+sc);
 		
 		try {
 			if (request.getParameter("member_no") != null) {
@@ -212,13 +214,16 @@ public class MemberController {
 			
 			MemberDto memberInfo = memberService.getMemberInfo(member_no);//Mypage_member
 			
-			List<Map<String, Object>> mypageProductList = memberService.getMypageProduct(member_no);
+			sc.setMember_no(member_no);
+			List<Map<String, Object>> mypageProductList = memberService.getMypageProduct(sc);
+			logger.info("mypageProductList : {}",mypageProductList);
 			int ProductCount = memberService.getMypageProductCount(member_no);//Mypage_product
 
 			int bookmarkCount = memberService.getMypageBookmarkCount(member_no);//Mypage_Bookmark
 			
 			totalCnt = ProductCount;
-			PageHandler pageHandler = new PageHandler(totalCnt, sc);
+			sc.setMember_no(member_no);
+			AdminPageHandler pageHandler = new AdminPageHandler(totalCnt, sc);
 
 			model.addAttribute("memberInfo", memberInfo);
 			model.addAttribute("regdate",dateFormat.format(memberInfo.getMember_regdate()));
@@ -257,16 +262,16 @@ public class MemberController {
 	}
 
 	@PostMapping("/MyProductList")
-	public String MyProductList(@RequestBody String member_no, Model model, SearchCondition sc) throws Exception {
+	public String MyProductList(@RequestBody AdminSearchCondition sc, Model model) throws Exception {
 		sc.setPageSize(15);
 		int totalCnt = 0;
 		
-		logger.info("member_No = {}", member_no);
+		logger.info("AdminSearchCondition = {}", sc.toString());
 		
-		List<Map<String, Object>> mypageProductList = memberService.getMypageProduct(member_no);
+		List<Map<String, Object>> mypageProductList = memberService.getMypageProduct(sc);
 		logger.info("마이페이지 상품 리스트 = " + mypageProductList);
 		totalCnt = mypageProductList.size();
-		PageHandler pageHandler = new PageHandler(totalCnt, sc);
+		AdminPageHandler pageHandler = new AdminPageHandler(totalCnt, sc);
 		
 		model.addAttribute("MyList", "MyProductList");
 		model.addAttribute("mypageList", mypageProductList);

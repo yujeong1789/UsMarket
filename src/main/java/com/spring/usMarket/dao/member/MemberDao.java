@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.spring.usMarket.domain.member.MemberDto;
-import com.spring.usMarket.domain.product.ProductDto;
+import com.spring.usMarket.utils.AdminSearchCondition;
 
 public interface MemberDao {
 	int insertMember(MemberDto member);
@@ -18,8 +18,7 @@ public interface MemberDao {
 	Map<String, Object> idLogin(String member_id) throws Exception;
 	MemberDto memberSearch(Integer member_no) throws Exception;
 	
-	List<Map<String, Object>> searchMypageProduct(Integer member_no) throws Exception;
-	List<ProductDto> searchMypageProduct2(Integer member_no) throws Exception;
+	List<Map<String, Object>> searchMypageProduct(AdminSearchCondition sc) throws Exception;
 	int searchMypageProductCount(Integer member_no) throws Exception;
 	
 	List<Map<String, Object>> searchMypageBookmark(Integer member_no) throws Exception;
