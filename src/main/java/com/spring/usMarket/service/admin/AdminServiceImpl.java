@@ -299,4 +299,34 @@ public class AdminServiceImpl implements AdminService{
 		
 		return map;
 	}
+
+	@Override
+	@Transactional(rollbackFor = SQLException.class, readOnly = true)
+	public List<Map<String, Object>> getNoticeList(AdminSearchCondition sc) throws Exception {
+		
+		List<Map<String, Object>> listMap = adminDao.searchNoticeList(sc);
+		logger.info("공지사항 목록 조회 결과 = {}건", listMap.size());
+		
+		return listMap;
+	}
+
+	@Override
+	@Transactional(rollbackFor = SQLException.class, readOnly = true)
+	public int getNoticeCnt(String condition) throws Exception {
+
+		int totalCnt = adminDao.searchNoticeCnt(condition);
+		logger.info("공지사항 수 조회 결과 = {}", totalCnt);
+		
+		return totalCnt;
+	}
+
+	@Override
+	@Transactional(rollbackFor = SQLException.class, readOnly = true)
+	public Map<String, Object> getNoticeInfo(String notice_no) throws Exception {
+
+		Map<String, Object> map = adminDao.searchNoticeInfo(notice_no);
+		logger.info("공지사항 내용 조회 결과 = {}", map.toString());
+		
+		return map;
+	}
 }

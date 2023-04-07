@@ -46,4 +46,10 @@ public interface AdminDao {
 	int insertQnaReply(QnaReplyInsertDto dto) throws Exception;
 	int updateQna(String qna_no) throws Exception;
 	Map<String, Object> searchQnaReply(String qna_no) throws Exception;
+	
+	// notice
+	List<Map<String, Object>> searchNoticeList(AdminSearchCondition sc) throws Exception;
+	int searchNoticeCnt(String condition) throws Exception;
+	Map<String, Object> searchNoticeInfo(String notice_no) throws Exception;
+	
 }

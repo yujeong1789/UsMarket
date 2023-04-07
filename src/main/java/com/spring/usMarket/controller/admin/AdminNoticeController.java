@@ -21,17 +21,16 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.spring.usMarket.service.admin.AdminService;
 import com.spring.usMarket.utils.AdminPageHandler;
 import com.spring.usMarket.utils.AdminSearchCondition;
-import com.spring.usMarket.utils.SessionParameters;
 
 @Controller
-@RequestMapping("/admin/qna")
-public class AdminQnaController {
-	private static final Logger logger = LoggerFactory.getLogger(AdminQnaController.class);
+@RequestMapping("/admin/notice")
+public class AdminNoticeController {
+	private static final Logger logger = LoggerFactory.getLogger(AdminNoticeController.class);
 	
 	@Autowired AdminService adminService;
 	
 	@GetMapping("/list")
-	public void qnaList(Model model) {
+	public void noticeList(Model model) {
 		
 		AdminSearchCondition sc = new AdminSearchCondition();
 		
@@ -40,15 +39,15 @@ public class AdminQnaController {
 		
 		logger.info("adminSearchCondition = {}", sc.toString());
 		
-		List<Map<String, Object>> qnaList = new ArrayList<>();
+		List<Map<String, Object>> noticeList = new ArrayList<>();
 		int totalCnt = 0;
 		
 		try {
-			qnaList = adminService.getQnaList(sc);
-			totalCnt = adminService.getQnaCnt(sc.getComplete());
+			noticeList = adminService.getNoticeList(sc);
+			totalCnt = adminService.getNoticeCnt(sc.getCondition());
 			AdminPageHandler pageHandler = new AdminPageHandler(totalCnt, sc);
 			 
-			model.addAttribute("qnaList", qnaList);
+			model.addAttribute("noticeList", noticeList);
 			model.addAttribute("page", sc.getPage());
 			model.addAttribute("pageSize", sc.getPageSize());
 			model.addAttribute("ph", pageHandler);
@@ -59,30 +58,29 @@ public class AdminQnaController {
 	}
 	
 	@PostMapping("/list")
-	public String qnaListPost(@RequestBody AdminSearchCondition sc, HttpServletRequest request, RedirectAttributes ratt) {
+	public String noticeListPost(@RequestBody AdminSearchCondition sc, HttpServletRequest request, RedirectAttributes ratt) {
 		
-		sc.setMember_no(SessionParameters.getUserNo(request));
 		logger.info("AdminSearchCondition = {}", sc.toString());
 		
-		List<Map<String, Object>> qnaList = new ArrayList<>();
+		List<Map<String, Object>> noticeList = new ArrayList<>();
 		int totalCnt = 0;
 		
 		try {
-			qnaList = adminService.getQnaList(sc);
-			totalCnt = adminService.getQnaCnt(sc.getComplete());
+			noticeList = adminService.getNoticeList(sc);
+			totalCnt = adminService.getNoticeCnt(sc.getCondition());
 			AdminPageHandler pageHandler = new AdminPageHandler(totalCnt, sc);
 			
-			ratt.addFlashAttribute("qnaList", qnaList);
+			ratt.addFlashAttribute("noticeList", noticeList);
 			ratt.addFlashAttribute("page", sc.getPage());
 			ratt.addFlashAttribute("pageSize", sc.getPageSize());
-			ratt.addFlashAttribute("complete", sc.getComplete());
+			ratt.addFlashAttribute("condition", sc.getCondition());
 			ratt.addFlashAttribute("ph", pageHandler);
 			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		
-		return "redirect:/admin/qna/listform";
+		return "redirect:/admin/notice/listform";
 	}
 	
 	@GetMapping("/listform")
@@ -91,30 +89,27 @@ public class AdminQnaController {
 	}
 	
 	@GetMapping("/info")
-	public void qnaInfo() {
-		logger.info("qna/info");
+	public void noticeInfo(Model model) {
+		logger.info("notice/info");
 	}
 	
 	@PostMapping("/info")
-	public void qnaInfoPost(Model model, String qna_no) {
-		
-		logger.info("qna_no = {}", qna_no);
+	public void noticeInfoPost(String notice_no, String mode, Model model) {
+		logger.info("notice_no = {}", notice_no);
 		
 		Map<String, Object> infoMap = new HashMap<>();
 		
 		try {
-			infoMap = adminService.getQnaInfo(qna_no);
-			
-			String qna_complete = infoMap.get("QNA_COMPLETE").toString();
-			if(qna_complete == "Y" || qna_complete.equals("Y")) {
-				Map<String, Object> replyMap = adminService.getQnaReply(qna_no);
-				model.addAttribute("replyMap", replyMap);
-			}
-			
+			infoMap = adminService.getNoticeInfo(notice_no);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		
 		model.addAttribute("infoMap", infoMap);
+	}
+	
+	@PostMapping("/modify")
+	public void noticeModify() {
+		
 	}
 }
