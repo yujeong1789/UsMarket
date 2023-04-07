@@ -62,7 +62,7 @@ public class AdminQnaController {
 	public String qnaListPost(@RequestBody AdminSearchCondition sc, HttpServletRequest request, RedirectAttributes ratt) {
 		
 		sc.setMember_no(SessionParameters.getUserNo(request));
-		logger.info("qnaSearchCondition = {}", sc.toString());
+		logger.info("AdminSearchCondition = {}", sc.toString());
 		
 		List<Map<String, Object>> qnaList = new ArrayList<>();
 		int totalCnt = 0;
