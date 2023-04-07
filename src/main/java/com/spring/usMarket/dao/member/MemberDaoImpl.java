@@ -9,8 +9,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 
 import com.spring.usMarket.domain.member.MemberDto;
-import com.spring.usMarket.domain.product.ProductDto;
 import com.spring.usMarket.service.member.MemberService;
+import com.spring.usMarket.utils.AdminSearchCondition;
 
 import lombok.RequiredArgsConstructor;
 
@@ -65,15 +65,10 @@ public class MemberDaoImpl implements MemberDao{
 	}
 
 	@Override
-	public List<Map<String, Object>> searchMypageProduct(Integer member_no) throws Exception {
-		return session.selectList(namespace+"searchMypageProduct", member_no);
+	public List<Map<String, Object>> searchMypageProduct(AdminSearchCondition sc) throws Exception {
+		return session.selectList(namespace+"searchMypageProduct", sc);
 	}
 
-	@Override
-	public List<ProductDto> searchMypageProduct2(Integer member_no) throws Exception {
-		return session.selectList(namespace+"searchMypageProduct2", member_no);
-	}
-	
 	@Override
 	public int searchMypageProductCount(Integer member_no) throws Exception {
 		return session.selectOne(namespace+"searchMypageProductCount", member_no);
