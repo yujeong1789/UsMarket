@@ -45,4 +45,9 @@ public interface AdminService {
 	Map<String, Object> getQnaInfo(String qna_no) throws Exception;
 	int addQnaReply(QnaReplyInsertDto dto) throws Exception;
 	Map<String, Object> getQnaReply(String qna_no) throws Exception;
+	
+	// notice
+	List<Map<String, Object>> getNoticeList(AdminSearchCondition sc) throws Exception;
+	int getNoticeCnt(String condition) throws Exception;
+	Map<String, Object> getNoticeInfo(String notice_no) throws Exception;
 }
