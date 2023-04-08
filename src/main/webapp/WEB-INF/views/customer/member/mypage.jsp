@@ -98,6 +98,30 @@
 						</button>
 					</div>
 				</div>
+				<div class="dropdown-container">
+					<div class="dropdown order-dropdown">
+						<span>정렬</span>
+						<div class="dropdown-content">
+							<ul>
+								<li class="order-selected" data-order="regdate_desc">등록 최신순</li>
+								<li data-order="regdate">등록 오래된순</li>
+								<li data-order="view_desc">조회 많은순</li>
+								<li data-order="view">조회 적은순</li>							
+							</ul>
+						</div>
+					</div>
+					<div class="dropdown condition-dropdown">
+						<span>판매상태</span>
+						<div class="dropdown-content">
+							<ul>
+								<li class="condition-selected" data-condition="0">전체</li>					
+								<li data-condition="1">판매중</li>					
+								<li data-condition="2">예약중</li>					
+								<li data-condition="3">판매완료</li>					
+							</ul>
+						</div>
+					</div>
+				</div>
 				<div class="mypage_category_content">
 					<c:if test="${! empty mypageList }">
 						<div class="product__area" id="product__area">
@@ -142,26 +166,21 @@
 					</c:if>
 					
 					<div class="paging__container">
-							<c:if test="${ph.totalCnt != null || ph.totalCnt != 0 }">
-								<c:if test="${ph.showPrev }">
-									<div class="paging__box">
-										<a class="paging__href" href="<c:url value='/member/mypage${ph.sc.getQueryString(ph.beginPage-1)}'/>">&lt;</a>								
-									</div>
-								</c:if>
-								<c:forEach var="i" begin="${ph.beginPage }" end="${ph.endPage }">
+							<c:if test="${ph.totalCnt != null}">
+						<c:if test="${ph.showPrev }">
+							<div class="paging-prev">&lt;&lt;</div>
+						</c:if>
+						<c:forEach var="i" begin="${ph.beginPage }" end="${ph.endPage }">
+							<div class="paging-box ${i eq ph.sc.page ? 'current-page' : 'not-current-page' }" >
+							<!-- onclick="${i eq ph.sc.page ? '' : 'getProductList(' += i += ')'}" -->
 								<input id="pageValue" type="hidden" value="${i }">
-									<div class="paging__box">
-										<a class="paging__href ${i==ph.sc.page ? 'paging-active' : ''}" href="<c:url value="/member/mypage${ph.sc.getQueryString(i)}&member_no=211" />">
-											${i}
-										</a>															
-									</div>
-								</c:forEach>
-								<c:if test="${ph.showNext }">
-									<div class="paging__box">
-										<a class="paging__href" href="<c:url value='/member/mypage${ph.sc.getQueryString(ph.endPage+1)}'/>">&gt;</a>								
-									</div>
-								</c:if>
-							</c:if>
+								${i}
+							</div>
+						</c:forEach>
+						<c:if test="${ph.showNext }">
+							<div class="paging-next">&gt;&gt;</div>
+						</c:if>
+					</c:if>
 					</div> <!-- product__container -->						
 				</div>
 			</div>
@@ -231,22 +250,51 @@
 			$("span").css('color','black');
 		}
 		
-		/* $(".paging__href").click(function(event) {
-			event.preventDefault(); // 기본 이벤트 취소
-			var url = "/member/mypage" + $(this).attr('href'); // 이동할 URL 생성
-			console.log("url : "+url);
+		/* $('.order-dropdown li').on('click', function() {
+			$('.order-selected').removeClass('order-selected');
+			$(this).addClass('order-selected');
+			console.log($(this).data('order'));
+
+			$('#pageValue').val(1);
+			getProductList(1);
+		});
+
+		$('.condition-dropdown li').on('click', function() {
+			$('.condition-selected').removeClass('condition-selected');
+			$(this).addClass('condition-selected');
+			console.log($(this).data('condition'));
+
+			$('#pageValue').val(1);
+			getProductList(1);
+		});
+
+		$(document).on('click', '.paging-box', function(){
+		    var page = $(this).find('input').val();
+			let params = {
+				'page': page,
+				'pageSize': 15,
+				'member_no': member_no,
+				'condition': $('.condition-selected').data('condition'),
+				'order': $('.order-selected').data('order')
+			};
+
+			console.log(params);
+
 			$.ajax({
-				url: url,
-				type: 'GET',
-				success: function(response) { // 요청 완료 시
-				  $('#your-page-content').html(response); // 페이지 업데이트
-				  $('#your-page-content').scrollTop(0); // 페이지 맨 위로 스크롤
+				type: 'POST',
+				url: '/usMarket/member/mypage',
+				contentType: 'application/json',
+				data: JSON.stringify(params),
+				success: function(data) {
+					var result = $('<div></div>').html(data);
+					var productBox = $(result).find('.mypage_category_content').html();
+					$('.mypage_category_content').html(productBox);
 				},
 				error: function(error) {
-					console.log(error);
+					console.log('error: ' + error);
 				}
-			});
-		}); */
+			}); // end of ajax
+		}); // paging-box */
 		
 	}); //ready
 	
