@@ -2,6 +2,7 @@ package com.spring.usMarket.controller;
 
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
@@ -24,8 +25,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.spring.usMarket.domain.member.MemberDto;
+import com.spring.usMarket.service.admin.AdminService;
 import com.spring.usMarket.service.member.MemberService;
 import com.spring.usMarket.utils.AdminPageHandler;
 import com.spring.usMarket.utils.AdminSearchCondition;
@@ -42,6 +45,7 @@ public class MemberController {
 
 	private final MemberService memberService;
 	private final JavaMailSender mailSender;
+	private final AdminService adminService;
 
 	@GetMapping("/login")
 	public String login(HttpServletRequest request) {
@@ -215,6 +219,7 @@ public class MemberController {
 			MemberDto memberInfo = memberService.getMemberInfo(member_no);//Mypage_member
 			
 			sc.setMember_no(member_no);
+			logger.info("AdminSearchCondition = "+sc);
 			List<Map<String, Object>> mypageProductList = memberService.getMypageProduct(sc);
 			logger.info("mypageProductList : {}",mypageProductList);
 			int ProductCount = memberService.getMypageProductCount(member_no);//Mypage_product
@@ -238,6 +243,39 @@ public class MemberController {
 			e.printStackTrace();
 		}
 		return "member/mypage";
+	}
+	
+	@PostMapping("/mypage")
+	public String reinfo(@RequestBody AdminSearchCondition sc, RedirectAttributes ratt) {
+		sc.setPageSize(15);
+		logger.info("post adminSearchCondition = {}", sc.toString());
+		
+		List<Map<String, Object>> productList = new ArrayList<>();
+		int totalCnt = 0;
+		
+		try {
+			productList = adminService.getMemberProductList(sc);
+			 
+			totalCnt = adminService.getMemberProductCnt(sc.getMember_no(), sc.getCondition());
+			AdminPageHandler pageHandler = new AdminPageHandler(totalCnt, sc);
+			 
+			ratt.addFlashAttribute("productList", productList);
+			ratt.addFlashAttribute("page", sc.getPage());
+			ratt.addFlashAttribute("pageSize", sc.getPageSize());
+			ratt.addFlashAttribute("condition", sc.getOrder());
+			ratt.addFlashAttribute("order", sc.getOrder());
+			ratt.addFlashAttribute("ph", pageHandler);
+			 
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return "redirect:/member/viewajax";
+	}
+	
+	@GetMapping("/viewajax")
+	public void listform() throws Exception{
+		logger.info("viewajax");
 	}
 	
 	@PostMapping("/MyBookmark")
