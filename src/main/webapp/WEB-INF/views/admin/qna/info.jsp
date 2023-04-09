@@ -2,7 +2,6 @@
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
-<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 
 <link rel="stylesheet" href="<c:url value='/resources/admin/css/qna_info.css'/>" type="text/css">
 
@@ -142,6 +141,8 @@ if(`${infoMap.QNA_COMPLETE}` == 'N'){
 				if(text == '2'){
 					alert('답변 등록이 완료되었습니다.');
 					document.getElementById('qnaInfoForm').submit();
+				}else{
+					alert('답변 등록에 실패했습니다.');
 				}
 			}).catch((error) => console.log('error: '+error));
 		}
