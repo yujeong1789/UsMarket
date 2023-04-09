@@ -62,7 +62,8 @@
 					<div onclick="location.href='<c:url value='/admin/notice/list'/>'">목록</div>
 				</div>
 				<div class="notice-modify">
-					<div>등록</div>
+					<div class="new">등록</div>
+					<div class="cancel">취소</div>
 				</div>
 				<form id="noticeInfoForm" name="noticeInfoForm" action="<c:url value='/admin/notice/info'/>" method="post">
 					<input type="hidden" id="notice_no" name="notice_no" value="${infoMap.NOTICE_NO }">
@@ -110,7 +111,10 @@ document.querySelector('.modify').addEventListener('click', function(e){
 	});
 	
 	document.getElementById('notice_content').addEventListener('input', function(){
-		console.log('input');
+		// 높이 조절
+		this.style.height = 'auto';
+		this.style.height = (12 + this.scrollHeight) + 'px';
+		
 		if(this.value.length > 0){
 			this.classList.remove('not-pass');
 			this.classList.add('pass');
@@ -122,7 +126,7 @@ document.querySelector('.modify').addEventListener('click', function(e){
 	
 	
 	// 등록 클릭 이벤트
-	document.querySelector('.notice-modify').addEventListener('click', function(){
+	document.querySelector('.notice-modify > .new').addEventListener('click', function(){
 		if(document.querySelector('.not-pass') != null){
 			console.log('not-pass');
 			alert(document.querySelector('.not-pass').dataset.alert);
@@ -155,7 +159,30 @@ document.querySelector('.modify').addEventListener('click', function(e){
 				document.getElementById('noticeInfoForm').submit();
 			}).catch((error) => console.log('error: '+error));
 		}
-	})
+	});
+	
+	// 취소 클릭 이벤트
+	document.querySelector('.notice-modify > .cancel').addEventListener('click', function(){
+		document.querySelector('.notice-modify').style.display = 'none';
+		document.querySelector('.notice-btns').style.display = 'flex';
+		
+		// 테두리 강조
+		document.querySelectorAll('.modify-true').forEach(el => {
+			el.classList.remove('modify-true');
+			el.classList.add('modify-false')
+		});
+		
+		// 제목 수정
+		document.querySelector('.title > span').textContent = '공지사항';
+		
+		// readonly 속성 삭제 및 value 복구
+		document.getElementById('notice_title').setAttribute('readonly', true);
+		document.getElementById('notice_title').value = `${infoMap.NOTICE_TITLE }`;
+		
+		document.getElementById('notice_content').setAttribute('readonly', true);
+		document.getElementById('notice_content').value = `${infoMap.NOTICE_CONTENT }`;
+		document.getElementById('notice_content').style.height = 'auto';
+	});
 });
 
 document.querySelector('.remove').addEventListener('click', function(){
