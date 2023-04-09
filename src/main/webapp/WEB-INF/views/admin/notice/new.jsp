@@ -47,7 +47,8 @@
 </div>
 
 <script type="text/javascript">
-//qna_title event
+
+//notice_title event
 document.getElementById('notice_title').addEventListener('input', function(){
 	this.nextElementSibling.firstElementChild.textContent = this.value.length;
 	
@@ -63,7 +64,7 @@ document.getElementById('notice_title').addEventListener('input', function(){
 document.getElementById('notice_content').addEventListener('input', function(){
 	// 높이 조절
 	this.style.height = 'auto';
-	this.style.height = (12 + this.scrollHeight) + 'px';
+	this.style.height = this.scrollHeight + 'px';
 	
 	this.nextElementSibling.firstElementChild.textContent = this.value.length;
 	
