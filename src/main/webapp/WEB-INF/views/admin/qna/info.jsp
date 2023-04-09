@@ -72,7 +72,10 @@
 						<textarea name="qna_reply_content" id="qna_reply_content" maxlength="500"></textarea>
 						<div class="current_count"><p>0</p><p>/500</p></div>
 					</div>
-					<div class="qna-submit">등록</div>
+					<div class="qna-submit">
+						<div class="new">등록하기</div>
+						<div onclick="location.href='<c:url value="/admin/qna/list"/>'">목록</div>
+					</div>
 					<form id="qnaInfoForm" name="qnaInfoForm" action="<c:url value='/admin/qna/info'/>" method="post">
 						<input type="hidden" name="qna_no" value="${infoMap.QNA_NO }">
 					</form>
@@ -96,6 +99,7 @@
 							<div class="info-title">내용</div>
 							<div class="info-info">${replyMap.QNA_REPLY_CONTENT }</div>
 						</div>
+						<div class="qna-btn" onclick="location.href='<c:url value="/admin/qna/list"/>'">목록</div>
 					</div>
 				</div>
 			</c:if>
@@ -111,10 +115,14 @@ if(`${infoMap.QNA_COMPLETE}` == 'N'){
 	
 	//qna_content event
 	document.getElementById('qna_reply_content').addEventListener('input', function(){
+		// 높이 조절
+		this.style.height = 'auto';
+		this.style.height = (12 + this.scrollHeight) + 'px';
+		
 		this.nextElementSibling.firstElementChild.textContent = this.value.length;
 	});
 	
-	document.querySelector('.qna-submit').addEventListener('click', function(){
+	document.querySelector('.qna-submit > .new').addEventListener('click', function(){
 		if(isEmpty(document.getElementById('qna_reply_content').value)){
 			alert('내용을 입력해 주세요.');
 			document.getElementById('qna_reply_content').focus();

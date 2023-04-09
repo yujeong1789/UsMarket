@@ -30,6 +30,7 @@
 
 .payment-info-container > .dashboard > div{
 	display: flex;
+	flex-wrap: wrap;
 	width: 100%;
 	background-color: #FFFFFF;
 	margin-bottom: 30px;
@@ -178,4 +179,30 @@
 
 .review-info > .left{
 	cursor: pointer;
+}
+
+.payment-btn{
+	display: flex;
+	justify-content: center;
+	padding-right: 30px;
+	padding-left: 30px;
+	margin-top: 30px;
+	width: 100%;
+}
+
+.payment-btn > div{
+	width: 100%;
+	box-shadow: 0 2px 6px 0 rgba(67,89,113,.12);
+	color: #7988FD;
+	cursor: pointer;
+	padding: 10px 30px 10px 30px;
+	display: flex;
+	align-items: center;
+	font-weight: 550;
+	border-radius: .375rem;
+	justify-content: center;
+}
+
+.payment-btn > div:hover{
+	background-color: #F7F9FF;
 }

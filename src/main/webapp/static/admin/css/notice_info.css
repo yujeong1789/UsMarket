@@ -143,9 +143,9 @@
 }
 
 .notice-modify > div{
-	width: 100%;
+	width: 49%;
 }
 
 .notice-btns > div:hover, .notice-modify > div:hover{
-	background-color: #F7FCFF;
+	background-color: #F7F9FF;
 }

@@ -265,3 +265,30 @@
 .not-current-page{
 	cursor: pointer;
 }
+
+.member-btn{
+	min-width: calc(100% - 50px);
+	width: 100%;
+	display: flex;
+	justify-content: center;
+}
+
+.member-btn > div{
+	width: calc(100% - 50px);
+	min-width: 810px;
+	max-width: 810px;
+	background-color: #FFFFFF;
+	box-shadow: 0 2px 6px 0 rgba(67,89,113,.12);
+	color: #7988FD;
+	cursor: pointer;
+	padding: 10px 30px 10px 30px;
+	display: flex;
+	align-items: center;
+	font-weight: 550;
+	border-radius: .375rem;
+	justify-content: center;
+}
+
+.member-btn > div:hover{
+	background-color: #F7F9FF;
+}

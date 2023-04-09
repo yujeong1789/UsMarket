@@ -112,6 +112,9 @@
 						<div class="info-info">${infoMap.CUSTOMER_ADDRESS_DETAIL }</div>
 					</div>
 				</div> <!-- delivery-info -->
+				<div class="payment-btn">
+					<div onclick="location.href='<c:url value="/admin/payment/list"/>'">목록</div>
+				</div>
 			</div>
 			<c:if test="${not empty reviewMap}">
 				<div class="payment-review">

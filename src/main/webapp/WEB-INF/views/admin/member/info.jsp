@@ -157,6 +157,10 @@
 				</div> <!-- paging -->
 			</div> <!-- product-list -->
 		</div>
+	</div> <!-- dashboard -->
+	
+	<div class="member-btn">
+		<div onclick="location.href='<c:url value="/admin/member/list"/>'">목록</div>
 	</div>
 </div>
 

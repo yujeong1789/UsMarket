@@ -185,7 +185,6 @@
 	border-radius: .375rem;
 	box-shadow: 0 2px 6px 0 rgba(67,89,113,.12);
 	padding: 10px;
-	height: 200px;
 }
 
 .qna-reply-input > textarea{
@@ -207,20 +206,27 @@
 }
 
 .qna-submit{
+	display: flex;
 	width: 100%;
-	background-color: #FFFFFF;
-	color: #7988FD;
-	font-size: 16px;
-	font-weight: 700;
-	margin-top: 30px;
-	border-radius: .375rem;
+	justify-content: space-between;
+	margin-top: 50px;
+}
+
+.qna-submit > div{
+	width: 49%;
 	box-shadow: 0 2px 6px 0 rgba(67,89,113,.12);
+	color: #7988FD;
+	cursor: pointer;
+	padding: 10px 30px 10px 30px;
 	display: flex;
 	justify-content: center;
 	align-items: center;
-	cursor: pointer;
-	padding-top: 10px;
-	padding-bottom: 10px;
+	font-weight: 550;
+	border-radius: .375rem;	
+}
+
+.qna-submit > div:hover, .qna-btn:hover{
+	background-color: #F7F9FF;
 }
 
 .qna-info-container > .dashboard > div > .qna-reply{
@@ -228,4 +234,18 @@
 	flex-direction: row;
 	justify-content: space-between;
 	flex-wrap: wrap;
+}
+
+.qna-btn{
+	margin-top: 30px;
+	width: 100%;
+	box-shadow: 0 2px 6px 0 rgba(67,89,113,.12);
+	color: #7988FD;
+	cursor: pointer;
+	padding: 10px 30px 10px 30px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	font-weight: 550;
+	border-radius: .375rem;	
 }

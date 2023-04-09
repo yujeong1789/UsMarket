@@ -177,11 +177,12 @@
 
 .sanction-category{
 	display: flex;
+	flex-direction: column;
 	justify-content: space-between;
 }
 
 .sanction-category select {
-	width: 80%;
+	width: 100%;
 	border: none;
 	border-radius: .375rem;
 	box-shadow: 0 2px 6px 0 rgba(67,89,113,.12);
@@ -201,15 +202,37 @@
 }
 
 .report-submit{
-	width: 100px;
-	background-color: #FFFFFF;
-	color: #7988FD;
-	font-size: 16px;
-	font-weight: 700;
-	border-radius: .375rem;
-	box-shadow: 0 2px 6px 0 rgba(67,89,113,.12);
 	display: flex;
-	justify-content: center;
-	align-items: center;
+	justify-content: space-between;
+}
+
+.report-submit > div{
+	width: 49%;
+	box-shadow: 0 2px 6px 0 rgba(67,89,113,.12);
+	color: #7988FD;
 	cursor: pointer;
+	padding: 10px 30px 10px 30px;
+	display: flex;
+	align-items: center;
+	font-weight: 550;
+	border-radius: .375rem;
+	justify-content: center;
+}
+
+.report-submit > div:hover, .report-list-btn:hover{
+	background-color: #F7F9FF;	
+}
+
+.report-list-btn{
+	width: 100%;
+	box-shadow: 0 2px 6px 0 rgba(67,89,113,.12);
+	color: #7988FD;
+	cursor: pointer;
+	padding: 10px 30px 10px 30px;
+	margin-top: 10px;
+	display: flex;
+	align-items: center;
+	font-weight: 550;
+	border-radius: .375rem;
+	justify-content: center;
 }
