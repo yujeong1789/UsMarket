@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.spring.usMarket.domain.admin.AdminNoticeInsertDto;
 import com.spring.usMarket.domain.admin.QnaReplyInsertDto;
 import com.spring.usMarket.domain.admin.ReportHistoryDto;
 import com.spring.usMarket.service.admin.AdminService;
@@ -135,6 +138,51 @@ public class AdminFetchController {
 		int result = 0;
 		try {
 			result = adminService.addQnaReply(dto);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return result;
+	}
+	
+	@PostMapping("/notice/modify")
+	public int noticeModify(@RequestBody Map<String, Object> map) {
+		
+		logger.info("parameter = {}, {}, {}", map.get("notice_no").toString(), map.get("notice_title").toString(), map.get("notice_content").toString());
+		
+		int result = 0;
+		try {
+			result = adminService.modifyNotice(map);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return result;
+	}
+	
+	@PostMapping("/notice/remove")
+	public int noticeRemove(@RequestBody String notice_no) {
+		
+		logger.info("notice_no = {}", notice_no);
+		
+		int result = 0;
+		try {
+			result = adminService.removeNotice(notice_no);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return result;
+	}
+	
+	@PostMapping("/notice/new")
+	public int noticeNew(@RequestBody AdminNoticeInsertDto dto, HttpServletRequest request) {
+		
+		logger.info("dto = {}", dto.toString());
+		
+		int result = 0;
+		try {
+			result = adminService.addNotice(dto);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

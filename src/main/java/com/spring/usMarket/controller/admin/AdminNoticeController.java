@@ -108,8 +108,8 @@ public class AdminNoticeController {
 		model.addAttribute("infoMap", infoMap);
 	}
 	
-	@PostMapping("/modify")
-	public void noticeModify() {
-		
+	@GetMapping("/new")
+	public void noticeNew() {
+		logger.info("notice/new");
 	}
 }

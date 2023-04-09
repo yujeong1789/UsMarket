@@ -8,6 +8,7 @@ import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import com.spring.usMarket.domain.admin.AdminNoticeInsertDto;
 import com.spring.usMarket.domain.admin.QnaReplyInsertDto;
 import com.spring.usMarket.domain.admin.ReportHistoryDto;
 import com.spring.usMarket.utils.AdminSearchCondition;
@@ -210,6 +211,21 @@ public class AdminDaoImpl implements AdminDao{
 	@Override
 	public Map<String, Object> searchNoticeInfo(String notice_no) throws Exception {
 		return session.selectOne(namespace+"searchNoticeInfo", notice_no);
+	}
+
+	@Override
+	public int updateNotice(Map<String, Object> map) throws Exception {
+		return session.update(namespace+"updateNotice", map);
+	}
+
+	@Override
+	public int deleteNotice(String notice_no) throws Exception {
+		return session.delete(namespace+"deleteNotice", notice_no);
+	}
+
+	@Override
+	public int insertNotice(AdminNoticeInsertDto dto) throws Exception {
+		return session.insert(namespace+"insertNotice", dto);
 	}
 
 }

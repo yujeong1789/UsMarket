@@ -51,6 +51,9 @@
 		 
 		<typeAlias type="com.spring.usMarket.domain.qna.QnaInsertDto"
 		 alias="qnaInsertDto"/>
+		 
+		 <typeAlias type="com.spring.usMarket.domain.admin.AdminNoticeInsertDto"
+		  alias="adminNoticeInsertDto"/>
 	</typeAliases>
 	
 </configuration>

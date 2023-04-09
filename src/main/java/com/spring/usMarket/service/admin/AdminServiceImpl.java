@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.spring.usMarket.dao.admin.AdminDao;
+import com.spring.usMarket.domain.admin.AdminNoticeInsertDto;
 import com.spring.usMarket.domain.admin.QnaReplyInsertDto;
 import com.spring.usMarket.domain.admin.ReportHistoryDto;
 import com.spring.usMarket.utils.AdminSearchCondition;
@@ -328,5 +329,35 @@ public class AdminServiceImpl implements AdminService{
 		logger.info("공지사항 내용 조회 결과 = {}", map.toString());
 		
 		return map;
+	}
+
+	@Override
+	@Transactional(rollbackFor = SQLException.class)
+	public int modifyNotice(Map<String, Object> map) throws Exception {
+		
+		int rowCnt = adminDao.updateNotice(map);
+		logger.info("공지사항 수정 결과 = {}", getResult(rowCnt));
+		
+		return rowCnt;
+	}
+
+	@Override
+	@Transactional(rollbackFor = SQLException.class)
+	public int removeNotice(String notice_no) throws Exception {
+		
+		int rowCnt = adminDao.deleteNotice(notice_no);
+		logger.info("공지사항 삭제 결과 = {}", getResult(rowCnt));
+		
+		return rowCnt;
+	}
+
+	@Override
+	@Transactional(rollbackFor = SQLException.class)
+	public int addNotice(AdminNoticeInsertDto dto) throws Exception {
+
+		int rowCnt = adminDao.insertNotice(dto);
+		logger.info("공지사항 등록 결과 = {}", getResult(rowCnt));
+		
+		return rowCnt;
 	}
 }

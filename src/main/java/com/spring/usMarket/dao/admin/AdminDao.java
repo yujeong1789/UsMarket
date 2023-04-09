@@ -3,6 +3,7 @@ package com.spring.usMarket.dao.admin;
 import java.util.List;
 import java.util.Map;
 
+import com.spring.usMarket.domain.admin.AdminNoticeInsertDto;
 import com.spring.usMarket.domain.admin.QnaReplyInsertDto;
 import com.spring.usMarket.domain.admin.ReportHistoryDto;
 import com.spring.usMarket.utils.AdminSearchCondition;
@@ -51,5 +52,8 @@ public interface AdminDao {
 	List<Map<String, Object>> searchNoticeList(AdminSearchCondition sc) throws Exception;
 	int searchNoticeCnt(String condition) throws Exception;
 	Map<String, Object> searchNoticeInfo(String notice_no) throws Exception;
+	int updateNotice(Map<String, Object> map) throws Exception; 
+	int deleteNotice(String notice_no) throws Exception;
+	int insertNotice(AdminNoticeInsertDto dto) throws Exception;
 	
 }

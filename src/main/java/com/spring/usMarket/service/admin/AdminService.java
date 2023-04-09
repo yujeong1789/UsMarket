@@ -3,6 +3,7 @@ package com.spring.usMarket.service.admin;
 import java.util.List;
 import java.util.Map;
 
+import com.spring.usMarket.domain.admin.AdminNoticeInsertDto;
 import com.spring.usMarket.domain.admin.QnaReplyInsertDto;
 import com.spring.usMarket.domain.admin.ReportHistoryDto;
 import com.spring.usMarket.utils.AdminSearchCondition;
@@ -50,4 +51,7 @@ public interface AdminService {
 	List<Map<String, Object>> getNoticeList(AdminSearchCondition sc) throws Exception;
 	int getNoticeCnt(String condition) throws Exception;
 	Map<String, Object> getNoticeInfo(String notice_no) throws Exception;
+	int modifyNotice(Map<String, Object> map) throws Exception;
+	int removeNotice(String notice_no) throws Exception;
+	int addNotice(AdminNoticeInsertDto dto) throws Exception;
 }
