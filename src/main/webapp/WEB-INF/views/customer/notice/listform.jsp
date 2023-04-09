@@ -31,7 +31,7 @@
 				</c:forEach>
 			</tbody>
 		</table>
-		<form id="noticeInfoForm" name="noticeInfoForm" action="<c:url value='/admin/notice/info'/>" method="post">
+		<form id="noticeInfoForm" name="noticeInfoForm" action="<c:url value='/notice/info'/>" method="post">
 			<input type="hidden" id="notice_no" name="notice_no">
 		</form>
 		<div class="paging">
