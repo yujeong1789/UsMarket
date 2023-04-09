@@ -476,7 +476,18 @@
 		</choose>
 	</select>
 	
-	<select id="searchNoticeInfo" parameterType="string" resultType="map">
+	<resultMap type="HashMap" id="noticeInfo">
+		<result property="ADMIN_NO" column="ADMIN_NO"/>
+		<result property="ADMIN_NAME" column="ADMIN_NAME"/>
+		<result property="ADMIN_ID" column="ADMIN_ID"/>
+		<result property="NOTICE_NO" column="NOTICE_NO"/>
+		<result property="NOTICE_STATUS" column="NOTICE_STATUS"/>
+		<result property="NOTICE_VIEW" column="NOTICE_VIEW"/>
+		<result property="NOTICE_REGDATE" column="NOTICE_REGDATE"/>
+		<result property="NOTICE_TITLE" column="NOTICE_TITLE"/>
+		<result property="NOTICE_CONTENT" column="NOTICE_CONTENT" jdbcType="CLOB" javaType="java.lang.String"/>
+	</resultMap>
+	<select id="searchNoticeInfo" parameterType="string" resultMap="noticeInfo">
 		SELECT a.admin_id
 			  , a.admin_name
 			  , n.*
@@ -484,4 +495,22 @@
 		WHERE n.admin_no = a.admin_no
 		AND n.notice_no = #{notice_no}
 	</select>
+	
+	<update id="updateNotice" parameterType="map">
+		UPDATE notice
+		SET notice_title = #{notice_title}
+			, notice_content = #{notice_content}
+			, notice_regdate = CURRENT_DATE
+		WHERE notice_no = #{notice_no}
+	</update>
+	
+	<delete id="deleteNotice" parameterType="string">
+		DELETE FROM notice
+		WHERE notice_no = #{notice_no}
+	</delete>
+	
+	<insert id="insertNotice" parameterType="adminNoticeInsertDto">
+		INSERT INTO notice(notice_no, admin_no, notice_status, notice_title, notice_content)
+		VALUES(#{notice_no}, #{admin_no}, #{notice_status}, #{notice_title}, #{notice_content})
+	</insert>
 </mapper>
