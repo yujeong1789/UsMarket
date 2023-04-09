@@ -2,7 +2,6 @@
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
-<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 
 <link rel="stylesheet" href="<c:url value='/resources/admin/css/report_info.css'/>" type="text/css">
 
@@ -201,29 +200,31 @@ if(document.querySelector('.sanction-category > select') != null){
 		if(isEmpty(document.getElementById('sanction_category_no').value)){
 			alert('제재 기간을 선택하세요.');
 		}else{
-			let params = {
-					report_no: `${infoMap.REPORT_NO}`,
-					admin_no: document.getElementById('admin_auth').dataset.no,
-					member_no: `${infoMap.REPORT_MEMBER_NO}`,
-					sanction_category_no: document.getElementById('sanction_category_no').value,
-					sanction_startdate: (document.getElementById('sanction_category_no').value == 0 ? '' : document.getElementById('sanction_startdate').value),
-					sanction_enddate: (document.getElementById('sanction_category_no').value == 0 ? '' : document.getElementById('sanction_enddate').value)
-				};
-			
-			fetch('/usMarket/fetch/admin/report/reg', {
-				method: 'POST',
-				headers: {
-					'Content-type' : 'application/json'
-				},
-				body: JSON.stringify(params),
-			})
-			.then((response) => response.text())
-			.then((text) => {
-				if(text == '2'){
-					alert('제재 등록이 완료되었습니다.');
-					document.getElementById('reportInfoForm').submit();
-				}
-			}).catch((error) => console.log('error: '+error));			
+			if(confirm('제재를 등록하시겠습니까?')){
+				let params = {
+						report_no: `${infoMap.REPORT_NO}`,
+						admin_no: document.getElementById('admin_auth').dataset.no,
+						member_no: `${infoMap.REPORT_MEMBER_NO}`,
+						sanction_category_no: document.getElementById('sanction_category_no').value,
+						sanction_startdate: (document.getElementById('sanction_category_no').value == 0 ? '' : document.getElementById('sanction_startdate').value),
+						sanction_enddate: (document.getElementById('sanction_category_no').value == 0 ? '' : document.getElementById('sanction_enddate').value)
+					};
+				
+				fetch('/usMarket/fetch/admin/report/reg', {
+					method: 'POST',
+					headers: {
+						'Content-type' : 'application/json'
+					},
+					body: JSON.stringify(params),
+				})
+				.then((response) => response.text())
+				.then((text) => {
+					if(text == '2'){
+						alert('제재 등록이 완료되었습니다.');
+						document.getElementById('reportInfoForm').submit();
+					}
+				}).catch((error) => console.log('error: '+error));			
+			}
 		}
 	});
 }
