@@ -69,7 +69,7 @@
 						<span>답변 등록</span>
 					</div>
 					<div class="qna-reply-input">
-						<textarea name="qna_reply_content" id="qna_reply_content" maxlength="500"></textarea>
+						<textarea name="qna_reply_content" id="qna_reply_content" placeholder="내용을 입력해 주세요." maxlength="500"></textarea>
 						<div class="current_count"><p>0</p><p>/500</p></div>
 					</div>
 					<div class="qna-submit">
@@ -99,7 +99,6 @@
 							<div class="info-title">내용</div>
 							<div class="info-info">${replyMap.QNA_REPLY_CONTENT }</div>
 						</div>
-						<div class="qna-btn" onclick="location.href='<c:url value="/admin/qna/list"/>'">목록</div>
 					</div>
 				</div>
 			</c:if>
@@ -117,7 +116,7 @@ if(`${infoMap.QNA_COMPLETE}` == 'N'){
 	document.getElementById('qna_reply_content').addEventListener('input', function(){
 		// 높이 조절
 		this.style.height = 'auto';
-		this.style.height = (12 + this.scrollHeight) + 'px';
+		this.style.height = this.scrollHeight + 'px';
 		
 		this.nextElementSibling.firstElementChild.textContent = this.value.length;
 	});
