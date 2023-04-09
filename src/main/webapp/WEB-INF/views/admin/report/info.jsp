@@ -117,7 +117,10 @@
 							<option value="2" data-date="15">15일 정지</option>
 							<option value="3" data-date="30">30일 정지</option>
 						</select>
-						<div class="report-submit">등록</div>
+						<div class="report-submit">
+							<div class="new">등록하기</div>
+							<div onclick="location.href='<c:url value="/admin/report/list"/>'">목록</div>
+						</div>
 					</div>
 					<form id="reportInfoForm" name="reportInfoForm" action="<c:url value='/admin/report/info'/>" method="post">
 						<input type="hidden" name="report_no" value="${infoMap.REPORT_NO }">
@@ -152,6 +155,7 @@
 							<div class="info-title">처리일</div>
 							<div class="info-info"><fmt:formatDate value="${historyMap.SANCTION_REGDATE }" pattern="yyyy/MM/dd (HH:mm:ss)" /></div>
 						</div>
+						<div class="report-list-btn" onclick="location.href='<c:url value="/admin/report/list"/>'">목록</div>
 					</div>
 				</div>
 			</c:if>
@@ -196,9 +200,10 @@ if(document.querySelector('.sanction-category > select') != null){
 		}
 	});
 	
-	document.querySelector('.report-submit').addEventListener('click', function(){
+	document.querySelector('.report-submit > .new').addEventListener('click', function(){
 		if(isEmpty(document.getElementById('sanction_category_no').value)){
 			alert('제재 기간을 선택하세요.');
+			document.getElementById('sanction_category_no').focus();
 		}else{
 			if(confirm('제재를 등록하시겠습니까?')){
 				let params = {
