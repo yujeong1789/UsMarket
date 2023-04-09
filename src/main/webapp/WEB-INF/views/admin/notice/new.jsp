@@ -35,7 +35,10 @@
 					<div class="current_count"><p>0</p><p>/500</p></div>
 				</div>
 			</div>
-			<div class="notice-btn">등록하기</div>
+			<div class="notice-btn">
+				<div class="new">등록하기</div>
+				<div onclick="location.href='<c:url value="/admin/notice/list"/>'">취소</div>
+			</div>
 			<form id="noticeInfoForm" name="noticeInfoForm" action="<c:url value='/admin/notice/info'/>" method="post">
 				<input type="hidden" id="notice_no" name="notice_no">
 			</form>
@@ -83,7 +86,8 @@ document.getElementById('notice_status').addEventListener('change', function(){
 	}
 });
 
-document.querySelector('.notice-btn').addEventListener('click', function(){
+// 등록 이벤트
+document.querySelector('.notice-btn > .new').addEventListener('click', function(){
 	if(document.querySelector('.not-pass') != null){
 		console.log('not-pass');
 		alert(document.querySelector('.not-pass').dataset.alert);
