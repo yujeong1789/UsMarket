@@ -2,7 +2,7 @@
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
-<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
+
 <link rel="stylesheet" href="<c:url value='/resources/admin/css/notice_list.css'/>" type="text/css">
 
 <div class="notice-list-container">
@@ -11,31 +11,42 @@
 	</div>
 	<div class="dashboard">
 		<div>
-			<div class="options-container">
-				<div class="order-condition">
-					<div class="order-dropdown">
-						<span>정렬</span>
-						<div class="dropdown-content">
-							<ul>
-								<li class="order-selected" data-order="regdate_desc">작성일 내림차순</li>
-								<li data-order="regdate">작성일 오름차순</li>
-								<li data-order="view_desc">조회 많은순</li>
-								<li data-order="view">조회 적은순</li>							
-							</ul>
-						</div>
+			<div class="notice-header">
+				<div>
+					<div class="options-container">
+						<div class="order-condition">
+							<div class="order-dropdown">
+								<span>정렬</span>
+								<div class="dropdown-content">
+									<ul>
+										<li class="order-selected" data-order="regdate_desc">작성일 내림차순</li>
+										<li data-order="regdate">작성일 오름차순</li>
+										<li data-order="view_desc">조회 많은순</li>
+										<li data-order="view">조회 적은순</li>							
+									</ul>
+								</div>
+							</div>
+							<div class="condition-dropdown">
+								<span>분류</span>
+								<div class="dropdown-content">
+									<ul>
+										<li class="condition-selected" data-condition="">전체</li>
+										<li data-condition="0">공지사항</li>					
+										<li data-condition="1">자주묻는질문</li>					
+									</ul>
+								</div>
+							</div>
+						</div>			
 					</div>
-					<div class="condition-dropdown">
-						<span>분류</span>
-						<div class="dropdown-content">
-							<ul>
-								<li class="condition-selected" data-condition="">전체</li>
-								<li data-condition="0">공지사항</li>					
-								<li data-condition="1">자주묻는질문</li>					
-							</ul>
-						</div>
-					</div>
-				</div>			
+				</div>
+				<div>
+					<a href="<c:url value='/admin/notice/new'/>">
+						<span>작성하기</span>
+						<img src="<c:url value='/resources/customer/img/customer_redirect.png'/>">
+					</a>
+				</div>
 			</div>
+			
 
 			<div class="notice-list">
 				<c:if test="${empty noticeList }">
