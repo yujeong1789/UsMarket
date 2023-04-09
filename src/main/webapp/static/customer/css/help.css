@@ -22,8 +22,8 @@
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
-	padding-left: 50px;
-	padding-right: 50px;
+	padding-left: 60px;
+	padding-right: 60px;
 }
 
 .help-btn > div{
@@ -50,3 +50,56 @@
 	font-weight: 600;
 	font-size: 18px;
 } 
+
+.help-list{
+	margin-top: 100px;
+	padding-left: 50px;
+	padding-right: 50px;
+	width: 100%;
+	display: flex;
+	justify-content: space-between;
+}
+
+.help-list > div{
+	border-radius: .375rem;
+	box-shadow: 0 2px 6px 0 rgba(67,89,113,.12);
+	width: 50%;
+	margin: 10px;
+	display: flex;
+	flex-direction: column;
+}
+
+.help-list > div > .sub-title{
+	font-size: 20px;
+	font-weight: 500;
+	padding: 30px 30px 20px 30px;
+}
+
+.help-list ul{
+	list-style: none;
+	font-size: 18px;
+}
+
+.help-list ul > li{
+	padding: 12px 30px 12px 30px;
+	cursor: pointer;
+}
+
+.help-list ul > li:hover{
+	background-color: #F5FBFF;
+	color: #16A7F1;
+}
+
+.notice-list > div, .faq-list > div{
+	padding: 20px 30px 12px 30px;
+	font-weight: 700;
+}
+
+.empty {
+	padding: 50px;
+}
+
+.notice-list > div > span:hover, .faq-list > div > span:hover{
+	color: #16A7F1;
+	cursor: pointer;
+}
