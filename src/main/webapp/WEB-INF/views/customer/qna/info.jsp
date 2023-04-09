@@ -92,18 +92,16 @@
 							</div>
 						</div>
 						<c:if test="${qnaInfo.QNA_COMPLETE eq 'Y' and not empty replyInfo}">
-							<div class="info-reply">
-								<div class="info-title">답변</div>
-								<div class="info">
-									<div class="input ta">
-										<textarea readonly>${replyInfo.QNA_REPLY_CONTENT }</textarea>
+							<div class="qna-reply">
+								<div>
+									<div class="info-title">답변</div>
+									<div class="info ta">
+										<textarea id="qna_reply_content" readonly>${replyInfo.QNA_REPLY_CONTENT }</textarea>
 									</div>
 								</div>
-							</div>
-							<div>
-								<div class="info-title">답변등록일</div>
-								<div class="info">
-									<div class="input">
+								<div>
+									<div class="info-title">답변등록일</div>
+									<div class="info">
 										<div><fmt:formatDate value="${replyInfo.QNA_REPLY_REGDATE }" pattern="yyyy/MM/dd (HH:mm:ss)" /></div>
 									</div>
 								</div>
@@ -120,6 +118,13 @@
 </div> <!-- qna-info-container -->
 
 <script type="text/javascript">
+
+document.addEventListener('DOMContentLoaded', function(){
+	document.getElementById('qna_content').style.height = document.getElementById('qna_content').scrollHeight + 'px';
+	if(document.getElementById('qna_reply_content') != null){
+		document.getElementById('qna_reply_content').style.height = document.getElementById('qna_reply_content').scrollHeight + 'px';		
+	}
+});
 
 // 조회 모드일 경우 글자수 숨김
 if(`${mode}` == 'new'){
@@ -172,8 +177,6 @@ if(`${mode}` == 'new'){
 			})
 			.then((response) => response.json())
 			.then((json) => {
-				const jsonData = json;
-				console.log(json);
 				alert(json.msg);
 				location.href = '${pageContext.request.contextPath}/qna/read?qna_no='+json.qna_no;
 			}).catch((error) => console.log('error: '+error));
@@ -196,6 +199,10 @@ document.getElementById('qna_title').addEventListener('input', function(){
 
 // qna_content event
 document.getElementById('qna_content').addEventListener('input', function(){
+	// 높이 조절
+	this.style.height = 'auto';
+	this.style.height = this.scrollHeight + 'px';
+	
 	this.nextElementSibling.firstElementChild.textContent = this.value.length;
 	
 	if(this.value.length > 0){

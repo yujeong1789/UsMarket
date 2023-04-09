@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mybatis.mapper.notice">
+
+	<select id="searchNoticeList" parameterType="noticeSearchCondition" resultType="map">
+		SELECT *
+		FROM ( SELECT rownum AS num, A.*
+			   FROM ( SELECT notice_no
+							 , notice_title
+							 , notice_view
+							 , notice_regdate
+							 , notice_status
+					   FROM notice 
+					   WHERE notice_status = #{status}
+					   ORDER BY notice_regdate DESC
+					 ) A
+			 )
+		WHERE num BETWEEN #{startPage} AND #{endPage}
+		ORDER by num
+	</select>
+	
+	<select id="searchNoticeCnt" parameterType="string" resultType="int">
+		SELECT COUNT(*)
+		FROM notice
+		WHERE notice_status = #{notice_status}
+	</select>
+	
+</mapper>

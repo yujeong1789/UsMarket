@@ -43,6 +43,9 @@
 		<typeAlias type="com.spring.usMarket.utils.QnaSearchCondition"
 		 alias="qnaSearchCondition"/>
 		 
+		<typeAlias type="com.spring.usMarket.utils.NoticeSearchCondition"
+		 alias="noticeSearchCondition"/>
+		 
 		<typeAlias type="com.spring.usMarket.domain.admin.ReportHistoryDto"
 		 alias="reportHistoryDto"/>
 		 

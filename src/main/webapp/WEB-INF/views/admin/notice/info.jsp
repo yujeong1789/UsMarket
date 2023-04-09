@@ -77,6 +77,10 @@
 
 <script src="https://cdn.ckeditor.com/ckeditor5/36.0.1/classic/ckeditor.js"></script>
 <script type="text/javascript">
+document.addEventListener('DOMContentLoaded', function(){
+	document.getElementById('notice_content').style.height = document.getElementById('notice_content').scrollHeight + 'px';
+});
+
 document.querySelector('.modify').addEventListener('click', function(e){
 	// 테두리 강조
 	document.querySelectorAll('.modify-false').forEach(el => {
@@ -113,7 +117,7 @@ document.querySelector('.modify').addEventListener('click', function(e){
 	document.getElementById('notice_content').addEventListener('input', function(){
 		// 높이 조절
 		this.style.height = 'auto';
-		this.style.height = (12 + this.scrollHeight) + 'px';
+		this.style.height = this.scrollHeight + 'px';
 		
 		if(this.value.length > 0){
 			this.classList.remove('not-pass');

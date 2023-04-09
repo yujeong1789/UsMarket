@@ -132,10 +132,7 @@ public class ProductController {
 		return "redirect:/product/info?product_no="+dto.getProduct_no();
 	}
 	
-	
-	/*
-	 * 상품 delete할 시 자식 테이블에 영향이 있음. 따라서 db상에서 삭제처리하지 않고 blind 상태코드를 추가해 update하는 식으로 구현할 것.
-	 * */
+
 	@PostMapping("/remove")
 	public String removeProduct(HttpServletRequest request, String product_no, Integer product_state_no) {
 		String seller_no = SessionParameters.getUserNo(request);
