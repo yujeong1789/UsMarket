@@ -1,10 +1,13 @@
 package com.spring.usMarket.controller;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -125,8 +128,53 @@ public class NoticeController {
 	}
 	
 	@PostMapping("/info")
-	public void noticeInfoPost(String notice_no, String notice_status, Model model) {
+	public String noticeInfoPost(String notice_no, String notice_status, Model model
+								, HttpServletRequest request, HttpServletResponse response) {
+		
 		logger.info("notice_no = {}, notice_status = {}", notice_no, (notice_status == "0" ? "공지사항" : "자주묻는질문"));
+		
+		Cookie viewCookie = null;
+		
+		Cookie[] cookies = request.getCookies();
+		if(cookies != null) {
+			for(Cookie cookie : cookies) {
+				if(cookie.getName().equals("notice_no")) {
+					viewCookie = cookie;
+					logger.info("viewCookie name = {}, value = {}", viewCookie.getName(), viewCookie.getValue().toString());
+				}
+			}
+		}
+		
+		Map<String, Object> noticeInfo = new HashMap<>();
+		try {
+			if(viewCookie != null) {
+				if(!viewCookie.getValue().contains("[" + notice_no + "]")) {
+					noticeService.modifyNoticeView(notice_no);
+					
+					viewCookie.setValue(viewCookie.getValue() + "_[" + notice_no + "]");
+					viewCookie.setPath("/");
+					viewCookie.setMaxAge(60 * 60 * 24);
+					
+					response.addCookie(viewCookie);
+				} 
+			} else {
+				noticeService.modifyNoticeView(notice_no);
+				Cookie newCookie = new Cookie("notice_no", "[" + notice_no + "]");
+				
+				newCookie.setPath("/");
+				newCookie.setMaxAge(60 * 60 * 24);
+				
+				response.addCookie(newCookie);
+			}
+			
+			noticeInfo = noticeService.getNoticeInfo(notice_no);
+			model.addAttribute("noticeInfo", noticeInfo);
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return "/notice/info";
 	}
 	
 }
