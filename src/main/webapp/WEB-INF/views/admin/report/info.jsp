@@ -185,7 +185,6 @@ if(document.querySelector('.sanction-category > select') != null){
 	fetch('/usMarket/fetch/admin/report/history/'+member_no)
 	.then((response) => response.text())
 	.then((text) => {
-		console.log(text);
 		document.getElementById('sanction_startdate').value = (isEmpty(text) ? getEndDay() : text);
 	}).catch((error) => console.log("error: "+error));
 	
