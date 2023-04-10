@@ -10,7 +10,8 @@
 		<div class="container">
 			<div class="list-title">
 				<a href="<c:url value='/help'/>">고객센터</a>
-				<span>1:1문의</span>
+				<span>></span>
+				<div>1:1문의</div>
 			</div>
 			<div class="title">
 				<span>1:1 문의내역</span>
