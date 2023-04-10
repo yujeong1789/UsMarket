@@ -2,7 +2,7 @@
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
-<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
+
 <link rel="stylesheet" href="<c:url value='/resources/admin/css/member_info.css'/>" type="text/css">
 
 <div class="member-info-container">
@@ -128,7 +128,7 @@
 										<span><fmt:formatNumber value="${product.PRODUCT_PRICE }" pattern="#,###"/></span> <!-- 가격 -->
 									</div>
 									<div class="info-regdate">
-										<fmt:formatDate value="${product.PRODUCT_REGDATE }" pattern="yyyy년 MM월 dd일 HH:mm"/>
+										<fmt:formatDate value="${product.PRODUCT_REGDATE }" pattern="yyyy/MM/dd (HH:mm:ss)"/>
 									</div> <!-- regdate -->
 									<div class="info-view">
 										<img src="<c:url value='/resources/customer/img/view.png'/>">
