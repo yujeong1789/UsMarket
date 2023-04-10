@@ -4,7 +4,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,14 +34,8 @@ import com.spring.usMarket.utils.SessionParameters;
 public class ProductController {
 	private static final Logger logger = LoggerFactory.getLogger(ProductController.class);
 	
-	private static final int ADDED = 1;
-	private static final int NOT_ADDED = 0;
-	
-	@Autowired
-	ProductService productService;
-	
-	@Autowired
-	ProductFileService fileService;
+	@Autowired ProductService productService;
+	@Autowired ProductFileService fileService;
 	
 	@GetMapping("/list")
 	public void list(SearchCondition sc, Model model){
@@ -73,10 +69,46 @@ public class ProductController {
 	
 	
 	@GetMapping("/info")
-	public void info(String product_no, HttpServletRequest request, Model model) {
+	public String info(String product_no, HttpServletRequest request, Model model
+						, HttpServletResponse response) {
+		
+		logger.info("product_no = {}", product_no);
+		
+		Cookie viewCookie = null;
+		
+		Cookie[] cookies = request.getCookies();
+		if(cookies != null) {
+			for(Cookie cookie : cookies) {
+				if(cookie.getName().equals("product_no")) {
+					viewCookie = cookie;
+					logger.info("viewCookie name = {}, value = {}", viewCookie.getName(), viewCookie.getValue().toString());
+				}
+			}
+		}
 		
 		Map<String, Object> productInfo = new HashMap<>();
 		try {
+			
+			if(viewCookie != null) {
+				if(!viewCookie.getValue().contains("[" + product_no + "]")) {
+					productService.modifyProductView(product_no);
+					
+					viewCookie.setValue(viewCookie.getValue() + "_[" + product_no + "]");
+					viewCookie.setPath("/");
+					viewCookie.setMaxAge(60 * 60 * 24);
+					
+					response.addCookie(viewCookie);
+				} 
+			} else {
+				productService.modifyProductView(product_no);
+				Cookie newCookie = new Cookie("product_no", "[" + product_no + "]");
+				
+				newCookie.setPath("/");
+				newCookie.setMaxAge(60 * 60 * 24);
+				
+				response.addCookie(newCookie);
+			}
+			
 			productInfo = productService.getProductInfo(product_no);
 			model.addAttribute("productInfo", productInfo);
 			
@@ -85,12 +117,12 @@ public class ProductController {
 				ObjectMapper mapper = new ObjectMapper();
 				String jsonText = mapper.writeValueAsString(productImage);
 				
-				model.addAttribute("jsonText", jsonText);	
+				model.addAttribute("jsonText", jsonText);
 				
 				int bookmarkStatus = 0;
 				if(request.getSession().getAttribute("userNo") != null) {
 					Integer member_no = Integer.parseInt(SessionParameters.getUserNo(request));
-					bookmarkStatus = productService.getBookmarkByInfo(member_no+product_no);
+					bookmarkStatus = productService.getBookmarkByInfo(member_no + product_no);
 				}
 				
 				model.addAttribute("bookmarkStatus", bookmarkStatus);
@@ -99,6 +131,8 @@ public class ProductController {
 		} catch (Exception e) {
 			e.printStackTrace();
 		} // try-catch
+		
+		return "/product/info";
 	}
 	
 	
