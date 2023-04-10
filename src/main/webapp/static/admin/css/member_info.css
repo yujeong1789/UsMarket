@@ -128,8 +128,8 @@
 	padding: 5px;
 	display: flex;
 	flex-direction: column;
-	font-size: 12px;
-	min-height: 70px;
+	font-size: 11px;
+	min-height: 98px;
 	justify-content: space-evenly;
 }
 
