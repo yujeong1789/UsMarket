@@ -12,7 +12,8 @@
 		<div class="container">
 			<div class="list-title">
 				<a href="<c:url value='/help'/>">고객센터</a>
-				<span>${pageTitle }</span>
+				<span>></span>
+				<div>${pageTitle }</div>
 			</div>
 			<div class="title">
 				<span>${pageTitle }</span>

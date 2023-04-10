@@ -1,7 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<section class="hero border__btm">
+<section class="hero">
 	<div class="row">
 		<div class="container">
 			<div class="visual__container">
@@ -28,7 +28,7 @@
 		</div>
 	</div>
 	
-	<div class="row">
+	<div class="row bottom__shadow">
 		<div class="container">
 			<div class="index__visual">
 				<div class="hero__categories">

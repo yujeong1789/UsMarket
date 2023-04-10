@@ -8,4 +8,6 @@ import com.spring.usMarket.utils.NoticeSearchCondition;
 public interface NoticeService {
 	List<Map<String, Object>> getNoticeList(NoticeSearchCondition sc) throws Exception;
 	int gethNoticeCnt(String notice_status) throws Exception;
+	Map<String, Object> getNoticeInfo (String notice_no) throws Exception;
+	int modifyNoticeView (String notice_no) throws Exception;
 }

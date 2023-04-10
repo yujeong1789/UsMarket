@@ -8,6 +8,14 @@
 <c:set var="list" value="${productList }"/>
 
 <section class="products__section">
+
+	<c:if test="${empty productList }">
+		<script type="text/javascript">
+			alert("상품 목록을 찾을 수 없습니다.");
+			location.href = '${pageContext.request.contextPath}/';
+		</script>
+	</c:if>
+	
 	<div class="row">
 		<div class="container">
 		<c:if test="${empty param.keyword }">
@@ -51,7 +59,7 @@
 					
 				</div>
 				
-				<c:if test="${! empty productList }">
+				<c:if test="${not empty productList }">
 				<div class="product__area">
 				<c:forEach var="product" items="${productList }">
 					<div class="product__box">
@@ -85,9 +93,6 @@
 				</c:forEach>
 				</div> <!-- product__area -->
 				</c:if>
-				<c:if test="${empty productList }">
-					<div class="no__item">등록된 상품이 없습니다.</div> <!-- 이미지 만들 것 -->				
-				</c:if>
 				
 				<div class="paging__container">
 						<c:if test="${ph.totalCnt != null || ph.totalCnt != 0 }">
@@ -99,7 +104,7 @@
 							<c:forEach var="i" begin="${ph.beginPage }" end="${ph.endPage }">
 							<input id="pageValue" type="hidden" value="${i }">
 								<div class="paging__box">
-									<a class="paging__href ${i==ph.sc.page ? 'paging-active' : ''}" href="<c:url value="/product/list${ph.sc.getQueryString(i)} " />">
+									<a class="paging__href ${i eq ph.sc.page ? 'paging-active' : ''}" href="<c:url value="/product/list${ph.sc.getQueryString(i)} " />">
 										${i}
 									</a>															
 								</div>
@@ -157,7 +162,7 @@
 		
 			
 		const list = `${list}`
-		if(! isEmpty(list)){
+		if(isEmpty(list) == false){
 			// 선택 옵션 강조
 			const optionParam = url.get('option');
 			

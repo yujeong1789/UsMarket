@@ -18,6 +18,7 @@
 	margin-bottom: 70px;
 	font-size: 16px;
 	color: #1C1C1C;
+	display: flex;
 }
 
 .list-title > a{
@@ -25,8 +26,7 @@
 	font-weight: 500;  
 }
 
-.list-title > a:after{
-	content: ">";
+.list-title > span{
 	color: #989898;
 	font-weight: 800;
 	margin-left: 15px;

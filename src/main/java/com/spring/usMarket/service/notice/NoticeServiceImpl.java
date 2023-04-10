@@ -43,4 +43,24 @@ public class NoticeServiceImpl implements NoticeService{
 		return totalCnt;
 	}
 
+	@Override
+	@Transactional(rollbackFor = SQLException.class, readOnly = true)
+	public Map<String, Object> getNoticeInfo(String notice_no) throws Exception {
+
+		Map<String, Object> map = noticeDao.searchNoticeInfo(notice_no);
+		logger.info("공지사항 상세조회 결과 = {}", map.toString());
+		
+		return map;
+	}
+
+	@Override
+	@Transactional(rollbackFor = SQLException.class)
+	public int modifyNoticeView(String notice_no) throws Exception {
+
+		int rowCnt = noticeDao.updateNoticeView(notice_no);
+		logger.info("공지사항 조회수 업데이트 결과 = {}", getResult(rowCnt));
+		
+		return rowCnt;
+	}
+
 }

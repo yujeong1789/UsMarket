@@ -18,13 +18,13 @@
 						<table>
 							<thead>
 								<tr>
-									<th>Date</th>
-									<th>User</th>
-									<th>Message</th>
+									<th>일시</th>
+									<th>보낸사람</th>
+									<th>내용</th>
 								</tr>
 							</thead>
 							<tbody>
-								<tr></tr>
+								
 							</tbody>
 						</table>
 					</div>
@@ -43,18 +43,21 @@ document.addEventListener('DOMContentLoaded', function(){
 	.then((response) => response.json())
 	.then((json) => {
 		json.forEach((el, i) => {
-			console.log(el);
+			let tr = document.createElement('tr');
+			
 			let td1 = document.createElement('td');
 			td1.textContent = getFullTimeFormat(el.CHAT_TIME);
-			document.querySelector('.modal-body tbody > tr').appendChild(td1);
+			tr.appendChild(td1);
 			
 			let td2 = document.createElement('td');
 			td2.textContent = el.CHAT_FROM_ID;
-			document.querySelector('.modal-body tbody > tr').appendChild(td2);
+			tr.appendChild(td2);
 			
 			let td3 = document.createElement('td');
 			td3.textContent = el.CHAT_CONTENT;
-			document.querySelector('.modal-body tbody > tr').appendChild(td3);
+			tr.appendChild(td3);
+			
+			document.querySelector('.modal-body tbody').appendChild(tr);
 		});
 	}).catch((error) => console.log("error: "+error));
 

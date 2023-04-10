@@ -2,7 +2,6 @@
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
-<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 
 <link rel="stylesheet" href="<c:url value='/resources/customer/css/qna_info.css'/>" type="text/css">
 <c:set var="status" value="${mode eq 'new' ? '' : 'readonly' }" />
@@ -19,6 +18,11 @@
 	
 	<div class="row">
 		<div class="container">
+			<div class="list-title">
+				<a href="<c:url value='/help'/>">고객센터</a>
+				<span>></span>
+				<a href="<c:url value='/qna/list'/>">1:1문의</a>
+			</div>
 			<div class="title">${title }</div>
 			<div class="qna-info">
 				<form id="qnaInsertForm" action="<c:url value='/qna/new'/>" method="post" enctype="multipart/form-data">
