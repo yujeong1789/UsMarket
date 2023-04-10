@@ -24,4 +24,14 @@ public class NoticeDaoImpl implements NoticeDao{
 	public int searchNoticeCnt(String notice_status) throws Exception {
 		return session.selectOne(namespace+"searchNoticeCnt", notice_status);
 	}
+
+	@Override
+	public Map<String, Object> searchNoticeInfo(String notice_no) throws Exception {
+		return session.selectOne(namespace+"searchNoticeInfo", notice_no);
+	}
+
+	@Override
+	public int updateNoticeView(String notice_no) throws Exception {
+		return session.update(namespace+"updateNoticeView", notice_no);
+	}
 }
