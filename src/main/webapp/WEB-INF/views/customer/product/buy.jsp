@@ -260,6 +260,7 @@
 					})
 					.then((response) => response.text()) // 서버가 텍스트를 반환하는 경우 response.text()가 적합하다.
 					.then((text) => {
+						// 완료 메세지 띄우고 거래내역 페이지로 이동할 것
 						location.href = '${pageContext.request.contextPath}/deal/complete?deal_no='+text;
 					}).catch((error) => console.log('error: '+error)); // fetch
 					
