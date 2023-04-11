@@ -282,3 +282,40 @@
 	cursor: pointer;
 }
 
+.product__info__1{
+	background-color: #ffffff;
+    border-top: 1px solid #eeeeee;
+    padding: 5px;
+    display: flex;
+    flex-direction: column;
+    font-size: 12px;
+    min-height: 100px;
+    justify-content: space-evenly;
+}
+
+.product__info__2 {
+    display: block;
+    padding-top: 10px;
+}
+
+.info-view {
+    display: flex;
+    align-items: center;
+    color: #888888;
+    font-size: 11px;
+}
+
+.info-view > img {
+    width: 12px;
+    object-fit: contain;
+    margin-right: 3px;
+}
+
+.sub-title {
+    width: 100%;
+    padding-left: 10px;
+    margin-bottom: 10px;
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+}

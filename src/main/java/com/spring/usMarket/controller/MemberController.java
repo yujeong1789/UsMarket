@@ -2,7 +2,6 @@ package com.spring.usMarket.controller;
 
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
@@ -32,8 +31,6 @@ import com.spring.usMarket.service.admin.AdminService;
 import com.spring.usMarket.service.member.MemberService;
 import com.spring.usMarket.utils.AdminPageHandler;
 import com.spring.usMarket.utils.AdminSearchCondition;
-import com.spring.usMarket.utils.PageHandler;
-import com.spring.usMarket.utils.SearchCondition;
 
 import lombok.RequiredArgsConstructor;
 
@@ -220,14 +217,14 @@ public class MemberController {
 			
 			sc.setMember_no(member_no);
 			logger.info("AdminSearchCondition = "+sc);
+			
 			List<Map<String, Object>> mypageProductList = memberService.getMypageProduct(sc);
 			logger.info("mypageProductList : {}",mypageProductList);
+			
 			int ProductCount = memberService.getMypageProductCount(member_no);//Mypage_product
-
 			int bookmarkCount = memberService.getMypageBookmarkCount(member_no);//Mypage_Bookmark
 			
 			totalCnt = ProductCount;
-			sc.setMember_no(member_no);
 			AdminPageHandler pageHandler = new AdminPageHandler(totalCnt, sc);
 
 			model.addAttribute("memberInfo", memberInfo);
@@ -250,16 +247,15 @@ public class MemberController {
 		sc.setPageSize(15);
 		logger.info("post adminSearchCondition = {}", sc.toString());
 		
-		List<Map<String, Object>> productList = new ArrayList<>();
 		int totalCnt = 0;
 		
 		try {
-			productList = adminService.getMemberProductList(sc);
+			List<Map<String, Object>> productList = adminService.getMemberProductList(sc);
 			 
 			totalCnt = adminService.getMemberProductCnt(sc.getMember_no(), sc.getCondition());
 			AdminPageHandler pageHandler = new AdminPageHandler(totalCnt, sc);
-			 
-			ratt.addFlashAttribute("productList", productList);
+			
+			ratt.addFlashAttribute("mypageList", productList);
 			ratt.addFlashAttribute("page", sc.getPage());
 			ratt.addFlashAttribute("pageSize", sc.getPageSize());
 			ratt.addFlashAttribute("condition", sc.getOrder());
@@ -278,46 +274,47 @@ public class MemberController {
 		logger.info("viewajax");
 	}
 	
-	@PostMapping("/MyBookmark")
-	public String MyBookmark(@RequestBody String member_no, Model model, SearchCondition sc) throws Exception {
+	@PostMapping("/myBookmark")
+	public String MyBookmark(@RequestBody AdminSearchCondition sc, RedirectAttributes ratt) throws Exception {
 		sc.setPageSize(15);
 		int totalCnt = 0;
 		
-		logger.info("member_No = {}", member_no);
+		logger.info("member_No = {}", sc.getMember_no());
 		
-		List<Map<String, Object>> mypageBookmarkList = memberService.getMypageBookmark(member_no);
+		List<Map<String, Object>> mypageBookmarkList = memberService.getMypageBookmark(sc);
 		logger.info("북마크 리스트 = " + mypageBookmarkList);
+		
 		totalCnt = mypageBookmarkList.size();
-		PageHandler pageHandler = new PageHandler(totalCnt, sc);
+		AdminPageHandler pageHandler = new AdminPageHandler(totalCnt, sc);
 		
-		model.addAttribute("MyList", "MyBookmark");
-		model.addAttribute("mypageList", mypageBookmarkList);
-		model.addAttribute("Page", sc.getPage());
-		model.addAttribute("PageSize", sc.getPageSize());
-		model.addAttribute("ph", pageHandler);
+		ratt.addFlashAttribute("myList", "myBookmark");
+		ratt.addFlashAttribute("mypageList", mypageBookmarkList);
+		ratt.addFlashAttribute("page", sc.getPage());
+		ratt.addFlashAttribute("pageSize", sc.getPageSize());
+		ratt.addFlashAttribute("ph", pageHandler);
 		
-		return "member/viewajax";
+		return "redirect:/member/viewajax";
 	}
 
-	@PostMapping("/MyProductList")
-	public String MyProductList(@RequestBody AdminSearchCondition sc, Model model) throws Exception {
+	@PostMapping("/myProductList")
+	public String MyProductList(@RequestBody AdminSearchCondition sc, RedirectAttributes ratt) throws Exception {
 		sc.setPageSize(15);
 		int totalCnt = 0;
 		
 		logger.info("AdminSearchCondition = {}", sc.toString());
 		
-		List<Map<String, Object>> mypageProductList = memberService.getMypageProduct(sc);
+		List<Map<String, Object>> mypageProductList = adminService.getMemberProductList(sc);
 		logger.info("마이페이지 상품 리스트 = " + mypageProductList);
 		totalCnt = mypageProductList.size();
 		AdminPageHandler pageHandler = new AdminPageHandler(totalCnt, sc);
 		
-		model.addAttribute("MyList", "MyProductList");
-		model.addAttribute("mypageList", mypageProductList);
-		model.addAttribute("Page", sc.getPage());
-		model.addAttribute("PageSize", sc.getPageSize());
-		model.addAttribute("ph", pageHandler);
+		ratt.addFlashAttribute("myList", "myProductList");
+		ratt.addFlashAttribute("mypageList", mypageProductList);
+		ratt.addFlashAttribute("page", sc.getPage());
+		ratt.addFlashAttribute("pageSize", sc.getPageSize());
+		ratt.addFlashAttribute("ph", pageHandler);
 		
-		return "member/viewajax";
+		return "redirect:/member/viewajax";
 	}
 	
 	@GetMapping("/transactionhistory")
