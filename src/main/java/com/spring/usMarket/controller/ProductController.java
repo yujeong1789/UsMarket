@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.spring.usMarket.domain.product.ProductCategoryDto;
@@ -36,6 +37,8 @@ public class ProductController {
 	
 	@Autowired ProductService productService;
 	@Autowired ProductFileService fileService;
+	
+	private static final int BLIND = 4;
 	
 	@GetMapping("/list")
 	public void list(SearchCondition sc, Model model){
@@ -120,12 +123,16 @@ public class ProductController {
 				model.addAttribute("jsonText", jsonText);
 				
 				int bookmarkStatus = 0;
-				if(request.getSession().getAttribute("userNo") != null) {
+				boolean isMyProduct = productInfo.get("SELLER_NO").toString().equals(SessionParameters.getUserNo(request));
+				logger.info("isMyProduct = {}", isMyProduct);
+				if(request.getSession().getAttribute("userNo") != null && !isMyProduct) {
 					Integer member_no = Integer.parseInt(SessionParameters.getUserNo(request));
 					bookmarkStatus = productService.getBookmarkByInfo(member_no + product_no);
+					
 				}
 				
 				model.addAttribute("bookmarkStatus", bookmarkStatus);
+				model.addAttribute("isMyProduct", isMyProduct);
 			}
 			
 		} catch (Exception e) {
@@ -168,22 +175,23 @@ public class ProductController {
 	
 
 	@PostMapping("/remove")
-	public String removeProduct(HttpServletRequest request, String product_no, Integer product_state_no) {
+	public String removeProduct(HttpServletRequest request, String product_no, Integer product_state_no, RedirectAttributes ratt) {
 		String seller_no = SessionParameters.getUserNo(request);
 		
 		logger.info("product_no = {}, seller_no = {}, product_state_no = {}", product_no, seller_no, product_state_no);
 		
 		String url = "redirect:/product/info?product_no="+product_no;
-		
+		String msg = "상품 삭제에 실패했습니다.";
 		try {
 			List<String> productImage = productService.getProductImage(product_no);
 			boolean deleteResult = fileService.delete(productImage);
 			if(deleteResult) {
 				
-				int updateCnt = productService.modifyProductState(4, seller_no, product_no);
+				int updateCnt = productService.modifyProductState(BLIND, seller_no, product_no);
 				int removeCnt = productService.removeProductImage(product_no);
 				
 				if(updateCnt+removeCnt == productImage.size()+1) {
+					msg = "상품이 정상적으로 삭제되었습니다.";
 					url = "redirect:/";
 					logger.info("removeProduct SUCCESS");
 				}
@@ -193,6 +201,7 @@ public class ProductController {
 			e.printStackTrace();
 		}
 		
+		ratt.addFlashAttribute("removeMessage", msg);
 		return url;
 	}
 	

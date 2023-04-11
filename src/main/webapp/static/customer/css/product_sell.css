@@ -110,8 +110,7 @@
 }
 
 .product__sell__section .input__font{
-	padding-left: 15px;
-	padding-right: 15px;
+	padding: 15px;
 	font-size: 18px;
 	border: 1px solid #DCDBE4;
 }

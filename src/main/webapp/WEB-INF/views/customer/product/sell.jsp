@@ -66,9 +66,8 @@
 							<span id="selected__category__1"></span>
 							<span id="selected__category__2"></span>
 							
-							<!-- 확인용, 추후 hidden으로 변경 -->
-							<input style="width: 50px;" type="text" id="product_category1_no" name="product_category1_no" value="" readonly required>
-							<input style="width: 50px;" type="text" id="product_category2_no" name="product_category2_no" value="" readonly required>
+							<input type="hidden" id="product_category1_no" name="product_category1_no" value="" readonly required>
+							<input type="hidden" id="product_category2_no" name="product_category2_no" value="" readonly required>
 						</div>
 					</li>
 					<li>
@@ -186,20 +185,24 @@
 	
 	
 	// 상품명
-	document.getElementById('product_name').addEventListener('keyup', function(e){
+	document.getElementById('product_name').addEventListener('input', function(e){
 		// 1. 길이 체크
 		setBorder(this, lengthCheck(this.value.replace(/(\s*)/g,'').length, 2, 40));
 		document.getElementById('current__name__length').innerText = this.value.replace(/(\s*)/g,'').length;
 	});
 	
 	// 상품 가격
-	document.getElementById('product_price').addEventListener('keyup', function(e){
+	document.getElementById('product_price').addEventListener('input', function(e){
 		priceRegexCheck(this);
 		setBorder(this, lengthCheck(this.value, 100, 1000000000));
 	});
 	
 	// 상품 설명
-	document.getElementById('product_explanation').addEventListener('keyup', function(e){
+	document.getElementById('product_explanation').addEventListener('input', function(e){
+		// 높이 조절
+		this.style.height = 'auto';
+		this.style.height = this.scrollHeight + 'px';
+		
 		setBorder(this, lengthCheck(this.value.length, 10, 2000));
 		document.getElementById('current__explanation__length').innerText = this.value.length;
 	});
