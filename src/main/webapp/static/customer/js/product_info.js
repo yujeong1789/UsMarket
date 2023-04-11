@@ -18,7 +18,7 @@ function setReview(el) {
 	product__review__1.className = 'product__review__1';
 
 	let imgUrl = document.createElement('a');
-	imgUrl.setAttribute('href', '#'); // 회원 상세보기 링크 추가할 것
+	imgUrl.setAttribute('href', '/usMarket/member/mypage?member_no=' + el.CUSTOMER_NO);
 
 	let img = document.createElement('img');
 	img.setAttribute('alt', '판매자 이미지');
@@ -39,7 +39,7 @@ function setReview(el) {
 	// 2. 닉네임
 	let review__nickname = document.createElement('a');
 	review__nickname.id = 'review__nickname';
-	review__nickname.setAttribute('href', '#'); // 회원 상세보기 링크 추가할 것
+	review__nickname.setAttribute('href', '/usMarket/member/mypage?member_no=' + el.CUSTOMER_NO);
 	review__nickname.textContent = el.MEMBER_NICKNAME;
 	review__info__1.appendChild(review__nickname);
 
@@ -74,8 +74,6 @@ function setReview(el) {
 	product__review__2.appendChild(review__info__2);
 	
 	parentDiv.appendChild(product__review__2);
-
-	//product__review.appendChild(parentDiv);
 	
 	return parentDiv;
 };
