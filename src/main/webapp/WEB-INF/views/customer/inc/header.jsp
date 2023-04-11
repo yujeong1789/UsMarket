@@ -32,7 +32,6 @@
 						<div class="header__top__right__auth">
 							<input type="hidden" id="loginId" data-id="${loginId }" />
                             <input type="hidden" id="loginNo" data-no="${loginNo }" />
-                            <div>id = ${empty loginId ? '없음' : loginId}, no = ${empty loginNo ? '없음' : loginNo }</div> <!-- 확인용, 추후 삭제 -->
                             <div class="header__top__right__auth__login">
                             	<a href="<c:url value='${loginOutLink}' />">${loginOut }</a>
                             </div>
