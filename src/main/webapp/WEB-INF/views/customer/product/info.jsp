@@ -12,6 +12,13 @@
 			location.href = '${pageContext.request.contextPath}/';
 		</script>
 	</c:if>
+	
+	<c:if test="${not empty removeMessage}">
+		<script type="text/javascript">
+			var removeMessage = `${removeMessage}`;
+			alert(removeMessage);
+		</script>
+	</c:if>
 
 	<!-- 신고하기 모달 -->
 	<input type="hidden" id="report_type" value="1">
@@ -64,7 +71,7 @@
 								<span><c:out value="${productInfo.PRODUCT_REGDATE }"/></span>						
 							</div>
 						</div>
-						<div class="right">
+						<div class="right" id="productReport" onclick="openReport()">
 							<div class="product__detail__icon">
 								<img alt="신고하기" src="<c:url value='/resources/customer/img/report.png'/>">
 							</div>
@@ -83,52 +90,73 @@
 						</div>	
 					</div>
 					
-					<c:choose>
-						<c:when test="${productInfo.PRODUCT_STATE_NO != 1 }"> 
-							<!-- 판매 중이 아닌 상품일 경우 -->
-							<div class="product__not__sale">
-								<span>현재 판매 중인 상품이 아닙니다.</span>
-							</div>
-						</c:when>
-						<c:otherwise>
-							<!-- 판매 중이며 내 상품이 아닐 경우 보여질 버튼 -->
-							<div class="product__buttons" id="product__buttons">
-								<div id="btn__wish" data-status="${bookmarkStatus }">
-									<img id="bookmark__status" alt="찜" src="<c:url value='/resources/customer/img/wish_icon_${bookmarkStatus }.png' />">
-									<span>찜</span>
-									<span><c:out value="${productInfo.BOOKMARK_COUNT }"/></span>
-								</div>
-								<div id="btn__chat">
-									<span>채팅하기</span>
-									<form id="addChatRoomForm" method="post" action="<c:url value='/chat/add'/>">
-										<input type="hidden" name="seller_no">
-										<input type="hidden" name="product_name">
-										<input type="hidden" name="seller_nickname">
-									</form>
-								</div>
-								<div id="btn__buy">
-									<span>바로구매</span>
-									<form id="productBuyForm" method="post" action="<c:url value='/product/buy'/>">
-										<input type="hidden" name="product_no">
-									</form>
-								</div>
-							</div>
-							
-							<!-- 판매 중이며 내 상품일 경우 보여질 버튼 -->
-							<div class="product__my__buttons" id="product__my__buttons">
-								<div class="btn__my__store" id="btn__my__store">
-									<span>내 상점 관리하기</span>
-								</div>
+					<!-- 내 상품일 경우 -->
+					<c:if test="${isMyProduct }">
+						<c:choose>
+							<c:when test="${productInfo.PRODUCT_STATE_NO eq 1 or productInfo.PRODUCT_STATE_NO eq 2}">
+								<div class="product__my__buttons" id="product__my__buttons">
+									<div class="btn__my__store" id="btn__my__store">
+										<span onclick="location.href='<c:url value='/member/mypage'/>'">내 상점 관리하기</span>
+									</div>
+									<div class="btn__product__modify" id="btn__product__modify">
+										<span>상태변경</span>
+										<div class="dropdown-content">
+											<ul>
+												<li class="${productInfo.PRODUCT_STATE_NO eq 1 ? 'status-selected' : ''}" data-status="1" onclick="${productInfo.PRODUCT_STATE_NO eq 1 ? '' : 'productStateChange(this)'}">판매중</li>
+												<li class="${productInfo.PRODUCT_STATE_NO eq 2 ? 'status-selected' : ''}" data-status="2" onclick="${productInfo.PRODUCT_STATE_NO eq 2 ? '' : 'productStateChange(this)'}">예약완료</li>			
+											</ul>
+										</div>
+									</div>
+									<div class="btn__product__delete" id="btn__product__delete" onclick="productRemove()">
+										<span>삭제하기</span>
+									</div>
+								</div>	
 								<form id="productModifyForm" method="post" action="<c:url value='/product/remove'/>">
 									<input type="hidden" name="product_no">
 									<input type="hidden" name="product_state_no">
 								</form>
-								<div class="btn__product__delete" id="btn__product__delete">
-									<span>삭제하기</span>
+							</c:when>
+							<c:otherwise>
+								<div class="product__not__sale">
+									<span>현재 판매 중인 상품이 아닙니다.</span>
 								</div>
-							</div>	
-						</c:otherwise>
-					</c:choose>
+							</c:otherwise>
+						</c:choose>
+					</c:if>
+					
+					<!-- 내 상품이 아닐 경우 -->
+					<c:if test="${!isMyProduct }">
+						<c:choose>
+							<c:when test="${productInfo.PRODUCT_STATE_NO eq 1 }">
+								<div class="product__buttons" id="product__buttons">
+									<div id="btn__wish" data-status="${bookmarkStatus }" onclick="productWish(this)">
+										<img id="bookmark__status" alt="찜" src="<c:url value='/resources/customer/img/wish_icon_${bookmarkStatus }.png' />">
+										<span>찜</span>
+										<span><c:out value="${productInfo.BOOKMARK_COUNT }"/></span>
+									</div>
+									<div id="btn__chat" onclick="sendChat()">
+										<span>채팅하기</span>
+										<form id="addChatRoomForm" method="post" action="<c:url value='/chat/add'/>">
+											<input type="hidden" name="seller_no">
+											<input type="hidden" name="product_name">
+											<input type="hidden" name="seller_nickname">
+										</form>
+									</div>
+									<div id="btn__buy" onclick="productBuy()">
+										<span>바로구매</span>
+										<form id="productBuyForm" method="post" action="<c:url value='/product/buy'/>">
+											<input type="hidden" name="product_no">
+										</form>
+									</div>
+								</div>
+							</c:when>
+							<c:otherwise>
+								<div class="product__not__sale">
+									<span>현재 판매 중인 상품이 아닙니다.</span>
+								</div>
+							</c:otherwise>
+						</c:choose>
+					</c:if>
 				</div>
 			</div> <!-- product__info -->
 			
@@ -149,21 +177,23 @@
 				</div>
 				<div class="product__content__2">
 					<div class="product__content__title">상점정보</div>
+					
 					<div class="product__seller">
 						<div class="product__seller__profile">
-							<a href="#"> <!-- 회원 상세보기 링크 추가할 것 -->
+							<a href="<c:url value='/member/mypage?member_no=${productInfo.SELLER_NO }'/>">
 								<img alt="판매자 이미지" src="<c:url value='/resources/customer/img/default_profile.png' />">
 							</a>
 						</div>
 						<div class="product__seller__info">
 							<div class="product__seller__info__1">
-								<a id="fetch__member__nickname" href="#"></a> <!-- 회원 상세보기 링크 추가할 것 -->
+								<a id="fetch__member__nickname" href="<c:url value='/member/mypage?member_no=${productInfo.SELLER_NO }'/>"></a>
 							</div>
 							<div class="product__seller__info__2">
 								<span id="fetch__product__count"></span>
 							</div>
 						</div>
 					</div>
+					
 					<div class="product__content__title">
 						<span>상점후기</span>
 						<span id="fetch__review__count"></span>
@@ -177,7 +207,7 @@
 					</div>
 					
 					<div class="product__review__more" id="product__review__more">
-						<a href="#">더 많은 후기 보러가기</a>
+						<a href="<c:url value='/member/mypage?member_no=${productInfo.SELLER_NO }'/>">더 많은 후기 보러가기</a>
 					</div>
 					
 					
@@ -190,211 +220,208 @@
 
 <script src="<c:url value='/resources/customer/js/product_info.js'/>"></script>
 <script type="text/javascript">
-	document.addEventListener('DOMContentLoaded', function(){
+const seller_id = `${productInfo.MEMBER_ID}`;
+const seller_no = `${productInfo.SELLER_NO}`;
+const current_id = document.getElementById('loginId').getAttribute('data-id');
+const current_no = document.getElementById('loginNo').getAttribute('data-no');
+const product_no = `${productInfo.PRODUCT_NO}`;
+const product_state = `${productInfo.PRODUCT_STATE_NO}`;
+
+document.addEventListener('DOMContentLoaded', function(){
+	// 이미지 불러오기
+	const imgList = JSON.parse(`${jsonText}`);
+	const imgPath = 'https://usmarket.s3.ap-northeast-2.amazonaws.com/';
+	document.getElementById('product__current__img').src = imgPath + imgList[0]; 
+	document.getElementById('img_preview').style.visibility = 'hidden';
+	let imgOrder = 0;
+	
+	if(imgList.length <= 1){
+		// 이미지가 한 장만 존재할 경우 preview, next 버튼 숨기기
+		document.getElementById('product__img__button').style.display = 'none';
+	}
 		
-		const seller_id = `${productInfo.MEMBER_ID}`;
-		const seller_no = `${productInfo.SELLER_NO}`;
-		const current_id = document.getElementById('loginId').getAttribute('data-id');
-		const current_no = document.getElementById('loginNo').getAttribute('data-no');
-		const product_no = `${productInfo.PRODUCT_NO}`;
-		const product_state = `${productInfo.PRODUCT_STATE_NO}`;
-		
-		console.log("product_no = "+product_no);
-		console.log("current_no = "+current_no);
-		console.log("current_id = "+current_id);
-		console.log("seller_no = "+seller_no);
-		
-		if(!isEmpty(current_no) && product_state == 1 ){
-			if(seller_id == current_id){ // 내 상품이며 판매 중인 상품일 경우
-				document.getElementById('product__buttons').style.display = 'none'; // 찜, 구매, 채팅 숨기기
-				document.querySelector('.product__detail__1 > .right').style.visibility = 'hidden'; // 신고 버튼 숨기기
-				document.getElementById('product__my__buttons').style.display = 'flex'; // 내 상점 관리, 삭제 활성화
-				
-			}
+	// 이전 요소가 존재하는지
+	function getPreviewImg(imgOrder){
+		// 현재 index가 0이 아니면
+		if(imgOrder > 0){
+			imgOrder--;
 		}
-		
-		
-		// 이미지 불러오기
-		const imgList = JSON.parse(`${jsonText}`);
-		const imgPath = 'https://usmarket.s3.ap-northeast-2.amazonaws.com/';
-		document.getElementById('product__current__img').src = imgPath + imgList[0]; 
-		document.getElementById('img_preview').style.visibility = 'hidden';
-		let imgOrder = 0;
-		
-		console.log('imgList = '+imgList);
-		console.log('imgListSize = '+imgList.length);
-		
-		if(imgList.length <= 1){
-			// 이미지가 한 장만 존재할 경우 preview, next 버튼 숨기기
-			document.getElementById('product__img__button').style.display = 'none';
+		return imgOrder;
+	}
+	
+	// 다음 요소가 존재하는지
+	function getNextImg(imgOrder){
+		// 현재 index가 마지막 index보다 작으면
+		if(imgOrder < (imgList.length-1)){
+			imgOrder++;
 		}
+		return imgOrder;
+	}
+	
+	document.getElementById('img_next').addEventListener('click', function(){
+		imgOrder = getNextImg(imgOrder);
+		console.log('imgOrder = '+imgOrder);
 		
-		// 이전 요소가 존재하는지
-		function getPreviewImg(imgOrder){
-			// 현재 index가 0이 아니면
-			if(imgOrder > 0){
-				imgOrder--;
-			}
-			return imgOrder;
+		if(imgOrder == (imgList.length - 1)){
+			// 마지막 요소면 next 버튼 숨김
+			console.log('마지막 요소');
+			document.getElementById('img_next').style.visibility = 'hidden';	
 		}
-		
-		// 다음 요소가 존재하는지
-		function getNextImg(imgOrder){
-			// 현재 index가 마지막 index보다 작으면
-			if(imgOrder < (imgList.length-1)){
-				imgOrder++;
-			}
-			return imgOrder;
-		}
-		
-		document.getElementById('img_next').addEventListener('click', function(){
-			imgOrder = getNextImg(imgOrder);
-			console.log('imgOrder = '+imgOrder);
-			
-			if(imgOrder == (imgList.length - 1)){
-				// 마지막 요소면 next 버튼 숨김
-				console.log('마지막 요소');
-				document.getElementById('img_next').style.visibility = 'hidden';	
-			}
-			// preview 버튼 표시
-			document.getElementById('img_preview').style.visibility = 'visible';
-			document.getElementById('product__current__img').src = imgPath + imgList[imgOrder];							
-		});
-		
-		document.getElementById('img_preview').addEventListener('click', function(){
-			imgOrder = getPreviewImg(imgOrder);
-			console.log('imgOrder = '+imgOrder);
-			
-			if(imgOrder == 0){
-				// 첫번째 요소면 preview 버튼 숨김
-				console.log('첫번째 요소');
-				document.getElementById('img_preview').style.visibility = 'hidden';
-			}
-			// next 버튼 표시
-			document.getElementById('img_next').style.visibility = 'visible';
-			document.getElementById('product__current__img').src = imgPath + imgList[imgOrder];
-		});
-		
-		
-		// 판매 중인 상품일 경우에만 구매, 채팅, 찜, 삭제 이벤트 등록 (판매 중이 아닐 경우 버튼이 존재하지 않기 때문)
-		if(product_state == 1){
-			// 삭제하기
-			document.getElementById('btn__product__delete').addEventListener('click', function(){
-				if(confirm('상품을 삭제하시겠습니까?')){
-					const productModifyForm = document.getElementById('productModifyForm');
-					productModifyForm.children[0].value = product_no;
-					productModifyForm.children[1].value = 4;
-					
-					productModifyForm.submit();
-				}
-			});		
-			
-			// 구매하기
-			document.getElementById('btn__buy').addEventListener('click', function(){
-				const productBuyForm = document.getElementById('productBuyForm');
-				productBuyForm.children[0].value = product_no;
-				
-				productBuyForm.submit();
-			});
-			
-			// 찜
-			document.getElementById('btn__wish').addEventListener('click', function(){
-				let status = this.dataset.status; 
-				
-				if(this.dataset.status == '0'){
-					this.dataset.status = '1';
-					this.children[0].setAttribute('src', '${pageContext.request.contextPath}/resources/customer/img/wish_icon_1.png');
-					this.children[2].textContent = parseInt(this.children[2].textContent) + 1;
-					document.querySelector('.product__wish span').textContent = this.children[2].textContent; 
-				}else{
-					this.dataset.status = '0';
-					this.children[0].setAttribute('src', '${pageContext.request.contextPath}/resources/customer/img/wish_icon_0.png');
-					this.children[2].textContent = parseInt(this.children[2].textContent) - 1;
-					document.querySelector('.product__wish span').textContent = this.children[2].textContent; 
-				}
-				
-				fetch('/usMarket/fetch/bookmark/'+product_no+'/'+status)
-				.then((response) => response.text())
-				.then((text) => {
-					console.log('after status = '+text);
-				}).catch((error) => console.log("error: "+error));
-			});
-			
-			// 채팅하기
-			document.getElementById('btn__chat').addEventListener('click', function(){
-				const addChatRoomForm = document.getElementById('addChatRoomForm');
-				addChatRoomForm.children[0].value = seller_no;
-				addChatRoomForm.children[1].value = document.querySelector('.product_name').textContent.trim();
-				addChatRoomForm.children[2].value = document.getElementById('fetch__member__nickname').textContent;
-				
-				console.log(addChatRoomForm);
-				addChatRoomForm.submit();				
-			});
-			
-			// 신고하기
-			document.getElementById('product__report').addEventListener('click', function(e){
-				if(isEmpty(document.getElementById('loginNo').dataset.no)){
-					location.href = '${pageContext.request.contextPath}/member/login';
-				} else{
-					document.getElementById('report_member_no').value = seller_no;
-					document.getElementById('report_info').value = `${param.product_no}`;
-					document.querySelector('.report-info').textContent = document.getElementById('fetch__member__nickname').textContent;
-					reportModal.show();		
-				}
-			});
-		} // if
-		
-		
-		// 리뷰 출력하기
-		const product__review = document.getElementById('product__review');
-		
-		fetch('/usMarket/fetch/seller/'+seller_no)
-		.then((response) => response.json())
-		.then((json) => {
-			setSellerInfo(json);
-			
-			if (json.REVIEW_COUNT == 0) {
-				document.getElementById('product__review__empty').style.display = 'flex';
-			} else if(json.REVIEW_COUNT > 0){
-				getTopReview(json.REVIEW_COUNT);
-			} // if-else
-				
-		}).catch((error) => console.log("error: "+error)); // fetch-2
-		
-		
-		// 상위 2건 리뷰 얻기
-		function getTopReview(reviewCount){
-			fetch('/usMarket/fetch/topReview/'+seller_no)
-			.then((response) => response.json())
-			.then((json) => {
-				json.forEach((el, i) => {
-					product__review.appendChild(setReview(el));
-				});
-			}).catch((error) => console.log("error: "+error)); // fetch-3
-			
-			if(reviewCount > 2){
-				document.getElementById('product__review__more').style.display = 'flex';
-			}
-			
-		}; // getTopReview
-		
-		
-		// 상품 태그 출력하기
-		const tagElement = document.getElementById('product__tag__content');
-		const tag = `${productInfo.PRODUCT_TAG}`;
-		
-		if(tag.length > 0){
-			const tagArr = tag.split(' ');
-			
-			tagArr.forEach((el) => {
-				let appendTag = document.createElement('a');
-				appendTag.setAttribute('href', '${pageContext.request.contextPath}/product/list?keyword='+encodeURIComponent(el));
-				appendTag.textContent = el;
-				tagElement.appendChild(appendTag);
-			});		
-		}
-		
+		// preview 버튼 표시
+		document.getElementById('img_preview').style.visibility = 'visible';
+		document.getElementById('product__current__img').src = imgPath + imgList[imgOrder];							
 	});
 	
+	document.getElementById('img_preview').addEventListener('click', function(){
+		imgOrder = getPreviewImg(imgOrder);
+		console.log('imgOrder = '+imgOrder);
+		
+		if(imgOrder == 0){
+			// 첫번째 요소면 preview 버튼 숨김
+			console.log('첫번째 요소');
+			document.getElementById('img_preview').style.visibility = 'hidden';
+		}
+		// next 버튼 표시
+		document.getElementById('img_next').style.visibility = 'visible';
+		document.getElementById('product__current__img').src = imgPath + imgList[imgOrder];
+	});
 	
+	// 리뷰 출력하기
+	const product__review = document.getElementById('product__review');
+	
+	fetch('/usMarket/fetch/seller/'+seller_no)
+	.then((response) => response.json())
+	.then((json) => {
+		setSellerInfo(json);
+		
+		if (json.REVIEW_COUNT == 0) {
+			document.getElementById('product__review__empty').style.display = 'flex';
+		} else if(json.REVIEW_COUNT > 0){
+			getTopReview(json.REVIEW_COUNT);
+		} // if-else
+			
+	}).catch((error) => console.error("error: "+error)); // fetch-2
+		
+		
+	// 상위 2건 리뷰 얻기
+	function getTopReview(reviewCount){
+		fetch('/usMarket/fetch/topReview/'+seller_no)
+		.then((response) => response.json())
+		.then((json) => {
+			json.forEach((el, i) => {
+				product__review.appendChild(setReview(el));
+			});
+		}).catch((error) => console.log("error: "+error)); // fetch-3
+		
+		if(reviewCount > 2){
+			document.getElementById('product__review__more').style.display = 'flex';
+		}
+		
+	}; // getTopReview
+		
+		
+	// 상품 태그 출력하기
+	const tagElement = document.getElementById('product__tag__content');
+	const tag = `${productInfo.PRODUCT_TAG}`;
+	
+	if(tag.length > 0){
+		const tagArr = tag.split(' ');
+		
+		tagArr.forEach((el) => {
+			let appendTag = document.createElement('a');
+			appendTag.setAttribute('href', '${pageContext.request.contextPath}/product/list?keyword='+encodeURIComponent(el));
+			appendTag.textContent = el;
+			tagElement.appendChild(appendTag);
+		});		
+	}
+	
+	// 내 상품일 경우 신고하기 버튼 숨김
+	if(`${isMyProduct}` == 'true'){
+		document.getElementById('productReport').style.visibility = 'hidden';
+	};
+}); // DOMContentLoaded
+
+
+// 상품 삭제
+let productRemove = function(){
+	if(confirm('상품을 삭제하시겠습니까?')){
+		// 삭제 작업 fetch로 변경할 것
+		const productModifyForm = document.getElementById('productModifyForm');
+		productModifyForm.children[0].value = `${productInfo.PRODUCT_NO}`;
+		productModifyForm.children[1].value = 4;
+		
+		productModifyForm.submit();
+	}	
+};
+
+
+// 상품 구매
+let productBuy = function(){
+	const productBuyForm = document.getElementById('productBuyForm');
+	productBuyForm.children[0].value = `${productInfo.PRODUCT_NO}`;
+	
+	productBuyForm.submit();
+};
+
+
+// 상품 찜하기
+let productWish = function(el){
+	let status = el.dataset.status;
+	
+	if(isEmpty(current_no)){
+		location.href = '${pageContext.request.contextPath}/member/login';
+		return;
+	}
+	
+	if(el.dataset.status == '0'){
+		el.dataset.status = '1';
+		el.children[0].setAttribute('src', '${pageContext.request.contextPath}/resources/customer/img/wish_icon_1.png');
+		el.children[2].textContent = parseInt(el.children[2].textContent) + 1;
+		document.querySelector('.product__wish span').textContent = el.children[2].textContent; 
+	}else{
+		el.dataset.status = '0';
+		el.children[0].setAttribute('src', '${pageContext.request.contextPath}/resources/customer/img/wish_icon_0.png');
+		el.children[2].textContent = parseInt(el.children[2].textContent) - 1;
+		document.querySelector('.product__wish span').textContent = el.children[2].textContent; 
+	}
+		
+	fetch('/usMarket/fetch/bookmark/'+product_no+'/'+status)
+	.then((response) => response.text())
+	.then((text) => {
+		console.log('after status = '+text);
+	}).catch((error) => console.error("error: "+error));
+};
+
+
+// 채팅하기
+let sendChat = function(){
+	const addChatRoomForm = document.getElementById('addChatRoomForm');
+	addChatRoomForm.children[0].value = seller_no;
+	addChatRoomForm.children[1].value = document.querySelector('.product_name').textContent.trim();
+	addChatRoomForm.children[2].value = document.getElementById('fetch__member__nickname').textContent;
+	
+	console.log(addChatRoomForm);
+	addChatRoomForm.submit();
+};
+
+
+// 신고하기
+let openReport = function(){
+	if(isEmpty(current_no)){
+		location.href = '${pageContext.request.contextPath}/member/login';
+		return;
+	}
+	
+	document.getElementById('report_member_no').value = seller_no;
+	document.getElementById('report_info').value = `${param.product_no}`;
+	document.querySelector('.report-info').textContent = document.getElementById('fetch__member__nickname').textContent;
+	reportModal.show();	
+};
+
+let productStateChange = function(el){
+	let currentStatus = el.dataset.status == '1' ? '판매중으로' : '예약완료로';
+	if(confirm('해당 상품을 ' + currentStatus + ' 변경하시겠습니까?')){
+		location.href = '${pageContext.request.contextPath}/product/info?product_no=' + `${productInfo.PRODUCT_NO}`;
+	}
+};
 </script>
