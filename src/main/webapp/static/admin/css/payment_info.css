@@ -142,7 +142,12 @@
 }
 
 .payment-review > .review-info > .left{
+	display: flex;
 	width: 15%;
+}
+
+.payment-review > .review-info > .left > img{
+	object-fit: contain;
 }
 
 .payment-review > .review-info > .right{
