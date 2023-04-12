@@ -16,16 +16,20 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.spring.usMarket.domain.chat.ChatDto;
 import com.spring.usMarket.domain.deal.DealInsertDto;
+import com.spring.usMarket.domain.product.ProductFileDto;
+import com.spring.usMarket.domain.product.ProductInsertDto;
 import com.spring.usMarket.domain.qna.QnaInsertDto;
 import com.spring.usMarket.domain.report.ReportInsertDto;
 import com.spring.usMarket.service.chat.ChatService;
 import com.spring.usMarket.service.deal.DealService;
+import com.spring.usMarket.service.product.ProductFileService;
 import com.spring.usMarket.service.product.ProductService;
 import com.spring.usMarket.service.qna.QnaService;
 import com.spring.usMarket.service.report.ReportService;
@@ -41,6 +45,7 @@ public class FetchController {
 	private static final String ADDED = "1";
 	
 	@Autowired ProductService productService;
+	@Autowired ProductFileService productFileService;
 	@Autowired DealService dealService;
 	@Autowired ChatService chatService;
 	@Autowired ReportService reportService;
@@ -313,7 +318,7 @@ public class FetchController {
 		return result;
 	}
 	
-	@PostMapping(value="/qna/reg")
+	@PostMapping("/qna/reg")
 	public Map<String, Object> qnaReg(QnaInsertDto dto, MultipartHttpServletRequest request) {
 		
 		logger.info("QnaInsertDto = {}", dto.toString());
@@ -341,5 +346,80 @@ public class FetchController {
 		} // try-catch
 		
 		return resultMap;
+	}
+	
+	@PostMapping("/product/modify")
+	public int productModify(@RequestParam Map<String, Object> map, HttpServletRequest request) {
+				
+		String product_no = map.get("product_no").toString();
+		String seller_no = SessionParameters.getUserNo(request);
+		Integer product_state_no = Integer.parseInt(map.get("product_state_no").toString());
+		
+		logger.info("product_no = {}, seller_no = {}, product_state_no = {}", product_no, seller_no, product_state_no);
+		
+		int rowCnt = 0;
+		try {
+			rowCnt = productService.modifyProductState(product_state_no, seller_no, product_no);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return rowCnt;
+	}
+	
+	@PostMapping("/product/remove")
+	public int productRemove(@RequestParam Map<String, Object> map, HttpServletRequest request) {
+		
+		String product_no = map.get("product_no").toString();
+		String seller_no = SessionParameters.getUserNo(request);
+		Integer product_state_no = Integer.parseInt(map.get("product_state_no").toString());
+		
+		logger.info("product_no = {}, seller_no = {}, product_state_no = {}", product_no, seller_no, product_state_no);
+		
+		int resultCnt = 0;
+		try {
+			List<String> productImage = productService.getProductImage(product_no);
+			boolean deleteResult = productFileService.delete(productImage);
+			if(deleteResult) {
+				
+				int updateCnt = productService.modifyProductState(product_state_no, seller_no, product_no);
+				int removeCnt = productService.removeProductImage(product_no);
+				
+				if(updateCnt+removeCnt == productImage.size()+1) {
+					logger.info("product remove SUCCESS");
+					resultCnt = 1;
+				}
+			}
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return resultCnt;
+	}
+	
+	@PostMapping("/product/sell")
+	public String productAdd(MultipartHttpServletRequest request, ProductInsertDto dto){
+		
+		dto.setSeller_no(Integer.parseInt(SessionParameters.getUserNo(request)));
+		logger.info("productInsertDto = {}", dto.toString());
+		
+		String result = "";
+		try {
+			int addResult = productService.addProduct(dto);
+			
+			if(addResult == 1) {
+				List<ProductFileDto> list = productFileService.upload(request.getFiles("product_img"), dto.getProduct_no());
+				int rowCnt = productService.addProductFile(list);
+				result = (list.size() == rowCnt ? dto.getProduct_no() : "");
+				
+				logger.info("addProductFile {}", (list.size() == rowCnt ? "SUCCESS" : "FAIL"));
+			}
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		} // try-catch
+		
+		return result;
 	}
 }

@@ -38,8 +38,6 @@ public class ProductController {
 	@Autowired ProductService productService;
 	@Autowired ProductFileService fileService;
 	
-	private static final int BLIND = 4;
-	
 	@GetMapping("/list")
 	public void list(SearchCondition sc, Model model){
 		sc.setPageSize(30);
@@ -147,65 +145,8 @@ public class ProductController {
 	public void sell(){
 		logger.info("product/sell");
 	}
-	
-	
-	@PostMapping("/sell")
-	public String addProduct(MultipartHttpServletRequest request, ProductInsertDto dto){
-		dto.setSeller_no(Integer.parseInt(SessionParameters.getUserNo(request)));
-		try {
-			// 1. 상품 등록
-			logger.info("productInsertDto = {}", dto.toString());
-			int result = productService.addProduct(dto);
-			
-			if(result != 1) return "redirect:/product/sell";
-			
-			// 2. 파일 업로드
-			List<ProductFileDto> list = fileService.upload(request.getFiles("product_img"), dto.getProduct_no());
-			
-			// 3. 파일 db에 insert
-			int rowCnt = productService.addProductFile(list);
-			logger.info("addProductFile {}", (list.size() == rowCnt ? "SUCCESS" : "FAIL"));
-			
-		} catch (Exception e) {
-			e.printStackTrace();
-		} // try-catch
-				
-		return "redirect:/product/info?product_no="+dto.getProduct_no();
-	}
-	
 
-	@PostMapping("/remove")
-	public String removeProduct(HttpServletRequest request, String product_no, Integer product_state_no, RedirectAttributes ratt) {
-		String seller_no = SessionParameters.getUserNo(request);
-		
-		logger.info("product_no = {}, seller_no = {}, product_state_no = {}", product_no, seller_no, product_state_no);
-		
-		String url = "redirect:/product/info?product_no="+product_no;
-		String msg = "상품 삭제에 실패했습니다.";
-		try {
-			List<String> productImage = productService.getProductImage(product_no);
-			boolean deleteResult = fileService.delete(productImage);
-			if(deleteResult) {
-				
-				int updateCnt = productService.modifyProductState(BLIND, seller_no, product_no);
-				int removeCnt = productService.removeProductImage(product_no);
-				
-				if(updateCnt+removeCnt == productImage.size()+1) {
-					msg = "상품이 정상적으로 삭제되었습니다.";
-					url = "redirect:/";
-					logger.info("removeProduct SUCCESS");
-				}
-			}
-			
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		
-		ratt.addFlashAttribute("removeMessage", msg);
-		return url;
-	}
 	
-
 	@PostMapping("/buy")
 	public void buy(String product_no, HttpServletRequest request, Model model) {
 		String customer_no = SessionParameters.getUserNo(request);
@@ -220,7 +161,5 @@ public class ProductController {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		
 	}
-
 }

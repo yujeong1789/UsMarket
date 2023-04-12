@@ -1,7 +1,6 @@
 package com.spring.usMarket.service.product;
 
 import java.sql.SQLException;
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -18,7 +17,6 @@ import com.spring.usMarket.domain.product.ProductDto;
 import com.spring.usMarket.domain.product.ProductFileDto;
 import com.spring.usMarket.domain.product.ProductInsertDto;
 import com.spring.usMarket.utils.SearchCondition;
-import com.spring.usMarket.utils.TimeConvert;
 
 @Service
 public class ProductServiceImpl implements ProductService {
@@ -106,7 +104,6 @@ public class ProductServiceImpl implements ProductService {
 	public Map<String, Object> getProductInfo(String product_no) throws Exception {
 		
 		Map<String, Object> resultMap = productDao.searchProductInfo(product_no);
-		resultMap.put("PRODUCT_REGDATE", TimeConvert.calculateTime((Date)resultMap.get("PRODUCT_REGDATE")));
 		logger.info("상품 상세보기 = {}", resultMap.keySet().toString());
 		
 		return resultMap;
