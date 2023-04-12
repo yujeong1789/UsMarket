@@ -2,6 +2,7 @@
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
+<%@ page import="com.spring.usMarket.utils.TimeConvert"%>
 
 <link rel="stylesheet" href="<c:url value='/resources/customer/css/product_info.css'/>" type="text/css">
 <section class="product__info__section">
@@ -68,7 +69,7 @@
 								<div class="product__detail__icon">
 									<img alt="업로드 시간" src="<c:url value='/resources/customer/img/clock.png' />">
 								</div>
-								<span><c:out value="${productInfo.PRODUCT_REGDATE }"/></span>						
+								<span>${TimeConvert.calculateTime(productInfo.PRODUCT_REGDATE)}</span>						
 							</div>
 						</div>
 						<div class="right" id="productReport" onclick="openReport()">
@@ -110,11 +111,7 @@
 									<div class="btn__product__delete" id="btn__product__delete" onclick="productRemove()">
 										<span>삭제하기</span>
 									</div>
-								</div>	
-								<form id="productModifyForm" method="post" action="<c:url value='/product/remove'/>">
-									<input type="hidden" name="product_no">
-									<input type="hidden" name="product_state_no">
-								</form>
+								</div>
 							</c:when>
 							<c:otherwise>
 								<div class="product__not__sale">
@@ -345,12 +342,24 @@ document.addEventListener('DOMContentLoaded', function(){
 // 상품 삭제
 let productRemove = function(){
 	if(confirm('상품을 삭제하시겠습니까?')){
-		// 삭제 작업 fetch로 변경할 것
-		const productModifyForm = document.getElementById('productModifyForm');
-		productModifyForm.children[0].value = `${productInfo.PRODUCT_NO}`;
-		productModifyForm.children[1].value = 4;
 		
-		productModifyForm.submit();
+		let formData = new FormData();
+		formData.append('product_no', `${productInfo.PRODUCT_NO}`);
+		formData.append('product_state_no', 4);
+		
+		fetch('/usMarket/fetch/product/remove', {
+			method: 'POST',
+			body: formData
+		})
+		.then((response) => response.text())
+		.then((text) => {
+			if(text == '1'){
+				alert('정상적으로 삭제되었습니다.');
+				location.href = '${pageContext.request.contextPath}/';
+			}else{
+				alert('상품 삭제에 실패했습니다.');
+			}
+		}).catch((error) => console.error('error: '+error));
 	}	
 };
 
@@ -420,8 +429,26 @@ let openReport = function(){
 
 let productStateChange = function(el){
 	let currentStatus = el.dataset.status == '1' ? '판매중으로' : '예약완료로';
+	
 	if(confirm('해당 상품을 ' + currentStatus + ' 변경하시겠습니까?')){
-		location.href = '${pageContext.request.contextPath}/product/info?product_no=' + `${productInfo.PRODUCT_NO}`;
+		
+		let formData = new FormData();
+		formData.append('product_no', `${productInfo.PRODUCT_NO}`);
+		formData.append('product_state_no', el.dataset.status);
+		
+		fetch('/usMarket/fetch/product/modify', {
+			method: 'POST',
+			body: formData
+		})
+		.then((response) => response.text())
+		.then((text) => {
+			if(text == '1'){
+				alert('정상적으로 변경되었습니다.');
+				location.reload();
+			}else{
+				alert('상태 변경에 실패했습니다.');
+			}
+		}).catch((error) => console.error('error: '+error));
 	}
 };
 </script>
