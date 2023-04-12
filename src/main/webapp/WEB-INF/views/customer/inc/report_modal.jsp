@@ -152,7 +152,7 @@ document.querySelector('.modal-submit').addEventListener('click', function(e){
 			.then((text) => {
 				alert(text);
 				reportModal.hide();
-			}).catch((error) => console.log('error: '+error));
+			}).catch((error) => console.error('error: '+error));
 		}
 	}
 });
@@ -180,8 +180,6 @@ function getReportCategory2(report_category1_no){
 	fetch('/usMarket/fetch/reportCategory/'+report_category1_no)
 	.then((response) => response.json())
 	.then((json) => {
-		console.log(json);
-		
 		json.forEach((el, i) => {
 			var label = document.createElement('label');
 			var radio = document.createElement('input');
@@ -203,6 +201,6 @@ function getReportCategory2(report_category1_no){
 			document.querySelector('.report-category').appendChild(label);
 		});
 		
-	}).catch((error) => console.log('error: '+error));
+	}).catch((error) => console.error('error: '+error));
 };
 </script>
