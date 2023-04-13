@@ -101,13 +101,13 @@
 				<div class="mypage_category">
 					<div class="category_head">
 						<button class="head_category" id="head_product" data-status="selected">
-							<span class="product_name">상품<c:out value="${product }"/></span>
+							<span class="product_name">상품 <c:out value="${product }"/></span>
 						</button>
 						<button class="head_category" id="head_review">
-							<span class="review_name">상점후기</span>
+							<span class="review_name">상점후기 </span><span></span>
 						</button>
 						<button class="head_category" id="head_bookmark">
-							<span class="bookmark_name">찜<c:out value="${bookmark }" /></span>
+							<span class="bookmark_name">찜 <c:out value="${bookmark }" /></span>
 						</button>
 					</div>
 				</div>
@@ -293,7 +293,7 @@
 			$('#pageValue').val(1);
 			myProductList(1);
 		});
-
+    
 		function myProductList(page){			
 			params = {
 					'page': page,
