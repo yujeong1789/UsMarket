@@ -3,13 +3,6 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 
-<c:if test="${not empty removeMessage}">
-	<script type="text/javascript">
-		var removeMessage = `${removeMessage}`;
-		alert(removeMessage);
-	</script>
-</c:if>
-
 <section class="featured spad">
 
 	<div class="row">

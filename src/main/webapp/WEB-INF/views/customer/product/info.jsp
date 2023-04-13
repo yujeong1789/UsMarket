@@ -13,13 +13,6 @@
 			location.href = '${pageContext.request.contextPath}/';
 		</script>
 	</c:if>
-	
-	<c:if test="${not empty removeMessage}">
-		<script type="text/javascript">
-			var removeMessage = `${removeMessage}`;
-			alert(removeMessage);
-		</script>
-	</c:if>
 
 	<!-- 신고하기 모달 -->
 	<input type="hidden" id="report_type" value="1">
