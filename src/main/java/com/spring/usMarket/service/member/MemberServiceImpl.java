@@ -140,15 +140,9 @@ public class MemberServiceImpl implements MemberService {
 	@Override
 	@Transactional(rollbackFor = SQLException.class, readOnly = true)
 	public List<Map<String, Object>> getMypageProduct(AdminSearchCondition sc) throws Exception {
-		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMdd");
-		
 		List<Map<String, Object>> productList = memberDAO.searchMypageProduct(sc);
-		for(Map<String, Object> product : productList) {
-		    Object regdate = product.get("PRODUCT_REGDATE");
-		    dateFormat.format(regdate);
-		    product.put("PRODUCT_REGDATE", TimeConvert.calculateTime((Date)regdate));
-		};
-
+		logger.info("productList = {}",productList);
+		
 	    return productList;
 	}
 	
@@ -164,15 +158,9 @@ public class MemberServiceImpl implements MemberService {
 
 	@Override
 	@Transactional(rollbackFor = SQLException.class, readOnly = true)
-	public List<Map<String, Object>> getMypageBookmark(String member_no) throws Exception {
-		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMdd");
-		
-		List<Map<String, Object>> bookmarkList = memberDAO.searchMypageBookmark(Integer.parseInt(member_no));
-		for(Map<String, Object> bookmark : bookmarkList) {
-		    Object regdate = bookmark.get("PRODUCT_REGDATE");
-		    dateFormat.format(regdate);
-		    bookmark.put("PRODUCT_REGDATE", TimeConvert.calculateTime((Date)regdate));
-		};
+	public List<Map<String, Object>> getMypageBookmark(AdminSearchCondition sc) throws Exception {
+		List<Map<String, Object>> bookmarkList = memberDAO.searchMypageBookmark(sc);
+		logger.info("productList = {}",bookmarkList);
 		
 		return bookmarkList;
 	}

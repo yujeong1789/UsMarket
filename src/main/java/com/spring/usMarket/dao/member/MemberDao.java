@@ -21,7 +21,7 @@ public interface MemberDao {
 	List<Map<String, Object>> searchMypageProduct(AdminSearchCondition sc) throws Exception;
 	int searchMypageProductCount(Integer member_no) throws Exception;
 	
-	List<Map<String, Object>> searchMypageBookmark(Integer member_no) throws Exception;
+	List<Map<String, Object>> searchMypageBookmark(AdminSearchCondition sc) throws Exception;
 	int searchMypageBookmarkCount(Integer member_no) throws Exception;
 	
 }

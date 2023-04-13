@@ -24,7 +24,7 @@ public interface MemberService {
 	List<Map<String, Object>> getMypageProduct(AdminSearchCondition sc) throws Exception;
 	int getMypageProductCount(String member_no) throws Exception;
 	
-	List<Map<String, Object>> getMypageBookmark(String member_no) throws Exception;
+	List<Map<String, Object>> getMypageBookmark(AdminSearchCondition sc) throws Exception;
 	int getMypageBookmarkCount(String member_no) throws Exception;
 	
 }
