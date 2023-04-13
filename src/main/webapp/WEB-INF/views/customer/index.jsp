@@ -36,7 +36,6 @@
 					<div class="product__img">
 						<a href="<c:url value='/product/info?product_no=${productDto.product_no}' />">
 							<img src="https://usmarket.s3.ap-northeast-2.amazonaws.com/${productDto.product_img_path }">
-							<!-- 임시 이미지 출력 (수정 예정) -->
 						</a>
 					</div>
 					<div class="product__info__1">
