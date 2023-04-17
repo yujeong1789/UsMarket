@@ -1,5 +1,6 @@
 package com.spring.usMarket.dao.member;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -10,7 +11,7 @@ import org.springframework.stereotype.Repository;
 
 import com.spring.usMarket.domain.member.MemberDto;
 import com.spring.usMarket.service.member.MemberService;
-import com.spring.usMarket.utils.AdminSearchCondition;
+import com.spring.usMarket.utils.ProfileSearchCondition;
 
 import lombok.RequiredArgsConstructor;
 
@@ -65,22 +66,30 @@ public class MemberDaoImpl implements MemberDao{
 	}
 
 	@Override
-	public List<Map<String, Object>> searchMypageProduct(AdminSearchCondition sc) throws Exception {
+	public List<Map<String, Object>> searchMypageProduct(ProfileSearchCondition sc) throws Exception {
 		return session.selectList(namespace+"searchMypageProduct", sc);
 	}
 
 	@Override
-	public int searchMypageProductCount(Integer member_no) throws Exception {
-		return session.selectOne(namespace+"searchMypageProductCount", member_no);
+	public int searchMypageProductCount(Integer member_no, String condition) throws Exception {
+		Map<String, Object> map = new HashMap<>();
+		map.put("member_no", member_no);
+		map.put("condition", condition);
+		
+		return session.selectOne(namespace+"searchMypageProductCount", map);
 	}
 
 	@Override
-	public List<Map<String, Object>> searchMypageBookmark(AdminSearchCondition sc) throws Exception {
+	public List<Map<String, Object>> searchMypageBookmark(ProfileSearchCondition sc) throws Exception {
 		return session.selectList(namespace+"searchMypageBookmark", sc);
 	}
 
 	@Override
-	public int searchMypageBookmarkCount(Integer member_no) throws Exception {
+	public int searchMypageBookmarkCount(Integer member_no, String condition) throws Exception {
+		Map<String, Object> map = new HashMap<>();
+		map.put("member_no", member_no);
+		map.put("condition", condition);
+		
 		return session.selectOne(namespace+"searchMypageBookmarkCount", member_no);
 	}
 }
