@@ -34,7 +34,7 @@ public class ChatServiceTest {
 		Integer seller_no = 3;
 		ChatRoomDto roomDto = chatService.getChatRoomByInfo(current_no, seller_no);
 		if(roomDto == null) {
-			ChatDto chatDto = chatService.addChatRoom(current_no, seller_no, "test message");
+			ChatDto chatDto = chatService.addChatRoom(current_no, seller_no, "test message", 0, "");
 		}
 		List<ChatDto> chatInfo = chatService.getChatInfo(roomDto.getRoom_no());
 		for(ChatDto chatDto : chatInfo){
