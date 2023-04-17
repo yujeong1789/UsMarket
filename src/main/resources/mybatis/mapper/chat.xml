@@ -57,8 +57,8 @@
 	</update>
 	
 	<insert id="insertChat" parameterType="chatDto">
-		INSERT INTO chat(room_no, chat_from, chat_to, chat_content, chat_time, chat_read)
-		 values(#{room_no}, #{chat_from}, #{chat_to}, #{chat_content}, #{chat_time}, #{chat_read})
+		INSERT INTO chat(room_no, chat_from, chat_to, chat_content, chat_time, chat_read, chat_type, chat_info)
+		 values(#{room_no}, #{chat_from}, #{chat_to}, #{chat_content}, #{chat_time}, #{chat_read}, #{chat_type}, #{chat_info})
 	</insert>
 	
 	<select id="searchNewChat" parameterType="int" resultType="int">
