@@ -72,28 +72,30 @@
 				</div>
 				</c:forEach>
 			</div>
+			
+			<div class="paging__container">
+				<c:if test="${ph.totalCnt != null}">
+					<c:if test="${ph.showPrev }">
+						<div class="paging-prev">&lt;&lt;</div>
+					</c:if>
+					<c:forEach var="i" begin="${ph.beginPage }" end="${ph.endPage }">
+						<div class="paging-box ${i eq ph.sc.page ? 'current-page' : 'not-current-page' }">
+							<input id="pageValue" type="hidden" value="${i }">
+							${i}
+						</div>
+					</c:forEach>
+					<c:if test="${ph.showNext }">
+						<div class="paging-next">&gt;&gt;</div>
+					</c:if>
+				</c:if>
+			</div> <!-- paging__container -->
 		</c:if>
 		
 		<c:if test="${empty mypageList }">
 			<div class="no__item">등록된 상품이 없습니다.</div> <!-- 이미지 만들 것 -->				
 		</c:if>
 		
-		<div class="paging__container">
-			<c:if test="${ph.totalCnt != null}">
-				<c:if test="${ph.showPrev }">
-					<div class="paging-prev">&lt;&lt;</div>
-				</c:if>
-				<c:forEach var="i" begin="${ph.beginPage }" end="${ph.endPage }">
-					<div class="paging-box ${i eq ph.sc.page ? 'current-page' : 'not-current-page' }">
-						<input id="pageValue" type="hidden" value="${i }">
-						${i}
-					</div>
-				</c:forEach>
-				<c:if test="${ph.showNext }">
-					<div class="paging-next">&gt;&gt;</div>
-				</c:if>
-			</c:if>
-		</div> <!-- paging__container -->		
+				
 	<c:if test="${myList == 'myProductList' || myList == 'myBookmark'}">
 	</c:if>
 	<!-- MyProductList -->
