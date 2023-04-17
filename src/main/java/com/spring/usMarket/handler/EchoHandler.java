@@ -47,7 +47,9 @@ public class EchoHandler extends TextWebSocketHandler{
 		if(!msg.isEmpty() || msg != "") {
 			ChatDto chatDto = objectMapper.readValue(msg, ChatDto.class);
 			String receiverNo = String.valueOf(chatDto.getChat_to());
-			if(sessionList.get(receiverNo) != null ) {
+			
+			// 받는 사람이 접속 중일 경우 sendMessage
+			if(sessionList.get(receiverNo) != null ) {	
 				WebSocketSession receiver = sessionList.get(receiverNo);
 				receiver.sendMessage(new TextMessage(msg));
 			}
