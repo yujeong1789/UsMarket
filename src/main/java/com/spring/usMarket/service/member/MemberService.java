@@ -7,7 +7,7 @@ import java.util.Map;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.spring.usMarket.domain.member.MemberDto;
-import com.spring.usMarket.utils.AdminSearchCondition;
+import com.spring.usMarket.utils.ProfileSearchCondition;
 
 public interface MemberService {
 	int addMember(MemberDto member);
@@ -21,10 +21,10 @@ public interface MemberService {
 	String upload(MultipartFile file)throws IOException;
 	MemberDto getMemberInfo(String member_no) throws Exception;
 	
-	List<Map<String, Object>> getMypageProduct(AdminSearchCondition sc) throws Exception;
-	int getMypageProductCount(String member_no) throws Exception;
+	List<Map<String, Object>> getMypageProduct(ProfileSearchCondition sc) throws Exception;
+	int getMypageProductCount(String member_no, String condition) throws Exception;
 	
-	List<Map<String, Object>> getMypageBookmark(AdminSearchCondition sc) throws Exception;
-	int getMypageBookmarkCount(String member_no) throws Exception;
+	List<Map<String, Object>> getMypageBookmark(ProfileSearchCondition sc) throws Exception;
+	int getMypageBookmarkCount(String member_no, String condition) throws Exception;
 	
 }
