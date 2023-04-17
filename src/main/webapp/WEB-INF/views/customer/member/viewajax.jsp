@@ -33,6 +33,7 @@
 		</div>
 	</div>
 </div>
+<input class="mode" type="hidden" value="${myList }">
 <div class="content_list">
 		<c:if test="${! empty mypageList }">
 			<div class="product__area">
