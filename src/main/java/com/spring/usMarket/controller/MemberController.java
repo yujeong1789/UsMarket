@@ -2,6 +2,7 @@ package com.spring.usMarket.controller;
 
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
@@ -27,10 +28,9 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.spring.usMarket.domain.member.MemberDto;
-import com.spring.usMarket.service.admin.AdminService;
 import com.spring.usMarket.service.member.MemberService;
-import com.spring.usMarket.utils.AdminPageHandler;
-import com.spring.usMarket.utils.AdminSearchCondition;
+import com.spring.usMarket.utils.ProfilePageHandler;
+import com.spring.usMarket.utils.ProfileSearchCondition;
 
 import lombok.RequiredArgsConstructor;
 
@@ -42,7 +42,6 @@ public class MemberController {
 
 	private final MemberService memberService;
 	private final JavaMailSender mailSender;
-	private final AdminService adminService;
 
 	@GetMapping("/login")
 	public String login(HttpServletRequest request) {
@@ -197,7 +196,7 @@ public class MemberController {
 	}
 	
 	@GetMapping("/mypage")
-	public String info(HttpServletRequest request, Model model, AdminSearchCondition sc) {
+	public String info(HttpServletRequest request, Model model, ProfileSearchCondition sc) {
 		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy년 MM월 dd일");
 		
 		String member_no = String.valueOf(request.getSession().getAttribute("userNo"));
@@ -206,7 +205,6 @@ public class MemberController {
 
 		int totalCnt = 0;
 		sc.setPageSize(15);		
-		logger.info("queryString = "+sc);
 		
 		try {
 			if (request.getParameter("member_no") != null) {
@@ -216,16 +214,15 @@ public class MemberController {
 			MemberDto memberInfo = memberService.getMemberInfo(member_no);//Mypage_member
 			
 			sc.setMember_no(member_no);
-			logger.info("AdminSearchCondition = "+sc);
 			
 			List<Map<String, Object>> mypageProductList = memberService.getMypageProduct(sc);
 			logger.info("mypageProductList : {}",mypageProductList);
 			
-			int ProductCount = memberService.getMypageProductCount(member_no);//Mypage_product
-			int bookmarkCount = memberService.getMypageBookmarkCount(member_no);//Mypage_Bookmark
+			int ProductCount = memberService.getMypageProductCount(member_no, sc.getCondition());//Mypage_product
+			int bookmarkCount = memberService.getMypageBookmarkCount(member_no,sc.getCondition());//Mypage_Bookmark
 			
 			totalCnt = ProductCount;
-			AdminPageHandler pageHandler = new AdminPageHandler(totalCnt, sc);
+			ProfilePageHandler pageHandler = new ProfilePageHandler(totalCnt, sc);
 
 			model.addAttribute("memberInfo", memberInfo);
 			model.addAttribute("regdate",dateFormat.format(memberInfo.getMember_regdate()));
@@ -243,19 +240,33 @@ public class MemberController {
 	}
 	
 	@PostMapping("/mypage")
-	public String reinfo(@RequestBody AdminSearchCondition sc, RedirectAttributes ratt) {
+	public String reinfo(@RequestBody ProfileSearchCondition sc, RedirectAttributes ratt) {
 		sc.setPageSize(15);
 		logger.info("post adminSearchCondition = {}", sc.toString());
 		
 		int totalCnt = 0;
 		
+		List<Map<String, Object>> myList = new ArrayList<>();
+		
 		try {
-			List<Map<String, Object>> productList = adminService.getMemberProductList(sc);
-			 
-			totalCnt = adminService.getMemberProductCnt(sc.getMember_no(), sc.getCondition());
-			AdminPageHandler pageHandler = new AdminPageHandler(totalCnt, sc);
+			logger.info("sc.getMode() = {}",sc.getMode());
+			if(sc.getMode().equals("myProductList")) {
+				myList = memberService.getMypageProduct(sc);
+				totalCnt = memberService.getMypageProductCount(sc.getMember_no(), sc.getCondition());
+			}
+			if(sc.getMode().equals("myReview")) {
+				myList = null;
+				totalCnt = 0;
+			}
+			if(sc.getMode().equals("myBookmark")) {
+				myList = memberService.getMypageBookmark(sc);
+				totalCnt = memberService.getMypageBookmarkCount(sc.getMember_no(), sc.getCondition());
+			}
+			logger.info("myList = {}, totalCnt = {}",myList, totalCnt);
 			
-			ratt.addFlashAttribute("mypageList", productList);
+			ProfilePageHandler pageHandler = new ProfilePageHandler(totalCnt, sc);
+			
+			ratt.addFlashAttribute("mypageList", myList);
 			ratt.addFlashAttribute("page", sc.getPage());
 			ratt.addFlashAttribute("pageSize", sc.getPageSize());
 			ratt.addFlashAttribute("condition", sc.getOrder());
@@ -273,19 +284,40 @@ public class MemberController {
 	public void listform() throws Exception{
 		logger.info("viewajax");
 	}
-	
-	@PostMapping("/myBookmark")
-	public String MyBookmark(@RequestBody AdminSearchCondition sc, RedirectAttributes ratt) throws Exception {
+
+	@PostMapping("/myProductList")
+	public String MyProductList(@RequestBody ProfileSearchCondition sc, RedirectAttributes ratt) throws Exception {
 		sc.setPageSize(15);
 		int totalCnt = 0;
 		
-		logger.info("member_No = {}", sc.getMember_no());
+		logger.info("member_no = {}", sc.getMember_no());
+		
+		List<Map<String, Object>> mypageProductList = memberService.getMypageProduct(sc);
+		logger.info("내 상품 리스트 = " + mypageProductList);
+		totalCnt = mypageProductList.size();
+		ProfilePageHandler pageHandler = new ProfilePageHandler(totalCnt, sc);
+		
+		ratt.addFlashAttribute("myList", "myProductList");
+		ratt.addFlashAttribute("mypageList", mypageProductList);
+		ratt.addFlashAttribute("page", sc.getPage());
+		ratt.addFlashAttribute("pageSize", sc.getPageSize());
+		ratt.addFlashAttribute("ph", pageHandler);
+		
+		return "redirect:/member/viewajax";
+	}
+
+	@PostMapping("/myBookmark")
+	public String MyBookmark(@RequestBody ProfileSearchCondition sc, RedirectAttributes ratt) throws Exception {
+		sc.setPageSize(15);
+		int totalCnt = 0;
+		
+		logger.info("member_no = {}", sc.getMember_no());
 		
 		List<Map<String, Object>> mypageBookmarkList = memberService.getMypageBookmark(sc);
 		logger.info("북마크 리스트 = " + mypageBookmarkList);
 		
 		totalCnt = mypageBookmarkList.size();
-		AdminPageHandler pageHandler = new AdminPageHandler(totalCnt, sc);
+		ProfilePageHandler pageHandler = new ProfilePageHandler(totalCnt, sc);
 		
 		ratt.addFlashAttribute("myList", "myBookmark");
 		ratt.addFlashAttribute("mypageList", mypageBookmarkList);
@@ -295,21 +327,22 @@ public class MemberController {
 		
 		return "redirect:/member/viewajax";
 	}
-
-	@PostMapping("/myProductList")
-	public String MyProductList(@RequestBody AdminSearchCondition sc, RedirectAttributes ratt) throws Exception {
+	
+	@PostMapping("/myReview")
+	public String MyReview(@RequestBody ProfileSearchCondition sc, RedirectAttributes ratt) throws Exception {
 		sc.setPageSize(15);
 		int totalCnt = 0;
 		
-		logger.info("AdminSearchCondition = {}", sc.toString());
+		logger.info("member_no = {}", sc.getMember_no());
 		
-		List<Map<String, Object>> mypageProductList = adminService.getMemberProductList(sc);
-		logger.info("마이페이지 상품 리스트 = " + mypageProductList);
-		totalCnt = mypageProductList.size();
-		AdminPageHandler pageHandler = new AdminPageHandler(totalCnt, sc);
+		List<Map<String, Object>> mypageBookmarkList = memberService.getMypageBookmark(sc);
+		logger.info("후기 리스트 = " + mypageBookmarkList);
 		
-		ratt.addFlashAttribute("myList", "myProductList");
-		ratt.addFlashAttribute("mypageList", mypageProductList);
+		totalCnt = mypageBookmarkList.size();
+		ProfilePageHandler pageHandler = new ProfilePageHandler(totalCnt, sc);
+		
+		ratt.addFlashAttribute("myList", "myReview");
+		ratt.addFlashAttribute("mypageList", mypageBookmarkList);
 		ratt.addFlashAttribute("page", sc.getPage());
 		ratt.addFlashAttribute("pageSize", sc.getPageSize());
 		ratt.addFlashAttribute("ph", pageHandler);
