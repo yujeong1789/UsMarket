@@ -111,6 +111,14 @@
 	width: 50%;
 	display: flex;
 	align-items: center;
+	color: #007BFF;
+}
+
+.member_option > div:last-child > span{
+	cursor: pointer;
+}
+.member_option > div:last-child > span:hover{
+	color: #0056B3;
 }
 
 .member_option span{

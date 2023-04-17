@@ -86,7 +86,10 @@
 											<a href="<c:url value='/member/join?mode=modify'/>">회원 정보 수정</a>
 										</div>
 										<div>
-											<a href="<c:url value='/member/transactionhistory'/>">거래 내역</a>
+											<span class="dealListForm">거래내역</span>
+											<form action="<c:url value='/deal/list'/>" method="post">
+												<input type="hidden" name="member_no" value="${memberInfo.member_no }">
+											</form>
 										</div>
 									</div>
 								</c:if>	
@@ -326,5 +329,9 @@
 		});
 		
 	}); // ready
+	
+	document.querySelector('.dealListForm').addEventListener('click', function(){
+		this.nextElementSibling.submit();
+	});
 	
 </script>
