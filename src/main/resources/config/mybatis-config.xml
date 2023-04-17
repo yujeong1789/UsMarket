@@ -57,6 +57,9 @@
 		 
 		 <typeAlias type="com.spring.usMarket.domain.admin.AdminNoticeInsertDto"
 		  alias="adminNoticeInsertDto"/>
+		  
+		 <typeAlias type="com.spring.usMarket.utils.ProfileSearchCondition"
+		 alias="profileSearchCondition"/>
 	</typeAliases>
 	
 </configuration>
