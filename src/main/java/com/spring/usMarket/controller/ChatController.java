@@ -62,7 +62,7 @@ public class ChatController {
 			// null이면 새 채팅방 만들고 채팅 insert
 			if(dto == null) {
 				String chat_content = seller_nickname+"님, 판매 중인 "+product_name+" 상품에 문의사항이 있어요!";
-				chatDto = chatService.addChatRoom(current_no, seller_no, chat_content);
+				chatDto = chatService.addChatRoom(current_no, seller_no, chat_content, 0, "");
 				ratt.addFlashAttribute("chatDto", new ObjectMapper().writeValueAsString(chatDto));
 				ratt.addFlashAttribute("room_no", chatDto.getRoom_no());
 			}else {

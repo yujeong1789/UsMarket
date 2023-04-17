@@ -99,177 +99,194 @@
 					</li>
 				</ul>
 			</form> <!-- form -->
+			<form id="dealInfoForm" action="<c:url value='/deal/info'/>" method="post">
+				<input type="hidden" id="success_deal_no" name="deal_no" value="">
+			</form>
 		</div> <!-- container -->
 	</div> <!-- row -->
 </section> <!-- product__buy__section -->
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.4.0/sockjs.min.js"></script>
 <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 <script>
-	document.addEventListener('DOMContentLoaded', function(){
-	
-		document.querySelectorAll('.infoLink').forEach(el => {
-			el.addEventListener('click', function(e){
-				e.target.style.cursor = 'pointer';
-				location.href='${pageContext.request.contextPath}/product/info?product_no='+`${productOrderInfo.PRODUCT_NO}`;
-			});
-		});
-		
+const customer_no = `${customer_no}`;
+document.addEventListener('DOMContentLoaded', function(){
 
-		// 회원 이름, 연락처 불러오기
-		const customer_no = `${customer_no}`;
-		fetch('/usMarket/fetch/customerInfo/'+customer_no)
-		.then((response) => response.json())
-		.then((json) => {
-			console.log(json);
+	document.querySelectorAll('.infoLink').forEach(el => {
+		el.addEventListener('click', function(e){
+			e.target.style.cursor = 'pointer';
+			location.href='${pageContext.request.contextPath}/product/info?product_no='+`${productOrderInfo.PRODUCT_NO}`;
+		});
+	});
+	
+	// 회원 이름, 연락처 불러오기
+	fetch('/usMarket/fetch/customerInfo/'+customer_no)
+	.then((response) => response.json())
+	.then((json) => {
+		console.log(json);
+		
+		var len = Object.keys(json).length;
+		document.getElementById('customer_name').value = json.MEMBER_NAME;
+		document.getElementById('customer_hp').value = json.MEMBER_HP;
+		document.getElementById('customer_email').value = json.MEMBER_EMAIL;
+		
+		// 우편번호, 주소, 상세주소는 필수 데이터가 아니기 때문에 존재하지 않을 수 있음. 따라서 해당 데이터가 존재할 때만 값을 set
+		if(len > 3){
+			document.getElementById('customer_zipcode').value = json.MEMBER_ZIPCODE;
+			document.getElementById('customer_address').value = json.MEMBER_ADDRESS;
+			document.getElementById('customer_address_detail').value = json.MEMBER_ADDRESS_DETAIL;
+		}
+		
+	}).catch((error) => console.log("error: "+error)); // fetch
+
+	
+	var socket = null;
+	connectWs();
+	
+}); // DOMContentLoaded
+
+
+// 주소 api 호출
+document.getElementById('btn_address').addEventListener('click', function(){
+	new daum.Postcode({
+		oncomplete: function(data){
+			document.getElementById('customer_zipcode').value = data.zonecode;
+			document.getElementById('customer_zipcode').style.border = '1px solid #e7e7e7';
 			
-			var len = Object.keys(json).length;
-			document.getElementById('customer_name').value = json.MEMBER_NAME;
-			document.getElementById('customer_hp').value = json.MEMBER_HP;
-			document.getElementById('customer_email').value = json.MEMBER_EMAIL;
+			document.getElementById('customer_address').value = data.roadAddress;
 			
-			// 우편번호, 주소, 상세주소는 필수 데이터가 아니기 때문에 존재하지 않을 수 있음. 따라서 해당 데이터가 존재할 때만 값을 set
-			if(len > 3){
-				document.getElementById('customer_zipcode').value = json.MEMBER_ZIPCODE;
-				document.getElementById('customer_address').value = json.MEMBER_ADDRESS;
-				document.getElementById('customer_address_detail').value = json.MEMBER_ADDRESS_DETAIL;
+			if(!isEmpty(data.buildingName)){
+				document.getElementById('customer_address').value += ' ('+data.buildingName+')'; 
 			}
 			
-		}).catch((error) => console.log("error: "+error)); // fetch
+			document.getElementById('customer_address').style.border = '1px solid #e7e7e7';
+			
+			document.getElementById('customer_address_detail').value = '';
+			document.getElementById('customer_address_detail').removeAttribute('readonly');
+			document.getElementById('customer_address_detail').style.border = '1px solid red';
+		}
+	}).open();
+
+});
+
+
+// 유효성 검증
+// 1. 이름
+document.querySelectorAll('#buyProductForm input[type=text]').forEach(el => {
+	el.addEventListener('keyup', function(e){
+		valueCheck(el);
+	})
+});
+	
+	
+// 2. 연락처
+// 숫자 이외의 값을 입력할 경우 alert 띄우고 값 제거
+document.getElementById('customer_hp').addEventListener('keyup', function(e){
+	const hpRegex = /[^-0-9]/g;
+	if (hpRegex.test(e.target.value)) {
+		alert('숫자만 입력해 주세요.');
+		e.target.value = e.target.value.replace(hpRegex, '');
+	}
+});
+
+
+// 3. 주소
+document.getElementById('buy__submit').addEventListener('click', function(e){
+	if(!orderValidate()){
+		return;
+	}else{
+		let deal_no = getOrderNo(10);
+		document.getElementById('deal_no').value = deal_no;
+		document.getElementById('success_deal_no').value = deal_no;
 		
-		// 주소 api 호출
-		document.getElementById('btn_address').addEventListener('click', function(){
-			new daum.Postcode({
-				oncomplete: function(data){
-					document.getElementById('customer_zipcode').value = data.zonecode;
-					document.getElementById('customer_zipcode').style.border = '1px solid #e7e7e7';
-					
-					document.getElementById('customer_address').value = data.roadAddress;
-					
-					if(!isEmpty(data.buildingName)){
-						document.getElementById('customer_address').value += ' ('+data.buildingName+')'; 
-					}
-					
-					document.getElementById('customer_address').style.border = '1px solid #e7e7e7';
-					
-					document.getElementById('customer_address_detail').value = '';
-					document.getElementById('customer_address_detail').removeAttribute('readonly');
-					document.getElementById('customer_address_detail').style.border = '1px solid red';
-				}
-			}).open();
-		});
+		let addressUpdate = document.getElementById('addressUpdate');
+		if(addressUpdate.checked) addressUpdate.value = 'Y'; 
 		
-		// 유효성 검증
-		// 1. 이름
-		document.querySelectorAll('#buyProductForm input[type=text]').forEach(el => {
-			el.addEventListener('keyup', function(e){
-				valueCheck(el);
-			})
-		});
-		
-		
-		// 2. 연락처
-		// 숫자 이외의 값을 입력할 경우 alert 띄우고 값 제거
-		document.getElementById('customer_hp').addEventListener('keyup', function(e){
-			const hpRegex = /[^-0-9]/g;
-			if (hpRegex.test(e.target.value)) {
-				alert('숫자만 입력해 주세요.');
-				e.target.value = e.target.value.replace(hpRegex, '');
-			}
-		});
-		
-		// 3. 주소
-		document.getElementById('buy__submit').addEventListener('click', function(e){
-			if(!orderValidate()){
-				return;
-			}else{
-				let deal_no = getOrderNo(10);
-				document.getElementById('deal_no').value = deal_no;
-				
-				let addressUpdate = document.getElementById('addressUpdate');
-				if(addressUpdate.checked) addressUpdate.value = 'Y'; 
-				
-				payment();
-			}
-		});
+		payment();
+	}
+});
 		
 		
-		function orderValidate(){
-			var result = true;
-			document.querySelectorAll('#buyProductForm input[type=text]').forEach(el => {
-				if(el.value.length < 1){
-					el.style.border = '1px solid red';
-					el.focus();
-					result = false;
-				}else{
-					el.style.border = '1px solid #e7e7e7';
-				}
-			});
-			return result;
-		};
-		
-		function valueCheck(element){
-			if(element.value.length < 1){
-				element.style.border = '1px solid red';
-				element.focus();
-				return false;
-			}else{
-				element.style.border = '1px solid #e7e7e7';
-			}
-		};
-		
-		
-		// 결제 api 호출
-		function payment(data){
-			IMP.init('imp88123621');
-			IMP.request_pay({
-				pg: 'kakaopay.TC0ONETIME',
-			    pay_method : 'card',  //생략가
-			    merchant_uid: document.getElementById('deal_no').value, //상점에서 생성한 고유 주문번호
-			    name : `${productOrderInfo.PRODUCT_NAME}`, // 상품명
-			    amount : `${productOrderInfo.PRODUCT_PRICE}`, // 가격
-			    buyer_email : document.getElementById('customer_email').value, 
-			    buyer_name : document.getElementById('customer_name').value,
-			    buyer_tel : document.getElementById('customer_hp').value,
-			    buyer_addr : document.getElementById('customer_address').value+' '+document.getElementById('customer_address_detail').value,
-			    buyer_postcode : document.getElementById('customer_zipcode').value,
-			    m_redirect_url : '${pageContext.request.contextPath}/product/info?product_no='+`${productOrderInfo.PRODUCT_NO}`,
-			}, function(rsp){
-				if(rsp.success){
-					alert('success!');
-					
-					let params = {
-						deal_no: document.getElementById('deal_no').value,
-						product_no: document.getElementById('product_no').value,
-						seller_no: document.getElementById('seller_no').value,
-						customer_no: document.getElementById('customer_no').value,
-						customer_name: document.getElementById('customer_name').value,
-						customer_hp: document.getElementById('customer_hp').value,
-						customer_zipcode: document.getElementById('customer_zipcode').value,
-						customer_address: document.getElementById('customer_address').value,
-						customer_address_detail: document.getElementById('customer_address_detail').value,
-						deal_delivery_message: document.getElementById('deal_delivery_message').value,
-					}
-					
-					// 결제 성공시 fetch api로 db작업
-					fetch('/usMarket/fetch/deal/add/'+document.getElementById('addressUpdate').value, {
-						method: 'POST',
-						headers: {
-							'Content-type' : 'application/json'
-						},
-						body: JSON.stringify(params),
-					})
-					.then((response) => response.text()) // 서버가 텍스트를 반환하는 경우 response.text()가 적합하다.
-					.then((text) => {
-						// 완료 메세지 띄우고 거래내역 페이지로 이동할 것
-						location.href = '${pageContext.request.contextPath}/deal/complete?deal_no='+text;
-					}).catch((error) => console.log('error: '+error)); // fetch
-					
-					
-				} else {
-					alert(rsp.error_msg);
-					location.href='${pageContext.request.contextPath}/product/info?product_no='+`${productOrderInfo.PRODUCT_NO}`;
-				}
-			});
+function orderValidate(){
+	var result = true;
+	document.querySelectorAll('#buyProductForm input[type=text]').forEach(el => {
+		if(el.value.length < 1){
+			el.style.border = '1px solid red';
+			el.focus();
+			result = false;
+		}else{
+			el.style.border = '1px solid #e7e7e7';
 		}
 	});
+	return result;
+};
+
+
+function valueCheck(element){
+	if(element.value.length < 1){
+		element.style.border = '1px solid red';
+		element.focus();
+		return false;
+	}else{
+		element.style.border = '1px solid #e7e7e7';
+	}
+};
+	
+	
+// 결제 api 호출
+function payment(data){
+	IMP.init('imp88123621');
+	IMP.request_pay({
+		pg: 'kakaopay.TC0ONETIME',
+	    pay_method : 'card',  //생략가
+	    merchant_uid: document.getElementById('deal_no').value, //상점에서 생성한 고유 주문번호
+	    name : `${productOrderInfo.PRODUCT_NAME}`, // 상품명
+	    amount : `${productOrderInfo.PRODUCT_PRICE}`, // 가격
+	    buyer_email : document.getElementById('customer_email').value, 
+	    buyer_name : document.getElementById('customer_name').value,
+	    buyer_tel : document.getElementById('customer_hp').value,
+	    buyer_addr : document.getElementById('customer_address').value+' '+document.getElementById('customer_address_detail').value,
+	    buyer_postcode : document.getElementById('customer_zipcode').value,
+	    m_redirect_url : '${pageContext.request.contextPath}/product/info?product_no='+`${productOrderInfo.PRODUCT_NO}`,
+	}, function(rsp){
+		if(rsp.success){
+			let params = new FormData(document.getElementById('buyProductForm'));
+			params.append('message', '등록하신 '+`${productOrderInfo.PRODUCT_NAME}`+'상품이 판매되었습니다. 판매 여부 확인 후 판매 승인을 눌러주세요.');
+			
+			// 결제 성공시 fetch api로 db작업
+			fetch('/usMarket/fetch/deal/add/'+document.getElementById('addressUpdate').value, {
+				method: 'POST',
+				body: params,
+			})
+			.then((response) => response.json()) // 서버가 텍스트를 반환하는 경우 response.text()가 적합하다.
+			.then((json) => {
+				if(isEmpty(json)){
+					alert('구매에 실패했습니다.');
+					location.href='${pageContext.request.contextPath}/product/info?product_no='+`${productOrderInfo.PRODUCT_NO}`;
+				}else{
+					let msg = {
+							type: 'chat',
+							body: json
+						};
+					socket.send(JSON.stringify(msg));
+					alert('구매에 성공했습니다.');
+					document.getElementById('dealInfoForm').submit();
+				}
+			}).catch((error) => console.log('error: '+error));
+		} else {
+			alert(rsp.error_msg);
+			location.href='${pageContext.request.contextPath}/product/info?product_no='+`${productOrderInfo.PRODUCT_NO}`;
+		}
+	});
+};
+
+
+function connectWs(){
+	sock = new SockJS('${pageContext.request.contextPath}/echo');
+	socket = sock;
+	
+	sock.onopen = function(){
+		console.log('info: connection opened.');
+	};
+};
 </script>

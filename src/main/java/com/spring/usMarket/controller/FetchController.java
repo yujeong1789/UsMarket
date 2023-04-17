@@ -22,6 +22,7 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.spring.usMarket.domain.chat.ChatDto;
+import com.spring.usMarket.domain.chat.ChatRoomDto;
 import com.spring.usMarket.domain.deal.DealInsertDto;
 import com.spring.usMarket.domain.product.ProductFileDto;
 import com.spring.usMarket.domain.product.ProductInsertDto;
@@ -158,26 +159,38 @@ public class FetchController {
 	}
 	
 	
+	@SuppressWarnings("unchecked")
 	@PostMapping("/deal/add/{isUpdate}")
-	public String dealAdd(@RequestBody DealInsertDto dto, @PathVariable String isUpdate) {
+	public Map<String, Object> dealAdd(DealInsertDto dto, String message, @PathVariable String isUpdate) {
 		logger.info("isUpdate = {}", isUpdate);
 		logger.info("DealInsertDto = {}", dto.toString());
-
-		String deal_no = "";
+		logger.info("message = {}", message);
 		
+		ChatRoomDto chatRoomDto = new ChatRoomDto();
+		ChatDto chatDto = new ChatDto();
+		Map<String, Object> chatMap = new HashMap<>();
 		try {
 			boolean result = dealService.addDeal(dto, isUpdate);
-			if(result) deal_no = dto.getDeal_no();
-			logger.info("deal_no = {}", deal_no);
+			if(result) {
+				chatRoomDto = chatService.getChatRoomByInfo(dto.getSeller_no(), dto.getCustomer_no());
+				if(chatRoomDto == null) {
+					chatDto = chatService.addChatRoom(dto.getCustomer_no(), dto.getSeller_no(), message, 1, dto.getDeal_no());
+				}else {
+					chatDto = new ChatDto(chatRoomDto.getRoom_no(), dto.getCustomer_no(), dto.getSeller_no(), message, new Date(), "N", 1, dto.getDeal_no());
+					chatService.addChat(chatDto);
+				}
+				ObjectMapper objectMapper = new ObjectMapper();
+				chatMap = objectMapper.convertValue(chatDto, Map.class);
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		} // try-catch
 
-		return deal_no;
+		return chatMap;
 	}
 	
 	
-	@GetMapping(value="/chatmember/{member_no}")
+	@GetMapping("/chatmember/{member_no}")
 	public Map<String, Object> chatMember(@PathVariable String member_no) {
 		logger.info("member_no = {}", member_no);
 		
@@ -239,6 +252,7 @@ public class FetchController {
 			int rowCnt = chatService.addChat(dto);
 			
 			if(rowCnt == 0) throw new Exception();
+			
 			ObjectMapper objectMapper = new ObjectMapper();
 			chatMap = objectMapper.convertValue(dto, Map.class);
 			

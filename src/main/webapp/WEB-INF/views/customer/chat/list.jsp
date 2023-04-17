@@ -74,6 +74,9 @@
 			</div>
 		</div>
 	</div>
+	<form id="dealInfoForm" action="<c:url value='/deal/info'/>" method="post">
+		<input type="hidden" id="deal_no" name="deal_no">
+	</form>
 </section>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.4.0/sockjs.min.js"></script>
 <script type="text/javascript">
@@ -161,7 +164,7 @@ function getChatInfo(room_no, is_read){
 		document.getElementById('chat_to_nickname').textContent = document.querySelector('[data-room="'+room_no+'"] .title > p:first-child').textContent;
 		
 		document.getElementById('chat_to_nickname').addEventListener('click', function(){
-			document.getElementById('formMyPage').submit();
+			location.href = '${pageContext.request.contextPath}/member/mypage?member_no='+document.getElementById('chat_to').value;
 		});
 		
 	}).catch((error) => console.log('error: '+error));
@@ -169,6 +172,7 @@ function getChatInfo(room_no, is_read){
 
 
 function setChatInfo(el){
+	console.log(el);
 	let parentDiv = document.createElement('div');
 	parentDiv.className = 'info-content';
 	
@@ -185,10 +189,35 @@ function setChatInfo(el){
 	span.className = 'chat-time';
 	childDiv.appendChild(span);
 	
-	let p = document.createElement('p');
-	p.className = 'chat-content';
-	p.textContent = el.chat_content;
-	childDiv.appendChild(p);
+	if(el.chat_type == 0){
+		let p = document.createElement('p');
+		p.className = 'chat-content';
+		p.textContent = el.chat_content;
+		childDiv.appendChild(p);		
+	}else{
+		let div = document.createElement('div');
+		div.className = 'chat-alert';
+		let titleSpan = document.createElement('span');
+		titleSpan.textContent = (el.chat_type == 1 ? '결제완료' : (el.chat_type == 2 ? '거래취소' : '거래완료'));
+		div.appendChild(titleSpan);
+		
+		let p = document.createElement('p');
+		p.textContent = el.chat_content;
+		div.appendChild(p);
+		
+		let buttonDiv = document.createElement('div');
+		buttonDiv.textContent = '거래내역 확인';
+		buttonDiv.dataset.no = el.chat_info;
+		
+		buttonDiv.addEventListener('click', function(){
+			document.getElementById('deal_no').value = this.dataset.no;
+			document.getElementById('dealInfoForm').submit();
+		});
+		
+		div.appendChild(buttonDiv);
+		
+		childDiv.appendChild(div);
+	}
 	
 	parentDiv.appendChild(childDiv);
 	
@@ -326,7 +355,7 @@ setInterval(() => {
 		console.log('change');
 		el.querySelector('p:last-child').textContent = convert(el.children[0].value);
 	});
-}, 60000);
+}, 120000);
 
 
 function getChatMember(member_no, element){
@@ -349,4 +378,8 @@ document.getElementById('chat-report').addEventListener('click', function(){
 		reportModal.show();
 	}
 });
+
+function getDealInfo(){
+	
+}
 </script>
