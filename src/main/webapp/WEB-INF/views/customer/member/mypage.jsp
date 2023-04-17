@@ -241,7 +241,7 @@
 		btn_b.click(function(){
 			myCategory("myBookmark");
 			optOut();
-			selectButton(btn_b,$(".bookmark_name"));			
+			selectButton(btn_b,$(".bookmark_name"));
 		}); // .click이벤트
 
 		function selectButton(btn,font){
@@ -279,7 +279,7 @@
 			}); // ajax
 		} // function
 	
-		$('.order-dropdown li').on('click', function() {
+		$(document).on('click', '.order-dropdown li', function() {
 			$('.order-selected').removeClass('order-selected');
 			$(this).addClass('order-selected');
 			console.log($(this).data('order'));
@@ -287,8 +287,8 @@
 			$('#pageValue').val(1);
 			myProductList(1);
 		});
-
-		$('.condition-dropdown li').on('click', function() {
+		
+		$(document).on('click', '.condition-dropdown li', function() {
 			$('.condition-selected').removeClass('condition-selected');
 			$(this).addClass('condition-selected');
 			console.log($(this).data('condition'));
@@ -302,7 +302,8 @@
 					'page': page,
 					'member_no': member_no,
 					'condition': $('.condition-selected').data('condition'),
-					'order': $('.order-selected').data('order')
+					'order': $('.order-selected').data('order'),
+					'mode': $('.mode').val()
 			};
 			
 			console.log(params);
@@ -333,5 +334,4 @@
 	document.querySelector('.dealListForm').addEventListener('click', function(){
 		this.nextElementSibling.submit();
 	});
-	
 </script>
