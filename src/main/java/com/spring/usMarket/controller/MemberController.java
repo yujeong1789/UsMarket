@@ -109,7 +109,8 @@ public class MemberController {
 		logger.info("referer.substring = "+referer.substring(referer.length()-6, referer.length()));
 		
 		if(referer.substring(referer.length()-6, referer.length()).equals("modify") ||
-				referer.substring(referer.length()-6, referer.length()).equals("mypage")) {
+				referer.substring(referer.length()-6, referer.length()).equals("mypage") ||
+					referer.equals(null) || referer.equals("")) {
 			referer = "/";
 		};
 		return "redirect:" + referer;
@@ -249,7 +250,6 @@ public class MemberController {
 		List<Map<String, Object>> myList = new ArrayList<>();
 		
 		try {
-			logger.info("sc.getMode() = {}",sc.getMode());
 			if(sc.getMode().equals("myProductList")) {
 				myList = memberService.getMypageProduct(sc);
 				totalCnt = memberService.getMypageProductCount(sc.getMember_no(), sc.getCondition());
@@ -262,14 +262,15 @@ public class MemberController {
 				myList = memberService.getMypageBookmark(sc);
 				totalCnt = memberService.getMypageBookmarkCount(sc.getMember_no(), sc.getCondition());
 			}
-			logger.info("myList = {}, totalCnt = {}",myList, totalCnt);
+			
+			logger.info("myList = {}", myList);
 			
 			ProfilePageHandler pageHandler = new ProfilePageHandler(totalCnt, sc);
 			
 			ratt.addFlashAttribute("mypageList", myList);
 			ratt.addFlashAttribute("page", sc.getPage());
 			ratt.addFlashAttribute("pageSize", sc.getPageSize());
-			ratt.addFlashAttribute("condition", sc.getOrder());
+			ratt.addFlashAttribute("condition", sc.getCondition());
 			ratt.addFlashAttribute("order", sc.getOrder());
 			ratt.addFlashAttribute("ph", pageHandler);
 			 
@@ -294,7 +295,9 @@ public class MemberController {
 		
 		List<Map<String, Object>> mypageProductList = memberService.getMypageProduct(sc);
 		logger.info("내 상품 리스트 = " + mypageProductList);
-		totalCnt = mypageProductList.size();
+		
+		totalCnt = memberService.getMypageProductCount(sc.getMember_no(), sc.getCondition());
+		
 		ProfilePageHandler pageHandler = new ProfilePageHandler(totalCnt, sc);
 		
 		ratt.addFlashAttribute("myList", "myProductList");
@@ -311,12 +314,13 @@ public class MemberController {
 		sc.setPageSize(15);
 		int totalCnt = 0;
 		
-		logger.info("member_no = {}", sc.getMember_no());
+		logger.info("RequestBody = {}", sc.toString());
 		
 		List<Map<String, Object>> mypageBookmarkList = memberService.getMypageBookmark(sc);
-		logger.info("북마크 리스트 = " + mypageBookmarkList);
+		logger.info("북마크 리스트 = {}", mypageBookmarkList);
 		
-		totalCnt = mypageBookmarkList.size();
+		totalCnt = memberService.getMypageBookmarkCount(sc.getMember_no(),sc.getCondition());//Mypage_Bookmark
+		
 		ProfilePageHandler pageHandler = new ProfilePageHandler(totalCnt, sc);
 		
 		ratt.addFlashAttribute("myList", "myBookmark");

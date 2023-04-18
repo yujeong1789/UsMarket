@@ -116,44 +116,47 @@
 	
 	<!-- 마이페이지 찜 출력 -->
 	<select id="searchMypageBookmark" parameterType="profileSearchCondition" resultType="map">
-		SELECT rownum AS num, A.*
-		FROM (SELECT*
-              FROM product
-              WHERE product_no IN (SELECT DISTINCT(product_no) FROM bookmark WHERE member_no = #{member_no})
-              AND product_state_no != 4 
-              <choose>
-                <when test="condition == 1">
-                    AND product_state_no = 1 
-                </when>
-                <when test="condition == 2">
-                    AND product_state_no = 2  
-                </when>
-                <when test="condition == 3">
-                    AND product_state_no = 3  
-                </when>
-              </choose> 
-              <choose>
-                <when test="order == 'regdate_desc'">
-                    ORDER BY product_regdate DESC 
-                </when>
-                <when test="order == 'regdate'">
-                    ORDER BY product_regdate  
-                </when>
-                <when test="order == 'view_desc'">
-                    ORDER BY product_view DESC 
-                </when>
-                <when test="order == 'view'">
-                    ORDER BY product_view 
-                </when>
-                <otherwise>
-                    ORDER BY product_regdate DESC 
-                </otherwise>
-              </choose>
-            ) A		
+		SELECT *
+		FROM (SELECT rownum AS num, A.*
+			 FROM (SELECT*
+	              FROM product_view
+	              WHERE product_no IN (SELECT DISTINCT(product_no) FROM bookmark WHERE member_no = #{member_no})
+	              AND product_state_no != 4 
+	              <choose>
+	                <when test="condition == 1">
+	                    AND product_state_no = 1 
+	                </when>
+	                <when test="condition == 2">
+	                    AND product_state_no = 2  
+	                </when>
+	                <when test="condition == 3">
+	                    AND product_state_no = 3  
+	                </when>
+	              </choose> 
+	              <choose>
+	                <when test="order == 'regdate_desc'">
+	                    ORDER BY product_regdate DESC 
+	                </when>
+	                <when test="order == 'regdate'">
+	                    ORDER BY product_regdate  
+	                </when>
+	                <when test="order == 'view_desc'">
+	                    ORDER BY product_view DESC 
+	                </when>
+	                <when test="order == 'view'">
+	                    ORDER BY product_view 
+	                </when>
+	                <otherwise>
+	                    ORDER BY product_regdate DESC 
+	                </otherwise>
+	              </choose>
+	            ) A
+			 )
+		WHERE num BETWEEN #{startPage} AND #{endPage}
 	</select>
 	
 	<!-- 마이페이지 찜 중인 상품 수 출력 -->
-	<select id="searchMypageBookmarkCount" parameterType="Integer" resultType="int">
+	<select id="searchMypageBookmarkCount" parameterType="map" resultType="int">
 		SELECT COUNT(product_no) 
 		FROM product 
 		WHERE product_no IN (

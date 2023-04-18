@@ -90,6 +90,6 @@ public class MemberDaoImpl implements MemberDao{
 		map.put("member_no", member_no);
 		map.put("condition", condition);
 		
-		return session.selectOne(namespace+"searchMypageBookmarkCount", member_no);
+		return session.selectOne(namespace+"searchMypageBookmarkCount", map);
 	}
 }
