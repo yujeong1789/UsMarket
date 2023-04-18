@@ -138,8 +138,8 @@ public class MemberServiceImpl implements MemberService {
 
 	@Override
 	@Transactional(rollbackFor = SQLException.class, readOnly = true)
-	public List<Map<String, Object>> getMypageProduct(ProfileSearchCondition sc) throws Exception {
-		List<Map<String, Object>> productList = memberDAO.searchMypageProduct(sc);
+	public List<Map<String, Object>> getProduct(ProfileSearchCondition sc) throws Exception {
+		List<Map<String, Object>> productList = memberDAO.searchProduct(sc);
 		logger.info("productList = {}",productList);
 		
 	    return productList;
@@ -147,30 +147,48 @@ public class MemberServiceImpl implements MemberService {
 	
 	@Override
 	@Transactional(rollbackFor = SQLException.class, readOnly = true)
-	public int getMypageProductCount(String member_no, String condition) throws Exception {
+	public int getProductCnt(String member_no, String condition) throws Exception {
 		
-		int productCount = memberDAO.searchMypageProductCount(Integer.parseInt(member_no), condition);
-		logger.info("전체 상품 수 = {}", productCount);
+		int productCount = memberDAO.searchProductCnt(Integer.parseInt(member_no), condition);
+		logger.info("ProductCount = {}", productCount);
 		
 		return productCount;
 	}
 
 	@Override
 	@Transactional(rollbackFor = SQLException.class, readOnly = true)
-	public List<Map<String, Object>> getMypageBookmark(ProfileSearchCondition sc) throws Exception {
-		List<Map<String, Object>> bookmarkList = memberDAO.searchMypageBookmark(sc);
-		logger.info("productList = {}",bookmarkList);
+	public List<Map<String, Object>> getBookmark(ProfileSearchCondition sc) throws Exception {
+		List<Map<String, Object>> bookmarkList = memberDAO.searchBookmark(sc);
+		logger.info("bookmarkList = {}",bookmarkList);
 		
 		return bookmarkList;
 	}
 
 	@Override
 	@Transactional(rollbackFor = SQLException.class, readOnly = true)
-	public int getMypageBookmarkCount(String member_no, String condition) throws Exception {
+	public int getBookmarkCnt(String member_no, String condition) throws Exception {
 		
-		int BookmarkCount = memberDAO.searchMypageBookmarkCount(Integer.parseInt(member_no), condition);
-		logger.info("BookmarkCount 상품 수 = {}", BookmarkCount);
+		int bookmarkCount = memberDAO.searchBookmarkCnt(Integer.parseInt(member_no), condition);
+		logger.info("BookmarkCount = {}", bookmarkCount);
 	
-		return BookmarkCount;
+		return bookmarkCount;
+	}
+
+	@Override
+	@Transactional(rollbackFor = SQLException.class, readOnly = true)
+	public List<Map<String, Object>> getReview(ProfileSearchCondition sc) throws Exception {
+		List<Map<String, Object>> review = memberDAO.searchReview(sc);
+		logger.info("review = {}",review);
+		
+		return review;
+	}
+
+	@Override
+	public int getReviewCnt(String member_no, String condition) throws Exception {
+
+		int reviewCount = memberDAO.searchReviewCnt(Integer.parseInt(member_no), condition);
+		logger.info("ReviewCount = {}", reviewCount);
+	
+		return reviewCount;
 	}
 }
