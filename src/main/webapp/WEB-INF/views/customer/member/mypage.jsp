@@ -47,7 +47,7 @@
 							
 								<c:if test="${loginOn != memberInfo.member_no}">
 									<div class="member_report">
-										<div class="right">
+										<div class="right" id="productReport" onclick="openReport()">
 											<div class="member_detail_icon">
 												<img alt="신고하기" src="<c:url value='/resources/customer/img/report.png'/>">
 											</div>
@@ -107,7 +107,7 @@
 							<span class="product_name">상품 <c:out value="${product }"/></span>
 						</button>
 						<button class="head_category" id="head_review">
-							<span class="review_name">상점후기 </span><span></span>
+							<span class="review_name">상점후기 <c:out value="${review }"/></span>
 						</button>
 						<button class="head_category" id="head_bookmark">
 							<span class="bookmark_name">찜 <c:out value="${bookmark }" /></span>
@@ -329,9 +329,24 @@
 		    myProductList(page);
 		});
 		
+		// 신고하기
+		function openReport() {
+		    if (isEmpty(member_no)) {
+		        location.href = '${pageContext.request.contextPath}/member/login';
+		        return;
+		    }
+
+		    $('#report_member_no').val(seller_no);
+		    $('#report_info').val(`${param.product_no}`);
+		    $('.report-info').text($('#fetch__member__nickname').text());
+		    reportModal.show();
+		};
+		
 	}); // ready
 	
 	document.querySelector('.dealListForm').addEventListener('click', function(){
 		this.nextElementSibling.submit();
 	});
+	
+	
 </script>
