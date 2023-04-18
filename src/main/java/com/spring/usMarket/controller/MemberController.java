@@ -45,10 +45,17 @@ public class MemberController {
 
 	@GetMapping("/login")
 	public String login(HttpServletRequest request) {
+		
 		String uri = request.getHeader("Referer");
-		if (uri != null & !uri.contains("/login")) {
-			request.getSession().setAttribute("prevPage", uri);
-		}
+	    
+		if (uri != null && !uri.contains("/login")) {
+	        request.getSession().setAttribute("prevPage", uri);
+	    }
+	    if (uri == null) {
+	        request.getSession().setAttribute("prevPage", null);
+	    }
+		
+		logger.info("referer = {}",request.getHeader("Referer"));
 		return "member/login";
 	}
 
@@ -56,22 +63,21 @@ public class MemberController {
 	public String loginCheck(HttpServletRequest request, String member_id, String member_password, Model model)
 			throws Exception {
 		BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
-		Map<String, Object> member = memberService.loginCheckID(member_id);
 		HttpSession httpSession = request.getSession(true);
-		Object result= null;
-
 		String prevPage = (String)request.getSession().getAttribute("prevPage");
+
+		Map<String, Object> member = memberService.loginCheckID(member_id);
+		
+		if(prevPage != null) {
+			if(prevPage.substring(prevPage.length()-4, prevPage.length()) == "join"){
+				prevPage += "?mode=modify";
+			}
+		}else {
+			prevPage = "/";
+		}
 		
 		logger.info("ID 입력 정보 = " + member_id + ", PW 입력 정보 = " + member_password);
 		logger.info("회원정보 = " + member);
-		
-		if(prevPage.substring(prevPage.length()-4, prevPage.length()).equals("join")){
-			result = request.getSession().getAttribute("prevPage")+"?mode=modify";
-		}else if(request.getSession().getAttribute("prevPage") != null){
-			result = request.getSession().getAttribute("prevPage");			
-		}else {
-			result = "/";
-		}
 		
 		if (member == null) {
 			logger.info("아이디 없음");
@@ -84,8 +90,8 @@ public class MemberController {
 			logger.info("로그인 성공");
 			httpSession.setAttribute("userId", member_id);
 			httpSession.setAttribute("userNo", member.get("MEMBER_NO"));
-			logger.info("result = "+result);
-			return "redirect:"+result;
+			logger.info("prevPage = "+prevPage);
+			return "redirect:"+prevPage;
 		} else {
 			logger.info("비밀번호 오류");
 			String msg = "잘못된 입력입니다.";
@@ -100,19 +106,21 @@ public class MemberController {
 	@GetMapping("/logout")
 	public String logout(HttpServletRequest request) throws Exception {
 		String referer = request.getHeader("Referer");
+		if(referer == null) {
+			referer = "/";
+		}else if(referer.substring(referer.length()-6, referer.length()) == "modify" ||
+					referer.substring(referer.length()-6, referer.length()) == "mypage") {
+			referer = "/";
+		}
+		
+		logger.info("referer.substring = "+referer.substring(referer.length()-6, referer.length()));
+		
 		
 		request.getSession().removeAttribute("userId");
 		request.getSession().removeAttribute("userNo");
 		logger.info("로그아웃 {}", (request.getSession().getAttribute("userId") == null && 
 				request.getSession().getAttribute("userNo") == null ? "성공" : "실패"));
 		
-		logger.info("referer.substring = "+referer.substring(referer.length()-6, referer.length()));
-		
-		if(referer.substring(referer.length()-6, referer.length()).equals("modify") ||
-				referer.substring(referer.length()-6, referer.length()).equals("mypage") ||
-					referer.equals(null) || referer.equals("")) {
-			referer = "/";
-		};
 		return "redirect:" + referer;
 	}
 
@@ -148,6 +156,12 @@ public class MemberController {
 
 	@PostMapping("/join")
 	public String join(@ModelAttribute MemberDto member,MultipartHttpServletRequest request,Model model) {
+		Object prevPage = request.getSession().getAttribute("prevPage");
+
+		if(request.getSession().getAttribute("prevPage") == null) {
+			prevPage = "/";
+		}
+		
 		try {
 			// 1. 파일 업로드
 			String img = "/resources/customer/img/default_profile.png";
@@ -168,7 +182,7 @@ public class MemberController {
 			e.printStackTrace();
 			return "member/join";
 		}// try-catch
-		return "redirect:" + request.getSession().getAttribute("prevPage");
+		return "redirect:" + prevPage;
 	}
 
 	@PostMapping("/modify")
@@ -216,11 +230,12 @@ public class MemberController {
 			
 			sc.setMember_no(member_no);
 			
-			List<Map<String, Object>> mypageProductList = memberService.getMypageProduct(sc);
+			List<Map<String, Object>> mypageProductList = memberService.getProduct(sc);
 			logger.info("mypageProductList : {}",mypageProductList);
 			
-			int ProductCount = memberService.getMypageProductCount(member_no, sc.getCondition());//Mypage_product
-			int bookmarkCount = memberService.getMypageBookmarkCount(member_no,sc.getCondition());//Mypage_Bookmark
+			int ProductCount = memberService.getProductCnt(member_no, sc.getCondition());//Mypage_product
+			int bookmarkCount = memberService.getBookmarkCnt(member_no,sc.getCondition());//Mypage_Bookmark
+			int reviewCnt = memberService.getReviewCnt(member_no, sc.getCondition());//Mypage_Review
 			
 			totalCnt = ProductCount;
 			ProfilePageHandler pageHandler = new ProfilePageHandler(totalCnt, sc);
@@ -229,6 +244,7 @@ public class MemberController {
 			model.addAttribute("regdate",dateFormat.format(memberInfo.getMember_regdate()));
 			model.addAttribute("mypageList", mypageProductList);
 			model.addAttribute("product", ProductCount);
+			model.addAttribute("review", reviewCnt);
 			model.addAttribute("bookmark", bookmarkCount);
 			model.addAttribute("Page", sc.getPage());
 			model.addAttribute("PageSize", sc.getPageSize());
@@ -243,37 +259,40 @@ public class MemberController {
 	@PostMapping("/mypage")
 	public String reinfo(@RequestBody ProfileSearchCondition sc, RedirectAttributes ratt) {
 		sc.setPageSize(15);
-		logger.info("post adminSearchCondition = {}", sc.toString());
-		
-		int totalCnt = 0;
+		logger.info("(post)ProfileSC = {}", sc.toString());
 		
 		List<Map<String, Object>> myList = new ArrayList<>();
+		int totalCnt = 0;
+		String category = null;
 		
 		try {
-			if(sc.getMode().equals("myProductList")) {
-				myList = memberService.getMypageProduct(sc);
-				totalCnt = memberService.getMypageProductCount(sc.getMember_no(), sc.getCondition());
+			if(sc.getMode().equals("productList")) {
+				myList = memberService.getProduct(sc);
+				totalCnt = memberService.getProductCnt(sc.getMember_no(), sc.getCondition());
+				category = "productList";
 			}
-			if(sc.getMode().equals("myReview")) {
-				myList = null;
-				totalCnt = 0;
+			if(sc.getMode().equals("reviewList")) {
+				myList = memberService.getReview(sc);
+				totalCnt = memberService.getReviewCnt(sc.getMember_no(), sc.getCondition());
+				category = "reviewList";
 			}
-			if(sc.getMode().equals("myBookmark")) {
-				myList = memberService.getMypageBookmark(sc);
-				totalCnt = memberService.getMypageBookmarkCount(sc.getMember_no(), sc.getCondition());
+			if(sc.getMode().equals("bookmarkList")) {
+				myList = memberService.getBookmark(sc);
+				totalCnt = memberService.getBookmarkCnt(sc.getMember_no(), sc.getCondition());
+				category = "bookmarkList";
 			}
 			
-			logger.info("myList = {}", myList);
+			logger.info("totalCnt = {}, myList = {}", totalCnt, myList);
 			
 			ProfilePageHandler pageHandler = new ProfilePageHandler(totalCnt, sc);
-			
-			ratt.addFlashAttribute("mypageList", myList);
+	
+			ratt.addFlashAttribute("category", category);
+			ratt.addFlashAttribute("pageList", myList);
 			ratt.addFlashAttribute("page", sc.getPage());
 			ratt.addFlashAttribute("pageSize", sc.getPageSize());
 			ratt.addFlashAttribute("condition", sc.getCondition());
 			ratt.addFlashAttribute("order", sc.getOrder());
 			ratt.addFlashAttribute("ph", pageHandler);
-			 
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -293,15 +312,15 @@ public class MemberController {
 		
 		logger.info("member_no = {}", sc.getMember_no());
 		
-		List<Map<String, Object>> mypageProductList = memberService.getMypageProduct(sc);
-		logger.info("내 상품 리스트 = " + mypageProductList);
+		List<Map<String, Object>> productList = memberService.getProduct(sc);
+		logger.info("내 상품 리스트 = " + productList);
 		
-		totalCnt = memberService.getMypageProductCount(sc.getMember_no(), sc.getCondition());
+		totalCnt = memberService.getProductCnt(sc.getMember_no(), sc.getCondition());
 		
 		ProfilePageHandler pageHandler = new ProfilePageHandler(totalCnt, sc);
 		
-		ratt.addFlashAttribute("myList", "myProductList");
-		ratt.addFlashAttribute("mypageList", mypageProductList);
+		ratt.addFlashAttribute("category", "productList");
+		ratt.addFlashAttribute("pageList", productList);
 		ratt.addFlashAttribute("page", sc.getPage());
 		ratt.addFlashAttribute("pageSize", sc.getPageSize());
 		ratt.addFlashAttribute("ph", pageHandler);
@@ -316,15 +335,15 @@ public class MemberController {
 		
 		logger.info("RequestBody = {}", sc.toString());
 		
-		List<Map<String, Object>> mypageBookmarkList = memberService.getMypageBookmark(sc);
-		logger.info("북마크 리스트 = {}", mypageBookmarkList);
+		List<Map<String, Object>> bookmarkList = memberService.getBookmark(sc);
+		logger.info("북마크 리스트 = {}", bookmarkList);
 		
-		totalCnt = memberService.getMypageBookmarkCount(sc.getMember_no(),sc.getCondition());//Mypage_Bookmark
+		totalCnt = memberService.getBookmarkCnt(sc.getMember_no(),sc.getCondition());//Mypage_Bookmark
 		
 		ProfilePageHandler pageHandler = new ProfilePageHandler(totalCnt, sc);
 		
-		ratt.addFlashAttribute("myList", "myBookmark");
-		ratt.addFlashAttribute("mypageList", mypageBookmarkList);
+		ratt.addFlashAttribute("category", "bookmarkList");
+		ratt.addFlashAttribute("pageList", bookmarkList);
 		ratt.addFlashAttribute("page", sc.getPage());
 		ratt.addFlashAttribute("pageSize", sc.getPageSize());
 		ratt.addFlashAttribute("ph", pageHandler);
@@ -339,14 +358,14 @@ public class MemberController {
 		
 		logger.info("member_no = {}", sc.getMember_no());
 		
-		List<Map<String, Object>> mypageBookmarkList = memberService.getMypageBookmark(sc);
-		logger.info("후기 리스트 = " + mypageBookmarkList);
+		List<Map<String, Object>> reviewList = memberService.getReview(sc);
+		logger.info("후기 리스트 = " + reviewList);
 		
-		totalCnt = mypageBookmarkList.size();
+		totalCnt = memberService.getReviewCnt(sc.getMember_no(), sc.getCondition());
 		ProfilePageHandler pageHandler = new ProfilePageHandler(totalCnt, sc);
 		
-		ratt.addFlashAttribute("myList", "myReview");
-		ratt.addFlashAttribute("mypageList", mypageBookmarkList);
+		ratt.addFlashAttribute("category", "reviewList");
+		ratt.addFlashAttribute("pageList", reviewList);
 		ratt.addFlashAttribute("page", sc.getPage());
 		ratt.addFlashAttribute("pageSize", sc.getPageSize());
 		ratt.addFlashAttribute("ph", pageHandler);
