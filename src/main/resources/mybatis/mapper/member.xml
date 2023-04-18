@@ -56,7 +56,7 @@
 	</select>
 	
 	<!-- 마이페이지 상품 출력 -->
-	<select id="searchMypageProduct" parameterType="profileSearchCondition" resultType="map">
+	<select id="searchProfileProduct" parameterType="profileSearchCondition" resultType="map">
 		SELECT * 
 		FROM ( SELECT rownum AS num, A.*
 		       FROM ( SELECT*
@@ -97,7 +97,7 @@
 	</select>
 		
 	<!-- 마이페이지 판매 중인 상품 수 출력 -->
-	<select id="searchMypageProductCount" parameterType="map" resultType="int">
+	<select id="searchProfileProductCnt" parameterType="map" resultType="int">
 		SELECT count(*) 
 		 FROM product_view
 		 WHERE seller_no = #{member_no} AND product_state_no != 4
@@ -115,7 +115,7 @@
 	</select>
 	
 	<!-- 마이페이지 찜 출력 -->
-	<select id="searchMypageBookmark" parameterType="profileSearchCondition" resultType="map">
+	<select id="searchProfileBookmark" parameterType="profileSearchCondition" resultType="map">
 		SELECT *
 		FROM (SELECT rownum AS num, A.*
 			 FROM (SELECT*
@@ -156,7 +156,7 @@
 	</select>
 	
 	<!-- 마이페이지 찜 중인 상품 수 출력 -->
-	<select id="searchMypageBookmarkCount" parameterType="map" resultType="int">
+	<select id="searchProfileBookmarkCnt" parameterType="map" resultType="int">
 		SELECT COUNT(product_no) 
 		FROM product 
 		WHERE product_no IN (
@@ -173,6 +173,68 @@
 			<when test="condition == 3">
 				AND product_state_no = 3  
 			</when>
+		</choose>
+	</select>
+	
+	<!-- 마이페이지 찜 출력 -->
+	<select id="searchProfileReview" parameterType="profileSearchCondition" resultType="map">
+		SELECT *
+		FROM(SELECT rownum AS num, A.*
+		    FROM(SELECT * 
+		        FROM review 
+		        WHERE deal_no IN(SELECT deal_no 
+		                        FROM deal 
+		                        WHERE customer_no = #{member_no})
+		        <choose>
+					<when test="condition == 1">
+					    AND review_score = 1 
+					</when>
+					<when test="condition == 2">
+					    AND review_score = 2  
+					</when>
+					<when test="condition == 3">
+					    AND review_score = 3  
+				  </when>
+				</choose> 
+				<choose>
+					<when test="order == 'regdate_desc'">
+						ORDER BY review_regdate DESC 
+					</when>
+					<when test="order == 'regdate'">
+					    ORDER BY review_regdate
+					</when>
+					<when test="order == 'view_desc'">
+					    ORDER BY review_view DESC 
+					</when>
+					<when test="order == 'view'">
+					    ORDER BY ewview_view 
+					</when>
+					<otherwise>
+					    ORDER BY review_regdate DESC 
+					</otherwise>
+				</choose>
+		        ) A
+		    )
+		WHERE num BETWEEN #{startPage} AND #{endPage}                                                                                                                                                                                                                                                                                                                                                                     
+	</select>
+	
+	<!-- 마이페이지 찜 중인 상품 수 출력 -->
+	<select id="searchProfileReviewCnt" parameterType="map" resultType="int">
+		SELECT COUNT(*) 
+        FROM review 
+        WHERE deal_no IN(SELECT deal_no 
+                        FROM deal 
+                        WHERE customer_no = #{member_no})
+        <choose>
+			<when test="condition == 1">
+			    AND review_score = 1 
+			</when>
+			<when test="condition == 2">
+			    AND review_score = 2  
+			</when>
+			<when test="condition == 3">
+			    AND review_score = 3  
+		  </when>
 		</choose>
 	</select>
 </mapper>
