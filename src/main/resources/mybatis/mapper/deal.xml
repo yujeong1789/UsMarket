@@ -18,4 +18,26 @@
 		 WHERE member_no = #{member_no}
 	</update>
 	
+	<!-- 거래내역 목록 -->
+	<select id="searchDealList" parameterType="map" resultType="map">
+		SELECT *
+		FROM deal_view 
+		<choose>
+			<when test="condition == 'sell'">
+				 WHERE seller_no = #{member_no} 
+			</when>
+			<when test="condition == 'buy'">
+				 WHERE customer_no = #{member_no} 
+			</when>
+		</choose>
+		<choose>
+			<when test="state != null and state != ''">
+				 AND deal_state = #{state} 
+			</when>
+			<otherwise>
+				 AND deal_state IN (1, 2, 3) 
+			</otherwise>
+		</choose>
+	</select>
+	
 </mapper>
