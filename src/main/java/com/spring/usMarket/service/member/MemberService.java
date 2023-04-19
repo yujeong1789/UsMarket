@@ -21,10 +21,12 @@ public interface MemberService {
 	String upload(MultipartFile file)throws IOException;
 	MemberDto getMemberInfo(String member_no) throws Exception;
 	
-	List<Map<String, Object>> getMypageProduct(ProfileSearchCondition sc) throws Exception;
-	int getMypageProductCount(String member_no, String condition) throws Exception;
+	List<Map<String, Object>> getProduct(ProfileSearchCondition sc) throws Exception;
+	int getProductCnt(String member_no, String condition) throws Exception;
 	
-	List<Map<String, Object>> getMypageBookmark(ProfileSearchCondition sc) throws Exception;
-	int getMypageBookmarkCount(String member_no, String condition) throws Exception;
+	List<Map<String, Object>> getBookmark(ProfileSearchCondition sc) throws Exception;
+	int getBookmarkCnt(String member_no, String condition) throws Exception;
 	
+	List<Map<String, Object>> getReview(ProfileSearchCondition sc) throws Exception;
+	int getReviewCnt(String member_no, String condition) throws Exception;
 }

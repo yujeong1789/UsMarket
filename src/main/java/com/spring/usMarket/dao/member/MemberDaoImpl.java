@@ -66,30 +66,44 @@ public class MemberDaoImpl implements MemberDao{
 	}
 
 	@Override
-	public List<Map<String, Object>> searchMypageProduct(ProfileSearchCondition sc) throws Exception {
-		return session.selectList(namespace+"searchMypageProduct", sc);
+	public List<Map<String, Object>> searchProduct(ProfileSearchCondition sc) throws Exception {
+		return session.selectList(namespace+"searchProfileProduct", sc);
 	}
 
 	@Override
-	public int searchMypageProductCount(Integer member_no, String condition) throws Exception {
+	public int searchProductCnt(Integer member_no, String condition) throws Exception {
 		Map<String, Object> map = new HashMap<>();
 		map.put("member_no", member_no);
 		map.put("condition", condition);
 		
-		return session.selectOne(namespace+"searchMypageProductCount", map);
+		return session.selectOne(namespace+"searchProfileProductCnt", map);
 	}
 
 	@Override
-	public List<Map<String, Object>> searchMypageBookmark(ProfileSearchCondition sc) throws Exception {
-		return session.selectList(namespace+"searchMypageBookmark", sc);
+	public List<Map<String, Object>> searchBookmark(ProfileSearchCondition sc) throws Exception {
+		return session.selectList(namespace+"searchProfileBookmark", sc);
 	}
 
 	@Override
-	public int searchMypageBookmarkCount(Integer member_no, String condition) throws Exception {
+	public int searchBookmarkCnt(Integer member_no, String condition) throws Exception {
 		Map<String, Object> map = new HashMap<>();
 		map.put("member_no", member_no);
 		map.put("condition", condition);
 		
-		return session.selectOne(namespace+"searchMypageBookmarkCount", map);
+		return session.selectOne(namespace+"searchProfileBookmarkCnt", map);
+	}
+
+	@Override
+	public List<Map<String, Object>> searchReview(ProfileSearchCondition sc) throws Exception {
+		return session.selectList(namespace+"searchProfileReview", sc);
+	}
+
+	@Override
+	public int searchReviewCnt(Integer member_no, String condition) throws Exception {
+		Map<String, Object> map = new HashMap<>();
+		map.put("member_no", member_no);
+		map.put("condition", condition);
+		
+		return session.selectOne(namespace+"searchProfileReviewCnt", map);
 	}
 }

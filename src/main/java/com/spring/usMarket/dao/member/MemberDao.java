@@ -18,10 +18,12 @@ public interface MemberDao {
 	Map<String, Object> idLogin(String member_id) throws Exception;
 	MemberDto memberSearch(Integer member_no) throws Exception;
 	
-	List<Map<String, Object>> searchMypageProduct(ProfileSearchCondition sc) throws Exception;
-	int searchMypageProductCount(Integer member_no, String condition) throws Exception;
+	List<Map<String, Object>> searchProduct(ProfileSearchCondition sc) throws Exception;
+	int searchProductCnt(Integer member_no, String condition) throws Exception;
 	
-	List<Map<String, Object>> searchMypageBookmark(ProfileSearchCondition sc) throws Exception;
-	int searchMypageBookmarkCount(Integer member_no, String condition) throws Exception;
+	List<Map<String, Object>> searchBookmark(ProfileSearchCondition sc) throws Exception;
+	int searchBookmarkCnt(Integer member_no, String condition) throws Exception;
 	
+	List<Map<String, Object>> searchReview(ProfileSearchCondition sc) throws Exception;
+	int searchReviewCnt(Integer member_no, String condition) throws Exception;
 }
