@@ -3,7 +3,6 @@ package com.usMarket.test;
 import static org.junit.Assert.assertEquals;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -27,7 +26,7 @@ import com.spring.usMarket.utils.SearchCondition;
 @ContextConfiguration(locations = {"file:src/main/webapp/WEB-INF/spring/root-context.xml"})
 public class ProductServiceImplTest {
 	
-	private static int member_no = 43;
+	private static int member_no = 3;
 	private static int randomCategory1 = (int)((Math.random()*15)+1); // product_category1 범위 내 난수 생성
 	
 	@Autowired private ProductService productService;
