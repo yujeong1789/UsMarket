@@ -2,14 +2,8 @@
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
-
-<link rel="stylesheet" href="<c:url value='/resources/customer/css/deal_list.css'/>" type="text/css">
-<div class="deal-list-container">
-	<div class="row">
-		<div class="container">
-			<div class="title">
-				<span>거래내역</span>
-			</div>	
+<!DOCTYPE html>
+<html>
 			<div class="deal-list">
 				<div class="deal-list-header">
 					<div class="${condition eq 'buy' ? 'condition-selected' : '' }" data-condition="buy" onclick="setCondition(this)">구매</div>
@@ -47,59 +41,4 @@
 					</c:if>
 				</div>
 			</div> <!-- deal-list -->
-			<form id="dealInfoForm" action="<c:url value='/deal/info'/>" method="post">
-				<input type="hidden" id="deal_no" name="deal_no">
-			</form>
-		</div> <!-- container -->
-	</div> <!-- row -->
-</div> <!-- deal-list-container --> 
-
-<script type="text/javascript">
-document.querySelectorAll('.deal-list li').forEach(el => function(){
-	el.addEventListener('click', function(){
-		getDealInfo(el);
-	});
-});
-
-let setCondition = function(el){
-	document.querySelector('.condition-selected').classList.remove('condition-selected');
-	el.className = 'condition-selected';
-	
-	document.querySelector('.state-selected').classList.remove('state-selected');
-	document.querySelector('.deal-states > div:first-child').className = 'state-selected';
-	
-	getDealList();
-};
-
-let setState = function(el){
-	document.querySelector('.state-selected').classList.remove('state-selected');
-	el.className = 'state-selected';
-	
-	getDealList();
-};
-
-let getDealInfo = function(el){
-	document.getElementById('deal_no').value = el.dataset.no;
-	document.getElementById('dealInfoForm').submit();
-};
-
-let getDealList = function(page){
-	console.log(document.querySelector('.condition-selected').dataset.condition);
-	console.log(document.querySelector('.state-selected').dataset.state);
-	
-	let params = new FormData();
-	params.append('condition', document.querySelector('.condition-selected').dataset.condition);
-	params.append('state', document.querySelector('.state-selected').dataset.state);
-	
-	fetch('/usMarket/deal/list', {
-		method: 'POST',
-		body: params,
-	})
-	.then((response) => response.text())
-	.then((data) => {
-		var result = document.createElement('div');
-		result.innerHTML = data;
-		document.querySelector('.deal-list').innerHTML = result.querySelector('.deal-list').innerHTML;
-	}).catch((error) => console.log('error: '+error)); // fetch end
-}; // getDealList
-</script>
+</html>

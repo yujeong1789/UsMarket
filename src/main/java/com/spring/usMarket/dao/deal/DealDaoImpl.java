@@ -1,6 +1,7 @@
 package com.spring.usMarket.dao.deal;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.apache.ibatis.session.SqlSession;
@@ -30,6 +31,16 @@ public class DealDaoImpl implements DealDao{
 		map.put("member_no", customer_no);
 		
 		return session.update(namespace+"updateAddress", map);
+	}
+
+	@Override
+	public List<Map<String, Object>> searchDealList(String state, String condition, String member_no) throws Exception {
+		Map<String, Object> map = new HashMap<>();
+		map.put("state", state);
+		map.put("condition", condition);
+		map.put("member_no", member_no);
+		
+		return session.selectList(namespace+"searchDealList", map);
 	}
 
 }

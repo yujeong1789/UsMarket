@@ -1,6 +1,8 @@
 package com.spring.usMarket.service.deal;
 
 import java.sql.SQLException;
+import java.util.List;
+import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -49,6 +51,16 @@ public class DealServiceImpl implements DealService{
 		logger.info("상품 판매완료 처리 결과 = {}", getResult(modifyProductCnt));
 		
 		return cnt==result ? true : false;
+	}
+
+	@Override
+	@Transactional(rollbackFor = SQLException.class, readOnly = true)
+	public List<Map<String, Object>> getDealList(String state, String condition, String member_no) throws Exception {
+		
+		List<Map<String, Object>> listMap = dealDao.searchDealList(state, condition, member_no);
+		logger.info("거래내역 목록 조회 결과 = {}건", listMap.size());
+		
+		return listMap;
 	}
 
 
