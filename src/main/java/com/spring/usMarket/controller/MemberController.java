@@ -373,11 +373,6 @@ public class MemberController {
 		return "redirect:/member/viewajax";
 	}
 	
-	@GetMapping("/transactionhistory")
-	public String transactionhistory(HttpServletRequest request) {
-		return "member/transactionhistory";
-	}
-	
 	@ResponseBody
 	@PostMapping("/nickCheck")
 	public String NickCheck(@RequestBody String member_nick) throws Exception {
