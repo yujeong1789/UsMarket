@@ -24,7 +24,7 @@ import com.spring.usMarket.utils.SearchCondition;
 @WebAppConfiguration
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = {"file:src/main/webapp/WEB-INF/spring/root-context.xml"})
-public class ProductServiceImplTest {
+public class ProductTest {
 	
 	private static int member_no = 3;
 	private static int randomCategory1 = (int)((Math.random()*15)+1); // product_category1 범위 내 난수 생성
@@ -80,6 +80,9 @@ public class ProductServiceImplTest {
 		ProductInsertDto dto = new ProductInsertDto(product_no, member_no, 1, 1, "test title", "N", "N", 150000, "test content", "t a g");
 		int result = productService.addProduct(dto);
 		assertEquals(result, 1);
+		
+		int modifyResult = productService.modifyProductState(3, String.valueOf(member_no), product_no);
+		assertEquals(modifyResult, 1);
 	}
 
 }

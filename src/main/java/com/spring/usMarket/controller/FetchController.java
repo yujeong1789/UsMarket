@@ -189,6 +189,19 @@ public class FetchController {
 		return chatMap;
 	}
 	
+	@PostMapping("/deal/modify")
+	public int dealModify(String deal_no, String deal_state) {
+		logger.info("deal_no = {}, deal_state = {}", deal_no, deal_state);
+		
+		int rowCnt = 1;
+		try {
+			// rowCnt = dealService.modifyDealState(deal_state, deal_no);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return rowCnt;
+	}
 	
 	@GetMapping("/chatmember/{member_no}")
 	public Map<String, Object> chatMember(@PathVariable String member_no) {

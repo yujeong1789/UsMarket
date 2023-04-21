@@ -22,7 +22,7 @@ public class DealServiceImpl implements DealService{
 	@Autowired ProductDao productDao;
 	
 	public String getResult(int rowCnt) {
-		return rowCnt == 1 ? "OK" : "NOT_OK";
+		return rowCnt == 1 ? "SUCCESS" : "FAIL";
 	}
 	
 	@Override
@@ -46,11 +46,12 @@ public class DealServiceImpl implements DealService{
 		
 		// 해당 상품 판매완료 처리
 		int modifyProductCnt = productDao.updateProductState(3, dto.getSeller_no().toString(), dto.getProduct_no().toString());
+		logger.info("seller_no = {}, product_no = {}", dto.getSeller_no(), dto.getProduct_no());
 		cnt++;
 		result += modifyProductCnt;
 		logger.info("상품 판매완료 처리 결과 = {}", getResult(modifyProductCnt));
 		
-		return cnt==result ? true : false;
+		return cnt == result ? true : false;
 	}
 
 	@Override
@@ -73,5 +74,14 @@ public class DealServiceImpl implements DealService{
 		return map;
 	}
 
+	@Override
+	@Transactional(rollbackFor = SQLException.class)
+	public int modifyDealState(String deal_state, String deal_no) throws Exception {
+		
+		int rowCnt = dealDao.updateDealState(deal_state, deal_no);
+		logger.info("거래상태 업데이트 결과 = {}", getResult(rowCnt));
+		
+		return rowCnt;
+	}
 
 }
