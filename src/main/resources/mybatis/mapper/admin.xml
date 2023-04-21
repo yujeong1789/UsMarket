@@ -188,15 +188,12 @@
 					  WHERE d.product_no = p.product_no
 					  AND d.deal_start_date BETWEEN TO_DATE(#{startDate}, 'YYYY-MM-DD') AND TO_DATE(#{endDate}, 'YYYY-MM-DD')+1
 					  <choose>
-					  	<when test="condition == 1">
-							AND d.deal_state = 1 
+					  	<when test="condition != null and condition != ''">
+							AND d.deal_state = #{condition} 
 						</when>
-					  	<when test="condition == 2">
-							AND d.deal_state = 2 
-						</when>
-					  	<when test="condition == 3">
-							AND d.deal_state = 3 
-						</when>
+					  	<otherwise>
+					  		AND d.deal_state IN (0, 1, 2, 3)
+					  	</otherwise>
 					  </choose>
 					  <choose>
 					  	<when test="order == 'regdate'">
@@ -222,14 +219,17 @@
 		FROM deal
 		WHERE deal_start_date BETWEEN TO_DATE(#{startDate}, 'YYYY-MM-DD') AND TO_DATE(#{endDate}, 'YYYY-MM-DD')+1
 		<choose>
+			<when test="condition == 0">
+				AND deal_state = 0 
+			</when>
 			<when test="condition == 1">
-				AND deal_delivery_state = 1 
+				AND deal_state = 1 
 			</when>
 			<when test="condition == 2">
-				AND deal_delivery_state = 2 
+				AND deal_state = 2 
 			</when>
 			<when test="condition == 3">
-				AND deal_delivery_state = 3 
+				AND deal_state = 3 
 			</when>
 		</choose>
 	</select>
