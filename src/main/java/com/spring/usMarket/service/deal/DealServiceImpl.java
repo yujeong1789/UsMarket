@@ -63,5 +63,15 @@ public class DealServiceImpl implements DealService{
 		return listMap;
 	}
 
+	@Override
+	@Transactional(rollbackFor = SQLException.class, readOnly = true)
+	public Map<String, Object> getDealInfo(String deal_no) throws Exception {
+		
+		Map<String, Object> map = dealDao.searchDealInfo(deal_no);
+		logger.info("거래내역 조회 결과 = {}", map.toString());
+		
+		return map;
+	}
+
 
 }
