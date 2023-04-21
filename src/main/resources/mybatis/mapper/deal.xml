@@ -42,9 +42,16 @@
 	
 	<!-- 거래내역 상세보기 -->
 	<select id="searchDealInfo" parameterType="string" resultType="map">
-	SELECT * 
-	FROM deal_info_view 
-	WHERE deal_no = #{deal_no}
+		SELECT * 
+		FROM deal_info_view 
+		WHERE deal_no = #{deal_no}
 	</select>
+	
+	<!-- 거래상태 변경 -->
+	<update id="updateDealState" parameterType="map">
+		UPDATE deal
+		SET deal_state = #{deal_state}
+		WHERE deal_no = #{deal_no}
+	</update>
 	
 </mapper>

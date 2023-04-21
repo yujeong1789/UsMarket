@@ -40,7 +40,7 @@
 										<span>${deal.PRODUCT_NAME }</span>
 										<span><fmt:formatNumber value="${deal.PRODUCT_PRICE }" pattern="#,###"/>원</span>
 										<span>${state eq 'buy' ? deal.SELLER_NICKNAME : deal.CUSTOMER_NICKNAME }</span>
-										<span><fmt:formatDate value="${deal.DEAL_START_DATE }" pattern="yyyy.MM.dd (a HH:mm)"/></span>
+										<span><fmt:formatDate value="${deal.DEAL_START_DATE }" pattern="yyyy.MM.dd (a hh:mm)"/></span>
 									</div>
 								</li>
 							</c:forEach>
