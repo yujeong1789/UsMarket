@@ -20,7 +20,7 @@ import com.spring.usMarket.service.chat.ChatService;
 @WebAppConfiguration
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = {"file:src/main/webapp/WEB-INF/spring/root-context.xml"})
-public class ChatServiceTest {
+public class ChatTest {
 	
 	@Autowired private ChatService chatService;
 	
