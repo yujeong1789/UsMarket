@@ -84,9 +84,6 @@ let getDealInfo = function(el){
 };
 
 let getDealList = function(page){
-	console.log(document.querySelector('.condition-selected').dataset.condition);
-	console.log(document.querySelector('.state-selected').dataset.state);
-	
 	let params = new FormData();
 	params.append('condition', document.querySelector('.condition-selected').dataset.condition);
 	params.append('state', document.querySelector('.state-selected').dataset.state);
