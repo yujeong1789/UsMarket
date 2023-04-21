@@ -176,12 +176,12 @@
 		</choose>
 	</select>
 	
-	<!-- 마이페이지 찜 출력 -->
+	<!-- 마이페이지 리뷰 출력 -->
 	<select id="searchProfileReview" parameterType="profileSearchCondition" resultType="map">
 		SELECT *
 		FROM(SELECT ROWNUM AS num, A.*
 			 FROM (
-			    SELECT m.MEMBER_IMAGE, m.MEMBER_NICKNAME, r.REVIEW_CONTENT, p.PRODUCT_NAME, d.DEAL_START_DATE
+			    SELECT m.MEMBER_IMAGE, m.MEMBER_NICKNAME, r.REVIEW_CONTENT, r.REVIEW_SCORE, r.REVIEW_REGDATE, p.PRODUCT_NAME, p.PRODUCT_NO
 			    FROM deal d 
 			    JOIN review r ON r.deal_no = d.deal_no
 			    JOIN member m ON m.member_no = d.seller_no
@@ -196,23 +196,23 @@
 					</when>
 					<when test="condition == 3">
 					    AND r.review_score = 3  
-				  </when>
+					</when>
+					<when test="condition == 4">
+					   AND r.review_score = 4  
+					</when>
+					<when test="condition == 5">
+					   AND r.review_score = 5  
+					</when>
 				</choose> 
 				<choose>
 					<when test="order == 'regdate_desc'">
-						ORDER BY review_regdate DESC 
+						ORDER BY r.REVIEW_REGDATE DESC 
 					</when>
 					<when test="order == 'regdate'">
-					    ORDER BY review_regdate
-					</when>
-					<when test="order == 'view_desc'">
-					    ORDER BY review_view DESC 
-					</when>
-					<when test="order == 'view'">
-					    ORDER BY ewview_view 
+					    ORDER BY r.REVIEW_REGDATE
 					</when>
 					<otherwise>
-					    ORDER BY review_regdate DESC 
+					    ORDER BY r.REVIEW_REGDATE DESC 
 					</otherwise>
 				</choose>
 			 	) A
@@ -220,7 +220,7 @@
 		WHERE num BETWEEN #{startPage} AND #{endPage}                                                                                                                                                                                                                                                                                                                                                                     
 	</select>
 	
-	<!-- 마이페이지 찜 중인 상품 수 출력 -->
+	<!-- 마이페이지 리뷰 수 출력 -->
 	<select id="searchProfileReviewCnt" parameterType="map" resultType="int">
 		SELECT COUNT(*) 
         FROM review 
