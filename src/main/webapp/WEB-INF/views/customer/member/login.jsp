@@ -29,7 +29,10 @@
 			</div>
 		</form>
 		<div class="caption">
-			<a href=#>비밀번호를 잃어버리셨나요?</a>
+			<div class="search">
+				<a href="<c:url value='/member/search?mode=id'/>">아이디</a>/
+				<a href="<c:url value='/member/search?mode=pw'/>">비밀번호를 잃어버리셨나요?</a>
+			</div>
 			<a href="<c:url value='/member/join'/>">회원가입</a>
 		</div>
 	</section>
