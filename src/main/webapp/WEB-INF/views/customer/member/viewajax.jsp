@@ -6,7 +6,7 @@
 
 <div class="mypage_content">
 
-<c:if test="${category == 'productList' || category == 'bookmarkList'}">
+<c:if test="${category == 'productList' || category == 'bookmarkList'}"> <!-- Product, Bookmark -->
 
 	<div class="sub-title">
 		<div></div>
@@ -44,7 +44,7 @@
 				<c:forEach var="product" items="${pageList }" varStatus="status">
 				<div class="product__box">
 					<div class="product__img">
-						<a href="<c:url value='/product/info?product_no=${PRODUCT.PRODUCT_NO}' />"> 
+						<a href="<c:url value='/product/info?product_no=${product.PRODUCT_NO}' />"> 
 							<c:if test="${product.PRODUCT_STATE_NO == 2}">
 								<img class="product__img__top" src="${pageContext.request.contextPath}/resources/customer/img/product/reserve.png">
 							</c:if>
@@ -100,7 +100,8 @@
 		</c:if>
 	</div>
 </c:if>
-<c:if test="${category == 'reviewList'}">
+
+<c:if test="${category == 'reviewList'}"> <!-- Review -->
 	<div class="sub-title">
 		<div></div>
 		<div class="dropdown-container">
@@ -132,42 +133,28 @@
 	<input class="mode" type="hidden" value="${category}">
 	
 	<div class="content_list">
+		<c:if test="${empty pageList }">
+			<div class="empty">
+				<span>리뷰내역이 존재하지 않습니다.</span>
+			</div>
+		</c:if>
 		<c:if test="${! empty pageList }">
-			<div class="product__area">
-				<c:forEach var="product" items="${pageList }" varStatus="status">
-				<div class="product__box">
-					<div class="product__img">
-						<a href="<c:url value='/product/info?product_no=${PRODUCT.PRODUCT_NO}' />"> 
-							<c:if test="${product.PRODUCT_STATE_NO == 2}">
-								<img class="product__img__top" src="${pageContext.request.contextPath}/resources/customer/img/product/reserve.png">
-							</c:if>
-							<c:if test="${product.PRODUCT_STATE_NO == 3}">
-								<img class="product__img__top" src="${pageContext.request.contextPath}/resources/customer/img/product/complete.png">
-							</c:if>
-							<img src="https://usmarket.s3.ap-northeast-2.amazonaws.com/${product.PRODUCT_IMG_PATH}">
-						</a>
-					</div>
-					<div class="product__info__1">
-						<div class="product__title">
-							<a href="<c:url value='/product/info?product_no=${product.DEAL_NO}' />">
-								<c:out value="${product.PRODUCT_NAME }" />
-							</a>
-						</div>
-						<div class="product__info__2">
-							<div class="product__price">
-								<span><fmt:formatNumber value="${product.PRODUCT_PRICE}" pattern="#,###"/></span>
+			<div class="review__area">
+				<ul>
+					<c:forEach var="review" items="${pageList }">
+						<li data-no="${review.DEAL_NO }" onclick="getDealInfo(this)">
+							<div class="review-left">
+								<img class="seller-img" src="<c:url value='${review.MEMBER_IMAGE }' />">
 							</div>
-							<div class="product__regdate">
-								<fmt:formatDate value="${product.REVIEW_REGDATE }" pattern="yyyy년 MM월 dd일 HH:mm"/>
+							<div class="review-right">
+								<span>${review.PRODUCT_NAME }</span>
+								<span>${review.REVIEW_CONTENT }</span>
+								<span>${review.MEMBER_NICKNAME }</span>
+								<span><fmt:formatDate value="${review.DEAL_START_DATE }" pattern="yyyy.MM.dd (a HH:mm)"/></span>
 							</div>
-							<div class="info-view">
-								<img src="<c:url value='/resources/customer/img/view.png'/>">
-							<span>${product.PRODUCT_VIEW }</span>
-							</div>
-						</div>
-					</div>
-				</div>
-				</c:forEach>
+						</li>
+					</c:forEach>
+				</ul>
 			</div>
 			
 			<div class="paging__container">

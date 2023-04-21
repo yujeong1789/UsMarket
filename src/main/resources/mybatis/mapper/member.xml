@@ -179,21 +179,23 @@
 	<!-- 마이페이지 찜 출력 -->
 	<select id="searchProfileReview" parameterType="profileSearchCondition" resultType="map">
 		SELECT *
-		FROM(SELECT rownum AS num, A.*
-		    FROM(SELECT * 
-		        FROM review 
-		        WHERE deal_no IN(SELECT deal_no 
-		                        FROM deal 
-		                        WHERE customer_no = #{member_no})
-		        <choose>
+		FROM(SELECT ROWNUM AS num, A.*
+			 FROM (
+			    SELECT m.MEMBER_IMAGE, m.MEMBER_NICKNAME, r.REVIEW_CONTENT, p.PRODUCT_NAME, d.DEAL_START_DATE
+			    FROM deal d 
+			    JOIN review r ON r.deal_no = d.deal_no
+			    JOIN member m ON m.member_no = d.seller_no
+			    JOIN product p ON p.product_no = d.product_no
+			    WHERE d.customer_no = #{member_no}
+			    <choose>
 					<when test="condition == 1">
-					    AND review_score = 1 
+					    AND r.review_score = 1 
 					</when>
 					<when test="condition == 2">
-					    AND review_score = 2  
+					    AND r.review_score = 2  
 					</when>
 					<when test="condition == 3">
-					    AND review_score = 3  
+					    AND r.review_score = 3  
 				  </when>
 				</choose> 
 				<choose>
@@ -213,7 +215,7 @@
 					    ORDER BY review_regdate DESC 
 					</otherwise>
 				</choose>
-		        ) A
+			 	) A
 		    )
 		WHERE num BETWEEN #{startPage} AND #{endPage}                                                                                                                                                                                                                                                                                                                                                                     
 	</select>
