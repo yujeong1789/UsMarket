@@ -81,7 +81,7 @@ public class MemberController {
 		
 		if (member == null) {
 			logger.info("아이디 없음");
-			String msg = "잘못된 입력입니다.";
+			String msg = "아이디 또는 비밀번호를 잘못 입력했습니다.";
 			model.addAttribute("msg", msg);
 			model.addAttribute("mem_id", member_id);
 			model.addAttribute("mem_pw", member_password);
@@ -94,7 +94,7 @@ public class MemberController {
 			return "redirect:"+prevPage;
 		} else {
 			logger.info("비밀번호 오류");
-			String msg = "잘못된 입력입니다.";
+			String msg = "아이디 또는 비밀번호를 잘못 입력했습니다.";
 			model.addAttribute("msg", msg);
 			model.addAttribute("mem_id", member_id);
 			model.addAttribute("mem_pw", member_password);
@@ -124,6 +124,14 @@ public class MemberController {
 		return "redirect:" + referer;
 	}
 
+	@GetMapping("/search")
+	public String search(HttpServletRequest request, Model model) {
+		logger.info("mode = {}",request.getParameter("mode"));
+		model.addAttribute("mode", request.getParameter("mode"));
+		
+		return "member/search";
+	}
+	
 	@GetMapping("/join")
 	public String join(HttpServletRequest request, Model model) {
 		MemberDto memberInfo = null;
@@ -273,6 +281,7 @@ public class MemberController {
 				category = "productList";
 			}
 			if(sc.getMode().equals("reviewList")) {
+				sc.setPageSize(5);
 				myList = memberService.getReview(sc);
 				totalCnt = memberService.getReviewCnt(sc.getMember_no(), sc.getCondition());
 				category = "reviewList";
@@ -283,7 +292,7 @@ public class MemberController {
 				category = "bookmarkList";
 			}
 			
-			logger.info("totalCnt = {}, myList = {}", totalCnt, myList);
+			logger.info("totalCnt = {}, myList = {}, sc.setPageSize({})", totalCnt, myList,sc.getPageSize());
 			
 			ProfilePageHandler pageHandler = new ProfilePageHandler(totalCnt, sc);
 	
@@ -354,7 +363,7 @@ public class MemberController {
 	
 	@PostMapping("/myReview")
 	public String MyReview(@RequestBody ProfileSearchCondition sc, RedirectAttributes ratt) throws Exception {
-		sc.setPageSize(15);
+		sc.setPageSize(5);
 		int totalCnt = 0;
 		
 		logger.info("member_no = {}", sc.getMember_no());
