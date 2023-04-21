@@ -11,6 +11,7 @@
 				</div>
 				<div class="deal-states">
 					<div class="${empty state or state eq '' ? 'state-selected' : '' }" data-state="" onclick="setState(this)">전체</div>
+					<div class="${state eq '0' ? 'state-selected' : '' }" data-state="0" onclick="setState(this)">대기중</div>
 					<div class="${state eq '1' ? 'state-selected' : '' }" data-state="1" onclick="setState(this)">진행중</div>
 					<div class="${state eq '2' ? 'state-selected' : '' }" data-state="2" onclick="setState(this)">완료</div>
 					<div class="${state eq '3' ? 'state-selected' : '' }" data-state="3" onclick="setState(this)">취소/환불</div>

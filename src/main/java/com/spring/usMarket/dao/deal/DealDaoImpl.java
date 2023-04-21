@@ -43,4 +43,9 @@ public class DealDaoImpl implements DealDao{
 		return session.selectList(namespace+"searchDealList", map);
 	}
 
+	@Override
+	public Map<String, Object> searchDealInfo(String deal_no) throws Exception {
+		return session.selectOne(namespace+"searchDealInfo", deal_no);
+	}
+
 }

@@ -25,6 +25,7 @@
 						<div>거래정보</div>
 						<div>
 							<c:choose>
+								<c:when test="${infoMap.DEAL_STATE eq 0 }">거래대기중</c:when>
 								<c:when test="${infoMap.DEAL_STATE eq 1 }">거래진행중</c:when>
 								<c:when test="${infoMap.DEAL_STATE eq 2 }">거래완료</c:when>
 								<c:when test="${infoMap.DEAL_STATE eq 3 }">거래취소</c:when>
@@ -84,6 +85,7 @@
 						<div>배송정보</div>
 						<div>
 							<c:choose>
+								<c:when test="${empty infoMap.DEAL_DELIVERY_STATE }">거래대기중</c:when>
 								<c:when test="${infoMap.DEAL_DELIVERY_STATE eq 1 }">배송준비중</c:when>
 								<c:when test="${infoMap.DEAL_DELIVERY_STATE eq 2 }">배송중</c:when>
 								<c:when test="${infoMap.DEAL_DELIVERY_STATE eq 3 }">배송완료</c:when>

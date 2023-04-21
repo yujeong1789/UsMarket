@@ -35,9 +35,16 @@
 				 AND deal_state = #{state} 
 			</when>
 			<otherwise>
-				 AND deal_state IN (1, 2, 3) 
+				 AND deal_state IN (0, 1, 2, 3) 
 			</otherwise>
 		</choose>
+	</select>
+	
+	<!-- 거래내역 상세보기 -->
+	<select id="searchDealInfo" parameterType="string" resultType="map">
+	SELECT * 
+	FROM deal_info_view 
+	WHERE deal_no = #{deal_no}
 	</select>
 	
 </mapper>

@@ -28,6 +28,7 @@
 						<td><fmt:formatNumber type="number" value="${deal.PRODUCT_PRICE }"/>원</td>
 						<td data-status="${deal.DEAL_STATE }">
 							<c:choose>
+								<c:when test="${deal.DEAL_STATE  eq 0}">거래대기중</c:when>
 								<c:when test="${deal.DEAL_STATE  eq 1}">거래진행중</c:when>
 								<c:when test="${deal.DEAL_STATE  eq 2}">거래완료</c:when>
 								<c:when test="${deal.DEAL_STATE  eq 3}">거래취소</c:when>
@@ -38,7 +39,7 @@
 				</c:forEach>
 			</tbody>
 		</table>
-		<form id="dealInfoForm" name="dealInfoForm" action="<c:url value='/admin/deal/info'/>" method="post">
+		<form id="dealInfoForm" name="dealInfoForm" action="<c:url value='/admin/payment/info'/>" method="post">
 			<input type="hidden" id="deal_no" name="deal_no" value="">
 		</form>
 		<div class="paging">
