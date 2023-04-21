@@ -96,7 +96,12 @@
 		</c:if>
 		
 		<c:if test="${empty pageList }">
-			<div class="no__item">등록된 상품이 없습니다.</div> <!-- 이미지 만들 것 -->				
+			<c:if test="${category == 'productList' }">
+				<div class="no__item">등록된 상품이 없습니다.</div>
+			</c:if>
+			<c:if test="${category == 'bookmarkList' }">
+				<div class="no__item">찜함 상품이 없습니다.</div>
+			</c:if>			
 		</c:if>
 	</div>
 </c:if>
@@ -111,19 +116,19 @@
 					<ul>
 						<li class="order-selected" data-order="regdate_desc">등록 최신순</li>
 						<li data-order="regdate">등록 오래된순</li>
-						<li data-order="view_desc">조회 많은순</li>
-						<li data-order="view">조회 적은순</li>							
 					</ul>
 				</div>
 			</div>
 			<div class="dropdown condition-dropdown">
-				<span>판매상태</span>
+				<span>별점</span>
 				<div class="dropdown-content">
 					<ul>
-						<li class="condition-selected" data-condition="0">전체</li>					
-						<li data-condition="1">판매중</li>					
-						<li data-condition="2">예약중</li>					
-						<li data-condition="3">판매완료</li>					
+						<li class="condition-selected" data-condition="0">전체</li>
+						<li data-condition="1">1점</li>
+						<li data-condition="2">2점</li>
+						<li data-condition="3">3점</li>
+						<li data-condition="4">4점</li>
+						<li data-condition="5">5점</li>
 					</ul>
 				</div>
 			</div>
@@ -134,23 +139,47 @@
 	
 	<div class="content_list">
 		<c:if test="${empty pageList }">
-			<div class="empty">
-				<span>리뷰내역이 존재하지 않습니다.</span>
-			</div>
+			<div class="no__item">리뷰내역이 존재하지 않습니다.</div>
 		</c:if>
 		<c:if test="${! empty pageList }">
 			<div class="review__area">
-				<ul>
+				<ul class="review-list">
 					<c:forEach var="review" items="${pageList }">
-						<li data-no="${review.DEAL_NO }" onclick="getDealInfo(this)">
+						<li data-no="${review.PRODUCT_NO }">
 							<div class="review-left">
 								<img class="seller-img" src="<c:url value='${review.MEMBER_IMAGE }' />">
 							</div>
 							<div class="review-right">
-								<span>${review.PRODUCT_NAME }</span>
-								<span>${review.REVIEW_CONTENT }</span>
-								<span>${review.MEMBER_NICKNAME }</span>
-								<span><fmt:formatDate value="${review.DEAL_START_DATE }" pattern="yyyy.MM.dd (a HH:mm)"/></span>
+								<div class="review-info">
+									<div class="info-label">
+										<div class="info-label-nickname">판매자</div>
+										<span><c:out value="${review.MEMBER_NICKNAME }"/></span>
+									</div>
+									<div class="review-info-right">
+										<div class="info-label-regdate">등록 시간</div>
+										<span class="name-right"><fmt:formatDate value="${review.REVIEW_REGDATE }" pattern="yyyy.MM.dd (a HH:mm)"/></span>
+									</div>
+								</div>
+								
+								<div class="review-info">
+									<div class="info-label">
+										<div class="info-label-product">구매한 상품</div>
+										<span><c:out value="${review.PRODUCT_NAME }"/></span>
+									</div>
+								</div>
+								<div class="review-info-score">
+									<c:forEach begin="1" end="5" var="loopIndex">
+										<c:choose>
+											<c:when test="${review.REVIEW_SCORE >= loopIndex}">
+												<img class="score" src="${pageContext.request.contextPath}/resources/customer/img/star.png">
+											</c:when>
+											<c:otherwise>
+												<img class="score" src="${pageContext.request.contextPath}/resources/customer/img/star_blank.png">
+											</c:otherwise>
+										</c:choose>
+									</c:forEach>
+								</div>
+								<input type="text" class="review-content"value="${review.REVIEW_CONTENT }" readonly>
 							</div>
 						</li>
 					</c:forEach>
@@ -173,10 +202,10 @@
 					</c:if>
 				</c:if>
 			</div> <!-- paging__container -->
-		</c:if>
-		
-		<c:if test="${empty pageList }">
-			<div class="no__item">등록된 상품이 없습니다.</div> <!-- 이미지 만들 것 -->				
+			
+			<form id="productInfoForm" action="<c:url value='/product/info'/>" method="get">
+			    <input type="hidden" id="product_no" name="product_no">
+			</form>
 		</c:if>
 	</div>
 </c:if>
