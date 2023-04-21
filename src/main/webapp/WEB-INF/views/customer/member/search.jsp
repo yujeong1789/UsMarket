@@ -13,11 +13,11 @@
 <body>
 <div class="login-body">
 	<section class="login-form">
-		<h1>로그인</h1>
-		<form name="loginForm">
+		<h1>${mode eq 'id' ? '아이디' : '비밀번호' } 찾기</h1>
+		<form name="searchForm">
 			<div class="int-area">
-				<input type="text" name="member_id" id="id" autocomplete="off" value="${mem_id }" required>
-				<label for="id">아이디</label>
+				<input type="text" name="member_name" id="name" autocomplete="off" required>
+				<label for="name">이름</label>
 			</div>
 			<div class="int-area">
 				<input type="password" name="member_password" id="pw" autocomplete="off" value="${mem_pw }" required>
@@ -30,8 +30,12 @@
 		</form>
 		<div class="caption">
 			<div class="search">
-				<a href="<c:url value='/member/search?mode=id'/>">아이디</a>/
-				<a href="<c:url value='/member/search?mode=pw'/>">비밀번호를 잃어버리셨나요?</a>
+				<c:if test="${mode ne 'id'}">
+					<a href="<c:url value='/member/search?mode=id'/>">아이디를 잃어버리셨나요?</a>
+				</c:if>
+				<c:if test="${mode ne 'pw'}">
+					<a href="<c:url value='/member/search?mode=pw'/>">비밀번호를 잃어버리셨나요?</a>
+				</c:if>
 			</div>
 			<a href="<c:url value='/member/join'/>">회원가입</a>
 		</div>

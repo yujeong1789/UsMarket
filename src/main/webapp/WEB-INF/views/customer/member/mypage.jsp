@@ -200,7 +200,10 @@
 									<div class="paging-next">&gt;&gt;</div>
 								</c:if>
 							</c:if>
-						</div> <!-- product__container -->						
+						</div> <!-- paging__container -->
+						<form id="productInfoForm" action="<c:url value='/product/info'/>" method="get">
+						    <input type="hidden" id="product_no" name="product_no">
+						</form>
 					</div>
 				</div> <!-- mypage_content -->
 			</div> <!-- member_mypage -->
@@ -340,6 +343,10 @@
 		    reportModal.show();
 		};
 		
+		$(document).on('click', '.review-list li', function() {
+	        $('#product_no').val($(this).data('no'));
+	        $('#productInfoForm').submit();
+	    });
 	}); // ready
 	
 	

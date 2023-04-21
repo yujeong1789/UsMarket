@@ -1,14 +1,9 @@
 package com.spring.usMarket.utils;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
-
 public class ProfileSearchCondition {
 	private Integer page = 1;
 	private Integer pageSize;
 	
-	private String startDate = "2022-04-01";
-	private String endDate = new SimpleDateFormat("yyyy-MM-dd").format(new Date()).toString();
 	private String condition = "";
 	private String order = "";
 	private String member_no = "";
@@ -17,12 +12,10 @@ public class ProfileSearchCondition {
 	
 	public ProfileSearchCondition() {}
 
-	public ProfileSearchCondition (Integer page, Integer pageSize, String startDate, String endDate, String condition,
+	public ProfileSearchCondition (Integer page, Integer pageSize, String condition,
 			String order, String member_no, String complete, String mode) {
 		this.page = page;
 		this.pageSize = pageSize;
-		this.startDate = startDate;
-		this.endDate = endDate;
 		this.condition = condition;
 		this.order = order;
 		this.member_no = member_no;
@@ -52,22 +45,6 @@ public class ProfileSearchCondition {
 
 	public void setPageSize(Integer pageSize) {
 		this.pageSize = pageSize;
-	}
-
-	public String getStartDate() {
-		return startDate;
-	}
-
-	public void setStartDate(String startDate) {
-		this.startDate = startDate;
-	}
-
-	public String getEndDate() {
-		return endDate;
-	}
-
-	public void setEndDate(String endDate) {
-		this.endDate = endDate;
 	}
 
 	public String getCondition() {
@@ -112,7 +89,7 @@ public class ProfileSearchCondition {
 	
 	@Override
 	public String toString() {
-		return "MypageSearchCondition [page=" + page + ", startPage=" + getStartPage() + ", endPage=" + getEndPage() + ", pageSize=" + pageSize + ", startDate=" + startDate
-				+ ", endDate=" + endDate + ", condition=" + condition + ", order=" + order + ", member_no=" + member_no + ", complete=" + complete + ", mode=" + mode + "]";
+		return "ProfileSearchCondition [page=" + page + ", startPage=" + getStartPage() + ", endPage=" + getEndPage() + ", pageSize=" + pageSize + 
+				", condition=" + condition + ", order=" + order + ", member_no=" + member_no + ", complete=" + complete + ", mode=" + mode + "]";
 	}
 }
