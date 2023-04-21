@@ -1,6 +1,7 @@
 package com.spring.usMarket.controller;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -84,7 +85,21 @@ public class DealController {
 	}
 	
 	@PostMapping("/info")
-	public void info(String deal_no) {
-		logger.info("deal_no = {}", deal_no);
+	public void info(String deal_no, Model model, HttpServletRequest request) {
+		
+		String member_no = SessionParameters.getUserNo(request);
+		logger.info("deal_no = {}, member_no = {}", deal_no, member_no);
+		
+		Map<String, Object> dealInfo = new HashMap<>();
+		String mode = "buy";
+		try {
+			dealInfo = dealService.getDealInfo(deal_no);
+			if(dealInfo.get("SELLER_NO").toString().equals(member_no)) mode = "sell";
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		model.addAttribute("dealInfo", dealInfo);
+		model.addAttribute("mode", mode);
 	}
 }
