@@ -48,4 +48,13 @@ public class DealDaoImpl implements DealDao{
 		return session.selectOne(namespace+"searchDealInfo", deal_no);
 	}
 
+	@Override
+	public int updateDealState(String deal_state, String deal_no) throws Exception {
+		Map<String, Object> map = new HashMap<>();
+		map.put("deal_state", deal_state);
+		map.put("deal_no", deal_no);
+		
+		return session.update(namespace+"updateDealState", map);
+	}
+
 }
