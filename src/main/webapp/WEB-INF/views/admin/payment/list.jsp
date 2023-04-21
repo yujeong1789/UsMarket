@@ -41,7 +41,8 @@
 						<span>거래상태</span>
 						<div class="dropdown-content">
 							<ul>
-								<li class="condition-selected" data-condition="0">전체</li>
+								<li class="condition-selected" data-condition="">전체</li>
+								<li data-condition="0">거래대기중</li>					
 								<li data-condition="1">거래진행중</li>					
 								<li data-condition="2">거래완료</li>					
 								<li data-condition="3">거래취소</li>					
@@ -73,6 +74,7 @@
 									<td><fmt:formatNumber type="number" value="${deal.PRODUCT_PRICE }"/>원</td>
 									<td data-status="${deal.DEAL_STATE }">
 										<c:choose>
+											<c:when test="${deal.DEAL_STATE  eq 0}">거래대기중</c:when>
 											<c:when test="${deal.DEAL_STATE  eq 1}">거래진행중</c:when>
 											<c:when test="${deal.DEAL_STATE  eq 2}">거래완료</c:when>
 											<c:when test="${deal.DEAL_STATE  eq 3}">거래취소</c:when>
