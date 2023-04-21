@@ -240,6 +240,7 @@ public class MemberController {
 			totalCnt = ProductCount;
 			ProfilePageHandler pageHandler = new ProfilePageHandler(totalCnt, sc);
 
+			model.addAttribute("category", "productList");
 			model.addAttribute("memberInfo", memberInfo);
 			model.addAttribute("regdate",dateFormat.format(memberInfo.getMember_regdate()));
 			model.addAttribute("mypageList", mypageProductList);
