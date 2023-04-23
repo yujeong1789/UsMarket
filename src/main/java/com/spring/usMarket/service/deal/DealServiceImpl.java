@@ -84,4 +84,14 @@ public class DealServiceImpl implements DealService{
 		return rowCnt;
 	}
 
+	@Override
+	@Transactional(rollbackFor = SQLException.class)
+	public int modifyDealCancel(String deal_cancel, String deal_no) throws Exception {
+
+		int rowCnt = dealDao.updateDealCancel(deal_cancel, deal_no);
+		logger.info("취소신청 결과 = {}", getResult(rowCnt));
+		
+		return rowCnt;
+	}
+
 }

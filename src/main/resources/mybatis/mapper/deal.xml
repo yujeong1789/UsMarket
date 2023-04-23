@@ -54,4 +54,11 @@
 		WHERE deal_no = #{deal_no}
 	</update>
 	
+	<!-- 취소신청 -->
+	<update id="updateDealCancel" parameterType="map">
+		UPDATE deal
+		SET deal_cancel = #{deal_cancel}
+		WHERE deal_no = #{deal_no}
+	</update>
+	
 </mapper>
