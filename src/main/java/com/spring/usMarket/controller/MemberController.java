@@ -131,6 +131,62 @@ public class MemberController {
 		
 		return "member/search";
 	}
+
+	@PostMapping("/search")
+	public String result(@RequestBody Map<String, Object> sc, RedirectAttributes ratt) {
+		logger.info("@RequestBody= {}",sc);
+		
+		Map<String, Object> result = memberService.searchMember(sc);
+		if(result == null) {
+			ratt.addFlashAttribute("message", "없는 회원 정보입니다.");    
+	    }
+		logger.info("result= {}",result);
+		ratt.addFlashAttribute("category","search");
+		ratt.addFlashAttribute("result", result);
+		
+		return "redirect:/member/viewajax";
+	}
+	
+	@PostMapping("/newpw")
+	public String newpw(@RequestBody Map<String, Object> sc, RedirectAttributes ratt) {
+		logger.info("@RequestBody= {}",sc);
+		
+		Map<String, Object>search = memberService.searchMember(sc);
+		if (search == null) {
+			ratt.addFlashAttribute("category","newPw");
+			ratt.addFlashAttribute("result",null);
+			
+			return "redirect:/member/viewajax";
+		}
+		
+		Random random = new Random();
+		int checkNum = random.nextInt(888888) + 111111;
+		logger.info("인증번호 " + checkNum);
+	
+		String subject = "임시 비밀번호가 발급되었습니다."; // 제목
+		String content = "<p>안녕하세요 고객님!<br><br>발급된 임시 비밀번호는<br><br>" + checkNum + "<br><br>입니다.<br>해당 비밀번호를 이용하여 로그인 후 비밀번호를 재설정 해주세요.</p>"; // 본문
+		String from = "ehd1530@gmail.com"; // 보내는사람 이메일주소
+		String to = (String) search.get("MEMBER_EMAIL");
+	
+		try {
+			MimeMessage mail = mailSender.createMimeMessage();
+			MimeMessageHelper mailHelper = new MimeMessageHelper(mail,true ,"utf-8");
+	
+			mailHelper.setFrom(from);
+			mailHelper.setTo(to);
+			mailHelper.setSubject(subject);
+			mailHelper.setText(content, true);
+			// html태그를 사용하려면 true
+			mailSender.send(mail);
+
+			ratt.addFlashAttribute("category","newPw");
+			ratt.addFlashAttribute("result", checkNum);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return "redirect:/member/viewajax";
+	}
 	
 	@GetMapping("/join")
 	public String join(HttpServletRequest request, Model model) {
