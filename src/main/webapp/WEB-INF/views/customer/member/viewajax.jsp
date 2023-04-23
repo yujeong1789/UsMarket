@@ -100,7 +100,7 @@
 				<div class="no__item">등록된 상품이 없습니다.</div>
 			</c:if>
 			<c:if test="${category == 'bookmarkList' }">
-				<div class="no__item">찜함 상품이 없습니다.</div>
+				<div class="no__item">찜한 상품이 없습니다.</div>
 			</c:if>			
 		</c:if>
 	</div>
@@ -208,6 +208,51 @@
 			</form>
 		</c:if>
 	</div>
+</c:if>
+
+<c:if test="${category == 'search'}"><!-- 아이디 찾기 페이지 -->
+<div>
+<div class="search_body">
+	<section class="search_form">
+		<h1>아이디 찾기</h1>
+		<div class="value_area">
+		<c:choose>
+			<c:when test="${message eq '없는 회원 정보입니다.' }">
+				<c:out value="${message}"></c:out>
+			</c:when>
+			<c:otherwise>
+				내 아이디 : <c:out value="${result.MEMBER_ID }" />
+			</c:otherwise>
+		</c:choose>
+		</div>
+		<div class="a_area">
+			<a class="a_btn" href="<c:url value='/member/login'/>">돌아가기</a>
+		</div>
+	</section>
+</div>
+</div>
+</c:if>
+
+<c:if test="${category == 'newPw'}"><!-- 새로운 비밀번호 전송 -->
+<div>
+<div class="search_body">
+	<section class="search_form">
+		<h1>비밀번호 찾기</h1>
+		<div class="value_area">
+			<c:if test="${result eq null}">
+				없는 회원 정보입니다.
+			</c:if>
+			<c:if test="${result ne null}">
+				임시 비밀번호를 이메일로 발송하였습니다. 확인하고 로그인해 주세요.
+				<input type="hidden" value="${result}">
+			</c:if>
+		</div>
+		<div class="a_area">
+			<a class="a_btn" href="<c:url value='/member/login'/>">돌아가기</a>
+		</div>
+	</section>
+</div>
+</div>
 </c:if>
 </div>
 
