@@ -35,6 +35,11 @@ public class MemberDaoImpl implements MemberDao{
 	}
 	
 	@Override
+	public Map<String, Object> selectMember(Map<String, Object> sc) {
+		return session.selectOne(namespace+"selectMember", sc);
+	}
+	
+	@Override
 	public int overlappedID(String member_id) {
 		return session.selectOne(namespace+"overlappedID", member_id);
 	}
