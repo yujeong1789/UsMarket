@@ -106,6 +106,12 @@ public class MemberServiceImpl implements MemberService {
 
 	@Transactional
 	@Override
+	public Map<String, Object> searchMember(Map<String, Object> sc) {
+		return memberDAO.selectMember(sc);
+	}
+	
+	@Transactional
+	@Override
 	public String checkNick(String member_nick) {
 		return memberDAO.overlappedNick(member_nick);
 	}
@@ -191,4 +197,6 @@ public class MemberServiceImpl implements MemberService {
 	
 		return reviewCount;
 	}
+
+	
 }
