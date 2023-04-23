@@ -193,9 +193,27 @@ public class FetchController {
 	public int dealModify(String deal_no, String deal_state) {
 		logger.info("deal_no = {}, deal_state = {}", deal_no, deal_state);
 		
-		int rowCnt = 1;
+		int rowCnt = 0;
 		try {
 			// rowCnt = dealService.modifyDealState(deal_state, deal_no);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return rowCnt;
+	}
+	
+	@PostMapping("/deal/cancel")
+	public int dealCancel(String deal_cancel, String deal_no) {
+		logger.info("deal_cancel = {}, deal_no = {}", deal_cancel, deal_no);
+		
+		int rowCnt = 0;
+		try {
+			// rowCnt = dealService.modifyDealCancel(deal_cancel, deal_no);
+			if(deal_cancel == "1") { // 거래취소 승인
+				// rowCnt += dealService.modifyDealState("3", deal_no);
+				rowCnt = (rowCnt == 2 ? 1 : rowCnt);
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
