@@ -57,4 +57,13 @@ public class DealDaoImpl implements DealDao{
 		return session.update(namespace+"updateDealState", map);
 	}
 
+	@Override
+	public int updateDealCancel(String deal_cancel, String deal_no) throws Exception {
+		Map<String, Object> map = new HashMap<>();
+		map.put("deal_cancel", deal_cancel);
+		map.put("deal_no", deal_no);
+		
+		return session.update(namespace+"updateDealCancel", map);
+	}
+
 }
