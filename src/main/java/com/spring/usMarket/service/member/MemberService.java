@@ -11,7 +11,8 @@ import com.spring.usMarket.utils.ProfileSearchCondition;
 
 public interface MemberService {
 	int addMember(MemberDto member);
-	int modifyMember (MemberDto member);
+	int modifyMember(MemberDto member);
+	Map<String, Object> searchMember(Map<String, Object> sc);
 	
 	String checkNick(String member_nick);
 	int checkID(String member_id);
