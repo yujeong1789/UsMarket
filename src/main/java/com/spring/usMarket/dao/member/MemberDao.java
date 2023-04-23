@@ -9,6 +9,7 @@ import com.spring.usMarket.utils.ProfileSearchCondition;
 public interface MemberDao {
 	int insertMember(MemberDto member);
 	int updateMember(MemberDto member);
+	Map<String, Object> selectMember(Map<String, Object> sc);
 	
 	int overlappedID(String member_id);
 	String overlappedNick(String member_nick);
