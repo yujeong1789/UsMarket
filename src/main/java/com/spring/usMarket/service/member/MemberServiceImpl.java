@@ -99,9 +99,21 @@ public class MemberServiceImpl implements MemberService {
 		logger.info("/ Service / memberDto = {}",member.toString());
 		member.setMember_password(BCrypt.hashpw(member.getMember_password(), BCrypt.gensalt()));
 		int rowCnt = memberDAO.updateMember(member);
-		logger.info("회원 등록 결과 = {}", getResult(rowCnt));
+		logger.info("회원 정보 변경 결과 = {}", getResult(rowCnt));
 
 		return rowCnt;
+	}
+	
+	@Transactional
+	@Override
+	public int resetMember(Map<String, Object> pw) {
+	    String hashedPw = BCrypt.hashpw((String) pw.get("member_password"), BCrypt.gensalt());
+	    logger.info("비밀번호 암호화 값 = {}",hashedPw);
+	    pw.put("member_password", hashedPw);
+	    logger.info("Service에서 넘긴 값 = {}",pw);
+	    int rowCnt = memberDAO.updatePw(pw);
+	    logger.info("업데이트 결과 = {}", getResult(rowCnt));
+	    return rowCnt;
 	}
 
 	@Transactional
