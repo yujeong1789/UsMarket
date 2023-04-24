@@ -126,8 +126,31 @@
 					<div class="deal-info">
 						<c:if test="${dealInfo.DEAL_REVIEW eq 'N' }">
 							<c:if test="${mode eq 'buy' }">
+								<div class="score-dropdown">
+									<span>별점</span>
+									<div class="dropdown-content">
+										<ul>
+											<li data-score="5">
+												<img alt="별점" src="<c:url value='/resources/customer/img/score/5.png'/>">
+											</li>		
+											<li data-score="4">
+												<img alt="별점" src="<c:url value='/resources/customer/img/score/4.png'/>">
+											</li>
+											<li data-score="3">
+												<img alt="별점" src="<c:url value='/resources/customer/img/score/3.png'/>">
+											</li>
+											<li data-score="2">
+												<img alt="별점" src="<c:url value='/resources/customer/img/score/2.png'/>">
+											</li>
+											<li data-score="1">
+												<img alt="별점" src="<c:url value='/resources/customer/img/score/1.png'/>">
+											</li>
+										</ul>
+									</div>
+									<input class="not-pass" id="review_score" type="hidden" data-alert="별점을 선택해 주세요.">
+								</div>
 								<div class="review-textarea">
-									<textarea class="not-pass" id="review-content" data-alert="내용을 입력해 주세요." maxlength="200"></textarea>
+									<textarea class="not-pass" id="review_content" data-alert="내용을 입력해 주세요." maxlength="200"></textarea>
 									<div class="current-count"><p>0</p><p>/200</p></div>
 								</div>
 								<div class="review-btn">등록하기</div>
@@ -265,8 +288,23 @@ let getDealInfo = function(deal_no){
 };
 
 // 리뷰 작성, 등록 이벤트
-if(document.getElementById('review-content') != null){
-	document.getElementById('review-content').addEventListener('input', function(){
+if(document.getElementById('review_content') != null){
+	document.querySelectorAll('.score-dropdown li').forEach(el => {
+		el.addEventListener('click', function(e){
+			if(document.querySelector('.score-selected') != null){
+				document.querySelector('.score-selected').classList.remove('score-selected');				
+			}
+			this.classList.add('score-selected');
+			
+			document.getElementById('review_score').value = this.dataset.score;
+			document.getElementById('review_score').classList.remove('not-pass');
+			document.getElementById('review_score').classList.add('pass');
+			
+			document.querySelector('.score-dropdown > span').innerHTML = this.innerHTML;
+		});
+	});
+	
+	document.getElementById('review_content').addEventListener('input', function(){
 		// 높이 조절
 		this.style.height = 'auto';
 		this.style.height = this.scrollHeight + 'px';
