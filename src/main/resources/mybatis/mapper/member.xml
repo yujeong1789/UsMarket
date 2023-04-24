@@ -30,6 +30,19 @@
 		WHERE member_no = #{member_no}
 	</update>
 
+	<!-- 아이디, 비밀번호 찾기 -->
+	<select id="selectMember" parameterType="map" resultType="map">
+		SELECT member_id,member_email 
+		FROM member 
+		WHERE 
+		<if test="member_name != null and member_hp != null">
+			member_name = #{member_name} and member_hp = #{member_hp}
+		</if>
+		<if test="member_id != null and member_email != null">
+			member_id = #{member_id} and member_email = #{member_email}
+		</if>
+	</select>
+
 	<!-- 닉네임 중복 검사 -->
 	<select id="overlappedNick" parameterType="String" resultType="String">
 		SELECT member_nickname FROM member WHERE MEMBER_NICKNAME = #{member_nick}
