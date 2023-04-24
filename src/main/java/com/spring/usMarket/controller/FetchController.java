@@ -174,9 +174,9 @@ public class FetchController {
 			if(result) {
 				chatRoomDto = chatService.getChatRoomByInfo(dto.getSeller_no(), dto.getCustomer_no());
 				if(chatRoomDto == null) {
-					chatDto = chatService.addChatRoom(dto.getCustomer_no(), dto.getSeller_no(), message, 1, dto.getDeal_no());
+					chatDto = chatService.addChatRoom(dto.getCustomer_no(), dto.getSeller_no(), message, 1, "결제완료", dto.getDeal_no());
 				}else {
-					chatDto = new ChatDto(chatRoomDto.getRoom_no(), dto.getCustomer_no(), dto.getSeller_no(), message, new Date(), "N", 1, dto.getDeal_no());
+					chatDto = new ChatDto(chatRoomDto.getRoom_no(), dto.getCustomer_no(), dto.getSeller_no(), message, new Date(), "N", 1, "결제완료", dto.getDeal_no());
 					chatService.addChat(chatDto);
 				}
 				ObjectMapper objectMapper = new ObjectMapper();
@@ -195,7 +195,7 @@ public class FetchController {
 		
 		int rowCnt = 0;
 		try {
-			// rowCnt = dealService.modifyDealState(deal_state, deal_no);
+			rowCnt = dealService.modifyDealState(deal_state, deal_no);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -209,11 +209,32 @@ public class FetchController {
 		
 		int rowCnt = 0;
 		try {
-			// rowCnt = dealService.modifyDealCancel(deal_cancel, deal_no);
-			if(deal_cancel == "1") { // 거래취소 승인
-				// rowCnt += dealService.modifyDealState("3", deal_no);
+			rowCnt = dealService.modifyDealCancel(deal_cancel, deal_no);
+			if(deal_cancel == "1" || deal_cancel.equals("1")) { // 거래취소 승인시 판매상태 취소로 변경
+				rowCnt += dealService.modifyDealState("3", deal_no);
 				rowCnt = (rowCnt == 2 ? 1 : rowCnt);
 			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return rowCnt;
+	}
+	
+	@PostMapping("/delivery/modify")
+	public int deliveryModify(String deal_delivery_state, String deal_no) {
+		logger.info("deal_delivery_state = {}, deal_no = {}", deal_delivery_state, deal_no);
+		
+		int rowCnt = 0;
+		Map<String, Object> param = new HashMap<>();
+		param.put("deal_delivery_state", deal_delivery_state);
+		param.put("deal_no", deal_no);
+		
+		try {
+			if(deal_delivery_state == "4" || deal_delivery_state.equals("4")) {
+				param.put("deal_receive", "Y");
+			}
+			rowCnt = dealService.modifyDeliveryState(param);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
