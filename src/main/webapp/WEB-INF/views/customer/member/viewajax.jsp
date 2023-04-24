@@ -142,6 +142,7 @@
 			<div class="no__item">리뷰내역이 존재하지 않습니다.</div>
 		</c:if>
 		<c:if test="${! empty pageList }">
+			<input type="hidden" class="pageList" value="${pageList}">
 			<div class="review__area">
 				<ul class="review-list">
 					<c:forEach var="review" items="${pageList }">
