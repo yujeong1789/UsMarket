@@ -39,7 +39,7 @@ public class ChatServiceImpl implements ChatService{
 	
 	@Override
 	@Transactional(rollbackFor = SQLException.class)
-	public ChatDto addChatRoom(Integer current_no, Integer seller_no, String message, Integer chat_type, String chat_info) throws Exception {
+	public ChatDto addChatRoom(Integer current_no, Integer seller_no, String message, Integer chat_type, String chat_title, String chat_info) throws Exception {
 		
 		String room_no = RandomString.getRandomString(RandomString.yyyyMMdd, 10);
 		ChatRoomDto dto = new ChatRoomDto(room_no, current_no, seller_no);
@@ -47,7 +47,7 @@ public class ChatServiceImpl implements ChatService{
 		logger.info("채팅방 생성 결과 = {}", getResult(rowCnt));
 		ChatDto chatDto = new ChatDto();
 		if(rowCnt == 1) {
-			chatDto = new ChatDto(room_no, current_no, seller_no, message, new Date(), "N", chat_type, chat_info);
+			chatDto = new ChatDto(room_no, current_no, seller_no, message, new Date(), "N", chat_type, chat_title, chat_info);
 			logger.info("chatDto.toString = {}", chatDto.toString());
 			
 			int rowCnt_ = chatDao.insertChat(chatDto);

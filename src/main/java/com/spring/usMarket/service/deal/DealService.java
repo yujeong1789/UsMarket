@@ -11,4 +11,5 @@ public interface DealService {
 	Map<String, Object> getDealInfo(String deal_no) throws Exception;
 	int modifyDealState(String deal_state, String deal_no) throws Exception;
 	int modifyDealCancel(String deal_cancel, String deal_no) throws Exception;
+	int modifyDeliveryState(Map<String, Object> map) throws Exception;
 }

@@ -61,4 +61,15 @@
 		WHERE deal_no = #{deal_no}
 	</update>
 	
+	<!-- 배송상태 변경 -->
+	<update id="updateDeliveryState" parameterType="map">
+		UPDATE deal
+		SET deal_delivery_state = #{deal_delivery_state} 
+		<if test="deal_receive != null and deal_receive != ''">
+			, deal_cancel = null 
+			, deal_state = 2
+		</if>
+		WHERE deal_no = #{deal_no}
+	</update>
+	
 </mapper>

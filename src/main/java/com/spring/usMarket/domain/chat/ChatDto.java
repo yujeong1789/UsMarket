@@ -9,13 +9,14 @@ public class ChatDto {
 	private String chat_content;	// 내용
 	private Date chat_time;			// 보낸 시간
 	private String chat_read;		// 읽음 여부, Y/N
-	private Integer chat_type = 0;	// 채팅 타입, 0 - 일반 채팅 / 1 - 결제완료 / 2 - 거래취소 / 3 - 거래완료
+	private Integer chat_type = 0;		// 채팅 타입 (0 - 일반 채팅, 1 - 알림)
+	private String chat_title = "";	// 알람 제목
 	private String chat_info = "";	// 채팅 부가정보 (거래번호)
 	
 	public ChatDto() {}
 
 	public ChatDto(String room_no, Integer chat_from, Integer chat_to, String chat_content, Date chat_time,
-			String chat_read, Integer chat_type, String chat_info) {
+			String chat_read, Integer chat_type, String chat_title, String chat_info) {
 		this.room_no = room_no;
 		this.chat_from = chat_from;
 		this.chat_to = chat_to;
@@ -23,6 +24,7 @@ public class ChatDto {
 		this.chat_time = chat_time;
 		this.chat_read = chat_read;
 		this.chat_type = chat_type;
+		this.chat_title = chat_title;
 		this.chat_info = chat_info;
 	}
 
@@ -82,6 +84,14 @@ public class ChatDto {
 		this.chat_type = chat_type;
 	}
 
+	public String getChat_title() {
+		return chat_title;
+	}
+
+	public void setChat_title(String chat_title) {
+		this.chat_title = chat_title;
+	}
+
 	public String getChat_info() {
 		return chat_info;
 	}
@@ -94,6 +104,6 @@ public class ChatDto {
 	public String toString() {
 		return "ChatDto [room_no=" + room_no + ", chat_from=" + chat_from + ", chat_to=" + chat_to + ", chat_content="
 				+ chat_content + ", chat_time=" + chat_time + ", chat_read=" + chat_read + ", chat_type=" + chat_type
-				+ ", chat_info=" + chat_info + "]";
+				+ ", chat_title=" + chat_title + ", chat_info=" + chat_info + "]";
 	}
 }

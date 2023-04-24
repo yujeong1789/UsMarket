@@ -198,7 +198,7 @@ function setChatInfo(el){
 		let div = document.createElement('div');
 		div.className = 'chat-alert';
 		let titleSpan = document.createElement('span');
-		titleSpan.textContent = (el.chat_type == 1 ? '결제완료' : (el.chat_type == 2 ? '거래취소' : '거래완료'));
+		titleSpan.textContent = el.chat_title;
 		div.appendChild(titleSpan);
 		
 		let p = document.createElement('p');
@@ -256,7 +256,6 @@ function connectWs(){
 			let openList = document.querySelector('[data-open="Y"]');
 			if(openList != null){
 				if(openList.getAttribute('data-room') == data.room_no){
-					console.log(document.querySelector('[data-open="Y"]').getAttribute('data-room'));
 					newList.querySelector('.list-content-right').style.visibility = 'hidden';
 					document.querySelector('.info-content-layout').prepend(setChatInfo(data));				
 				}
@@ -378,8 +377,4 @@ document.getElementById('chat-report').addEventListener('click', function(){
 		reportModal.show();
 	}
 });
-
-function getDealInfo(){
-	
-}
 </script>

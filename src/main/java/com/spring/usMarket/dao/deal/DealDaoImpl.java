@@ -66,4 +66,9 @@ public class DealDaoImpl implements DealDao{
 		return session.update(namespace+"updateDealCancel", map);
 	}
 
+	@Override
+	public int updateDeliveryState(Map<String, Object> map) throws Exception {
+		return session.update(namespace+"updateDeliveryState", map);
+	}
+
 }

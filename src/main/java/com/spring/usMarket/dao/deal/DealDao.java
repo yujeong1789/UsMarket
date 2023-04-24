@@ -12,4 +12,5 @@ public interface DealDao {
 	Map<String, Object> searchDealInfo(String deal_no) throws Exception;
 	int updateDealState(String deal_state, String deal_no) throws Exception;
 	int updateDealCancel(String deal_cancel, String deal_no) throws Exception;
+	int updateDeliveryState(Map<String, Object> map) throws Exception;
 }
