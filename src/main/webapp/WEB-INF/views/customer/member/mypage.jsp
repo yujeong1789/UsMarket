@@ -286,7 +286,9 @@
 			console.log($(this).data('order'));
 
 			$('#pageValue').val(1);
-			myProductList(1);
+			if($('.pageList') != null){
+				myProductList(1);				
+			}
 		});
 		
 		$(document).on('click', '.condition-dropdown li', function() {
@@ -295,7 +297,9 @@
 			console.log($(this).data('condition'));
 
 			$('#pageValue').val(1);
-			myProductList(1);
+			if($('.pageList') != null){
+				myProductList(1);				
+			}
 		});
     
 		function myProductList(page){			
@@ -314,8 +318,8 @@
 				url: '/usMarket/member/mypage',
 				contentType: 'application/json',
 				data: JSON.stringify(params),
-				success: function(data) {
-					var result = $('<div></div>').html(data);
+				async: false,
+				success: function(result) {
 					var productBox = $(result).find('.content_list').html();
 					$('.content_list').html(productBox);
 				},
