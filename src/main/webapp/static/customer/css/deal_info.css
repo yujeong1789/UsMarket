@@ -111,6 +111,20 @@
 	cursor: pointer;
 }
 
+.deal-receive, .review-btn{
+	width: 100%;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	border-radius: .375rem;
+	padding: 10px;
+	font-size: 18px;
+	color: #1C1C1C;
+	font-weight: 500;
+	box-shadow: 0 2px 6px 0 rgba(67,89,113,.12);
+	cursor: pointer;
+}
+
 .deal-accept > div{
 	width: 49%;
 	display: flex;
@@ -125,7 +139,7 @@
 	cursor: pointer;
 }
 
-.deal-cancel:hover, .deal-accept > div:hover{
+.deal-cancel:hover, .deal-receive:hover, .review-btn:hover, .deal-accept > div:hover{
 	color: #007bff;
 }
 
@@ -189,4 +203,23 @@
 
 .state-dropdown:hover .dropdown-content{
 	display: block;
+}
+
+.review-textarea{
+	width: 100%;
+	border-radius: .375rem;
+	box-shadow: 0 2px 6px 0 rgba(67,89,113,.12);
+	padding: 10px;
+	display: flex;
+	flex-direction: column;
+}
+
+.review-textarea > textarea{
+	resize: none;
+	border: none;
+}
+
+.review-textarea > .current-count{
+	display: flex;
+	justify-content: flex-end;
 }
