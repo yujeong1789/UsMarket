@@ -35,6 +35,11 @@ public class MemberDaoImpl implements MemberDao{
 	}
 	
 	@Override
+	public int updatePw(Map<String, Object> pw) {
+		return session.insert(namespace+"updatePw", pw);
+	}
+	
+	@Override
 	public Map<String, Object> selectMember(Map<String, Object> sc) {
 		return session.selectOne(namespace+"selectMember", sc);
 	}
