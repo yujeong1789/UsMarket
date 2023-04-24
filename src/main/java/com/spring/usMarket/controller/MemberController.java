@@ -3,6 +3,7 @@ package com.spring.usMarket.controller;
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
@@ -91,6 +92,10 @@ public class MemberController {
 			httpSession.setAttribute("userId", member_id);
 			httpSession.setAttribute("userNo", member.get("MEMBER_NO"));
 			logger.info("prevPage = "+prevPage);
+			if(member_password.length() == 6) {
+				model.addAttribute("mode", "newPw");
+				return "member/join";
+			}
 			return "redirect:"+prevPage;
 		} else {
 			logger.info("비밀번호 오류");
@@ -126,7 +131,10 @@ public class MemberController {
 
 	@GetMapping("/search")
 	public String search(HttpServletRequest request, Model model) {
-		logger.info("mode = {}",request.getParameter("mode"));
+		Object memberInfo = request.getSession().getAttribute("userId");
+		logger.info("mode = {}, sessionInfo = {}",request.getParameter("mode"), memberInfo);
+		
+		model.addAttribute("memberInfo", memberInfo);
 		model.addAttribute("mode", request.getParameter("mode"));
 		
 		return "member/search";
@@ -164,7 +172,9 @@ public class MemberController {
 		logger.info("인증번호 " + checkNum);
 	
 		String subject = "임시 비밀번호가 발급되었습니다."; // 제목
-		String content = "<p>안녕하세요 고객님!<br><br>발급된 임시 비밀번호는<br><br>" + checkNum + "<br><br>입니다.<br>해당 비밀번호를 이용하여 로그인 후 비밀번호를 재설정 해주세요.</p>"; // 본문
+		String content = "<p>안녕하세요 고객님!<br><br>발급된 임시 비밀번호는<br><br>" 
+				+ checkNum + 
+				"<br><br>입니다.<br>해당 비밀번호를 이용하여 로그인 후 비밀번호를 재설정 해주세요.</p>"; // 본문
 		String from = "ehd1530@gmail.com"; // 보내는사람 이메일주소
 		String to = (String) search.get("MEMBER_EMAIL");
 	
@@ -179,6 +189,12 @@ public class MemberController {
 			// html태그를 사용하려면 true
 			mailSender.send(mail);
 
+			Map<String,Object> searchPw = new HashMap<String,Object>();
+			searchPw.put("member_password", String.valueOf(checkNum));
+			searchPw.put("member_no", ((BigDecimal) search.get("MEMBER_NO")).intValue());
+			logger.info("searchPw = {}",searchPw);
+			memberService.resetMember(searchPw);
+			
 			ratt.addFlashAttribute("category","newPw");
 			ratt.addFlashAttribute("result", checkNum);
 		} catch (Exception e) {
@@ -195,8 +211,8 @@ public class MemberController {
 		String mode = "join";
 	    
 	    if (request.getSession().getAttribute("userNo") != null) {
-			BigDecimal memNo= (BigDecimal) request.getSession().getAttribute("userNo");
-			member_no = memNo.toString();
+	    	member_no = String.valueOf(request.getSession().getAttribute("userNo"));
+			mode = "modify";
 		}
 	    
 	    try {
@@ -440,7 +456,7 @@ public class MemberController {
 	}
 	
 	@ResponseBody
-	@PostMapping("/nickCheck")
+	@PostMapping(value = "/nickCheck", produces = "application/text; charset=utf8")
 	public String NickCheck(@RequestBody String member_nick) throws Exception {
 		logger.info("memberNick= " + member_nick);
 		String result = memberService.checkNick(member_nick);
