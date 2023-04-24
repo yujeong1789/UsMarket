@@ -32,7 +32,7 @@
 
 	<!-- 아이디, 비밀번호 찾기 -->
 	<select id="selectMember" parameterType="map" resultType="map">
-		SELECT member_id,member_email 
+		SELECT member_no,member_id,member_email 
 		FROM member 
 		WHERE 
 		<if test="member_name != null and member_hp != null">
@@ -42,6 +42,13 @@
 			member_id = #{member_id} and member_email = #{member_email}
 		</if>
 	</select>
+	
+	<!-- 비밀번호 재설정 -->
+	<update id="updatePw" parameterType="map">
+		UPDATE member 
+		SET member_password = #{member_password}
+		WHERE member_no = #{member_no}
+	</update>
 
 	<!-- 닉네임 중복 검사 -->
 	<select id="overlappedNick" parameterType="String" resultType="String">
