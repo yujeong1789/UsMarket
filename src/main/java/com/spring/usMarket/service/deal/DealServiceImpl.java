@@ -94,4 +94,14 @@ public class DealServiceImpl implements DealService{
 		return rowCnt;
 	}
 
+	@Override
+	@Transactional(rollbackFor = SQLException.class)
+	public int modifyDeliveryState(Map<String, Object> map) throws Exception {
+		
+		int rowCnt = dealDao.updateDeliveryState(map);
+		logger.info("배송상태 변경 결과 = {}", getResult(rowCnt));
+
+		return rowCnt;
+	}
+
 }
