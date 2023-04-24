@@ -61,7 +61,8 @@
 	75% {transform: translateX(8px);}
 }
 .int-area input:focus + label,
-.int-area input:valid + label {
+.int-area input:valid + label,
+.int-area input:read-only + label {
 	top: 0;
 	font-size: 13px; color: #166cea;
 }
