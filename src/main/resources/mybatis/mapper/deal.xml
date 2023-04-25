@@ -72,4 +72,36 @@
 		WHERE deal_no = #{deal_no}
 	</update>
 	
+	<!-- 리뷰 조회 -->
+	<select id="searchReviewInfo" resultType="map" parameterType="string">
+		SELECT d.customer_no
+			   , m.member_nickname
+			   , m.member_image
+			   , r.*
+		FROM review r, deal d, member m
+		WHERE r.deal_no = d.deal_no
+		AND d.customer_no = m.member_no
+		AND d.deal_no = #{deal_no}
+	</select>
+	
+	<!-- 리뷰 작성 -->
+	<insert id="insertReview" parameterType="map">
+		INSERT INTO review(deal_no, review_content, review_score)
+		values(#{deal_no}, #{review_content}, #{review_score})
+	</insert>
+	
+	<!-- 리뷰 작성 상태 업데이트 -->
+	<update id="updateDealReview" parameterType="string">
+		UPDATE deal
+		SET deal_review = 'Y'
+		WHERE deal_no = #{deal_no}
+	</update>
+	
+	<!-- 채팅 알림 발송 위한 채팅방 번호 조회 -->
+	<select id="searchChatRoom" parameterType="map" resultType="string">
+		SELECT room_no 
+		FROM chat_room
+		WHERE (chat_member_1 = #{chat_member_1} AND chat_member_2 = #{chat_member_2}) 
+		OR (chat_member_2 = #{chat_member_1} AND chat_member_1 = #{chat_member_2})
+	</select>
 </mapper>
