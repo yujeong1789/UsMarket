@@ -242,6 +242,21 @@ public class FetchController {
 		return rowCnt;
 	}
 	
+	@PostMapping("/review/add")
+	public int reviewAdd(String deal_no, String review_content, String review_score) {
+		logger.info("deal_no = {}, review_content = {}, review_score = {}점", deal_no, review_content, review_score);
+		
+		int rowCnt = 0;
+		
+		try {
+			rowCnt = dealService.addReview(deal_no, review_content, review_score);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return rowCnt;
+	}
+	
 	@GetMapping("/chatmember/{member_no}")
 	public Map<String, Object> chatMember(@PathVariable String member_no) {
 		logger.info("member_no = {}", member_no);
