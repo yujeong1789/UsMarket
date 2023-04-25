@@ -71,4 +71,33 @@ public class DealDaoImpl implements DealDao{
 		return session.update(namespace+"updateDeliveryState", map);
 	}
 
+	@Override
+	public Map<String, Object> searchReviewInfo(String deal_no) throws Exception {
+		return session.selectOne(namespace+"searchReviewInfo", deal_no);
+	}
+
+	@Override
+	public int insertReview(String deal_no, String review_content, String review_score) throws Exception {
+		Map<String, Object> map = new HashMap<>();
+		map.put("deal_no", deal_no);
+		map.put("review_content", review_content);
+		map.put("review_score", review_score);
+		
+		return session.insert(namespace+"insertReview", map);
+	}
+
+	@Override
+	public int updateDealReview(String deal_no) throws Exception {
+		return session.update(namespace+"updateDealReview", deal_no);
+	}
+
+	@Override
+	public String searchChatRoom(String chat_member_1, String chat_member_2) throws Exception {
+		Map<String, Object> map = new HashMap<>();
+		map.put("chat_member_1", chat_member_1);
+		map.put("chat_member_2", chat_member_2);
+		
+		return session.selectOne(namespace+"searchChatRoom", map);
+	}
+
 }
