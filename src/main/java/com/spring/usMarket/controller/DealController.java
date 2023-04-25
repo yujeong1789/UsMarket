@@ -92,14 +92,22 @@ public class DealController {
 		
 		Map<String, Object> dealInfo = new HashMap<>();
 		String mode = "buy";
+		String room_no = "";
 		try {
 			dealInfo = dealService.getDealInfo(deal_no);
+			room_no = dealService.getChatRoom(dealInfo.get("SELLER_NO").toString(), dealInfo.get("CUSTOMER_NO").toString());
 			if(dealInfo.get("SELLER_NO").toString().equals(member_no)) mode = "sell";
+			
+			if(dealInfo.get("DEAL_REVIEW").toString().equals("Y")) {
+				Map<String, Object> reviewInfo = dealService.getReviewInfo(deal_no);
+				model.addAttribute("reviewInfo", reviewInfo);
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		
 		model.addAttribute("dealInfo", dealInfo);
 		model.addAttribute("mode", mode);
+		model.addAttribute("room_no", room_no);
 	}
 }
