@@ -39,5 +39,13 @@ public class DealTest {
 		// update
 		int updateResult = dealDao.updateDealState("2", dto.getDeal_no());
 		assertEquals(updateResult, 1);
+		
+		// updateDealReview
+		int dealReviewCnt = dealDao.updateDealReview(dto.getDeal_no());
+		assertEquals(dealReviewCnt, 1);
+		
+		// reviewInsert
+		int reviewInsertCnt = dealDao.insertReview(dto.getDeal_no(), "test content", "5");
+		assertEquals(reviewInsertCnt, 1);
 	}
 }
