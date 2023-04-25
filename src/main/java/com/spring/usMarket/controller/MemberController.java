@@ -61,7 +61,8 @@ public class MemberController {
 	}
 
 	@PostMapping("/login")
-	public String loginCheck(HttpServletRequest request, String member_id, String member_password, Model model)
+	public String loginCheck(HttpServletRequest request, String member_id, String member_password, 
+			Model model,RedirectAttributes ratt)
 			throws Exception {
 		BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 		HttpSession httpSession = request.getSession(true);
@@ -88,14 +89,17 @@ public class MemberController {
 			model.addAttribute("mem_pw", member_password);
 			return "member/login";
 		} else if (encoder.matches(member_password, (String) member.get("MEMBER_PASSWORD"))) {
+			if(member_password.length() == 6) {
+				logger.info("member = {}",member);
+				ratt.addAttribute("mode", "uppw");
+				ratt.addFlashAttribute("member", member);
+				ratt.addFlashAttribute("prevPage", prevPage);
+				return "redirect:/member/join";
+			}
 			logger.info("로그인 성공");
 			httpSession.setAttribute("userId", member_id);
 			httpSession.setAttribute("userNo", member.get("MEMBER_NO"));
 			logger.info("prevPage = "+prevPage);
-			if(member_password.length() == 6) {
-				model.addAttribute("mode", "newPw");
-				return "member/join";
-			}
 			return "redirect:"+prevPage;
 		} else {
 			logger.info("비밀번호 오류");
@@ -111,10 +115,8 @@ public class MemberController {
 	@GetMapping("/logout")
 	public String logout(HttpServletRequest request) throws Exception {
 		String referer = request.getHeader("Referer");
-		if(referer == null) {
-			referer = "/";
-		}else if(referer.substring(referer.length()-6, referer.length()) == "modify" ||
-					referer.substring(referer.length()-6, referer.length()) == "mypage") {
+		if(referer == null || referer.substring(referer.length()-6, referer.length()) == "modify" ||
+				referer.substring(referer.length()-6, referer.length()) == "mypage") {
 			referer = "/";
 		}
 		
@@ -133,6 +135,7 @@ public class MemberController {
 	public String search(HttpServletRequest request, Model model) {
 		Object memberInfo = request.getSession().getAttribute("userId");
 		logger.info("mode = {}, sessionInfo = {}",request.getParameter("mode"), memberInfo);
+		logger.info("member = {}",request.getParameter("member"));
 		
 		model.addAttribute("memberInfo", memberInfo);
 		model.addAttribute("mode", request.getParameter("mode"));
@@ -204,6 +207,13 @@ public class MemberController {
 		return "redirect:/member/viewajax";
 	}
 	
+	@PostMapping(value="/newlogin", consumes = "application/json")
+	public void updatePw(@RequestBody Map<String, Object> member,Model model) {
+		logger.info("재설정 정보 = {}", member);
+		int result = memberService.resetMember(member);
+		logger.info("result", result);
+	}
+	
 	@GetMapping("/join")
 	public String join(HttpServletRequest request, Model model) {
 		MemberDto memberInfo = null;
@@ -227,6 +237,7 @@ public class MemberController {
 	        }
 	        logger.info(mode);
 	        model.addAttribute("mode", mode);
+	        model.addAttribute("member",request.getParameter("member"));
 	    } catch (Exception e) {
 	        e.printStackTrace();
 	    }
