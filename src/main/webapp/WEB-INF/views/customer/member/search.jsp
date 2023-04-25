@@ -11,6 +11,12 @@
 	
 </head>
 <body>
+<c:if test="${memberInfo != null}">
+	<script type="text/javascript">
+		alert('잘못된 접근입니다.');
+		location.href = '${pageContext.request.contextPath}/';
+	</script>
+</c:if>
 	<div class="search_body">
 		<section class="search_form">
 			<h1>${mode eq 'id' ? '아이디' : '비밀번호' } 찾기</h1>
@@ -41,10 +47,10 @@
 				<span style="color:red;">${msg }</span>
 				<div class="btn-area">
 					<c:if test="${mode eq 'id' }">
-						<button type="button" name="id_btn" id="id_btn">로그인</button>
+						<button type="button" name="id_btn" id="id_btn">찾기</button>
 					</c:if>
 					<c:if test="${mode eq 'pw' }">
-						<button type="button" name="pw_btn" id="pw_btn">로그인</button>
+						<button type="button" name="pw_btn" id="pw_btn">찾기</button>
 					</c:if>
 				</div>
 			</form>
@@ -128,9 +134,10 @@
 			
 			if (!hasError) {
 				const param = {
-						'member_id' : $(id).val(),
-						'member_email' : $(email).val()
+					'member_id' : $(id).val(),
+					'member_email' : $(email).val()
 				};
+				
 				$.ajax({
 					url: "${pageContext.request.contextPath}/member/newpw",
 					type: "POST",
@@ -146,7 +153,7 @@
 						console.log(error);					
 					}
 				})
-			};
+			}
 		});
 		
 		$(function() {
