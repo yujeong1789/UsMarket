@@ -267,3 +267,42 @@
 	display: flex;
 	justify-content: flex-end;
 }
+
+.review-info{
+	display: flex;
+}
+
+.review-info > .left{
+	margin-right: 20px;
+}
+
+.review-info > .left > img{
+	width: 80px;
+	object-fit: contain;
+}
+
+.review-content{
+	margin-top: 5px;
+}
+
+.review-nickname > a{
+	font-size: 16px;
+	font-weight: 500;
+	color: #1C1C1C;
+}
+
+.review-nickname > a:hover{
+	color: #007bff;
+}
+
+.review-score > img{
+	width: 13px;
+	object-fit: contain;
+	margin-right: 1px;
+}
+
+.review-nickname img{
+	height: 17px;
+	object-fit: contain;
+	padding-bottom: 1px;
+}

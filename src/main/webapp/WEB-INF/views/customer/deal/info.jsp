@@ -159,6 +159,37 @@
 								<div class="alert-message">작성된 리뷰가 없습니다.</div>
 							</c:if>
 						</c:if>
+						<c:if test="${dealInfo.DEAL_REVIEW eq 'Y' }">
+							<div class="review-info">
+								<div class="left" data-no="${reviewInfo.CUSTOMER_NO }">
+									<c:if test="${reviewInfo.MEMBER_IMAGE eq '/resources/customer/img/default_profile.png' }">
+										<img src="<c:url value='${reviewInfo.MEMBER_IMAGE }'/>">
+									</c:if>
+									<c:if test="${reviewInfo.MEMBER_IMAGE ne '/resources/customer/img/default_profile.png' }">
+										<img src="${reviewInfo.MEMBER_IMAGE }">
+									</c:if>
+								</div>
+								<div class="right">
+									<div class="review-nickname">
+										<a href="<c:url value='/member/mypage?member_no=${reviewInfo.CUSTOMER_NO }'/>">
+											${reviewInfo.MEMBER_NICKNAME }
+											<img src="<c:url value='/resources/admin/img/icon/redirect.png'/>">
+										</a>
+									</div>
+									<div class="review-score">
+										<c:forEach begin="0" end="4" step="1" varStatus="status">
+											<c:if test="${reviewInfo.REVIEW_SCORE ge status.count}">
+												<img src="<c:url value='/resources/customer/img/star.png'/>">
+											</c:if>
+											<c:if test="${reviewInfo.REVIEW_SCORE lt status.count}">
+												<img src="<c:url value='/resources/customer/img/star_blank.png'/>">
+											</c:if>
+										</c:forEach>
+									</div>
+									<div class="review-content"><c:out value='${reviewInfo.REVIEW_CONTENT }'/></div>
+								</div>
+							</div>
+						</c:if>
 					</div>
 				</c:if>
 			</div>
@@ -207,8 +238,10 @@ let dealStateModify = function(confirm, deal_state){
 		.then((text) => {
 				if(text == 1){
 					// 채팅 알림 발송 기능 추가할 것
-					getDealInfo(`${dealInfo.DEAL_NO}`);
+				}else{
+					
 				}
+				getDealInfo(`${dealInfo.DEAL_NO}`);
 		}).catch((error) => console.log('error: '+error));
 	}
 };
@@ -245,9 +278,12 @@ let dealCancel = function(confirm, deal_cancel){
 		.then((response) => response.text())
 		.then((text) => {
 				if(text == 1){
+					alert('요청하신 작업이 완료되었습니다.'); 
 					// 채팅 알림 발송 기능 추가할 것
-					getDealInfo(`${dealInfo.DEAL_NO}`);
+				}else{
+					alert('요청하신 작업에 실패했습니다. 다시 시도해 주세요.');
 				}
+				getDealInfo(`${dealInfo.DEAL_NO}`);
 		}).catch((error) => console.log('error: '+error));
 	}
 };
@@ -255,6 +291,9 @@ let dealCancel = function(confirm, deal_cancel){
 // 배송상태 변경
 let setDeliveryState = function(confirm, deal_delivery_state){
 	if(confirm){
+		let successMessage = (`${mode}` == 'buy' ? '구매확정이 완료되었습니다.' : '배송상태가 변경되었습니다.');
+		let failMessage = (`${mode}` == 'buy' ? '구매확정에 실패했습니다.' : '배송상태 변경에 실패했습니다.');
+		
 		let params = new FormData();
 		params.append('deal_delivery_state', deal_delivery_state);
 		params.append('deal_no', `${dealInfo.DEAL_NO}`);
@@ -267,8 +306,11 @@ let setDeliveryState = function(confirm, deal_delivery_state){
 		.then((text) => {
 				if(text == 1){
 					// 채팅 알림 발송 기능 추가할 것
-					getDealInfo(`${dealInfo.DEAL_NO}`);
+					alert(successMessage);
+				}else{
+					alert(failMessage);
 				}
+				getDealInfo(`${dealInfo.DEAL_NO}`);
 		}).catch((error) => console.log('error: '+error));
 	}
 };
@@ -328,7 +370,27 @@ if(document.getElementById('review_content') != null){
 			return;
 		}
 		
-		// 리뷰 등록, 채팅 알람 발송 기능 구현할 것
+		if(confirm('리뷰를 등록하시겠습니까?')){			
+			let params = new FormData();
+			params.append('deal_no', `${dealInfo.DEAL_NO}`);
+			params.append('review_content', document.getElementById('review_content').value);
+			params.append('review_score', document.getElementById('review_score').value);
+			
+			fetch('/usMarket/fetch/review/add', {
+				method: 'POST',
+				body: params,
+			})
+			.then((response) => response.text())
+			.then((text) => {
+					if(text == 2){
+						// 채팅 알림 발송 기능 추가할 것
+						alert("리뷰가 등록되었습니다.");
+					}else{
+						alert("리뷰 작성에 실패했습니다. 다시 시도해 주세요.");
+					}
+					getDealInfo(`${dealInfo.DEAL_NO}`);
+			}).catch((error) => console.log('error: '+error));
+		}
 	});
 }
 
@@ -339,5 +401,27 @@ let connectWs = function(){
 	sock.onopen = function(){
 		console.log('info: connection opened.');
 	};
+};
+
+// 알림 발송
+let sendMessge = function(chat_from, chat_to, chat_content, chat_title){
+	let chatDto = {
+			room_no: `${room_no}`,
+			chat_from: chat_from,
+			chat_to: chat_to,
+			chat_content: chat_content,
+			chat_time: new Date(),
+			chat_read: 'N',
+			chat_type: 1,
+			chat_title: chat_title,
+			chat_info: `${deal_no}`
+	};
+	
+	let msg = {
+			type: 'chat',
+			body: JSON.stringify(chatDto)
+	};
+	
+	socket.send(JSON.stringify(msg));
 };
 </script>

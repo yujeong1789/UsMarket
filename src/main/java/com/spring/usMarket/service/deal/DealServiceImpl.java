@@ -13,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.spring.usMarket.dao.deal.DealDao;
 import com.spring.usMarket.dao.product.ProductDao;
 import com.spring.usMarket.domain.deal.DealInsertDto;
+import com.spring.usMarket.service.chat.ChatService;
 
 @Service
 public class DealServiceImpl implements DealService{
@@ -102,6 +103,37 @@ public class DealServiceImpl implements DealService{
 		logger.info("배송상태 변경 결과 = {}", getResult(rowCnt));
 
 		return rowCnt;
+	}
+
+	@Override
+	@Transactional(rollbackFor = SQLException.class, readOnly = true)
+	public Map<String, Object> getReviewInfo(String deal_no) throws Exception {
+		
+		Map<String, Object> map = dealDao.searchReviewInfo(deal_no);
+		logger.info("리뷰 조회 결과 = {}", map.toString());
+		
+		return map;
+	}
+
+	@Override
+	@Transactional(rollbackFor = SQLException.class)
+	public int addReview(String deal_no, String review_content, String review_score) throws Exception {
+		
+		int updateCnt = dealDao.updateDealReview(deal_no);
+		int insertCnt = dealDao.insertReview(deal_no, review_content, review_score);
+		logger.info("리뷰 작성 상태 업데이트 결과 = {}, 리뷰 작성 결과 = {}", getResult(updateCnt), getResult(insertCnt));
+		
+		return updateCnt + insertCnt;
+	}
+
+	@Override
+	@Transactional(rollbackFor = SQLException.class, readOnly = true)
+	public String getChatRoom(String chat_member_1, String chat_member_2) throws Exception {
+
+		String room_no = dealDao.searchChatRoom(chat_member_1, chat_member_2);
+		logger.info("room_no = {}", room_no);
+		
+		return room_no;
 	}
 
 }
