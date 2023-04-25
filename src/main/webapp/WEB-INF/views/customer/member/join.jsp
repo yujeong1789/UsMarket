@@ -21,9 +21,11 @@
 
 	<section class="login-form">
 	<c:choose>
-		<c:when test="${mode == 'newPw' }">
+		<c:when test="${mode == 'uppw' }">
 			<h1>비밀번호 재설정</h1>
-			<form name="joinForm" enctype="multipart/form-data"	onsubmit="return false">
+			<form name="fixForm">
+				<input type="hidden" name="member_id" value="${member.MEMBER_ID }">
+				<input type="hidden" name="member_no" value="${member.MEMBER_NO }">
 				<div class="int-area">
 					<input type="password" name="member_password" id="pw1" autocomplete="off" required title="비밀번호를 입력해주세요."
 					oninput="this.value = this.value.replace(/[^a-z|A-Z|0-9|!@#$%^*+=-]/g, '').replace(/(\..*)\./g, '$1');"> 
@@ -38,7 +40,7 @@
 					<span class="pw_no"></span>
 				</div>
 				<div class="btn-area">
-					<button name="btn" id="modify_btn">비밀번호 변경</button>
+					<button name="btn" id="newlogin_btn">비밀번호 변경</button>
 					<p align="center" style="color: red;">${message }</p>
 				</div>
 			</form>
@@ -53,7 +55,7 @@
 		
 				<div class="profile_box">
 					<label for="profile" id="preview"> 
-						<img id="profile_img" alt="프로필 이미지" src="<c:url value='/resources/customer/img/default_profile.png'/>">
+						<img id="profile_img" alt="프로필 이미지" src="<c:url value='${memberInfo.member_image}'/>">
 					</label>
 					<img class="file__img__delete"	src="<c:url value='/resources/customer/img/delete_icon.png'/>">
 				</div>
@@ -91,7 +93,7 @@
 					<label for="email">이메일<text>*</text></label>
 					<span class="email_status"></span>
 					<div class="int-area-emailCheck">
-						<input type="text" name="member_email_check" id="email_check"autocomplete="off" disabled="disabled" required title="인증번호를 입력해주세요.">
+						<input type="text" name="member_email_check" id="email_check"autocomplete="off" required title="인증번호를 입력해주세요.">
 						<button type="button" class="email_check_btn"name="email_check_btn" disabled>인증번호 발송</button>
 					</div>
 					<span class="mail_check_warn"></span>
@@ -326,7 +328,7 @@
 			}
 			console.log('input{type: file} : '+	$("#profile").val());
 		});
-		if("${mode}" != "newPw"){
+		if("${mode}" != "uppw"){
 			// 주소 api 호출
 			document.getElementById('address_btn').addEventListener('click', function(){
 				new daum.Postcode({
@@ -495,7 +497,8 @@
 				async: false,
 				success:function(data){
 					console.log("data : " +  data);
-					$("#email_check").attr('disabled',false);
+					$("#email_check").css("display","block");
+					
 					$("#email_check").css("background-color", "transparent");
 					code=data;
 					alert('인증번호가 전송되었습니다.');
@@ -659,6 +662,62 @@
 			}
 		});
 		
+		$('#newlogin_btn').on("click", function(){
+			//비밀번호 영문자+숫자+특수조합(8~25자리 입력) 정규식
+			var pwdCheck = /^(?=.*[a-zA-Z])(?=.*[!@#$%^*+=-])(?=.*[0-9]).{8,25}$/;
+			
+			/* 비밀번호 */
+			$('.pw_status').css('display','block');
+			$('.pw_no').css('display','block');
+			if($('#pw1').val()==""){
+				pw1_error();
+				pw1Ck = false;
+			}else if(!pwdCheck.test($('#pw1').val())){
+				pw1_error();				
+				pw1Ck = false;
+				$('.pw_status').html('비밀번호 형식을 확인해주세요.');
+				$('.pw_status').css('color','red');
+			}else if(pwdCheck.test($('#pw1').val())){
+				pw1Ck = true;
+				$('.pw_status').html('사용 가능한 비밀번호입니다.');
+				$('.pw_status').css('color','green');
+			}
+			if($('#pw2').val()==""){
+				pw2_error();	
+				$('.pw_no').css('display','none');
+				pw2Ck = false;
+			}else if($('#pw2').val()!==$('#pw1').val()){
+				pw2_error();	
+				$('.pw_no').html('비밀번호가 일치하지 않습니다.');
+				$('.pw_no').css('color','red');
+				$('#pw2').val("");
+				pw2Ck = false;
+			}else{
+				pw2Ck = true;
+				$('.pw_no').html('');
+			}
+			
+			console.log("pw1Ck : "+pw1Ck+", pw2Ck : "+pw2Ck);
+			
+			if(pw1Ck && pw2Ck){
+				$.ajax({
+			        url: "${pageContext.request.contextPath}/member/newlogin",
+			        method: "POST",
+			        contentType: "application/json",
+			        data: JSON.stringify({
+			            member_id: "${member.MEMBER_ID}",
+			            member_no: "${member.MEMBER_NO}",
+			            member_password: $('#pw1').val
+			        }),
+			        success: function(data) {
+			        	location.href = '${pageContext.request.contextPath}/';
+			        },
+			        error: function(error) {
+			            console.log(error);
+			        }
+			    });
+			}
+		})
 	}); // ready
 	</script>
 </body>
