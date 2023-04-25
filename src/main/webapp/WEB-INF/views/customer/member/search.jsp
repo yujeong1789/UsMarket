@@ -56,10 +56,10 @@
 			</form>
 			<div class="caption">
 				<div class="search">
-					<c:if test="${mode ne 'id'}">
+					<c:if test="${mode eq 'pw'}">
 						<a href="<c:url value='/member/search?mode=id'/>">아이디를 잊어버리셨나요?</a>
 					</c:if>
-					<c:if test="${mode ne 'pw'}">
+					<c:if test="${mode eq 'id'}">
 						<a href="<c:url value='/member/search?mode=pw'/>">비밀번호를 잊어버리셨나요?</a>
 					</c:if>
 				</div>
