@@ -121,17 +121,6 @@
 		SELECT count(*) 
 		 FROM product_view
 		 WHERE seller_no = #{member_no} AND product_state_no != 4
-		 <choose>
-			<when test="condition == 1">
-				AND product_state_no = 1 
-			</when>
-			<when test="condition == 2">
-				AND product_state_no = 2  
-			</when>
-			<when test="condition == 3">
-				AND product_state_no = 3  
-			</when>
-		</choose>
 	</select>
 	
 	<!-- 마이페이지 찜 출력 -->
@@ -183,17 +172,6 @@
 			SELECT DISTINCT(product_no) 
 			FROM bookmark 
 			WHERE member_no = #{member_no})	AND product_state_no != 4
-		<choose>
-			<when test="condition == 1">
-				AND product_state_no = 1 
-			</when>
-			<when test="condition == 2">
-				AND product_state_no = 2  
-			</when>
-			<when test="condition == 3">
-				AND product_state_no = 3  
-			</when>
-		</choose>
 	</select>
 	
 	<!-- 마이페이지 리뷰 출력 -->
@@ -204,9 +182,9 @@
 			    SELECT m.MEMBER_IMAGE, m.MEMBER_NICKNAME, r.REVIEW_CONTENT, r.REVIEW_SCORE, r.REVIEW_REGDATE, p.PRODUCT_NAME, p.PRODUCT_NO
 			    FROM deal d 
 			    JOIN review r ON r.deal_no = d.deal_no
-			    JOIN member m ON m.member_no = d.seller_no
+			    JOIN member m ON m.member_no = d.customer_no
 			    JOIN product p ON p.product_no = d.product_no
-			    WHERE d.customer_no = #{member_no}
+			    WHERE d.seller_no = #{member_no}
 			    <choose>
 					<when test="condition == 1">
 					    AND r.review_score = 1 
@@ -246,17 +224,6 @@
         FROM review 
         WHERE deal_no IN(SELECT deal_no 
                         FROM deal 
-                        WHERE customer_no = #{member_no})
-        <choose>
-			<when test="condition == 1">
-			    AND review_score = 1 
-			</when>
-			<when test="condition == 2">
-			    AND review_score = 2  
-			</when>
-			<when test="condition == 3">
-			    AND review_score = 3  
-		  </when>
-		</choose>
+                        WHERE seller_no = #{member_no})
 	</select>
 </mapper>
