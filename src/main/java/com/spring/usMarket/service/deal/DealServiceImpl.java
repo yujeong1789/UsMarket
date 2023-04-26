@@ -13,7 +13,6 @@ import org.springframework.transaction.annotation.Transactional;
 import com.spring.usMarket.dao.deal.DealDao;
 import com.spring.usMarket.dao.product.ProductDao;
 import com.spring.usMarket.domain.deal.DealInsertDto;
-import com.spring.usMarket.service.chat.ChatService;
 
 @Service
 public class DealServiceImpl implements DealService{
