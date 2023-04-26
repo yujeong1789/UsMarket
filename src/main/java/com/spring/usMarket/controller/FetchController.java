@@ -75,7 +75,7 @@ public class FetchController {
 	}
 	
 	@GetMapping("/category2/{category2}")
-	public List<Map<String, Object>> category2(@PathVariable Integer category2){
+	public List<Map<String, Object>> category2(@PathVariable String category2){
 		
 		List<Map<String, Object>> category = new ArrayList<>();
 		
