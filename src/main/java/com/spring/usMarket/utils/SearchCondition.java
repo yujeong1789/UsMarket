@@ -7,8 +7,8 @@ public class SearchCondition {
 	private Integer pageSize;		// 한 페이지당 출력될 상품 수
 	private String option = "";		// 2 - 예약중, 3 - 판매 완료, 5 - 모두 포함
 	private String keyword = "";	// 검색어
-	private Integer category1;
-	private Integer category2;
+	private String category1;
+	private String category2;
 	
 	public SearchCondition() {}
 	
@@ -16,7 +16,7 @@ public class SearchCondition {
 		this.pageSize=pageSize;
 	}
 	
-	public SearchCondition(Integer page, Integer pageSize, String option, String keyword, Integer category1, Integer category2) {
+	public SearchCondition(Integer page, Integer pageSize, String option, String keyword, String category1, String category2) {
 		this.page = page;
 		this.pageSize = pageSize;
 		this.option = option;
@@ -26,7 +26,7 @@ public class SearchCondition {
 	}
 
 	// 쿼리 스트링 생성
-    public String getQueryString(Integer page, String option, String keyword, Integer category1, Integer category2){ // 쿼리 스트링 생성 위해 메서드 선언
+    public String getQueryString(Integer page, String option, String keyword, String category1, String category2){ // 쿼리 스트링 생성 위해 메서드 선언
     	// ?page=n&pageSize=n&option=n...
         return UriComponentsBuilder.newInstance()
                 .queryParam("page", page)
@@ -39,7 +39,7 @@ public class SearchCondition {
     }
     
     // keyword, option값 존재할 때 카테고리 이동할 경우 페이지, option, keyword 초기화
-    public String getQueryString(Integer category1, Integer category2){
+    public String getQueryString(String category1, String category2){
     	return getQueryString(1, "", "", category1, category2);
     }
     
@@ -90,19 +90,19 @@ public class SearchCondition {
 		this.option = option;
 	}
 
-	public Integer getCategory1() {
+	public String getCategory1() {
 		return category1;
 	}
 
-	public void setCategory1(Integer category1) {
+	public void setCategory1(String category1) {
 		this.category1 = category1;
 	}
 
-	public Integer getCategory2() {
+	public String getCategory2() {
 		return category2;
 	}
 
-	public void setCategory2(Integer category2) {
+	public void setCategory2(String category2) {
 		this.category2 = category2;
 	}
 

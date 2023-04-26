@@ -21,12 +21,12 @@ public class ProductCategoryDaoImpl implements ProductCategoryDao{
 	}
 
 	@Override
-	public List<ProductCategoryDto> searchProductCategory2(Integer product_category1_no) throws Exception {
+	public List<ProductCategoryDto> searchProductCategory2(String product_category1_no) throws Exception {
 		return session.selectList(namespace+"searchProductCategory2", product_category1_no);
 	}
 
 	@Override
-	public List<Map<String, Object>> searchCategory2(Integer product_category1_no) throws Exception {
+	public List<Map<String, Object>> searchCategory2(String product_category1_no) throws Exception {
 		return session.selectList(namespace+"searchCategory2", product_category1_no);
 	}
 
