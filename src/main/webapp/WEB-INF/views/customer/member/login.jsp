@@ -30,10 +30,11 @@
 		</form>
 		<div class="caption">
 			<div class="search">
-				<a href="<c:url value='/member/search?mode=id'/>">아이디</a>/
+				<a href="<c:url value='/member/search?mode=id'/>">아이디</a>
+				<a href="#">/</a>
 				<a href="<c:url value='/member/search?mode=pw'/>">비밀번호를 잊어버리셨나요?</a>
 			</div>
-			<a href="<c:url value='/member/join'/>">회원가입</a>
+			<a href="<c:url value='/member/join?mode=join'/>">회원가입</a>
 		</div>
 	</section>
 </div>	
