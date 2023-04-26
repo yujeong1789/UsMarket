@@ -119,6 +119,12 @@
 			</form>
 		</c:when>
 		<c:when test="${mode eq 'join' }">
+			<c:if test="${!empty memberInfo}">
+				<script type="text/javascript">
+					alert('잘못된 접근입니다.');
+					location.href = '${pageContext.request.contextPath}/';
+				</script>
+			</c:if>
 			<h1>회원가입</h1>
 
 			<form name="joinForm" enctype="multipart/form-data"	onsubmit="return false">
