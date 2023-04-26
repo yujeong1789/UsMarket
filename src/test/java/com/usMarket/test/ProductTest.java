@@ -27,7 +27,7 @@ import com.spring.usMarket.utils.SearchCondition;
 public class ProductTest {
 	
 	private static int member_no = 3;
-	private static int randomCategory1 = (int)((Math.random()*15)+1); // product_category1 범위 내 난수 생성
+	private static String randomCategory1 = String.valueOf(((Math.random()*15)+1)); // product_category1 범위 내 난수 생성
 	
 	@Autowired private ProductService productService;
 	
@@ -53,7 +53,7 @@ public class ProductTest {
 	
 	@Test
 	public void setBookmarkTest() throws Exception{
-		List<ProductDto> productList = productService.getProductByCategory(new SearchCondition(1, 30, "", "", 1, 1));
+		List<ProductDto> productList = productService.getProductByCategory(new SearchCondition(1, 30, "", "", "1", "1"));
 		
 		List<String> productNoList = new ArrayList<>();
 		for (ProductDto dto : productList) {
