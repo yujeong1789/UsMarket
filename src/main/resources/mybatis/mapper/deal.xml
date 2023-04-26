@@ -23,10 +23,10 @@
 		SELECT *
 		FROM deal_view 
 		<choose>
-			<when test="condition == 'sell'">
+			<when test='condition == "sell" or condition.equals("sell")'>
 				 WHERE seller_no = #{member_no} 
 			</when>
-			<when test="condition == 'buy'">
+			<when test='condition == "buy" or condition.equals("buy")'>
 				 WHERE customer_no = #{member_no} 
 			</when>
 		</choose>
