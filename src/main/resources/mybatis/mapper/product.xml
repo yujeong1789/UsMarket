@@ -62,7 +62,7 @@
 	
 	
 	<!-- 상품 소분류 출력 -->
-	<select id="searchProductCategory2" parameterType="int" resultType="productCategoryDto">
+	<select id="searchProductCategory2" parameterType="string" resultType="productCategoryDto">
 		SELECT * FROM category_view 
 		 WHERE product_category1_no = #{product_category1_no} 
 		 ORDER BY product_category2_no 
@@ -70,7 +70,7 @@
 	
 	
 	<!-- 상품 소분류 출력2 -->
-	<select id="searchCategory2" parameterType="int" resultType="map">
+	<select id="searchCategory2" parameterType="string" resultType="map">
 		SELECT product_category2_no, product_category2_name  
 		 FROM product_category2 
 		 WHERE product_category1_no = #{product_category1_no} 

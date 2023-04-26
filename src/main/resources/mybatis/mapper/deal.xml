@@ -23,15 +23,15 @@
 		SELECT *
 		FROM deal_view 
 		<choose>
-			<when test="condition == 'sell'">
+			<when test='condition == "sell" or condition.equals("sell")'>
 				 WHERE seller_no = #{member_no} 
 			</when>
-			<when test="condition == 'buy'">
+			<when test='condition == "buy" or condition.equals("buy")'>
 				 WHERE customer_no = #{member_no} 
 			</when>
 		</choose>
 		<choose>
-			<when test="state != null and state != ''">
+			<when test='state != null and state != ""'>
 				 AND deal_state = #{state} 
 			</when>
 			<otherwise>
@@ -49,8 +49,11 @@
 	
 	<!-- 거래상태 변경 -->
 	<update id="updateDealState" parameterType="map">
-		UPDATE deal
-		SET deal_state = #{deal_state}
+		UPDATE deal 
+		SET deal_state = #{deal_state} 
+		<if test='deal_state == "1" or deal_state.equals("1")'> 
+			, deal_delivery_state = 1 
+		</if>
 		WHERE deal_no = #{deal_no}
 	</update>
 	
@@ -65,7 +68,7 @@
 	<update id="updateDeliveryState" parameterType="map">
 		UPDATE deal
 		SET deal_delivery_state = #{deal_delivery_state} 
-		<if test="deal_receive != null and deal_receive != ''">
+		<if test='deal_receive != null and deal_receive != ""'>
 			, deal_cancel = null 
 			, deal_state = 2
 		</if>
