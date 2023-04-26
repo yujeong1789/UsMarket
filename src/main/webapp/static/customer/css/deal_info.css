@@ -17,6 +17,26 @@
 	margin-right: 15px;
 }
 
+.list-title{
+	margin-bottom: 70px;
+	font-size: 16px;
+	color: #1C1C1C;
+}
+
+.list-title > a{
+	color: #1C1C1C;
+	font-weight: 500;  
+}
+
+.list-title > span{
+	color: #1C1C1C;
+	font-weight: 500;
+}
+
+.list-title > a:hover{
+	color: #00a9ff;
+}
+
 .deal-info-container > .row > .container > .deal-info-layout > .title > .delivery-state{
 	height: 30px;
 	border: 1px solid #7988FD;
