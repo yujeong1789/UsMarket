@@ -258,7 +258,7 @@ let setCancel = function(el){
 
 // 판매자 취소신청 승인 및 거절
 let setSellerCancel = function(el){
-	let cancelMessage = el.dataset.no == 1 ? '거래 취소 요청을 승인하시겠습니까?\n해당 작업은 되돌릴 수 없으므로 반드시 취소된 상품을 수령한 후에 승인해 주세요.' : '거래 취소 요청을 거절하시겠습니까?\n해당 작업은 되돌릴 수 없습니다.';
+	let cancelMessage = el.dataset.no == 1 ? '거래 취소 요청을 승인하시겠습니까?\n해당 작업은 되돌릴 수 없으므로 반드시 취소된 상품을 수령한 후에 승인해 주세요.' : '거래 취소 요청을 거절하시겠습니까?';
 	dealCancel(confirm(cancelMessage), el.dataset.no);
 };
 
@@ -266,7 +266,7 @@ let setSellerCancel = function(el){
 let dealCancel = function(confirm, deal_cancel){
 	if(confirm){
 		let title = (`${mode}` == 'buy' ? '취소요청' : (deal_cancel == 1 ? '취소요청 승인' : '취소요청 거절'));
-		let content = `${dealInfo.PRODUCT_NAME}`+ ' 상품의 거래 취소 요청이 ' + (deal_cancel == 1 ? '승인되었습니다.' : '거절되었습니다.'));
+		let content = `${dealInfo.PRODUCT_NAME}` + '상품의 거래 취소' + (`${mode}` == 'buy' ? '가 요청되었습니다.' :  + ' 요청이 ' + (deal_cancel == 1 ? '승인되었습니다.' : '거절되었습니다.'));
 		
 		let params = new FormData();
 		params.append('deal_cancel', deal_cancel);
