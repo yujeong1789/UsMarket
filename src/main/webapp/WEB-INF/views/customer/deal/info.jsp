@@ -15,6 +15,11 @@
 	<div class="row">
 		<div class="container">
 			<div class="deal-info-layout">
+				<div class="list-title">
+					<a href="<c:url value='/deal/list'/>">거래내역 목록</a>
+					>
+					<span>거래내역 상세</span>
+				</div>
 				<div class="title">
 					<span>거래내역</span>
 				</div>
@@ -66,7 +71,7 @@
 				<c:if test="${dealInfo.DEAL_STATE eq '1' }">
 					<div class="title">
 						<span>배송정보</span>
-						<c:if test="${mode eq 'sell' and dealInfo.DEAL_DELIVERY_STATE != '3' and dealInfo.DEAL_DELIVERY_STATE != '4'  and empty dealInfo.DEAL_CANCEL}">
+						<c:if test="${mode eq 'sell' and dealInfo.DEAL_DELIVERY_STATE ne '3' and dealInfo.DEAL_DELIVERY_STATE != '4'  and dealInfo.DEAL_CANCEL ne '0'}">
 							<div class="state-dropdown">
 								<span>배송상태 변경</span>
 								<div class="dropdown-content">
@@ -96,7 +101,7 @@
 						</div>
 						
 						<c:if test="${mode eq 'buy'}">
-							<c:if test="${empty dealInfo.DEAL_CANCEL and dealInfo.DEAL_DELIVERY_STATE != '4'}">
+							<c:if test="${empty dealInfo.DEAL_CANCEL and dealInfo.DEAL_DELIVERY_STATE ne '4'}">
 								<div class="deal-cancel">
 									<div onclick="setCancel(this)" data-no="${dealInfo.DEAL_DELIVERY_STATE eq '1' ? '3' : '0' }">주문취소</div>
 								</div>
@@ -104,13 +109,13 @@
 							<c:if test="${dealInfo.DEAL_CANCEL eq '0' }">
 								<div class="alert-message">판매자의 취소 승인을 기다리고 있습니다.</div>
 							</c:if>
-							<c:if test="${dealInfo.DEAL_DELIVERY_STATE eq '3' }">
+							<c:if test="${dealInfo.DEAL_CANCEL ne '0' and dealInfo.DEAL_DELIVERY_STATE eq '3' }">
 								<div class="deal-receive">
 									<div onclick="setDeliveryReceive(this)" data-state="4">구매확정</div>
 								</div>
 							</c:if>
 						</c:if>
-						<c:if test="${mode eq 'sell' and not empty dealInfo.DEAL_CANCEL}">
+						<c:if test="${mode eq 'sell' and dealInfo.DEAL_CANCEL eq '0'}">
 							<div class="deal-accept">
 								<div onclick="setSellerCancel(this)" data-no="1">주문취소 승인</div>
 								<div onclick="setSellerCancel(this)" data-no="2">주문취소 거절</div>
@@ -201,30 +206,20 @@
 </div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.4.0/sockjs.min.js"></script>
 <script type="text/javascript">
-/*
-	// 아임포트 결제 취소 기능 추가할 것
-	
-	// socket.send() 예시
-	let params = new FormData(document.getElementById('buyProductForm'));
-	params.append('message', '등록하신 '+`${productOrderInfo.PRODUCT_NAME}`+'상품이 판매되었습니다. 판매 여부 확인 후 판매 승인을 눌러주세요.');
-	let msg = {
-			type: 'chat',
-			body: json
-		};
-	socket.send(JSON.stringify(msg));
-*/
-
 document.addEventListener('DOMContentLoaded', function(){
 	var socket = null;
 	connectWs();
 });
 
 let setAccept = function(el){
-	dealStateModify(confirm('거래를 '+el.textContent+'하시겠습니까?'), el.dataset.no);
+	 dealStateModify(confirm('거래를 '+el.textContent+'하시겠습니까?'), el.dataset.no);
 };
 
 // 거래상태 변경
 let dealStateModify = function(confirm, deal_state){
+	let title = (deal_state == 1 ? '거래승인' : (deal_state == 2 ? '거래완료' : '거래취소'));
+	let content = (deal_state == 1 ? '거래가 승인되었습니다.' : (deal_state == 2 ? '거래가 완료되었습니다.' : '거래가 취소되었습니다.'));
+	
 	if(confirm){
 		let params = new FormData();
 		params.append('deal_state', deal_state);
@@ -237,12 +232,15 @@ let dealStateModify = function(confirm, deal_state){
 		.then((response) => response.text())
 		.then((text) => {
 				if(text == 1){
-					// 채팅 알림 발송 기능 추가할 것
+					sendMessge(`${dealInfo.PRODUCT_NAME}` + ' 상품의 ' + content, title);
+					alert(content);
 				}else{
-					
+					alert('요청하신 작업에 실패했습니다. 다시 시도해 주세요.');
+					getDealInfo(`${dealInfo.DEAL_NO}`);
 				}
-				getDealInfo(`${dealInfo.DEAL_NO}`);
-		}).catch((error) => console.log('error: '+error));
+		}).catch((error) => {
+			console.error('error: '+error);
+		});
 	}
 };
 
@@ -267,6 +265,9 @@ let setSellerCancel = function(el){
 // 즉시 거래취소
 let dealCancel = function(confirm, deal_cancel){
 	if(confirm){
+		let title = (`${mode}` == 'buy' ? '취소요청' : (deal_cancel == 1 ? '취소요청 승인' : '취소요청 거절'));
+		let content = `${dealInfo.PRODUCT_NAME}`+ ' 상품의 거래 취소 요청이 ' + (deal_cancel == 1 ? '승인되었습니다.' : '거절되었습니다.'));
+		
 		let params = new FormData();
 		params.append('deal_cancel', deal_cancel);
 		params.append('deal_no', `${dealInfo.DEAL_NO}`);
@@ -278,19 +279,24 @@ let dealCancel = function(confirm, deal_cancel){
 		.then((response) => response.text())
 		.then((text) => {
 				if(text == 1){
-					alert('요청하신 작업이 완료되었습니다.'); 
-					// 채팅 알림 발송 기능 추가할 것
+					sendMessge(content, title);
+					alert('요청하신 작업이 완료되었습니다.');
 				}else{
 					alert('요청하신 작업에 실패했습니다. 다시 시도해 주세요.');
+					getDealInfo(`${dealInfo.DEAL_NO}`);
 				}
-				getDealInfo(`${dealInfo.DEAL_NO}`);
-		}).catch((error) => console.log('error: '+error));
+		}).catch((error) => {
+			console.error('error: '+error);
+		});
 	}
 };
 
 // 배송상태 변경
 let setDeliveryState = function(confirm, deal_delivery_state){
 	if(confirm){
+		let title = (`${mode}` == 'buy' ? '거래완료' : (deal_delivery_state == 2 ? '배송시작' : '배송완료'));
+		let content = `${dealInfo.PRODUCT_NAME}`+ ' 상품의 ' + (`${mode}` == 'buy' ? '거래가 완료되었습니다.' : (deal_delivery_state == 2 ? '배송이 시작되었습니다.' : '배송이 완료되었습니다. 구매확정을 눌러 주세요.'));
+		
 		let successMessage = (`${mode}` == 'buy' ? '구매확정이 완료되었습니다.' : '배송상태가 변경되었습니다.');
 		let failMessage = (`${mode}` == 'buy' ? '구매확정에 실패했습니다.' : '배송상태 변경에 실패했습니다.');
 		
@@ -305,18 +311,20 @@ let setDeliveryState = function(confirm, deal_delivery_state){
 		.then((response) => response.text())
 		.then((text) => {
 				if(text == 1){
-					// 채팅 알림 발송 기능 추가할 것
+					sendMessge(content, title);
 					alert(successMessage);
 				}else{
 					alert(failMessage);
+					getDealInfo(`${dealInfo.DEAL_NO}`);
 				}
-				getDealInfo(`${dealInfo.DEAL_NO}`);
-		}).catch((error) => console.log('error: '+error));
+		}).catch((error) => {
+			console.error('error: '+error);
+		});
 	}
 };
 
 let setDeliveryReceive = function(el){
-	setDeliveryState(confirm('구매확정하신 뒤에는 취소신청이 불가하며, 취소신청이 진행중일 경우 취소신청이 철회됩니다.\n반드시 상품을 수령하신 뒤에 구매확정해 주세요.'), el.dataset.state);
+	setDeliveryState(confirm('구매확정하신 뒤에는 취소신청이 불가합니다.\n반드시 상품을 수령하신 뒤에 구매확정해 주세요.'), el.dataset.state);
 };
 
 let setSellerDeliveryState = function(el){
@@ -384,12 +392,15 @@ if(document.getElementById('review_content') != null){
 			.then((text) => {
 					if(text == 2){
 						// 채팅 알림 발송 기능 추가할 것
+						sendMessge(`${dealInfo.PRODUCT_NAME}` + ' 상품 거래의 리뷰가 등록되었습니다.', '리뷰등록');
 						alert("리뷰가 등록되었습니다.");
 					}else{
 						alert("리뷰 작성에 실패했습니다. 다시 시도해 주세요.");
+						getDealInfo(`${dealInfo.DEAL_NO}`);
 					}
-					getDealInfo(`${dealInfo.DEAL_NO}`);
-			}).catch((error) => console.log('error: '+error));
+			}).catch((error) => {
+				console.error('error: '+error);
+			});
 		}
 	});
 }
@@ -404,24 +415,33 @@ let connectWs = function(){
 };
 
 // 알림 발송
-let sendMessge = function(chat_from, chat_to, chat_content, chat_title){
-	let chatDto = {
+let sendMessge = function(content, title){
+	let params = {
 			room_no: `${room_no}`,
-			chat_from: chat_from,
-			chat_to: chat_to,
-			chat_content: chat_content,
-			chat_time: new Date(),
-			chat_read: 'N',
+			chat_to: (`${mode}` == 'buy' ? `${dealInfo.SELLER_NO}` : `${dealInfo.CUSTOMER_NO}`),
+			chat_content: content,
 			chat_type: 1,
-			chat_title: chat_title,
-			chat_info: `${deal_no}`
+			chat_title: title,
+			chat_info: `${dealInfo.DEAL_NO}`
 	};
 	
-	let msg = {
-			type: 'chat',
-			body: JSON.stringify(chatDto)
-	};
-	
-	socket.send(JSON.stringify(msg));
+	fetch('/usMarket/fetch/chat/send', {
+		method: 'POST',
+		headers: {
+			'Content-type' : 'application/json'
+		},
+		body: JSON.stringify(params),
+	})
+	.then((response) => response.json())
+	.then((json) => {
+		let msg = {
+				type: 'chat',
+				body: json
+			};
+		socket.send(JSON.stringify(msg));
+		getDealInfo(`${dealInfo.DEAL_NO}`);
+	}).catch((error) => {
+		console.error('error: '+error);
+	});
 };
 </script>
