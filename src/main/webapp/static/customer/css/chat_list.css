@@ -205,6 +205,7 @@
 
 .info-content-layout > .info-content .chat-alert{
 	max-width: 350px;
+	min-width: 350px;
 	display: flex;
 	flex-direction: column;
 	padding: 0px 20px 0px 20px;
