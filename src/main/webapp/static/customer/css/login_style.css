@@ -48,7 +48,7 @@
 	transition: all .5s ease;
 	display: block;
 }
-.int-area text {
+.int-area sup {
 	color : red;
 }
 .nice-select {
@@ -66,6 +66,12 @@
 	top: 0;
 	font-size: 13px; color: #166cea;
 }
+.int-area input[name='member_zipcode'][value=''] + label {
+	left: 10px; top: 15px;
+	font-size: 18px; 
+	color: #999999;
+	transition: all .5s ease;
+}
 .int-area-emailCheck input{
 	width: 100%;
     padding: 20px 10px 10px;
@@ -74,7 +80,6 @@
     border-bottom: 1px solid #999999;
     font-size: 18px;
     outline: none;
-    display:none;
 }
 .email_check_btn {
     width: 100%;
@@ -181,4 +186,10 @@ input:-webkit-autofill:active {
 	display: none;
 }
 
+.detail > .int-area-detail{
+	width: 400px; position: relative;
+}
 
+#address, #address_detail{
+	display: none;
+}
