@@ -630,7 +630,7 @@ ol {
 }
 
 .hero__search__mypage span{
-	color: #eeeeee;
+	color: #d5d5d5;
 	font-size: 13px;
 }
 
@@ -859,6 +859,16 @@ ol {
 .selectedOption{
 	font-weight: 600;
 	color: #16A7F1;
+}
+
+.product__empty{	
+	height: 300px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	font-size: 25px;
+	color: #9f9f9f;
+	font-weight: 500;
 }
 
 .paging__container{
