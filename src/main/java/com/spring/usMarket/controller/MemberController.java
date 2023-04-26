@@ -46,63 +46,46 @@ public class MemberController {
 
 	@GetMapping("/login")
 	public String login(HttpServletRequest request) {
-		
+		Object userNo = request.getSession().getAttribute("userNo");
 		String uri = request.getHeader("Referer");
-	    
-		if (uri != null && !uri.contains("/login")) {
-	        request.getSession().setAttribute("prevPage", uri);
-	    }
-	    if (uri == null) {
-	        request.getSession().setAttribute("prevPage", null);
-	    }
+
+		if(userNo != null) {
+			if(request.getSession().getAttribute("prevPage") != null) {
+				return "redirect:" + request.getSession().getAttribute("prevPage");
+			}else {
+				return "redirect:/";
+			}
+		}
 		
-		logger.info("referer = {}",request.getHeader("Referer"));
+		if (uri != null && !uri.contains("/login")) {
+			request.getSession().setAttribute("prevPage", uri);
+		} else {
+			request.getSession().setAttribute("prevPage", null);
+		}
+		
+		logger.info("referer = {}", uri);
 		return "member/login";
 	}
-
+	
 	@PostMapping("/login")
 	public String loginCheck(HttpServletRequest request, String member_id, String member_password, 
-			Model model,RedirectAttributes ratt)
-			throws Exception {
-		BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
-		HttpSession httpSession = request.getSession(true);
-		String prevPage = (String)request.getSession().getAttribute("prevPage");
+			Model model,RedirectAttributes ratt) throws Exception {
+		HttpSession session = request.getSession(true);
+		String prevPage = (String) session.getAttribute("prevPage");
 
-		Map<String, Object> member = memberService.loginCheckID(member_id);
-		
-		if(prevPage != null) {
-			if(prevPage.substring(prevPage.length()-4, prevPage.length()) == "join"){
-				prevPage += "?mode=modify";
-			}
-		}else {
+		if (prevPage != null && prevPage.endsWith("/join")) {
+			prevPage += "?mode=modify";
+		} else {
 			prevPage = "/";
 		}
-		
-		logger.info("ID 입력 정보 = " + member_id + ", PW 입력 정보 = " + member_password);
-		logger.info("회원정보 = " + member);
-		
-		if (member == null) {
-			logger.info("아이디 없음");
-			String msg = "아이디 또는 비밀번호를 잘못 입력했습니다.";
-			model.addAttribute("msg", msg);
-			model.addAttribute("mem_id", member_id);
-			model.addAttribute("mem_pw", member_password);
-			return "member/login";
-		} else if (encoder.matches(member_password, (String) member.get("MEMBER_PASSWORD"))) {
-			if(member_password.length() == 6) {
-				logger.info("member = {}",member);
-				ratt.addAttribute("mode", "uppw");
-				ratt.addFlashAttribute("member", member);
-				ratt.addFlashAttribute("prevPage", prevPage);
-				return "redirect:/member/join";
-			}
-			logger.info("로그인 성공");
-			httpSession.setAttribute("userId", member_id);
-			httpSession.setAttribute("userNo", member.get("MEMBER_NO"));
-			logger.info("prevPage = "+prevPage);
-			return "redirect:"+prevPage;
-		} else {
-			logger.info("비밀번호 오류");
+
+		logger.info("ID 입력 정보 = {}, PW 입력 정보 = {}", member_id, member_password);
+
+		Map<String, Object> member = memberService.loginCheckID(member_id);
+		logger.info("회원정보 = {}", member);
+
+		if (member == null || !new BCryptPasswordEncoder().matches(member_password, (String) member.get("MEMBER_PASSWORD"))) {
+			logger.info("아이디 또는 비밀번호 오류");
 			String msg = "아이디 또는 비밀번호를 잘못 입력했습니다.";
 			model.addAttribute("msg", msg);
 			model.addAttribute("mem_id", member_id);
@@ -110,23 +93,29 @@ public class MemberController {
 			return "member/login";
 		}
 
+		logger.info("로그인 성공");
+		if (member_password.length() == 6) {
+			ratt.addFlashAttribute("loginMember", member);
+			return "redirect:/member/join?mode=uppw";
+		}
+
+		session.setAttribute("userId", member_id);
+		session.setAttribute("userNo", member.get("MEMBER_NO"));
+		logger.info("prevPage = {}", prevPage);
+		return "redirect:" + prevPage;
 	}
 
 	@GetMapping("/logout")
-	public String logout(HttpServletRequest request) throws Exception {
+	public String logout(HttpServletRequest request) {
 		String referer = request.getHeader("Referer");
-		if(referer == null || referer.substring(referer.length()-6, referer.length()) == "modify" ||
-				referer.substring(referer.length()-6, referer.length()) == "mypage") {
+		
+		if (referer == null || referer.endsWith("modify") || referer.endsWith("mypage")) {
 			referer = "/";
 		}
-		
-		logger.info("referer.substring = "+referer.substring(referer.length()-6, referer.length()));
-		
-		
+
 		request.getSession().removeAttribute("userId");
 		request.getSession().removeAttribute("userNo");
-		logger.info("로그아웃 {}", (request.getSession().getAttribute("userId") == null && 
-				request.getSession().getAttribute("userNo") == null ? "성공" : "실패"));
+		logger.info("로그아웃 성공");
 		
 		return "redirect:" + referer;
 	}
@@ -134,8 +123,6 @@ public class MemberController {
 	@GetMapping("/search")
 	public String search(HttpServletRequest request, Model model) {
 		Object memberInfo = request.getSession().getAttribute("userId");
-		logger.info("mode = {}, sessionInfo = {}",request.getParameter("mode"), memberInfo);
-		logger.info("member = {}",request.getParameter("member"));
 		
 		model.addAttribute("memberInfo", memberInfo);
 		model.addAttribute("mode", request.getParameter("mode"));
@@ -207,11 +194,25 @@ public class MemberController {
 		return "redirect:/member/viewajax";
 	}
 	
-	@PostMapping(value="/newlogin", consumes = "application/json")
-	public void updatePw(@RequestBody Map<String, Object> member,Model model) {
-		logger.info("재설정 정보 = {}", member);
+	@PostMapping(value="/newlogin")
+	public String updatePw(HttpServletRequest request,Model model) {
+		HttpSession httpSession = request.getSession(true);
+		Map<String, Object> member = new HashMap<String, Object>();
+		
+		logger.info("재설정 정보 = [member_no = {}, member_id = {}, member_password = {}", 
+				request.getParameter("member_no"), request.getParameter("member_id"), request.getParameter("member_password"));
+
+		member.put("member_no", Integer.parseInt(request.getParameter("member_no")));
+		member.put("member_password", request.getParameter("member_password"));
+
 		int result = memberService.resetMember(member);
 		logger.info("result", result);
+		
+		httpSession.setAttribute("userId", request.getParameter("member_id"));
+		httpSession.setAttribute("userNo", request.getParameter("member_no"));
+		
+		logger.info("prevPage= {}",request.getSession().getAttribute("prevPage"));
+		return "redirect:" + request.getSession().getAttribute("prevPage");
 	}
 	
 	@GetMapping("/join")
@@ -219,7 +220,7 @@ public class MemberController {
 		MemberDto memberInfo = null;
 	    String member_no = null;
 		String mode = "join";
-	    
+			    
 	    if (request.getSession().getAttribute("userNo") != null) {
 	    	member_no = String.valueOf(request.getSession().getAttribute("userNo"));
 			mode = "modify";
@@ -304,40 +305,36 @@ public class MemberController {
 	@GetMapping("/mypage")
 	public String info(HttpServletRequest request, Model model, ProfileSearchCondition sc) {
 		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy년 MM월 dd일");
-		
-		String member_no = String.valueOf(request.getSession().getAttribute("userNo"));
-		logger.info("member_id = {}, member_no = {}", request.getSession().getAttribute("userId").toString(), member_no);
-		//session으로 넘어온 회원 정보
-
-		int totalCnt = 0;
-		sc.setPageSize(15);		
-		
 		try {
+			String member_no = String.valueOf(request.getSession().getAttribute("userNo"));
+			logger.info("member_id = {}, member_no = {}", request.getSession().getAttribute("userId").toString(), member_no);
+
 			if (request.getParameter("member_no") != null) {
 		    	member_no = request.getParameter("member_no");
 		    }
 			
-			MemberDto memberInfo = memberService.getMemberInfo(member_no);//Mypage_member
+			MemberDto memberInfo = memberService.getMemberInfo(member_no);// 회원정보
 			
 			sc.setMember_no(member_no);
+			sc.setPageSize(15);		
 			
-			List<Map<String, Object>> mypageProductList = memberService.getProduct(sc);
+			List<Map<String, Object>> mypageProductList = memberService.getProduct(sc);//제품정보
 			logger.info("mypageProductList : {}",mypageProductList);
 			
-			int ProductCount = memberService.getProductCnt(member_no, sc.getCondition());//Mypage_product
-			int bookmarkCount = memberService.getBookmarkCnt(member_no,sc.getCondition());//Mypage_Bookmark
-			int reviewCnt = memberService.getReviewCnt(member_no, sc.getCondition());//Mypage_Review
+			int ProductCnt = memberService.getProductCnt(member_no, sc.getCondition());// 제품 전체 수
+			int bookmarkCnt = memberService.getBookmarkCnt(member_no,sc.getCondition());// 찜 전체 수
+			int reviewCnt = memberService.getReviewCnt(member_no, sc.getCondition());// 리뷰 전체 수
 			
-			totalCnt = ProductCount;
+			int totalCnt = ProductCnt;
 			ProfilePageHandler pageHandler = new ProfilePageHandler(totalCnt, sc);
 
 			model.addAttribute("category", "productList");
 			model.addAttribute("memberInfo", memberInfo);
 			model.addAttribute("regdate",dateFormat.format(memberInfo.getMember_regdate()));
 			model.addAttribute("mypageList", mypageProductList);
-			model.addAttribute("product", ProductCount);
+			model.addAttribute("product", ProductCnt);
 			model.addAttribute("review", reviewCnt);
-			model.addAttribute("bookmark", bookmarkCount);
+			model.addAttribute("bookmark", bookmarkCnt);
 			model.addAttribute("Page", sc.getPage());
 			model.addAttribute("PageSize", sc.getPageSize());
 			model.addAttribute("ph", pageHandler);
