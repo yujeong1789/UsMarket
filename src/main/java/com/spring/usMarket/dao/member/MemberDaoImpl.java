@@ -36,6 +36,7 @@ public class MemberDaoImpl implements MemberDao{
 	
 	@Override
 	public int updatePw(Map<String, Object> pw) {
+		logger.info("업데이트할 데이터 = {}",pw);
 		return session.insert(namespace+"updatePw", pw);
 	}
 	
