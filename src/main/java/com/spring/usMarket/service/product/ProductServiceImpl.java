@@ -44,7 +44,7 @@ public class ProductServiceImpl implements ProductService {
 	
 	@Override
 	@Transactional(rollbackFor = SQLException.class, readOnly = true)
-	public List<ProductCategoryDto> getProductCategory2(Integer product_category1_no) throws Exception {
+	public List<ProductCategoryDto> getProductCategory2(String product_category1_no) throws Exception {
 		
 		List<ProductCategoryDto> category2 = productCategoryDao.searchProductCategory2(product_category1_no);
 		logger.info("category2 = {}", category2);
@@ -54,7 +54,7 @@ public class ProductServiceImpl implements ProductService {
 	
 	@Override
 	@Transactional(rollbackFor = SQLException.class, readOnly = true)
-	public List<Map<String, Object>> getCategory2(Integer product_category1_no) throws Exception {
+	public List<Map<String, Object>> getCategory2(String product_category1_no) throws Exception {
 		
 		List<Map<String, Object>> category2 = productCategoryDao.searchCategory2(product_category1_no);
 		logger.info("category2 = {}", category2);

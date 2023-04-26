@@ -12,9 +12,9 @@ import com.spring.usMarket.utils.SearchCondition;
 public interface ProductService {
 	List<Map<String, Object>> getProductCategory1() throws Exception;
 	
-	List<ProductCategoryDto> getProductCategory2(Integer product_category1_no) throws Exception;
+	List<ProductCategoryDto> getProductCategory2(String product_category1_no) throws Exception;
 	
-	List<Map<String, Object>> getCategory2(Integer product_category1_no) throws Exception;
+	List<Map<String, Object>> getCategory2(String product_category1_no) throws Exception;
 	
 	List<ProductDto> getMainProduct() throws Exception;
 	
