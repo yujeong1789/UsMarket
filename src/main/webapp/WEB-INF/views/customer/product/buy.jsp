@@ -251,7 +251,7 @@ function payment(data){
 	}, function(rsp){
 		if(rsp.success){
 			let params = new FormData(document.getElementById('buyProductForm'));
-			params.append('message', '등록하신 '+`${productOrderInfo.PRODUCT_NAME}`+'상품이 판매되었습니다. 판매 여부 확인 후 판매 승인을 눌러주세요.');
+			params.append('message', '등록하신 '+`${productOrderInfo.PRODUCT_NAME}`+' 상품이 판매되었습니다. 판매 여부 확인 후 판매 승인을 눌러주세요.');
 			
 			// 결제 성공시 fetch api로 db작업
 			fetch('/usMarket/fetch/deal/add/'+document.getElementById('addressUpdate').value, {
