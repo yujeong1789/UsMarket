@@ -7,9 +7,13 @@
 <c:if test="${empty dealInfo }">
 	<script type="text/javascript">
 		alert("잘못된 접근입니다.");
-		location.href = '${pageContext.request.contextPath}/deal/list';
+		location.replace('${pageContext.request.contextPath}/deal/list');
 	</script>
 </c:if>
+
+<!-- 신고하기 모달 -->
+<input type="hidden" id="report_type">
+<jsp:include page="/WEB-INF/views/customer/inc/report_modal.jsp"/>
 
 <div class="deal-info-container">
 	<div class="row">
@@ -22,10 +26,16 @@
 				</div>
 				<div class="title">
 					<span>거래내역</span>
+					<c:if test="${dealInfo.DEAL_STATE eq '1' }">
+						<div class="report-div" onclick="openReport()">
+							<img alt="신고하기" src="<c:url value='/resources/customer/img/report.png'/>">
+							신고하기
+						</div>
+					</c:if>
 				</div>
 				<div class="deal-info">
 					<div class="info">
-						<div class="info-title">구매상품</div>
+						<div class="info-title">${mode eq 'buy' ? '구매상품' : '판매상품' }</div>
 						<div class="info-info">
 							<a href="<c:url value='/product/info?product_no=${dealInfo.PRODUCT_NO }'/>">
 								${dealInfo.PRODUCT_NAME }
@@ -224,6 +234,8 @@ let dealStateModify = function(confirm, deal_state){
 		let params = new FormData();
 		params.append('deal_state', deal_state);
 		params.append('deal_no', `${dealInfo.DEAL_NO}`);
+		params.append('product_no', `${dealInfo.PRODUCT_NO}`);
+		params.append('seller_no', `${dealInfo.SELLER_NO}`);
 		
 		fetch('/usMarket/fetch/deal/modify', {
 			method: 'POST',
@@ -271,6 +283,8 @@ let dealCancel = function(confirm, deal_cancel){
 		let params = new FormData();
 		params.append('deal_cancel', deal_cancel);
 		params.append('deal_no', `${dealInfo.DEAL_NO}`);
+		params.append('product_no', `${dealInfo.PRODUCT_NO}`);
+		params.append('seller_no', `${dealInfo.SELLER_NO}`);
 		
 		fetch('/usMarket/fetch/deal/cancel', {
 			method: 'POST',
@@ -443,5 +457,15 @@ let sendMessge = function(content, title){
 	}).catch((error) => {
 		console.error('error: '+error);
 	});
+};
+
+//신고하기
+let openReport = function(){
+	console.log(type);
+	document.getElementById('report_member_no').value = (`${mode}` == 'buy' ? `${dealInfo.SELLER_NO}` : `${dealInfo.CUSTOMER_NO}`);
+	document.getElementById('report_info').value = `${dealInfo.DEAL_NO}`;
+	document.querySelector('.report-info').textContent = (`${mode}` == 'buy' ? `${dealInfo.SELLER_NICKNAME}` : `${dealInfo.CUSTOMER_NICKNAME}`);
+	
+	reportModal.show();	
 };
 </script>

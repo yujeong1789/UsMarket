@@ -10,7 +10,7 @@
 	<c:if test="${empty productInfo}">
 		<script type="text/javascript">
 			alert('존재하지 않는 상품입니다.');
-			location.href = '${pageContext.request.contextPath}/';
+			location.replace('${pageContext.request.contextPath}/');
 		</script>
 	</c:if>
 
@@ -237,7 +237,7 @@ document.addEventListener('DOMContentLoaded', function(){
 			imgOrder--;
 		}
 		return imgOrder;
-	}
+	};
 	
 	// 다음 요소가 존재하는지
 	function getNextImg(imgOrder){
@@ -246,7 +246,7 @@ document.addEventListener('DOMContentLoaded', function(){
 			imgOrder++;
 		}
 		return imgOrder;
-	}
+	};
 	
 	document.getElementById('img_next').addEventListener('click', function(){
 		imgOrder = getNextImg(imgOrder);
@@ -288,11 +288,11 @@ document.addEventListener('DOMContentLoaded', function(){
 			document.getElementById('product__review__empty').style.display = 'flex';
 		} else if(json.REVIEW_COUNT > 0){
 			getTopReview(json.REVIEW_COUNT);
-		} // if-else
+		}
 			
-	}).catch((error) => console.error("error: "+error)); // fetch-2
-		
-		
+	}).catch((error) => console.error('error: ' + error));
+
+	
 	// 상위 2건 리뷰 얻기
 	function getTopReview(reviewCount){
 		fetch('/usMarket/fetch/topReview/'+seller_no)
@@ -301,7 +301,7 @@ document.addEventListener('DOMContentLoaded', function(){
 			json.forEach((el, i) => {
 				product__review.appendChild(setReview(el));
 			});
-		}).catch((error) => console.log("error: "+error)); // fetch-3
+		}).catch((error) => console.log('error: ' + error));
 		
 		if(reviewCount > 2){
 			document.getElementById('product__review__more').style.display = 'flex';
@@ -319,7 +319,7 @@ document.addEventListener('DOMContentLoaded', function(){
 		
 		tagArr.forEach((el) => {
 			let appendTag = document.createElement('a');
-			appendTag.setAttribute('href', '${pageContext.request.contextPath}/product/list?keyword='+encodeURIComponent(el));
+			appendTag.setAttribute('href', '${pageContext.request.contextPath}/product/list?keyword=' + encodeURIComponent(el));
 			appendTag.textContent = el;
 			tagElement.appendChild(appendTag);
 		});		
@@ -333,7 +333,7 @@ document.addEventListener('DOMContentLoaded', function(){
 
 
 // 상품 삭제
-let productRemove = function(){
+function productRemove(){
 	if(confirm('상품을 삭제하시겠습니까?')){
 		
 		let formData = new FormData();
@@ -348,17 +348,17 @@ let productRemove = function(){
 		.then((text) => {
 			if(text == '1'){
 				alert('정상적으로 삭제되었습니다.');
-				location.href = '${pageContext.request.contextPath}/';
+				location.replace('${pageContext.request.contextPath}/');
 			}else{
 				alert('상품 삭제에 실패했습니다.');
 			}
-		}).catch((error) => console.error('error: '+error));
+		}).catch((error) => console.error('error: ' + error));
 	}	
 };
 
 
 // 상품 구매
-let productBuy = function(){
+function productBuy(){
 	const productBuyForm = document.getElementById('productBuyForm');
 	productBuyForm.children[0].value = `${productInfo.PRODUCT_NO}`;
 	
@@ -367,7 +367,7 @@ let productBuy = function(){
 
 
 // 상품 찜하기
-let productWish = function(el){
+function productWish(el){
 	let status = el.dataset.status;
 	
 	if(isEmpty(current_no)){
@@ -391,12 +391,12 @@ let productWish = function(el){
 	.then((response) => response.text())
 	.then((text) => {
 		console.log('after status = '+text);
-	}).catch((error) => console.error("error: "+error));
+	}).catch((error) => console.error('error: ' + error));
 };
 
 
 // 채팅하기
-let sendChat = function(){
+function sendChat(){
 	const addChatRoomForm = document.getElementById('addChatRoomForm');
 	addChatRoomForm.children[0].value = seller_no;
 	addChatRoomForm.children[1].value = document.querySelector('.product_name').textContent.trim();
@@ -408,7 +408,7 @@ let sendChat = function(){
 
 
 // 신고하기
-let openReport = function(){
+function openReport(){
 	if(isEmpty(current_no)){
 		location.href = '${pageContext.request.contextPath}/member/login';
 		return;
@@ -420,7 +420,9 @@ let openReport = function(){
 	reportModal.show();	
 };
 
-let productStateChange = function(el){
+
+// 상품 상태 변경
+function productStateChange(el){
 	let currentStatus = el.dataset.status == '1' ? '판매중으로' : '예약완료로';
 	
 	if(confirm('해당 상품을 ' + currentStatus + ' 변경하시겠습니까?')){
@@ -437,10 +439,10 @@ let productStateChange = function(el){
 		.then((text) => {
 			if(text == '1'){
 				alert('정상적으로 변경되었습니다.');
-				location.reload();
 			}else{
 				alert('상태 변경에 실패했습니다.');
 			}
+			location.reload();
 		}).catch((error) => console.error('error: '+error));
 	}
 };

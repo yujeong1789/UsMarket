@@ -182,7 +182,7 @@ if(`${mode}` == 'new'){
 			.then((response) => response.json())
 			.then((json) => {
 				alert(json.msg);
-				location.href = '${pageContext.request.contextPath}/qna/read?qna_no='+json.qna_no;
+				location.replace('${pageContext.request.contextPath}/qna/read?qna_no='+json.qna_no);
 			}).catch((error) => console.log('error: '+error));
 		}
 	});

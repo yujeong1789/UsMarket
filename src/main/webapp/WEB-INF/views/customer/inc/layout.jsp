@@ -31,6 +31,8 @@
     <!-- bootstrap -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.min.js" integrity="sha384-cuYeSxntonz0PPNlHhBs68uyIAVpIIOZZ5JqeqvYYIcEL727kskC66kF92t6Xl2V" crossorigin="anonymous"></script>
     
+    <!-- common.js -->
+    <script src="<c:url value='/resources/customer/js/common.js'/>"></script>
 </head>
 
 <body>
@@ -58,13 +60,11 @@
 
     <!-- Js Plugins -->
     <script src="<c:url value='/resources/customer/js/jquery-3.3.1.min.js'/>"></script>
-    <%-- <script src="<c:url value='/resources/customer/js/jquery.nice-select.min.js'/>"></script> --%>
     <script src="<c:url value='/resources/customer/js/jquery-ui.min.js'/>"></script>
     <script src="<c:url value='/resources/customer/js/jquery.slicknav.js'/>"></script>
     <script src="<c:url value='/resources/customer/js/mixitup.min.js'/>"></script>
     <script src="<c:url value='/resources/customer/js/owl.carousel.min.js'/>"></script>
     <script src="<c:url value='/resources/customer/js/main.js'/>"></script>
-	<script src="<c:url value='/resources/customer/js/common.js'/>"></script>
 </body>
 
 </html>

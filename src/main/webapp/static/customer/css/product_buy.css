@@ -43,8 +43,7 @@
 }
 
 .product__order__info > div:first-child{
-	background-color: #f6f5f6;
-	height: 30px;
+	height: 35px;
 	font-weight: 600;
 	font-size: 15px;
 }
@@ -91,12 +90,13 @@
 }
 
 .order__border{
-	border: 2px solid #f6f5f6;
+	border-radius: .375rem;
+	box-shadow: 0 2px 6px 0 rgba(67,89,113,.12);
 }
 
 .product__order__address > div{
 	margin-bottom: 20px;
-	width: 65%;
+	width: 75%;
 }
 
 .address-title{
@@ -108,18 +108,21 @@
 
 .product__order__address input[type=text]{
 	height: 40px;
-	border: 1px solid #e7e7e7;
+	border: none;
+	border-radius: .375rem;
+	box-shadow: 0 2px 6px 0 rgba(67,89,113,.12);
 	padding-left: 10px;
 	padding-top: 3px;
+}
+
+.delivery-message{
+	padding: 10px 15px 10px 15px;
 }
 
 .product__order__address textarea{
 	width: 100%;
 	resize: none;
-	height: 40px;
-	border: 1px solid #e7e7e7;
-	padding-left: 10px;
-	padding-top: 8px;
+	border: none;
 }
 
 .product__order__address button{
@@ -131,6 +134,11 @@
 	font-weight: 800;
 	padding: 0px 10px 0px 10px;
 	margin-left: 10px;
+}
+
+#btn_address{
+	border-radius: .375rem;
+	box-shadow: 0 2px 6px 0 rgba(67,89,113,.12);
 }
 
 .essential::after{
@@ -181,4 +189,14 @@ label{
 .product__order__report img{
 	width: 50px;
 	object-fit: contain;
+}
+
+.current_count{
+	display: flex;
+	justify-content: flex-end;
+	width: 100%;
+}
+
+.current_count > p{
+	color: #8E8E8E;
 }

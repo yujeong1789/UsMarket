@@ -140,7 +140,6 @@
 <script src="<c:url value='/resources/customer/js/product_sell.js'/>"></script>
 <script type="text/javascript">
 document.addEventListener('DOMContentLoaded', function(){
-	
 	const category1__ul = document.getElementById('category1__ul');
 	const category2__ul = document.getElementById('category2__ul');
 	
@@ -175,11 +174,11 @@ document.addEventListener('DOMContentLoaded', function(){
 								setDisplayCategory2(this);
 							}); // addEventListner
 						}); // forEach
-					}).catch((error) => console.log("error: "+error)); // fetch-2
+					}).catch((error) => console.error('error: '+error));
 					
 			}); // addEventListner
 		}); // forEach
-	}).catch((error) => console.log("error: "+error)); // fetch-1
+	}).catch((error) => console.error('error: '+error));
 }); // DOMContentLoaded
 	
 	
@@ -250,7 +249,9 @@ function setTag(value) {
 document.getElementById('sell__submit').addEventListener('click', function(e){
 	if(!displayWarning()){
 		return;			
-	}else{
+	}
+	
+	if(confirm('상품을 등록하시겠습니까?')){
 		document.getElementById('product_no').value = getCurrentDate(); 
 		
 		const addedTags = document.querySelectorAll('.tag__content');
@@ -275,7 +276,7 @@ document.getElementById('sell__submit').addEventListener('click', function(e){
 				location.reload();
 			}else{
 				alert('상품이 등록되었습니다.');
-				location.href = '${pageContext.request.contextPath}/product/info?product_no='+text;
+				location.replace('${pageContext.request.contextPath}/product/info?product_no='+text);
 			}
 		}).catch((error) => console.error('error: '+error));
 	}
@@ -356,5 +357,4 @@ function init(fileArray){
 	});
 	document.getElementById('product_img').files = dataTransfer.files;
 }; // init
-	
 </script>

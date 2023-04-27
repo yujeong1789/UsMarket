@@ -142,6 +142,10 @@ public class ProductController {
 		logger.info("product/sell");
 	}
 
+	@GetMapping("/buy")
+	public void buy() {
+		logger.info("product/buy");
+	}
 	
 	@PostMapping("/buy")
 	public void buy(String product_no, HttpServletRequest request, Model model) {

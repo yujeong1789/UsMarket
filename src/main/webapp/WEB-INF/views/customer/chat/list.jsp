@@ -83,56 +83,8 @@
 
 const current_no = document.getElementById('loginNo').getAttribute('data-no');
 const chatList = document.querySelectorAll('.list-content');
+
 let listOrder = -1; 
-
-chatList.forEach(el => {
-	listClickEvent(el);
-});
-
-function listClickEvent(el){
-	el.addEventListener('click', function(){
-		if(document.querySelector('[data-open="Y"]')){
-			document.querySelector('[data-open="Y"]').removeAttribute('data-open');
-		}
-		if(this.getAttribute('data-read') == 'N'){ // 조회 여부 update
-			this.querySelector('.list-content-right').style.visibility = 'hidden';
-			modifyChatRead(this.getAttribute('data-room'));
-		}
-		initChatInfo(this);
-		getChatInfo(this.getAttribute('data-room'), this.getAttribute('data-read'));
-	});
-};
-
-
-document.addEventListener('DOMContentLoaded', function(){
-	var socket = null;
-	connectWs();
-});
-
-
-function initChatInfo(element){
-	element.setAttribute('data-open', 'Y');
-	document.getElementById('chat_to').value = element.getAttribute('data-to');
-	document.getElementById('chat_to_nickname').innerHTML = '';
-	document.querySelector('.info-title-report').style.visibility = 'visible';
-	document.querySelector('.info-textarea').style.visibility = 'visible';
-	document.getElementById('chat_content').value = '';
-	document.querySelector('.btn_send').style.visibility = 'hidden';
-	document.querySelector('.info-content-layout').replaceChildren();
-};
-
-
-if(`${room_no}` != ''){
-	var tmp_room = `${room_no}`;
-	document.querySelector('[data-room="'+tmp_room+'"]').click();
-	setTimeout(() => {
-		let msg = {
-			type: 'init',
-			body: `${chatDto}`
-		};
-		socket.send(JSON.stringify(msg));
-	}, 5000);
-};
 
 
 //채팅내역 얻기
@@ -168,6 +120,18 @@ function getChatInfo(room_no, is_read){
 		});
 		
 	}).catch((error) => console.log('error: '+error));
+};
+
+
+function initChatInfo(element){
+	element.setAttribute('data-open', 'Y');
+	document.getElementById('chat_to').value = element.getAttribute('data-to');
+	document.getElementById('chat_to_nickname').innerHTML = '';
+	document.querySelector('.info-title-report').style.visibility = 'visible';
+	document.querySelector('.info-textarea').style.visibility = 'visible';
+	document.getElementById('chat_content').value = '';
+	document.querySelector('.btn_send').style.visibility = 'hidden';
+	document.querySelector('.info-content-layout').replaceChildren();
 };
 
 
@@ -225,48 +189,42 @@ function setChatInfo(el){
 };
 
 
-function connectWs(){
-	sock = new SockJS('${pageContext.request.contextPath}/echo');
-	socket = sock;
-	
-	sock.onopen = function(){
-		console.log('info: connection opened.');
-	};
-	
-	sock.onmessage = function(evt){
-		let data = JSON.parse(evt.data);
-		let newList = document.querySelector('[data-room="'+data.room_no+'"]');
-		
-		if(newList == null){
-			let newList_ = setChatList(data);
-			newList_.style.order = listOrder;
-			getChatMember(data.chat_from, newList_);
-			listClickEvent(newList_);
-			document.querySelector('.list-div-content').appendChild(newList_);
-		} else {
-			newList.style.order = listOrder;
-			newList.children[0].value = new Date(data.chat_time);
-			newList.querySelector('p:last-child').textContent = convert(data.chat_time);
-			newList.querySelector('.content p').textContent = setPreview(data.chat_content);
-			
-			if(data.chat_to == current_no){
-				newList.querySelector('.list-content-right').style.visibility = 'visible';			
-			}
-			
-			let openList = document.querySelector('[data-open="Y"]');
-			if(openList != null){
-				if(openList.getAttribute('data-room') == data.room_no){
-					newList.querySelector('.list-content-right').style.visibility = 'hidden';
-					document.querySelector('.info-content-layout').prepend(setChatInfo(data));				
-				}
-				
-				if(data.chat_to == current_no){
-					modifyChatRead(data.room_no);
-				}
-			}
-			listOrder--;		
+function listClickEvent(el){
+	el.addEventListener('click', function(){
+		if(document.querySelector('[data-open="Y"]')){
+			document.querySelector('[data-open="Y"]').removeAttribute('data-open');
 		}
-	};
+		if(this.getAttribute('data-read') == 'N'){ // 조회 여부 update
+			this.querySelector('.list-content-right').style.visibility = 'hidden';
+			modifyChatRead(this.getAttribute('data-room'));
+		}
+		initChatInfo(this);
+		getChatInfo(this.getAttribute('data-room'), this.getAttribute('data-read'));
+	});
+};
+
+
+chatList.forEach(el => {
+	listClickEvent(el);
+});
+
+
+document.addEventListener('DOMContentLoaded', function(){
+	var socket = null;
+	connectWs();
+});
+
+
+if(`${room_no}` != ''){
+	var tmp_room = `${room_no}`;
+	document.querySelector('[data-room="'+tmp_room+'"]').click();
+	setTimeout(() => {
+		let msg = {
+			type: 'init',
+			body: `${chatDto}`
+		};
+		socket.send(JSON.stringify(msg));
+	}, 5000);
 };
 
 
@@ -334,6 +292,16 @@ function setChatTime(currentDate){
 };
 
 
+function getChatMember(member_no, element){
+	fetch('/usMarket/fetch/chatmember/'+member_no)
+	.then((response) => response.json())
+	.then((json) => {
+		element.children[1].setAttribute('src', '${pageContext.request.contextPath}'+json.MEMBER_IMAGE);
+		element.children[2].children[0].children[0].children[0].textContent = json.MEMBER_NICKNAME;
+	}).catch((error) => console.error('error: ' + error));	
+};
+
+
 function modifyChatRead(room_no){
 	fetch('/usMarket/fetch/chat/read', {
 		method: 'POST',
@@ -349,6 +317,51 @@ function modifyChatRead(room_no){
 };
 
 
+function connectWs(){
+	sock = new SockJS('${pageContext.request.contextPath}/echo');
+	socket = sock;
+	
+	sock.onopen = function(){
+		console.log('info: connection opened.');
+	};
+	
+	sock.onmessage = function(evt){
+		let data = JSON.parse(evt.data);
+		let newList = document.querySelector('[data-room="'+data.room_no+'"]');
+		
+		if(newList == null){
+			let newList_ = setChatList(data);
+			newList_.style.order = listOrder;
+			getChatMember(data.chat_from, newList_);
+			listClickEvent(newList_);
+			document.querySelector('.list-div-content').appendChild(newList_);
+		} else {
+			newList.style.order = listOrder;
+			newList.children[0].value = new Date(data.chat_time);
+			newList.querySelector('p:last-child').textContent = convert(data.chat_time);
+			newList.querySelector('.content p').textContent = setPreview(data.chat_content);
+			
+			if(data.chat_to == current_no){
+				newList.querySelector('.list-content-right').style.visibility = 'visible';			
+			}
+			
+			let openList = document.querySelector('[data-open="Y"]');
+			if(openList != null){
+				if(openList.getAttribute('data-room') == data.room_no){
+					newList.querySelector('.list-content-right').style.visibility = 'hidden';
+					document.querySelector('.info-content-layout').prepend(setChatInfo(data));				
+				}
+				
+				if(data.chat_to == current_no){
+					modifyChatRead(data.room_no);
+				}
+			}
+			listOrder--;		
+		}
+	};
+};
+
+
 setInterval(() => {
 	chatList.forEach((el, i) => {
 		console.log('change');
@@ -356,15 +369,6 @@ setInterval(() => {
 	});
 }, 120000);
 
-
-function getChatMember(member_no, element){
-	fetch('/usMarket/fetch/chatmember/'+member_no)
-	.then((response) => response.json())
-	.then((json) => {
-		element.children[1].setAttribute('src', '${pageContext.request.contextPath}'+json.MEMBER_IMAGE);
-		element.children[2].children[0].children[0].children[0].textContent = json.MEMBER_NICKNAME;
-	}).catch((error) => console.log("error: "+error)); // fetch-3	
-};
 
 // 신고하기
 document.getElementById('chat-report').addEventListener('click', function(){

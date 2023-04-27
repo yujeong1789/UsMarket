@@ -27,11 +27,6 @@ public class DealController {
 	
 	@Autowired
 	DealService dealService;
-
-	@GetMapping("/complete")
-	public void complete (String deal_no) {
-		logger.info("deal_no = {}", deal_no);
-	}
 	
 	@GetMapping("/list")
 	public void list(Model model, HttpServletRequest request) {

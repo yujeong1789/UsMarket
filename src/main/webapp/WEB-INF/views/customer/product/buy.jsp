@@ -8,6 +8,20 @@
 <!-- iamport.payment.js -->
 <script type="text/javascript" src="https://cdn.iamport.kr/js/iamport.payment-1.2.0.js"></script>
 
+<c:if test="${empty product_no}">
+	<script type="text/javascript">
+		alert('잘못된 접근입니다.');
+		location.replace('${pageContext.request.contextPath}/');
+	</script>
+</c:if>
+
+<c:if test="${empty productOrderInfo}">
+	<script type="text/javascript">
+		alert('현재 판매중인 상품이 아닙니다.');
+		location.href = '${pageContext.request.contextPath}/';
+	</script>
+</c:if>
+
 <link rel="stylesheet" href="<c:url value='/resources/customer/css/product_buy.css'/>" type="text/css">
 <section class="product__buy__section">
 	<div class="row">
@@ -67,8 +81,9 @@
 							</div>
 							<div>
 								<div class="address-title">배송 요청사항</div>
-								<div>
-									<textarea id="deal_delivery_message" name="deal_delivery_message" maxlength="30" placeholder="배송 관련 요청사항을 입력해 주세요. (선택)"></textarea>
+								<div class="delivery-message order__border">
+									<textarea id="deal_delivery_message" name="deal_delivery_message" maxlength="50" placeholder="배송 관련 요청사항을 입력해 주세요. (선택)"></textarea>
+									<div class="current_count"><p>0</p><p>/50</p></div>
 								</div>
 							</div>
 							<div class="mt-5">
@@ -95,7 +110,7 @@
 						</div>
 					</li>
 					<li>
-						<button class="w-100 buy-submit" id="buy__submit" type="button">결제하기</button>
+						<button class="w-100 buy-submit order__border" id="buy__submit" type="button">결제하기</button>
 					</li>
 				</ul>
 			</form> <!-- form -->
@@ -166,7 +181,6 @@ document.getElementById('btn_address').addEventListener('click', function(){
 			document.getElementById('customer_address_detail').style.border = '1px solid red';
 		}
 	}).open();
-
 });
 
 
@@ -175,7 +189,7 @@ document.getElementById('btn_address').addEventListener('click', function(){
 document.querySelectorAll('#buyProductForm input[type=text]').forEach(el => {
 	el.addEventListener('keyup', function(e){
 		valueCheck(el);
-	})
+	});
 });
 	
 	
@@ -204,6 +218,14 @@ document.getElementById('buy__submit').addEventListener('click', function(e){
 		
 		payment();
 	}
+});
+
+document.getElementById('deal_delivery_message').addEventListener('input', function(){
+	// 높이 조절
+	this.style.height = 'auto';
+	this.style.height = this.scrollHeight + 'px';
+	
+	this.nextElementSibling.firstElementChild.textContent = this.value.length;
 });
 		
 		
@@ -238,7 +260,7 @@ function payment(data){
 	IMP.init('imp88123621');
 	IMP.request_pay({
 		pg: 'kakaopay.TC0ONETIME',
-	    pay_method : 'card',  //생략가
+	    pay_method : 'card',  //생략가능
 	    merchant_uid: document.getElementById('deal_no').value, //상점에서 생성한 고유 주문번호
 	    name : `${productOrderInfo.PRODUCT_NAME}`, // 상품명
 	    amount : `${productOrderInfo.PRODUCT_PRICE}`, // 가격
@@ -249,20 +271,19 @@ function payment(data){
 	    buyer_postcode : document.getElementById('customer_zipcode').value,
 	    m_redirect_url : '${pageContext.request.contextPath}/product/info?product_no='+`${productOrderInfo.PRODUCT_NO}`,
 	}, function(rsp){
-		if(rsp.success){
+		if(rsp.success){ // 결제 성공
 			let params = new FormData(document.getElementById('buyProductForm'));
 			params.append('message', '등록하신 '+`${productOrderInfo.PRODUCT_NAME}`+' 상품이 판매되었습니다. 판매 여부 확인 후 판매 승인을 눌러주세요.');
 			
-			// 결제 성공시 fetch api로 db작업
 			fetch('/usMarket/fetch/deal/add/'+document.getElementById('addressUpdate').value, {
 				method: 'POST',
 				body: params,
 			})
-			.then((response) => response.json()) // 서버가 텍스트를 반환하는 경우 response.text()가 적합하다.
+			.then((response) => response.json())
 			.then((json) => {
 				if(isEmpty(json)){
 					alert('구매에 실패했습니다.');
-					location.href='${pageContext.request.contextPath}/product/info?product_no='+`${productOrderInfo.PRODUCT_NO}`;
+					location.replace('${pageContext.request.contextPath}/product/info?product_no='+`${productOrderInfo.PRODUCT_NO}`);
 				}else{
 					let msg = {
 							type: 'chat',
@@ -272,10 +293,10 @@ function payment(data){
 					alert('구매에 성공했습니다.');
 					document.getElementById('dealInfoForm').submit();
 				}
-			}).catch((error) => console.log('error: '+error));
+			}).catch((error) => console.error('error: '+error));
 		} else {
 			alert(rsp.error_msg);
-			location.href='${pageContext.request.contextPath}/product/info?product_no='+`${productOrderInfo.PRODUCT_NO}`;
+			location.replace('${pageContext.request.contextPath}/product/info?product_no='+`${productOrderInfo.PRODUCT_NO}`);
 		}
 	});
 };

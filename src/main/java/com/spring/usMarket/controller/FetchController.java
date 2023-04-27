@@ -44,6 +44,11 @@ public class FetchController {
 	
 	private static final String NOT_ADDED = "0";
 	private static final String ADDED = "1";
+	private static final Integer PRODUCT_SELL = 1;
+	private static final String DEAL_CANCEL = "3";
+	private static final String CANCEL_ACCEPT = "1";
+	private static final String DELIVERY_RECEIVE = "4";
+	
 	
 	@Autowired ProductService productService;
 	@Autowired ProductFileService productFileService;
@@ -190,35 +195,43 @@ public class FetchController {
 	}
 	
 	@PostMapping("/deal/modify")
-	public int dealModify(String deal_no, String deal_state) {
+	public int dealModify(String deal_no, String deal_state, String product_no, String seller_no) {
 		logger.info("deal_no = {}, deal_state = {}", deal_no, deal_state);
 		
 		int rowCnt = 0;
+		int cnt = 0;
 		try {
 			rowCnt = dealService.modifyDealState(deal_state, deal_no);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		
-		return rowCnt;
-	}
-	
-	@PostMapping("/deal/cancel")
-	public int dealCancel(String deal_cancel, String deal_no) {
-		logger.info("deal_cancel = {}, deal_no = {}", deal_cancel, deal_no);
-		
-		int rowCnt = 0;
-		try {
-			rowCnt = dealService.modifyDealCancel(deal_cancel, deal_no);
-			if(deal_cancel == "1" || deal_cancel.equals("1")) { // 거래취소 승인시 판매상태 취소로 변경
-				rowCnt += dealService.modifyDealState("3", deal_no);
-				rowCnt = (rowCnt == 2 ? 1 : rowCnt);
+			cnt++;
+			if(deal_state == DEAL_CANCEL || deal_state.equals(DEAL_CANCEL)) {
+				rowCnt += productService.modifyProductState(PRODUCT_SELL, seller_no, product_no);
+				cnt++;
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		
-		return rowCnt;
+		return (rowCnt == cnt ? 1 : 0);
+	}
+	
+	@PostMapping("/deal/cancel")
+	public int dealCancel(String deal_cancel, String deal_no, String product_no, String seller_no) {
+		logger.info("deal_cancel = {}, deal_no = {}", deal_cancel, deal_no);
+		
+		int rowCnt = 0;
+		int cnt = 0;
+		try {
+			rowCnt = dealService.modifyDealCancel(deal_cancel, deal_no);
+			cnt++;
+			if(deal_cancel == CANCEL_ACCEPT || deal_cancel.equals(CANCEL_ACCEPT)) {
+				rowCnt += productService.modifyProductState(PRODUCT_SELL, seller_no, product_no);
+				cnt++;
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return (rowCnt == cnt ? 1 : 0);
 	}
 	
 	@PostMapping("/delivery/modify")
@@ -231,7 +244,7 @@ public class FetchController {
 		param.put("deal_no", deal_no);
 		
 		try {
-			if(deal_delivery_state == "4" || deal_delivery_state.equals("4")) {
+			if(deal_delivery_state == DELIVERY_RECEIVE || deal_delivery_state.equals(DELIVERY_RECEIVE)) {
 				param.put("deal_receive", "Y");
 			}
 			rowCnt = dealService.modifyDeliveryState(param);
@@ -318,11 +331,10 @@ public class FetchController {
 		try {
 			int rowCnt = chatService.addChat(dto);
 			
-			if(rowCnt == 0) throw new Exception();
-			
-			ObjectMapper objectMapper = new ObjectMapper();
-			chatMap = objectMapper.convertValue(dto, Map.class);
-			
+			if(rowCnt == 1) {
+				ObjectMapper objectMapper = new ObjectMapper();
+				chatMap = objectMapper.convertValue(dto, Map.class);
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

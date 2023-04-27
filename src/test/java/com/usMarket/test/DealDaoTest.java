@@ -20,7 +20,7 @@ import com.spring.usMarket.domain.deal.DealInsertDto;
 @WebAppConfiguration
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = {"file:src/main/webapp/WEB-INF/spring/root-context.xml"})
-public class DealTest {
+public class DealDaoTest {
 	
 	@Autowired private DealDao dealDao;
 	

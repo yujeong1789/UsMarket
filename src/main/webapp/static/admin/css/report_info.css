@@ -164,11 +164,16 @@
 	cursor: pointer;
 }
 
-.info > .info-info img{
+.info > .info-info .icon{
 	width: 14px;
 	object-fit: contain;
 	margin-left: 2px;
 	padding-bottom: 1px;
+}
+
+.info > .info-info .report-img{
+	max-width: 100%;
+	object-fit: contain;
 }
 
 .info:not(.info:last-child) > .info-info > span:hover{
@@ -235,4 +240,9 @@
 	font-weight: 550;
 	border-radius: .375rem;
 	justify-content: center;
+}
+
+.report-img{
+	width: 100%;
+	object-fit: contain;
 }

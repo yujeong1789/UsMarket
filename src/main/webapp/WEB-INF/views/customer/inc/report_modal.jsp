@@ -62,21 +62,21 @@
 <script type="text/javascript">
 const reportModalEl = document.getElementById('reportModal');
 const reportModal = new bootstrap.Modal(reportModalEl);
-
+let confirmMessage = "";
 document.addEventListener('DOMContentLoaded', function(){
 	let path = window.location.pathname.split('/')[2]; // product, chat, deal, review 
 	switch (path) {
 	case 'product':
 		getReportCategory2(1);
+		confirmMessage = '해당 상품을 신고하시겠습니까?';
 		break;
 	case 'chat':
 		getReportCategory2(2);
+		confirmMessage = '해당 회원을 신고하시겠습니까?';
 		break;
 	case 'deal':
 		getReportCategory2(3);
-		break;
-	case 'review':
-		getReportCategory2(4);
+		confirmMessage = '해당 회원을 신고하시겠습니까?';
 		break;
 	};
 });
@@ -135,7 +135,7 @@ document.querySelector('.modal-submit').addEventListener('click', function(e){
 		alert('신고 내용을 입력해 주세요.');
 		document.querySelector('.report-textarea > textarea').focus();
 	} else {
-		if(confirm('해당 상품을 신고하시겠습니까?')){
+		if(confirm(confirmMessage)){
 			document.getElementById('report_no').value = 'R'+getOrderNo(9);
 			var formData = new FormData(document.getElementById('addReportForm'));
 			
@@ -175,6 +175,7 @@ function switchWriteable(result){
 		textarea.removeAttribute('placeholder');
 	}
 };
+
 
 function getReportCategory2(report_category1_no){
 	fetch('/usMarket/fetch/reportCategory/'+report_category1_no)
