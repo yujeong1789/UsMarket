@@ -65,7 +65,7 @@
 								<span><fmt:formatNumber value="${product.PRODUCT_PRICE}" pattern="#,###"/></span>
 							</div>
 							<div class="product__regdate">
-								<fmt:formatDate value="${product.PRODUCT_REGDATE }" pattern="yyyy년 MM월 dd일 HH:mm"/>
+								<fmt:formatDate value="${product.PRODUCT_REGDATE }" pattern="yyyy년 MM월 dd일 (a K:mm)"/>
 							</div>
 							<div class="info-view">
 								<img src="<c:url value='/resources/customer/img/view.png'/>">
@@ -158,7 +158,7 @@
 									</div>
 									<div class="review-info-right">
 										<div class="info-label-regdate">등록 시간</div>
-										<span class="name-right"><fmt:formatDate value="${review.REVIEW_REGDATE }" pattern="yyyy.MM.dd (a HH:mm)"/></span>
+										<span class="name-right"><fmt:formatDate value="${review.REVIEW_REGDATE }" pattern="yyyy년 MM월 dd일 (a K:mm)"/></span>
 									</div>
 								</div>
 								

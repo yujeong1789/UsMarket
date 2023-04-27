@@ -101,13 +101,13 @@
 				<div class="mypage_category">
 					<div class="category_head">
 						<button class="head_category" id="head_product" data-status="selected">
-							<span class="product_name">상품 <c:out value="${product }"/></span>
+							<span id="span_category" class="product_name">상품 <c:out value="${product }"/></span>
 						</button>
 						<button class="head_category" id="head_review">
-							<span class="review_name">상점후기 <c:out value="${review }"/></span>
+							<span id="span_category" class="review_name">상점후기 <c:out value="${review }"/></span>
 						</button>
 						<button class="head_category" id="head_bookmark">
-							<span class="bookmark_name">찜 <c:out value="${bookmark }" /></span>
+							<span id="span_category" class="bookmark_name">찜 <c:out value="${bookmark }" /></span>
 						</button>
 					</div>
 				</div>
@@ -168,7 +168,7 @@
 													<span><fmt:formatNumber value="${product.PRODUCT_PRICE }" pattern="#,###"/></span>
 												</div>
 												<div class="product__regdate">
-													<fmt:formatDate value="${product.PRODUCT_REGDATE }" pattern="yyyy년 MM월 dd일 HH:mm"/>
+													<fmt:formatDate value="${product.PRODUCT_REGDATE }" pattern="yyyy년 MM월 dd일 (a K:mm)"/>
 												</div>
 												<div class="info-view">
 													<img src="<c:url value='/resources/customer/img/view.png'/>">
@@ -224,36 +224,40 @@
 	    let btn_r = $("#head_review");
 	    let btn_b = $("#head_bookmark");
 		
-		/* 마이페이지 상품 리스트 */
-		btn_p.click(function(){
-			myCategory("myProductList");
-			optOut();
-			selectButton(btn_p,$(".product_name"));
-		}); // .click이벤트
+	    function selectButton(btn, font) {
+    	  // 선택한 버튼에만 스타일 적용
+    	  btn.css('background', '#16A7F1');
+    	  font.css('color', 'white');
+    	  
+    	  // 선택하지 않은 버튼 스타일 초기화
+    	  $('.head_category').not(btn).css('background', 'rgb(250, 250, 250)');
+    	  $('.head_category').not(btn).find('span').css('color', 'black');
+    	}
 
-		/* 마이페이지 상품후기 리스트 */
-		btn_r.click(function(){
-			myCategory("myReview");
-			optOut();
-			selectButton(btn_r,$(".review_name"));
-		}); // .click이벤트
+    	function optOut() {
+    	  // 모든 버튼 스타일 초기화
+    	  $('.head_category').css('background', 'rgb(250, 250, 250)');
+    	  $('.head_category span').css('color', 'black');
+    	}
 
-		/* 마이페이지 찜 리스트 */
-		btn_b.click(function(){
-			myCategory("myBookmark");
-			optOut();
-			selectButton(btn_b,$(".bookmark_name"));
-		}); // .click이벤트
+    	// 클릭 이벤트
+    	btn_p.click(function(){
+    	  myCategory("myProductList");
+    	  optOut();
+    	  selectButton(btn_p, $(".product_name"));
+    	});
 
-		function selectButton(btn,font){
-			btn.css('background','#16A7F1');
-			font.css('color','white');
-		}
-		
-		function optOut(){
-			$('.head_category').css('background','rgb(250, 250, 250)');
-			$("span").css('color','black');
-		}
+    	btn_r.click(function(){
+    	  myCategory("myReview");
+    	  optOut();
+    	  selectButton(btn_r, $(".review_name"));
+    	});
+
+    	btn_b.click(function(){
+    	  myCategory("myBookmark");
+    	  optOut();
+    	  selectButton(btn_b, $(".bookmark_name"));
+    	});
 		
 		pageInfo = {
 				'member_no': member_no,
