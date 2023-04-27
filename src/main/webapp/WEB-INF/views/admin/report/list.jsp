@@ -29,8 +29,7 @@
 								<li class="condition-selected" data-condition="">전체</li>
 								<li data-condition="1">상품신고</li>					
 								<li data-condition="2">채팅신고</li>					
-								<li data-condition="3">거래신고</li>					
-								<li data-condition="4">리뷰신고</li>					
+								<li data-condition="3">거래신고</li>
 								<li data-condition="5">기타</li>					
 							</ul>
 						</div>
