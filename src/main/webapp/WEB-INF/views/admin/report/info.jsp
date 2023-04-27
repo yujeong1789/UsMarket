@@ -38,7 +38,7 @@
 					<div class="info-title">신고대상</div>
 					<div class="info-info frm">
 						<span class="">${infoMap.REPORT_MEMBER_ID }</span>
-						<img src="<c:url value='/resources/admin/img/icon/redirect.png'/>">
+						<img class="icon" src="<c:url value='/resources/admin/img/icon/redirect.png'/>">
 					</div>
 					<form action="<c:url value='/admin/member/info'/>" method="post">
 						<input type="hidden" name="member_no" value="${infoMap.REPORT_MEMBER_NO }">
@@ -51,7 +51,7 @@
 							<div class="info-info">
 								<a href="<c:url value='/product/info?product_no=${infoMap.REPORT_INFO}' />">
 									<span>${infoMap.REPORT_INFO }</span>
-									<img src="<c:url value='/resources/admin/img/icon/redirect.png'/>">
+									<img class="icon" src="<c:url value='/resources/admin/img/icon/redirect.png'/>">
 								</a>
 							</div>
 						</c:when>
@@ -60,14 +60,14 @@
 							<div class="info-info info-chat">
 								<jsp:include page="/WEB-INF/views/admin/report/chat_modal.jsp"/>
 								<span class="chat-modal-open">${infoMap.REPORT_INFO }</span>
-								<img src="<c:url value='/resources/admin/img/icon/redirect.png'/>">
+								<img class="icon" src="<c:url value='/resources/admin/img/icon/redirect.png'/>">
 							</div>
 						</c:when>
-						<c:when test="${infoMap.REPORT_CATEGORY1_NO eq 3 || infoMap.REPORT_CATEGORY1_NO eq 4}">
+						<c:when test="${infoMap.REPORT_CATEGORY1_NO eq 3}">
 							<div class="info-title">거래내역</div>
 							<div class="info-info frm">
 								<span>${infoMap.REPORT_INFO }</span>
-								<img src="<c:url value='/resources/admin/img/icon/redirect.png'/>">
+								<img class="icon" src="<c:url value='/resources/admin/img/icon/redirect.png'/>">
 							</div>
 							<form action="<c:url value='/admin/payment/info'/>" method="post">
 								<input type="hidden" name="deal_no" value="${infoMap.REPORT_INFO }">
@@ -88,7 +88,7 @@
 					<div class="info-title">신고내용</div>
 						<div class="info-info">
 							<c:if test="${not empty infoMap.REPORT_IMAGE }">
-								<img src="${'https://usmarket.s3.ap-northeast-2.amazonaws.com/' += infoMap.REPORT_IMAGE }">
+								<img class="report-img" src="${'https://usmarket.s3.ap-northeast-2.amazonaws.com/' += infoMap.REPORT_IMAGE }">
 							</c:if>
 						<span>${infoMap.REPORT_CONTENT }</span>
 					</div>
