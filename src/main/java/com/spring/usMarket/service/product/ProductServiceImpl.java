@@ -27,7 +27,7 @@ public class ProductServiceImpl implements ProductService {
 
 	
 	public String getResult(int rowCnt) {
-		return rowCnt == 1 ? "OK" : "NOT_OK";
+		return rowCnt == 1 ? "SUCCESS" : "FAIL";
 	}
 	
 	
@@ -68,7 +68,7 @@ public class ProductServiceImpl implements ProductService {
 	public List<ProductDto> getMainProduct() throws Exception {
 		
 		List<ProductDto> mainProduct = productDao.searchMainProduct();
-		logger.info("메인 페이지 상품.size() = {}", mainProduct.size());
+		logger.info("메인 페이지 상품 수 = {}", mainProduct.size());
 		
 		return mainProduct;
 	}
@@ -81,7 +81,7 @@ public class ProductServiceImpl implements ProductService {
 		logger.info("SearchCondition = {}", sc);
 		
 		List<ProductDto> listProduct = productDao.searchProductByCategory(sc);
-		logger.info("페이지 내 상품 리스트.size() = {}", listProduct.size());
+		logger.info("페이지 내 상품 수 = {}", listProduct.size());
 		
 		return listProduct;
 	}
@@ -229,7 +229,7 @@ public class ProductServiceImpl implements ProductService {
 	public int removeProductImage(String product_no) throws Exception {
 		
 		int rowCnt = productDao.deleteProductImage(product_no);
-		logger.info("상품 이미지 삭제 결과 = {}", rowCnt);
+		logger.info("상품 이미지 삭제 결과 = {}", getResult(rowCnt));
 		
 		return rowCnt;
 	}
