@@ -23,9 +23,9 @@
 			<!-- 카테고리 영역 -->
 			<a class="home" href="<c:url value='/'/>">홈</a>
 			<span class="home__span"></span>
-			<a id="info__category1" href="<c:url value='/product/list?category1=${productInfo.PRODUCT_CATEGORY1_NO }'/>">${productInfo.PRODUCT_CATEGORY1_NAME }</a>
+			<a id="info__category1" href="​<c:url value='/product/list?category1=${productInfo.PRODUCT_CATEGORY1_NO }'/>">${productInfo.PRODUCT_CATEGORY1_NAME }</a>
 			<span class="before__span"></span>
-			<a id="info__category2" href="<c:url value='/product/list?category1=${productInfo.PRODUCT_CATEGORY1_NO }&category2=${productInfo.PRODUCT_CATEGORY2_NO }'/>">${productInfo.PRODUCT_CATEGORY2_NAME}</a>
+			<a id="info__category2" href="​<c:url value='/product/list?category1=${productInfo.PRODUCT_CATEGORY1_NO }&category2=${productInfo.PRODUCT_CATEGORY2_NO }'/>">${productInfo.PRODUCT_CATEGORY2_NAME}</a>
 			
 			<div class="product__info">
 				<!-- 상품 정보 영역 -->
@@ -85,7 +85,7 @@
 					</div>
 					
 					<!-- 내 상품일 경우 -->
-					<c:if test="${isMyProduct }">
+					<c:if test="${isMyProduct​ }">
 						<c:choose>
 							<c:when test="${productInfo.PRODUCT_STATE_NO eq 1 or productInfo.PRODUCT_STATE_NO eq 2}">
 								<div class="product__my__buttons" id="product__my__buttons">
@@ -351,6 +351,7 @@ function productRemove(){
 				location.replace('${pageContext.request.contextPath}/');
 			}else{
 				alert('상품 삭제에 실패했습니다.');
+				location.reload();
 			}
 		}).catch((error) => console.error('error: ' + error));
 	}	
@@ -443,7 +444,7 @@ function productStateChange(el){
 				alert('상태 변경에 실패했습니다.');
 			}
 			location.reload();
-		}).catch((error) => console.error('error: '+error));
+		}).catch((error) => console.error('error: ' + error));
 	}
 };
 </script>
