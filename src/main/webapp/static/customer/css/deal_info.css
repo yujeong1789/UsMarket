@@ -326,3 +326,18 @@
 	object-fit: contain;
 	padding-bottom: 1px;
 }
+
+.report-div{
+	display: flex;
+	align-items: center;
+	cursor: pointer;
+	color: #FE5A5A;
+	font-weight: 600;
+}
+
+.report-div > img{
+	width: 16px;
+	margin-right: 3px;
+	margin-bottom: 3px;
+	object-fit: contain;
+}
