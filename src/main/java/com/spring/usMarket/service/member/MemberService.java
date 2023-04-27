@@ -22,6 +22,7 @@ public interface MemberService {
 	Map<String, Object> loginCheckID(String member_id) throws Exception;
 	String upload(MultipartFile file)throws IOException;
 	MemberDto getMemberInfo(String member_no) throws Exception;
+	List<Map<String, Object>> getProductStateCnt(String member_no) throws Exception;
 	
 	List<Map<String, Object>> getProduct(ProfileSearchCondition sc) throws Exception;
 	int getProductCnt(String member_no, String condition) throws Exception;

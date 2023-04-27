@@ -19,6 +19,7 @@ public interface MemberDao {
 	
 	Map<String, Object> idLogin(String member_id) throws Exception;
 	MemberDto memberSearch(Integer member_no) throws Exception;
+	List<Map<String, Object>> productStateCnt(Integer member_no) throws Exception;
 	
 	List<Map<String, Object>> searchProduct(ProfileSearchCondition sc) throws Exception;
 	int searchProductCnt(Integer member_no, String condition) throws Exception;

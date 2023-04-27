@@ -70,6 +70,11 @@ public class MemberDaoImpl implements MemberDao{
 	public Map<String, Object> idLogin(String member_id) throws Exception {
 		return session.selectOne(namespace+"idLogin", member_id);
 	}
+	
+	@Override
+	public List<Map<String, Object>> productStateCnt(Integer member_no) throws Exception {
+		return session.selectList(namespace+"productStateCnt", member_no);
+	}
 
 	@Override
 	public MemberDto memberSearch(Integer member_no) throws Exception {
