@@ -12,8 +12,8 @@
 			</div>	
 			<div class="deal-list">
 				<div class="deal-list-header">
-					<div class="${condition eq 'buy' ? 'condition-selected' : '' }" data-condition="buy" onclick="setCondition(this)">구매</div>
-					<div class="${condition eq 'sell' ? 'condition-selected' : '' }" data-condition="sell" onclick="setCondition(this)">판매</div>
+					<div class="${condition eq 'buy' ? 'condition-selec​ted' : '' }" data-condition="buy" onclick="setCondition(this)">구매</div>
+					<div class="${condition eq 'sell' ? 'condition-​selected' : '' }" data-condition="sell" onclick="setCondition(this)">판매</div>
 				</div>
 				<div class="deal-states">
 					<div class="${empty state or state eq '' ? 'state-selected' : '' }" data-state="" onclick="setState(this)">전체</div>
@@ -62,6 +62,8 @@ document.querySelectorAll('.deal-list li').forEach(el => function(){
 	});
 });
 
+
+// 거래종류별 거래내역 조회
 let setCondition = function(el){
 	document.querySelector('.condition-selected').classList.remove('condition-selected');
 	el.className = 'condition-selected';
@@ -72,6 +74,8 @@ let setCondition = function(el){
 	getDealList();
 };
 
+
+// 거래상태별 거래내역 조회
 let setState = function(el){
 	document.querySelector('.state-selected').classList.remove('state-selected');
 	el.className = 'state-selected';
@@ -79,11 +83,14 @@ let setState = function(el){
 	getDealList();
 };
 
+// 거래내역 상세보기 이동
 let getDealInfo = function(el){
 	document.getElementById('deal_no').value = el.dataset.no;
 	document.getElementById('dealInfoForm').submit();
 };
 
+
+// 거래내역 조회
 let getDealList = function(page){
 	let params = new FormData();
 	params.append('condition', document.querySelector('.condition-selected').dataset.condition);
