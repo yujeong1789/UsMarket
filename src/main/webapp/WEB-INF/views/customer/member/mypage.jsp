@@ -240,8 +240,6 @@
 <script type="text/javascript">
 	$(document).ready(function(){
 		let member_no = ${memberInfo.member_no};
-	    let method = null;
-	    let list = null;
 	    	    
 	    let btn_p = $("#head_product");
 	    let btn_r = $("#head_review");
