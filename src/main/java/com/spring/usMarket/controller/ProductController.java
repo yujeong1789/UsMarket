@@ -40,14 +40,14 @@ public class ProductController {
 		logger.info("queryString = "+sc.getQueryString(sc.getPage()));
 		
 		try {
-			if(sc.getKeyword() == null || sc.getKeyword() == "") {
+			if(sc.getKeyword() == null || sc.getKeyword() == "​") {
 				// 검색 아닐시 하위 카테고리 출력
 				List<ProductCategoryDto>categoryList2 = productService.getProductCategory2(sc.getCategory1());
 				String category1_name = categoryList2.get(0).getProduct_category1_name();
 				
 				model.addAttribute("categoryList2", categoryList2);
 				model.addAttribute("category1_name", category1_name);
-			} // if
+			}
 			
 			List<ProductDto> productList = productService.getProductByCategory(sc);
 			int totalCnt = productService.getProductCount(sc);
@@ -61,7 +61,7 @@ public class ProductController {
 			
 		} catch (Exception e) {
 			e.printStackTrace();
-		} // try-catch
+		}
 	}
 	
 	
@@ -131,7 +131,7 @@ public class ProductController {
 			
 		} catch (Exception e) {
 			e.printStackTrace();
-		} // try-catch
+		}
 		
 		return "/product/info";
 	}
