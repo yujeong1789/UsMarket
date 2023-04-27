@@ -50,10 +50,15 @@
 	<!-- 거래상태 변경 -->
 	<update id="updateDealState" parameterType="map">
 		UPDATE deal 
-		SET deal_state = #{deal_state} 
-		<if test='deal_state == "1" or deal_state.equals("1")'> 
-			, deal_delivery_state = 1 
-		</if>
+		SET deal_state = #{deal_state}
+		<choose>
+			<when test='deal_state == "1" or deal_state.equals("1")'>
+				, deal_delivery_state = 1 
+			</when>
+			<otherwise>
+				, deal_complete_date = CURRENT_DATE 
+			</otherwise>
+		</choose>
 		WHERE deal_no = #{deal_no}
 	</update>
 	
@@ -63,6 +68,7 @@
 		SET deal_cancel = #{deal_cancel} 
 		<if test='deal_cancel == "1" or deal_cancel.equals("1")'>
 			, deal_state = 3 
+			, deal_complete_date = CURRENT_DATE
 		</if>
 		WHERE deal_no = #{deal_no}
 	</update>

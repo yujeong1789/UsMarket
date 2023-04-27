@@ -61,8 +61,10 @@
 						<div class="info-info"><fmt:formatNumber type="number" value="${dealInfo.PRODUCT_PRICE }"/>원</div>
 					</div>
 					<div class="info">
-						<div class="info-title">주문일시</div>
-						<div class="info-info"><fmt:formatDate value="${dealInfo.DEAL_START_DATE }" pattern="yyyy.MM.dd (a hh:mm)" /></div>
+						<div class="info-title">${not empty dealInfo.DEAL_COMPLETE_DATE ? '거래종료일' : '주문일시'}</div>
+						<div class="info-info">
+							<fmt:formatDate value="${not empty dealInfo.DEAL_COMPLETE_DATE ? dealInfo.DEAL_COMPLETE_DATE : dealInfo.DEAL_START_DATE }" pattern="yyyy.MM.dd (a hh:mm)" />
+						</div>
 					</div>
 					<c:if test="${mode eq 'buy' and dealInfo.DEAL_STATE eq '0'}">
 						<div class="alert-message">판매자의 승인을 기다리고 있습니다.</div>
@@ -207,7 +209,8 @@
 						</c:if>
 					</div>
 				</c:if>
-			</div>
+				<div class="deal-list-btn" onclick="location.href='<c:url value="/deal/list"/>'">목록</div>
+			</div> <!-- deal-info-layout -->
 		</div>
 	</div>
 	<form id="dealInfoForm" action="<c:url value='/deal/info'/>" method="post">
@@ -221,6 +224,7 @@ document.addEventListener('DOMContentLoaded', function(){
 	connectWs();
 });
 
+// 거래 승인 or 취소
 let setAccept = function(el){
 	 dealStateModify(confirm('거래를 '+el.textContent+'하시겠습니까?'), el.dataset.no);
 };
@@ -337,10 +341,12 @@ let setDeliveryState = function(confirm, deal_delivery_state){
 	}
 };
 
+// 구매확정
 let setDeliveryReceive = function(el){
 	setDeliveryState(confirm('구매확정하신 뒤에는 취소신청이 불가합니다.\n반드시 상품을 수령하신 뒤에 구매확정해 주세요.'), el.dataset.state);
 };
 
+// 판매자 배송상태 변경
 let setSellerDeliveryState = function(el){
 	setDeliveryState(confirm('배송상태를 '+el.dataset.current+'에서 '+el.textContent+'(으)로 변경하시겠습니까?'), el.dataset.state);
 };
@@ -405,7 +411,6 @@ if(document.getElementById('review_content') != null){
 			.then((response) => response.text())
 			.then((text) => {
 					if(text == 2){
-						// 채팅 알림 발송 기능 추가할 것
 						sendMessge(`${dealInfo.PRODUCT_NAME}` + ' 상품 거래의 리뷰가 등록되었습니다.', '리뷰등록');
 						alert("리뷰가 등록되었습니다.");
 					}else{
