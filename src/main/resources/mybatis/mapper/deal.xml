@@ -60,7 +60,10 @@
 	<!-- 취소신청 -->
 	<update id="updateDealCancel" parameterType="map">
 		UPDATE deal
-		SET deal_cancel = #{deal_cancel}
+		SET deal_cancel = #{deal_cancel} 
+		<if test='deal_cancel == "1" or deal_cancel.equals("1")'>
+			, deal_state = 3 
+		</if>
 		WHERE deal_no = #{deal_no}
 	</update>
 	
