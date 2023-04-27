@@ -89,12 +89,13 @@
 
 .member_label{
 	color: #999999;
-	width: 100px;
+	width: 110px;
 }
 
 
 .member_regdate, .member_regdate, .member_id,
- .member_email, .member_hp, .member_name{
+ .member_email, .member_hp, .member_name,
+ .product_state{
 	display: flex;
 }
 
