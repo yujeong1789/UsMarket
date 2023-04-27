@@ -311,6 +311,10 @@ public class MemberController {
 
 			if (request.getParameter("member_no") != null) {
 		    	member_no = request.getParameter("member_no");
+				List<Map<String, Object>> productStateCnt= memberService.getProductStateCnt(member_no);
+				logger.info("제품 상태별 갯수 = {}",productStateCnt);
+				
+				model.addAttribute("stateCnt", productStateCnt);
 		    }
 			
 			MemberDto memberInfo = memberService.getMemberInfo(member_no);// 회원정보
@@ -319,20 +323,19 @@ public class MemberController {
 			sc.setPageSize(15);		
 			
 			List<Map<String, Object>> mypageProductList = memberService.getProduct(sc);//제품정보
-			logger.info("mypageProductList : {}",mypageProductList);
 			
-			int ProductCnt = memberService.getProductCnt(member_no, sc.getCondition());// 제품 전체 수
+			int productCnt = memberService.getProductCnt(member_no, sc.getCondition());// 제품 전체 수
 			int bookmarkCnt = memberService.getBookmarkCnt(member_no,sc.getCondition());// 찜 전체 수
 			int reviewCnt = memberService.getReviewCnt(member_no, sc.getCondition());// 리뷰 전체 수
 			
-			int totalCnt = ProductCnt;
+			int totalCnt = productCnt;
 			ProfilePageHandler pageHandler = new ProfilePageHandler(totalCnt, sc);
 
 			model.addAttribute("category", "productList");
 			model.addAttribute("memberInfo", memberInfo);
 			model.addAttribute("regdate",dateFormat.format(memberInfo.getMember_regdate()));
 			model.addAttribute("mypageList", mypageProductList);
-			model.addAttribute("product", ProductCnt);
+			model.addAttribute("product", productCnt);
 			model.addAttribute("review", reviewCnt);
 			model.addAttribute("bookmark", bookmarkCnt);
 			model.addAttribute("Page", sc.getPage());
