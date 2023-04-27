@@ -36,7 +36,23 @@
 						<img src="<c:url value='/resources/customer/img/categories/line1.png' />">
 						<span>전체 카테고리</span>
 					</div>
-					<ul id="ul__allCategory"></ul>
+					<ul id="ul__allCategory">
+						<li><a id="1" href="<c:url value='/product/list?category1=1'/>">여성의류</a></li>
+						<li><a id="2" href="<c:url value='/product/list?category1=2'/>">남성의류</a></li>
+						<li><a id="3" href="<c:url value='/product/list?category1=3'/>">패션잡화</a></li>
+						<li><a id="4" href="<c:url value='/product/list?category1=4'/>">시계/쥬얼리</a></li>
+						<li><a id="5" href="<c:url value='/product/list?category1=5'/>">디지털/가전</a></li>
+						<li><a id="6" href="<c:url value='/product/list?category1=6'/>">스포츠/레저</a></li>
+						<li><a id="7" href="<c:url value='/product/list?category1=7'/>">차량/오토바이</a></li>
+						<li><a id="8" href="<c:url value='/product/list?category1=8'/>">음반/악기</a></li>
+						<li><a id="9" href="<c:url value='/product/list?category1=9'/>">도서/티켓/문구</a></li>
+						<li><a id="10" href="<c:url value='/product/list?category1=10'/>">뷰티/미용</a></li>
+						<li><a id="11" href="<c:url value='/product/list?category1=11'/>">가구/인테리어</a></li>
+						<li><a id="12" href="<c:url value='/product/list?category1=12'/>">생활/가공식품</a></li>
+						<li><a id="13" href="<c:url value='/product/list?category1=13'/>">유아동/출산</a></li>
+						<li><a id="14" href="<c:url value='/product/list?category1=14'/>">반려동물용품</a></li>
+						<li><a id="15" href="<c:url value='/product/list?category1=15'/>">기타</a></li>
+					</ul>
 				</div> <!-- hero__categories__all -->
 			</div>
 		</div>
@@ -44,41 +60,21 @@
 </section>
 
 <script type="text/javascript">
-	document.addEventListener('DOMContentLoaded', () => {
+const searchForm = document.getElementById('searchForm');
+searchForm.addEventListener('submit', function(e){
+	if(document.getElementById('searchKeyword').value.length < 2){
+		alert("검색어는 두 글자 이상 입력해 주세요.");
+		e.preventDefault();
+	};
+});
 		
-		const div__allCategory = document.getElementById('hero__categories__all');
-		const ul__allCategory = document.getElementById('ul__allCategory');
-		
-
-		fetch("/usMarket/fetch/category")
-		.then((response) => response.json())
-		.then((json) => {
-			json.forEach((el, i) => {
-				const li = document.createElement('li');
-				const innerHTML_ = '<a id='+el.PRODUCT_CATEGORY1_NO+' href=${pageContext.request.contextPath}/product/list?category1='+el.PRODUCT_CATEGORY1_NO+'>'+el.PRODUCT_CATEGORY1_NAME+'</a>'; 
-				li.innerHTML+=innerHTML_;
-				ul__allCategory.appendChild(li);
-			});
-		}).catch((error) => console.log("error: "+error)); // fetch
-			
-		
-		const searchForm = document.getElementById('searchForm');
-		searchForm.addEventListener('submit', function(e){
-			if(document.getElementById('searchKeyword').value.length < 2){
-				alert("검색어는 두 글자 이상 입력해 주세요.");
-				e.preventDefault();
-			};
-		});
-		
-		
-		if(!isEmpty(document.getElementById('loginNo').getAttribute('data-no'))){
-			fetch("/usMarket/fetch/newchat")
-			.then((response) => response.text())
-			.then((text) => {
-				if(text > 0){
-					document.querySelector('.hero__search__mypage > img').style.visibility = 'visible';
-				}
-			}).catch((error) => console.log("error: "+error));
-		}
-	});
+if(!isEmpty(document.getElementById('loginNo').dataset.no)){
+	fetch('/usMarket/fetch/newchat')
+	.then((response) => response.text())
+	.then((text) => {
+		if(text > 0){
+			document.querySelector('.hero__search__mypage > img').style.visibility = 'visible';
+		}	
+	}).catch((error) => console.log("error: "+error));
+}
 </script>
