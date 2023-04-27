@@ -24,12 +24,16 @@ public class IndexController { // 메인 페이지 출력
 	@Autowired private NoticeService noticeService;
 	
 	@GetMapping("/")
-	public String main(Model m) throws Exception {
+	public String main(Model model) {
 
-		List<ProductDto> mainProductList = productService.getMainProduct();
-		logger.info("mainProductList.size()= " + mainProductList.size());
+		List<ProductDto> mainProductList = new ArrayList<>();
+		try {
+			mainProductList = productService.getMainProduct();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 
-		m.addAttribute("mainProductList", mainProductList);
+		model.addAttribute("mainProductList", mainProductList);
 
 		return "index";
 	}
