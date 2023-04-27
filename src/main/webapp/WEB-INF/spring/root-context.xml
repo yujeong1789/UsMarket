@@ -8,8 +8,10 @@
 		http://www.springframework.org/schema/beans https://www.springframework.org/schema/beans/spring-beans.xsd
 		http://www.springframework.org/schema/context https://www.springframework.org/schema/context/spring-context.xsd http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd">
 	
+	<!-- Root Context: defines shared resources visible to all other web components -->
 	<context:property-placeholder location="classpath:props/database.properties ,classpath:props/mailsender.properties" />
 	
+	<!-- 파일 업로드를 위한 MutipartResolver 구현체 CommonsMultipartResolver  bean 등록 -->
 	<bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
 	  <property name="maxUploadSize" value="104857600"/>
 	  <property name="maxUploadSizePerFile" value="104857600"/>
@@ -23,13 +25,14 @@
 		<property name="password" value="${db.password}"/>
 	</bean>
 	
+	<!-- sql파일 위치 및 설정 -->
 	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
 		<property name="dataSource" ref="dataSource"/>
 		<property name="configLocation"  value="classpath:config/mybatis-config.xml"/>
 		<property name="mapperLocations" value="classpath:mybatis/mapper/*.xml"/>
 	</bean>
 
-	<bean id="sqlSession" class="org.mybatis.spring.SqlSessionTemplate​">
+	<bean id="sqlSession" class="org.mybatis.spring.SqlSessionTemplate">
 		<constructor-arg ref="sqlSessionFactory"/>
 	</bean>
 
