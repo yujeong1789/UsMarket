@@ -61,8 +61,10 @@
 						<div class="info-info"><fmt:formatNumber type="number" value="${dealInfo.PRODUCT_PRICE }"/>원</div>
 					</div>
 					<div class="info">
-						<div class="info-title">주문일시</div>
-						<div class="info-info"><fmt:formatDate value="${dealInfo.DEAL_START_DATE }" pattern="yyyy.MM.dd (a hh:mm)" /></div>
+						<div class="info-title">${not empty dealInfo.DEAL_COMPLETE_DATE ? '거래종료일' : '주문일시'}</div>
+						<div class="info-info">
+							<fmt:formatDate value="${not empty dealInfo.DEAL_COMPLETE_DATE ? dealInfo.DEAL_COMPLETE_DATE : dealInfo.DEAL_START_DATE }" pattern="yyyy.MM.dd (a hh:mm)" />
+						</div>
 					</div>
 					<c:if test="${mode eq 'buy' and dealInfo.DEAL_STATE eq '0'}">
 						<div class="alert-message">판매자의 승인을 기다리고 있습니다.</div>
