@@ -153,19 +153,24 @@
 							<div class="review-right">
 								<div class="review-info">
 									<div class="info-label">
-										<div class="info-label-nickname">판매자</div>
-										<span><c:out value="${review.MEMBER_NICKNAME }"/></span>
+										<div class="info-label-nickname">구매자</div>
+										<span class="info-redirect" onclick="location.href='<c:url value="/member/mypage?member_no=${review.MEMBER_NO }"/>'">
+											<c:out value="${review.MEMBER_NICKNAME }"/>
+											<img src="<c:url value='/resources/admin/img/icon/redirect.png'/>">
+										</span>
 									</div>
-									<div class="review-info-right">
-										<div class="info-label-regdate">등록 시간</div>
-										<span class="name-right"><fmt:formatDate value="${review.REVIEW_REGDATE }" pattern="yyyy년 MM월 dd일 (a K:mm)"/></span>
+									<div class="info-label">
+										<div class="info-label-product">판매상품</div>
+										<span class="info-redirect" onclick="location.href='<c:url value="/product/info?product_no=${review.PRODUCT_NO }"/>'">
+											<c:out value="${review.PRODUCT_NAME }"/>
+											<img src="<c:url value='/resources/admin/img/icon/redirect.png'/>">
+										</span>
 									</div>
 								</div>
-								
 								<div class="review-info">
-									<div class="info-label">
-										<div class="info-label-product">구매한 상품</div>
-										<span><c:out value="${review.PRODUCT_NAME }"/></span>
+									<div class="review-info-right">
+										<div class="info-label-regdate">등록 시간</div>
+										<span class="name-right"><fmt:formatDate value="${review.REVIEW_REGDATE }" pattern="yyyy년 MM월 dd일 (a hh:mm)"/></span>
 									</div>
 								</div>
 								<div class="review-info-score">
@@ -180,7 +185,7 @@
 										</c:choose>
 									</c:forEach>
 								</div>
-								<input type="text" class="review-content"value="${review.REVIEW_CONTENT }" readonly>
+								<textarea class="review-content" readonly>${review.REVIEW_CONTENT }</textarea>
 							</div>
 						</li>
 					</c:forEach>
