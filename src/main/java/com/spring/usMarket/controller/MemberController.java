@@ -64,6 +64,7 @@ public class MemberController {
 		}
 		
 		logger.info("referer = {}", uri);
+		
 		return "member/login";
 	}
 	
@@ -90,18 +91,21 @@ public class MemberController {
 			model.addAttribute("msg", msg);
 			model.addAttribute("mem_id", member_id);
 			model.addAttribute("mem_pw", member_password);
+			
 			return "member/login";
 		}
 
 		logger.info("로그인 성공");
 		if (member_password.length() == 6) {
 			ratt.addFlashAttribute("loginMember", member);
+			
 			return "redirect:/member/join?mode=uppw";
 		}
 
 		session.setAttribute("userId", member_id);
 		session.setAttribute("userNo", member.get("MEMBER_NO"));
 		logger.info("prevPage = {}", prevPage);
+		
 		return "redirect:" + prevPage;
 	}
 
@@ -206,13 +210,14 @@ public class MemberController {
 		member.put("member_password", request.getParameter("member_password"));
 
 		int result = memberService.resetMember(member);
-		logger.info("result", result);
+		logger.info("result = {}", result);
 		
 		httpSession.setAttribute("userId", request.getParameter("member_id"));
 		httpSession.setAttribute("userNo", request.getParameter("member_no"));
 		
-		logger.info("prevPage= {}",request.getSession().getAttribute("prevPage"));
-		return "redirect:" + request.getSession().getAttribute("prevPage");
+		logger.info("prevPage = {}",request.getSession().getAttribute("prevPage"));
+		
+		return "redirect:/";
 	}
 	
 	@GetMapping("/join")
@@ -238,7 +243,7 @@ public class MemberController {
 	        }
 	        logger.info(mode);
 	        model.addAttribute("mode", mode);
-	        model.addAttribute("member",request.getParameter("member"));
+	        model.addAttribute("member", request.getParameter("member"));
 	    } catch (Exception e) {
 	        e.printStackTrace();
 	    }
@@ -274,6 +279,7 @@ public class MemberController {
 			e.printStackTrace();
 			return "member/join";
 		}// try-catch
+		
 		return "redirect:" + prevPage;
 	}
 
@@ -299,6 +305,7 @@ public class MemberController {
 			e.printStackTrace();
 			return "member/join?mode=modify";
 		}// try-catch
+		
 		return "redirect:/member/mypage";
 	}
 	
@@ -345,6 +352,7 @@ public class MemberController {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		
 		return "member/mypage";
 	}
 	
@@ -489,9 +497,9 @@ public class MemberController {
 	@ResponseBody
 	@PostMapping("/emailCheck")
 	public String EmailCheck(@RequestBody String member_email) throws Exception {
-		logger.info("memberEmail= " + member_email);
+		logger.info("memberEmail = " + member_email);
 		String result = memberService.checkEmail(member_email);
-		logger.info("emailCheck result= " + result);
+		logger.info("emailCheck result = " + result);
 
 		return result;
 	}
@@ -529,7 +537,5 @@ public class MemberController {
 			e.printStackTrace();
 			return result;
 		}
-	} // end sendMailTest()
-
-	
+	}
 }
