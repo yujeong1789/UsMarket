@@ -201,7 +201,7 @@
 		SELECT *
 		FROM(SELECT ROWNUM AS num, A.*
 			 FROM (
-			    SELECT m.MEMBER_IMAGE, m.MEMBER_NICKNAME, r.REVIEW_CONTENT, r.REVIEW_SCORE, r.REVIEW_REGDATE, p.PRODUCT_NAME, p.PRODUCT_NO
+			    SELECT m.MEMBER_IMAGE, m.MEMBER_NICKNAME, r.REVIEW_CONTENT, r.REVIEW_SCORE, r.REVIEW_REGDATE, p.PRODUCT_NAME, p.PRODUCT_NO, m.MEMBER_NO 
 			    FROM deal d 
 			    JOIN review r ON r.deal_no = d.deal_no
 			    JOIN member m ON m.member_no = d.customer_no
