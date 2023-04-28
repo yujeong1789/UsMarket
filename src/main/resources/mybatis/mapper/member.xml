@@ -121,6 +121,17 @@
 		SELECT count(*) 
 		 FROM product_view
 		 WHERE seller_no = #{member_no} AND product_state_no != 4
+		 <choose>
+			<when test="condition == 1">
+				AND product_state_no = 1 
+			</when>
+			<when test="condition == 2">
+				AND product_state_no = 2  
+			</when>
+			<when test="condition == 3">
+				AND product_state_no = 3  
+			</when>
+		</choose>
 	</select>
 	
 	<!-- 마이페이지 찜 출력 -->
@@ -172,6 +183,17 @@
 			SELECT DISTINCT(product_no) 
 			FROM bookmark 
 			WHERE member_no = #{member_no})	AND product_state_no != 4
+		<choose>
+			<when test="condition == 1">
+				AND product_state_no = 1 
+			</when>
+			<when test="condition == 2">
+				AND product_state_no = 2  
+			</when>
+			<when test="condition == 3">
+				AND product_state_no = 3  
+			</when>
+		</choose>
 	</select>
 	
 	<!-- 마이페이지 리뷰 출력 -->
@@ -225,5 +247,24 @@
         WHERE deal_no IN(SELECT deal_no 
                         FROM deal 
                         WHERE seller_no = #{member_no})
+        <choose>
+			<when test="condition == 1">
+			    AND review_score = 1 
+			</when>
+			<when test="condition == 2">
+			    AND review_score = 2  
+			</when>
+			<when test="condition == 3">
+			    AND review_score = 3  
+		  </when>
+		</choose>
+	</select>
+	
+	<!-- 내 상품 상태번호 출력 -->
+	<select id="productStateCnt" parameterType="Integer" resultType="map">
+		SELECT ps.PRODUCT_STATE_NAME AS state, COUNT(p.PRODUCT_NO) AS cnt
+		FROM product_state ps
+		LEFT JOIN product p ON p.PRODUCT_STATE_NO = ps.PRODUCT_STATE_NO AND p.SELLER_NO = #{member_no}
+		GROUP BY ps.PRODUCT_STATE_NAME
 	</select>
 </mapper>

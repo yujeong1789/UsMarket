@@ -44,23 +44,46 @@
 							<c:out value="${memberInfo.member_nickname }"/>
 						</div>
 							<div class="member_detail">
-							
-								<c:if test="${loginOn != memberInfo.member_no}">
-									<div class="member_report">
-										<div class="right" id="productReport" onclick="openReport()">
-											<div class="member_detail_icon">
-												<img alt="신고하기" src="<c:url value='/resources/customer/img/report.png'/>">
-											</div>
-											<span id="member_report">신고하기</span>
-										</div>
-									</div>
-								</c:if>
-								
 								<div class="member_regdate">
 									<div class="member_label">상점 오픈일</div>
 									<span><c:out value="${regdate }"/></span>
 								</div>
-								
+								<c:if test="${loginOn ne memberInfo.member_no}">
+									<c:forEach var="state" begin="1" end="3">
+										<c:choose>
+											<c:when test="${state == 1}">
+												<div class="product_state">
+													<div class="member_label">판매중인 상품</div>
+													<c:forEach var="item" items="${stateCnt}">
+														<c:if test="${item.STATE == '판매중' }">
+															<span><c:out value="${item.CNT }"/>개</span>
+														</c:if>
+													</c:forEach>
+												</div>
+											</c:when>
+											<c:when test="${state == 2}">
+												<div class="product_state">
+													<div class="member_label">판매한 상품</div>
+													<c:forEach var="item" items="${stateCnt}">
+														<c:if test="${item.STATE == '판매완료' }">
+															<span><c:out value="${item.CNT }"/>개</span>
+														</c:if>
+													</c:forEach>
+												</div>
+											</c:when>
+											<c:when test="${state == 3}">
+												<div class="product_state">
+													<div class="member_label">예약중인 상품</div>
+													<c:forEach var="item" items="${stateCnt}">
+														<c:if test="${item.STATE == '예약중' }">
+															<span><c:out value="${item.CNT }"/>개</span>
+														</c:if>
+													</c:forEach>
+												</div>
+											</c:when>
+										</c:choose>
+									</c:forEach>
+								</c:if>
 								<c:if test="${loginOn == memberInfo.member_no}">
 									<div class="member_name">
 										<div class="member_label">이름</div>
@@ -217,8 +240,6 @@
 <script type="text/javascript">
 	$(document).ready(function(){
 		let member_no = ${memberInfo.member_no};
-	    let method = null;
-	    let list = null;
 	    	    
 	    let btn_p = $("#head_product");
 	    let btn_r = $("#head_review");
@@ -337,20 +358,7 @@
 		    var page = $(this).find('input').val();
 		    myProductList(page);
 		});
-		
-		// 신고하기
-		function openReport() {
-		    if (isEmpty(member_no)) {
-		        location.href = '${pageContext.request.contextPath}/member/login';
-		        return;
-		    }
 
-		    $('#report_member_no').val(seller_no);
-		    $('#report_info').val(`${param.product_no}`);
-		    $('.report-info').text($('#fetch__member__nickname').text());
-		    reportModal.show();
-		};
-		
 		$(document).on('click', '.review-list li', function() {
 	        $('#product_no').val($(this).data('no'));
 	        $('#productInfoForm').submit();

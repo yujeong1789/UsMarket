@@ -156,23 +156,25 @@ public class MemberServiceImpl implements MemberService {
 		
 		return member;
 	}
-
+	
+	@Override
+	public List<Map<String, Object>> getProductStateCnt(String member_no) throws Exception {
+		List<Map<String, Object>> stateCnt = memberDAO.productStateCnt(Integer.parseInt(member_no));
+		
+		return stateCnt;
+	}
+	
 	@Override
 	@Transactional(rollbackFor = SQLException.class, readOnly = true)
 	public List<Map<String, Object>> getProduct(ProfileSearchCondition sc) throws Exception {
-		List<Map<String, Object>> productList = memberDAO.searchProduct(sc);
-		logger.info("productList = {}",productList);
-		
+		List<Map<String, Object>> productList = memberDAO.searchProduct(sc);		
 	    return productList;
 	}
 	
 	@Override
 	@Transactional(rollbackFor = SQLException.class, readOnly = true)
 	public int getProductCnt(String member_no, String condition) throws Exception {
-		
 		int productCount = memberDAO.searchProductCnt(Integer.parseInt(member_no), condition);
-		logger.info("ProductCount = {}", productCount);
-		
 		return productCount;
 	}
 
@@ -180,18 +182,13 @@ public class MemberServiceImpl implements MemberService {
 	@Transactional(rollbackFor = SQLException.class, readOnly = true)
 	public List<Map<String, Object>> getBookmark(ProfileSearchCondition sc) throws Exception {
 		List<Map<String, Object>> bookmarkList = memberDAO.searchBookmark(sc);
-		logger.info("bookmarkList = {}",bookmarkList);
-		
 		return bookmarkList;
 	}
 
 	@Override
 	@Transactional(rollbackFor = SQLException.class, readOnly = true)
 	public int getBookmarkCnt(String member_no, String condition) throws Exception {
-		
 		int bookmarkCount = memberDAO.searchBookmarkCnt(Integer.parseInt(member_no), condition);
-		logger.info("BookmarkCount = {}", bookmarkCount);
-	
 		return bookmarkCount;
 	}
 
@@ -199,8 +196,6 @@ public class MemberServiceImpl implements MemberService {
 	@Transactional(rollbackFor = SQLException.class, readOnly = true)
 	public List<Map<String, Object>> getReview(ProfileSearchCondition sc) throws Exception {
 		List<Map<String, Object>> review = memberDAO.searchReview(sc);
-		logger.info("review = {}",review);
-		
 		return review;
 	}
 
@@ -208,8 +203,6 @@ public class MemberServiceImpl implements MemberService {
 	public int getReviewCnt(String member_no, String condition) throws Exception {
 
 		int reviewCount = memberDAO.searchReviewCnt(Integer.parseInt(member_no), condition);
-		logger.info("ReviewCount = {}", reviewCount);
-	
 		return reviewCount;
 	}
 
