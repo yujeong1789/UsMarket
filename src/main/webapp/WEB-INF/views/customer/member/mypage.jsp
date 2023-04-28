@@ -358,11 +358,6 @@
 		    var page = $(this).find('input').val();
 		    myProductList(page);
 		});
-
-		$(document).on('click', '.review-list li', function() {
-	        $('#product_no').val($(this).data('no'));
-	        $('#productInfoForm').submit();
-	    });
 	}); // ready
 	
 	
