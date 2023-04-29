@@ -21,7 +21,7 @@
 		<project.build.soureEncoding>UTF-8</project.build.soureEncoding>
 	</properties>
 	
-		<dependencies>
+	<dependencies>
 		<!-- Spring -->
 		<dependency>
 			<groupId>org.springframework</groupId>
@@ -58,8 +58,15 @@
 		    <artifactId>spring-jdbc</artifactId>
 		    <version>${org.springframework-version}</version>
 		</dependency>
+		<!-- https://mvnrepository.com/artifact/org.springframework/spring-context-support -->
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-context-support</artifactId>
+            <version>${org.springframework-version}</version>
+        </dependency>
 
 
+		<!-- file upload -->
 		<!-- https://mvnrepository.com/artifact/commons-fileupload/commons-fileupload -->
 		<dependency>
 		    <groupId>commons-fileupload</groupId>
@@ -68,7 +75,7 @@
 		</dependency>
 
 
-
+		<!-- mybatis -->
 		<!-- https://mvnrepository.com/artifact/org.mybatis/mybatis -->
 		<dependency>
 			<groupId>org.mybatis</groupId>
@@ -216,7 +223,7 @@
 		</dependency>
 
 		
-		<!-- Web Socket 구현 위해 추가 -->
+		<!-- Web Socket -->
 		<!-- https://mvnrepository.com/artifact/org.springframework/spring-websocket -->
 		<dependency>
 		    <groupId>org.springframework</groupId>
@@ -248,16 +255,17 @@
 		    <artifactId>ojdbc8</artifactId>
 		    <version>19.3.0.0</version>
 			<exclusions>
-					<exclusion>
-						<groupId>com.oracle.database.ha</groupId>
-						<artifactId>simplefan</artifactId>
-					</exclusion>
-					<exclusion>
-						<groupId>com.oracle.database.ha</groupId>
-						<artifactId>ons</artifactId>
-					</exclusion>
-				</exclusions>
-			</dependency>
+				<exclusion>
+					<groupId>com.oracle.database.ha</groupId>
+					<artifactId>simplefan</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>com.oracle.database.ha</groupId>
+					<artifactId>ons</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+
 
 		<!-- https://mvnrepository.com/artifact/javax.mail/mail -->
         <dependency>
@@ -265,21 +273,16 @@
             <artifactId>mail</artifactId>
             <version>1.4.7</version>
         </dependency>        
-        
-        <!-- https://mvnrepository.com/artifact/org.springframework/spring-context-support -->
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-context-support</artifactId>
-            <version>${org.springframework-version}</version>
-        </dependency>
 
-		<!-- amazon s3 접근 관련 라이브러리 -->			
+
+		<!-- amazon s3 -->			
 		<!-- https://mvnrepository.com/artifact/com.amazonaws/aws-java-sdk-s3 -->
 		<dependency>
 		    <groupId>com.amazonaws</groupId>
 		    <artifactId>aws-java-sdk-s3</artifactId>
 		    <version>1.12.389</version>
 		</dependency>
+
 
 		<!-- security -->
         <!-- https://mvnrepository.com/artifact/org.springframework.security/spring-security-core -->
@@ -300,15 +303,14 @@
             <artifactId>spring-security-config</artifactId>
             <version>5.4.2</version>
         </dependency>
-
 		<!-- https://mvnrepository.com/artifact/org.mindrot/jbcrypt -->
 		<dependency>
 		    <groupId>org.mindrot</groupId>
 		    <artifactId>jbcrypt</artifactId>
 		    <version>0.4</version>
 		</dependency>
-
 	</dependencies>
+	
 	
 	<build>
 		<finalName>usMarket</finalName>
