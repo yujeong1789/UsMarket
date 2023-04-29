@@ -86,10 +86,10 @@ let getFileSize = function(filesize) {
 
 let getStartDate = function(month) {
 	var date = new Date();
-	date.setMonth(date.getMonth() - month); 
+	date.setMonth(date.getMonth() - parseInt(month)); 
 	
 	var year    = date.getFullYear();
-	var month   = leftPad(date.getMonth() + 1);
+	var month   = leftPad(date.getMonth());
 	return year+'-'+month+'-01';
 };
 
