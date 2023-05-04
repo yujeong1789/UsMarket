@@ -62,6 +62,16 @@ public class ProductServiceImpl implements ProductService {
 		return category2;
 	}
 
+
+	@Override
+	@Transactional(rollbackFor = SQLException.class, readOnly = true)
+	public List<ProductDto> getBestProduct() throws Exception {
+		
+		List<ProductDto> bestProduct = productDao.searchBestProduct();
+		logger.info("메인 페이지 인기 상품 수 = {}", bestProduct.size());
+		
+		return bestProduct;
+	}
 	
 	@Override
 	@Transactional(rollbackFor = SQLException.class, readOnly = true)
@@ -255,5 +265,4 @@ public class ProductServiceImpl implements ProductService {
 		
 		return resultMap;
 	}
-
 }

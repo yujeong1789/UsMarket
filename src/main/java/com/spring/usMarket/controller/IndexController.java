@@ -27,13 +27,16 @@ public class IndexController { // 메인 페이지 출력
 	public String main(Model model) {
 
 		List<ProductDto> mainProductList = new ArrayList<>();
+		List<ProductDto> bestProductList = new ArrayList<>();
 		try {
 			mainProductList = productService.getMainProduct();
+			bestProductList = productService.getBestProduct();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 
 		model.addAttribute("mainProductList", mainProductList);
+		model.addAttribute("bestProductList", bestProductList);
 
 		return "index";
 	}

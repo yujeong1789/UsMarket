@@ -44,12 +44,22 @@
 	</sql>
 
 
-	<!-- 메인 상품 전체 출력 -->
+	<!-- 메인 새로 등록된 상품 출력 -->
 	<select id="searchMainProduct" resultType="productDto">
 		<![CDATA[ 
 		SELECT product_no, product_name, product_price, product_img_path, product_regdate 
 		 FROM product_view 
-		 WHERE product_state_no = 1 AND member_state_no = 1 AND rownum <= 30 
+		 WHERE product_state_no = 1 AND member_state_no = 1 AND rownum <= 15 
+		]]>
+	</select>
+	
+	<!-- 메인 best 상품 출력 -->
+	<select id="searchBestProduct" resultType="productDto">
+		<![CDATA[ 
+			SELECT product_no, product_name, product_price, product_img_path, product_regdate 
+			FROM product_view 
+			WHERE product_state_no = 1 AND member_state_no = 1 AND rownum <= 5 
+			ORDER BY product_view DESC, product_regdate DESC 
 		]]>
 	</select>
 

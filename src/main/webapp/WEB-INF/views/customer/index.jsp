@@ -19,10 +19,41 @@
 	</div>
 	<div class="row">
 		<div class="container">
+			<!-- best 상품 -->
 			<div class="section-title">
-				<h3>오늘의 추천 상품</h3>
+				<h3>BEST 상품</h3>
 			</div>
-			
+			<div class="product__area">
+				<c:forEach var="productDto" items="${bestProductList }">
+				<div class="product__box">
+					<div class="product__img">
+						<a href="<c:url value='/product/info?product_no=${productDto.product_no}' />">
+							<img src="https://usmarket.s3.ap-northeast-2.amazonaws.com/${productDto.product_img_path }">
+						</a>
+					</div>
+					<div class="product__info__1">
+						<div class="product__title">
+							<a href="<c:url value='/product/info?product_no=${productDto.product_no}' />">
+								${productDto.product_name }
+							</a> <!-- 상품명 -->
+						</div>
+						<div class="product__info__2">
+							<div class="product__price">
+								<span><fmt:formatNumber value="${productDto.product_price }" pattern="#,###"/></span> <!-- 가격 -->
+							</div>
+							<div class="product__regdate">
+								${productDto.product_regdate}
+							</div> <!-- regdate -->
+						</div>
+					</div>
+				</div> <!-- product__box -->
+				</c:forEach>
+			</div> <!-- product__area -->
+		
+			<!-- 새로 등록된 상품 -->
+			<div class="section-title">
+				<h3>새로 등록된 상품</h3>
+			</div>
 			<div class="product__area">
 				<c:forEach var="productDto" items="${mainProductList }">
 				<div class="product__box">

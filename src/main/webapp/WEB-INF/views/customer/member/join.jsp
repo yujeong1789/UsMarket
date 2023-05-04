@@ -103,7 +103,7 @@
 					<div class="int-area-emailCheck">
 						<input type="hidden" name="member_email_check" id="email_check"autocomplete="off" required title="인증번호를 입력해주세요.">
 						<span class="mail_check_warn"></span>
-						<button type="button" class="email_check_btn"name="email_check_btn" disabled>인증번호 발송</button>
+						<button type="button" class="email_check_btn"name="email_check_btn" disabled>인증메일 발송</button>
 					</div>
 				</div>
 				<div class="int-area" id="hp-area">
@@ -186,11 +186,9 @@
 					</div>
 					<input type="text" name="member_address" id="address" readonly="readonly" required="required" value="${memberInfo.member_address }">
 				</div>
-				<div class="detail">
-					<div class="int-area">
-						<input type="text" name="member_address_detail" id="address_detail" readonly="readonly" required="required" value="${memberInfo.member_address_detail }">
-						<label for="address_detail" id="address_detail_label" style="display: none;">상세주소<sup>*</sup></label>
-					</div>
+				<div class="int-area">
+					<input type="text" name="member_address_detail" id="address_detail" readonly="readonly" required="required" value="${memberInfo.member_address_detail }">
+					<label for="address_detail" id="address_detail_label" style="display: none;">상세주소<sup>*</sup></label>
 				</div>
 				<div class="int-area">
 					<input type="text" name="member_email" id="email" autocomplete="off" required title="이메일을 입력해주세요." value="${memberInfo.member_email }">
@@ -198,7 +196,7 @@
 					<span class="email_status"></span>
 					<div class="int-area-emailCheck">
 						<input type="hidden" name="member_email_check" id="email_check"autocomplete="off" required title="인증번호를 입력해주세요.">
-						<button type="button" class="email_check_btn"name="email_check_btn" disabled>인증번호 발송</button>
+						<button type="button" class="email_check_btn"name="email_check_btn" disabled>인증메일 발송</button>
 					</div>
 					<span class="mail_check_warn"></span>
 				</div>
