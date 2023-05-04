@@ -9,6 +9,9 @@ import com.spring.usMarket.domain.product.ProductInsertDto;
 import com.spring.usMarket.utils.SearchCondition;
 
 public interface ProductDao {
+	
+	List<ProductDto> searchBestProduct() throws Exception;
+	
 	List<ProductDto> searchMainProduct() throws Exception;
 	
 	List<ProductDto> searchProductByCategory(SearchCondition sc) throws Exception;

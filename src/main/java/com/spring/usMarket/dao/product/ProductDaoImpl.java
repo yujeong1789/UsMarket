@@ -21,6 +21,11 @@ public class ProductDaoImpl implements ProductDao {
 	private static String namespace="com.mybatis.mapper.product.";
 	
 	@Override
+	public List<ProductDto> searchBestProduct() throws Exception {
+		return session.selectList(namespace+"searchBestProduct");
+	}	
+	
+	@Override
 	public List<ProductDto> searchMainProduct() throws Exception {
 		return session.selectList(namespace+"searchMainProduct");
 	}
@@ -119,6 +124,7 @@ public class ProductDaoImpl implements ProductDao {
 	@Override
 	public Map<String, Object> searchCustomerInfo(String customer_no) throws Exception {
 		return session.selectOne(namespace+"searchCustomerInfo", customer_no);
-	}	
+	}
+
 
 }
