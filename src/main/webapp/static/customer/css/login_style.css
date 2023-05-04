@@ -194,7 +194,7 @@ input:-webkit-autofill:active {
 .detail > .int-area-detail{
 	width: 400px; position: relative;
 }
-
+/* 
 #address, #address_detail{
 	display: none;
-}
+} */
