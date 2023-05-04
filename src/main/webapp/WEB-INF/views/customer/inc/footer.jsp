@@ -2,7 +2,7 @@
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <footer class="footer spad">
-	<div class="row border__btm">
+	<div class="row">
 		<div class="container">
 			<div class="footer__about">
 				<div class="footer__about__logo">
