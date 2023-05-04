@@ -16,6 +16,8 @@ public interface ProductService {
 	
 	List<Map<String, Object>> getCategory2(String product_category1_no) throws Exception;
 	
+	List<ProductDto> getBestProduct() throws Exception;
+	
 	List<ProductDto> getMainProduct() throws Exception;
 	
 	List<ProductDto> getProductByCategory(SearchCondition sc) throws Exception;
