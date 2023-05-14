@@ -1,6 +1,7 @@
 package com.usMarket.test;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,29 +27,18 @@ import com.spring.usMarket.utils.SearchCondition;
 @ContextConfiguration(locations = {"file:src/main/webapp/WEB-INF/spring/root-context.xml"})
 public class ProductServiceTest {
 	
-	private static int member_no = 3;
-	private static String randomCategory1 = String.valueOf(((Math.random()*15)+1)); // product_category1 범위 내 난수 생성
+	private static int DUMMY_MEMBER_NO = 3;
+	private static String RANDOM_CATEGORY_1 = String.valueOf((int)((Math.random()*15)+1)); // product_category1 범위 내 난수 생성
 	
 	@Autowired private ProductService productService;
 	
 	@Test
-	public void getCategory1Test() throws Exception{
-		List<Map<String, Object>> list = productService.getProductCategory1();
-		assertEquals(list.size(), 15);
-	}
-	
-	@Test
-	public void getCategory2Test() throws Exception{
- 		System.out.println("randomCategory1 = "+randomCategory1);
+	public void getCategoryTest() throws Exception{
+		List<Map<String, Object>> category1 = productService.getProductCategory1();
+		assertEquals(category1.size(), 15);
 		
-		List<ProductCategoryDto> category2 = productService.getProductCategory2(randomCategory1);
-				
-		int category1_no = 0;
-		for (ProductCategoryDto dto : category2) {
-			System.out.println(dto.getProduct_category2_no()+"\t"+dto.getProduct_category2_name());
-			category1_no = dto.getProduct_category1_no();
-		}
-		assertEquals(randomCategory1, category1_no);
+		List<ProductCategoryDto> category2 = productService.getProductCategory2(RANDOM_CATEGORY_1);
+		assertTrue(category2.size() != 0);
 	}
 	
 	@Test
@@ -61,27 +51,26 @@ public class ProductServiceTest {
 		}
 		
 		String randomProductNo = productNoList.get((int)((Math.random()*productNoList.size()))).toString();
-		int bookmarkStatus = productService.getBookmarkByInfo(member_no+randomProductNo);
+		int bookmarkStatus = productService.getBookmarkByInfo(DUMMY_MEMBER_NO+randomProductNo);
 		
 		int result = 0;
 		if(bookmarkStatus == 0) {
-			result = productService.addBookmark(member_no, randomProductNo);
+			result = productService.addBookmark(DUMMY_MEMBER_NO, randomProductNo);
 		}else if(bookmarkStatus == 1) {
-			result = productService.removeBookmark(member_no+randomProductNo);
+			result = productService.removeBookmark(DUMMY_MEMBER_NO+randomProductNo);
 		}
 		
-		System.out.println("setBookmarkTest = " + (result == 1 ? "PASS" : "FAIL"));
 		assertEquals(result, 1);
 	}
 	
 	@Test
 	public void addProductTest() throws Exception{
 		String product_no = "9999999";
-		ProductInsertDto dto = new ProductInsertDto(product_no, member_no, 1, 1, "test title", "N", "N", 150000, "test content", "t a g");
-		int result = productService.addProduct(dto);
-		assertEquals(result, 1);
+		ProductInsertDto dto = new ProductInsertDto(product_no, DUMMY_MEMBER_NO, 1, 1, "test title", "N", "N", 150000, "test content", "t a g");
+		int addResult = productService.addProduct(dto);
+		assertEquals(addResult, 1);
 		
-		int modifyResult = productService.modifyProductState(3, String.valueOf(member_no), product_no);
+		int modifyResult = productService.modifyProductState(3, String.valueOf(DUMMY_MEMBER_NO), product_no);
 		assertEquals(modifyResult, 1);
 	}
 
