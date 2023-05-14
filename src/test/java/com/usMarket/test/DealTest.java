@@ -1,8 +1,10 @@
 package com.usMarket.test;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import org.junit.Test;
@@ -15,12 +17,13 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.spring.usMarket.dao.deal.DealDao;
 import com.spring.usMarket.domain.deal.DealInsertDto;
+import com.spring.usMarket.service.deal.DealService;
 
 @Transactional
 @WebAppConfiguration
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = {"file:src/main/webapp/WEB-INF/spring/root-context.xml"})
-public class DealDaoTest {
+public class DealTest {
 	
 	@Autowired private DealDao dealDao;
 	
@@ -34,7 +37,7 @@ public class DealDaoTest {
 		
 		// select
 		Map<String, Object> dealInfo = dealDao.searchDealInfo(dto.getDeal_no());
-		assertTrue(!dealInfo.isEmpty());
+		assertNotNull(dealInfo);
 		
 		// update
 		int updateResult = dealDao.updateDealState("2", dto.getDeal_no());
@@ -44,8 +47,30 @@ public class DealDaoTest {
 		int dealReviewCnt = dealDao.updateDealReview(dto.getDeal_no());
 		assertEquals(dealReviewCnt, 1);
 		
-		// reviewInsert
-		int reviewInsertCnt = dealDao.insertReview(dto.getDeal_no(), "test content", "5");
-		assertEquals(reviewInsertCnt, 1);
+		// insertReview
+		int insertReviewResult = dealDao.insertReview(dto.getDeal_no(), "test content", "5");
+		assertEquals(insertReviewResult, 1);
+		
+		// updateDealReview
+		int updateReviewResult = dealDao.updateDealReview(dto.getDeal_no());
+		assertEquals(updateReviewResult, 1);
+		
+		// searchReviewInfo
+		Map<String, Object> reviewInfo = dealDao.searchReviewInfo(dto.getDeal_no());
+		assertNotNull(reviewInfo);
+		
+		// updateDeliveryState
+		Map<String, Object> deliveryState = new HashMap<>();
+		deliveryState.put("deal_no", dto.getDeal_no());
+		deliveryState.put("deal_delivery_state", "2");
+		
+		int updateDeliveryResult = dealDao.updateDeliveryState(deliveryState);
+		assertEquals(updateDeliveryResult, 1);
+		
+		// updateDealState
+		int updateDealResult = dealDao.updateDealState("3", dto.getDeal_no());
+		assertEquals(updateDealResult, 1);
+		
+		
 	}
 }
