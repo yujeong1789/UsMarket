@@ -25,7 +25,7 @@ import com.spring.usMarket.utils.SearchCondition;
 @WebAppConfiguration
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = {"file:src/main/webapp/WEB-INF/spring/root-context.xml"})
-public class ProductServiceTest {
+public class ProductTest {
 	
 	private static int DUMMY_MEMBER_NO = 3;
 	private static String RANDOM_CATEGORY_1 = String.valueOf((int)((Math.random()*15)+1)); // product_category1 범위 내 난수 생성
