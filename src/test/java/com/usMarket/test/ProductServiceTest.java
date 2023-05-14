@@ -1,7 +1,7 @@
 package com.usMarket.test;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertNotNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,16 +34,35 @@ public class ProductServiceTest {
 	
 	@Test
 	public void getCategoryTest() throws Exception{
+		// getProductCategory1
 		List<Map<String, Object>> category1 = productService.getProductCategory1();
 		assertEquals(category1.size(), 15);
 		
+		// getProductCategory2
 		List<ProductCategoryDto> category2 = productService.getProductCategory2(RANDOM_CATEGORY_1);
-		assertTrue(category2.size() != 0);
+		assertNotNull(category2);
+	}
+	
+	@Test
+	public void getMainProductTest() throws Exception{
+		// getMainProduct
+		List<ProductDto> list = productService.getMainProduct();
+		assertEquals(list.size(), 15);
+	}
+	
+	@Test
+	public void getBestProductTest() throws Exception{
+		// getBestProduct
+		List<ProductDto> list = productService.getBestProduct();
+		assertEquals(list.size(), 5);
 	}
 	
 	@Test
 	public void setBookmarkTest() throws Exception{
-		List<ProductDto> productList = productService.getProductByCategory(new SearchCondition(1, 30, "", "", "1", "1"));
+		SearchCondition sc = new SearchCondition(1, 30, "", "", "1", "1");
+		
+		// getProductByCategory
+		List<ProductDto> productList = productService.getProductByCategory(sc);
 		
 		List<String> productNoList = new ArrayList<>();
 		for (ProductDto dto : productList) {
@@ -51,12 +70,16 @@ public class ProductServiceTest {
 		}
 		
 		String randomProductNo = productNoList.get((int)((Math.random()*productNoList.size()))).toString();
+		
+		// getBookmarkByInfo
 		int bookmarkStatus = productService.getBookmarkByInfo(DUMMY_MEMBER_NO+randomProductNo);
 		
 		int result = 0;
 		if(bookmarkStatus == 0) {
+			// addBookmark
 			result = productService.addBookmark(DUMMY_MEMBER_NO, randomProductNo);
 		}else if(bookmarkStatus == 1) {
+			// removeBookmark
 			result = productService.removeBookmark(DUMMY_MEMBER_NO+randomProductNo);
 		}
 		
@@ -64,14 +87,47 @@ public class ProductServiceTest {
 	}
 	
 	@Test
-	public void addProductTest() throws Exception{
+	public void productTest() throws Exception{
 		String product_no = "9999999";
 		ProductInsertDto dto = new ProductInsertDto(product_no, DUMMY_MEMBER_NO, 1, 1, "test title", "N", "N", 150000, "test content", "t a g");
+		
+		// addProduct
 		int addResult = productService.addProduct(dto);
 		assertEquals(addResult, 1);
 		
+		// modifyProductState (= removeProduct)
 		int modifyResult = productService.modifyProductState(3, String.valueOf(DUMMY_MEMBER_NO), product_no);
 		assertEquals(modifyResult, 1);
+		
+		// getProductInfo
+		Map<String, Object> productInfo = productService.getProductInfo(product_no);
+		assertNotNull(productInfo.size());
+		
+		// modifyProductView
+		int modifyViewCount = productService.modifyProductView(product_no);
+		assertEquals(modifyViewCount, 1);
+		
+		// getSellerInfo
+		Map<String, Object> sellerInfo = productService.getSellerInfo(DUMMY_MEMBER_NO);
+		assertNotNull(sellerInfo);
+	}
+	
+	public void getReviewTest() throws Exception{
+		// getReviewByInfo
+		List<Map<String, Object>> reviewInfo = productService.getReviewByInfo(212);
+		assertNotNull(reviewInfo);
+	}
+	
+	public void getCustomerTest() throws Exception{
+		// getCustomerInfo
+		Map<String, Object> customerInfo = productService.getCustomerInfo("243");
+		assertNotNull(customerInfo);
+	}
+	
+	public void getProductOrderTest() throws Exception{
+		// getProductOrderInfo
+		Map<String, Object> orderInfo = productService.getProductOrderInfo("230209204428375");
+		assertNotNull(orderInfo);
 	}
 
 }
