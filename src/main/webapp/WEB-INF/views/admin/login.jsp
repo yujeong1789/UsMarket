@@ -40,7 +40,7 @@ document.addEventListener('DOMContentLoaded', function(){
 	
 	document.querySelector('main').style.padding = '100px';
 	document.querySelector('main').style.maxHeight = '1800px';
-	document.querySelector('main').style.overflow = 'scroll';
+	document.querySelector('main').style.overflowY = 'auto';
 });
 
 document.querySelectorAll('.login-input').forEach((el) => {
