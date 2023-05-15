@@ -1,4 +1,4 @@
-package com.usMarket.test;
+package com.usMarket.test.customer;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -27,8 +27,8 @@ import com.spring.usMarket.utils.SearchCondition;
 @ContextConfiguration(locations = {"file:src/main/webapp/WEB-INF/spring/root-context.xml"})
 public class ProductTest {
 	
-	private static int DUMMY_MEMBER_NO = 3;
-	private static String RANDOM_CATEGORY_1 = String.valueOf((int)((Math.random()*15)+1)); // product_category1 범위 내 난수 생성
+	private final int DUMMY_MEMBER_NO = 3;
+	private final String RANDOM_CATEGORY_1 = String.valueOf((int)((Math.random()*15)+1)); // product_category1 범위 내 난수 생성
 	
 	@Autowired private ProductService productService;
 	
@@ -95,6 +95,11 @@ public class ProductTest {
 		int addResult = productService.addProduct(dto);
 		assertEquals(addResult, 1);
 		
+		// getProductOrderInfo
+		Map<String, Object> orderInfo = productService.getProductInfo(product_no);
+		System.out.println("\n"+orderInfo.toString()+"\n");
+		assertNotNull(orderInfo);
+		
 		// modifyProductState (= removeProduct)
 		int modifyResult = productService.modifyProductState(3, String.valueOf(DUMMY_MEMBER_NO), product_no);
 		assertEquals(modifyResult, 1);
@@ -112,22 +117,17 @@ public class ProductTest {
 		assertNotNull(sellerInfo);
 	}
 	
+	@Test
 	public void getReviewTest() throws Exception{
 		// getReviewByInfo
 		List<Map<String, Object>> reviewInfo = productService.getReviewByInfo(212);
 		assertNotNull(reviewInfo);
 	}
 	
+	@Test
 	public void getCustomerTest() throws Exception{
 		// getCustomerInfo
 		Map<String, Object> customerInfo = productService.getCustomerInfo("243");
 		assertNotNull(customerInfo);
 	}
-	
-	public void getProductOrderTest() throws Exception{
-		// getProductOrderInfo
-		Map<String, Object> orderInfo = productService.getProductOrderInfo("230209204428375");
-		assertNotNull(orderInfo);
-	}
-
 }

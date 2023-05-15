@@ -7,5 +7,5 @@ import com.spring.usMarket.domain.report.ReportInsertDto;
 
 public interface ReportDao {
 	int insertReport(ReportInsertDto dto) throws Exception;
-	List<Map<String, Object>> selectReportCategory2(Integer report_category2_no) throws Exception;
+	List<Map<String, Object>> selectReportCategory2(Integer report_category1_no) throws Exception;
 }

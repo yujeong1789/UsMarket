@@ -3,7 +3,7 @@ package com.spring.usMarket.utils;
 public class NoticeSearchCondition {
 	private Integer page = 1;
 	private Integer pageSize;
-	private String status = "";
+	private String status = "";	// 0 - 공지사항, 1 - 자주 묻는 질문
 	
 	public NoticeSearchCondition() {}
 	

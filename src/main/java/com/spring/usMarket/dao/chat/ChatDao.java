@@ -15,4 +15,5 @@ public interface ChatDao {
 	int insertChat(ChatDto dto) throws Exception;
 	Map<String, Object> searchChatMember(Integer member_no) throws Exception;
 	int searchNewChat(Integer member_no) throws Exception;
+	int deleteChatRoom(String room_no);
 }

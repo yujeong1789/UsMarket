@@ -21,8 +21,8 @@ public class ReportDaoImpl implements ReportDao{
 	}
 	
 	@Override
-	public List<Map<String, Object>> selectReportCategory2(Integer report_category2_no) throws Exception{
-		return session.selectList(namespace+"selectReportCategory2", report_category2_no);
+	public List<Map<String, Object>> selectReportCategory2(Integer report_category1_no) throws Exception{
+		return session.selectList(namespace+"selectReportCategory2", report_category1_no);
 	}
 
 }

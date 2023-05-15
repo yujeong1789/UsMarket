@@ -1,8 +1,7 @@
-package com.usMarket.test;
+package com.usMarket.test.customer;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -17,14 +16,13 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.spring.usMarket.dao.deal.DealDao;
 import com.spring.usMarket.domain.deal.DealInsertDto;
-import com.spring.usMarket.service.deal.DealService;
 
 @Transactional
 @WebAppConfiguration
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = {"file:src/main/webapp/WEB-INF/spring/root-context.xml"})
 public class DealTest {
-	
+
 	@Autowired private DealDao dealDao;
 	
 	@Test
@@ -69,8 +67,6 @@ public class DealTest {
 		
 		// updateDealState
 		int updateDealResult = dealDao.updateDealState("3", dto.getDeal_no());
-		assertEquals(updateDealResult, 1);
-		
-		
+		assertEquals(updateDealResult, 1);	
 	}
 }
