@@ -35,9 +35,9 @@ public class ReportServiceImpl implements ReportService{
 
 	@Override
 	@Transactional(rollbackFor = SQLException.class, readOnly = true)
-	public List<Map<String, Object>> getReportCategory2(Integer report_category2_no) throws Exception {
+	public List<Map<String, Object>> getReportCategory2(Integer report_category1_no) throws Exception {
 		
-		List<Map<String, Object>> reportCategory = reportDao.selectReportCategory2(report_category2_no);
+		List<Map<String, Object>> reportCategory = reportDao.selectReportCategory2(report_category1_no);
 		logger.info("reportCategory.toString() = {}", reportCategory.toString());
 		
 		return reportCategory;
