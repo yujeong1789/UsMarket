@@ -171,13 +171,13 @@
 	<select id="searchDealStatsByDate" parameterType="adminSearchCondition" resultType="map">
 		SELECT *
 		FROM deal_stats_date
-		WHERE TO_DATE(day, 'YYYY-MM-DD') BETWEEN TO_DATE(#{startDate}, 'YYYY-MM-DD') AND TO_DATE(#{endDate}, 'YYYY-MM-DD')+1
+		WHERE TO_DATE(day, 'YYYY-MM-DD') BETWEEN TO_DATE(#{startDate}, 'YYYY-MM-DD') AND TO_DATE(#{endDate}, 'YYYY-MM-DD')
 	</select>
 	
 	<select id="searchDealStatsByMonth" parameterType="adminSearchCondition" resultType="map">
 		SELECT *
 		FROM deal_stats_month
-		WHERE TO_DATE(day, 'YYYY-MM') BETWEEN TO_DATE(#{startDate}, 'YYYY-MM-DD') AND TO_DATE(#{endDate}, 'YYYY-MM-DD')+1
+		WHERE TO_DATE(day, 'YYYY-MM') BETWEEN TO_DATE(#{startDate}, 'YYYY-MM-DD') AND TO_DATE(#{endDate}, 'YYYY-MM-DD')
 	</select>
 	
 	<select id="searchDealList" parameterType="adminSearchCondition" resultType="map">
@@ -215,22 +215,16 @@
 	</select>
 	
 	<select id="searchDealCnt" parameterType="map" resultType="int">
-		SELECT COUNT(*)
-		FROM deal
-		WHERE deal_start_date BETWEEN TO_DATE(#{startDate}, 'YYYY-MM-DD') AND TO_DATE(#{endDate}, 'YYYY-MM-DD')+1
+		SELECT COUNT(*) 
+		FROM deal 
+		WHERE deal_start_date BETWEEN TO_DATE(#{startDate}, 'YYYY-MM-DD') AND TO_DATE(#{endDate}, 'YYYY-MM-DD')+1 
 		<choose>
-			<when test="condition == 0">
-				AND deal_state = 0 
+			<when test="condition != null and condition != ''">
+				AND deal_state = #{condition} 
 			</when>
-			<when test="condition == 1">
-				AND deal_state = 1 
-			</when>
-			<when test="condition == 2">
-				AND deal_state = 2 
-			</when>
-			<when test="condition == 3">
-				AND deal_state = 3 
-			</when>
+			<otherwise>
+				AND deal_state IN (0, 1, 2, 3)
+			</otherwise>
 		</choose>
 	</select>
 	
