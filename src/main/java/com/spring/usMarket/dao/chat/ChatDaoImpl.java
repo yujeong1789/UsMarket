@@ -66,4 +66,9 @@ public class ChatDaoImpl implements ChatDao{
 	public int searchNewChat(Integer member_no) throws Exception {
 		return session.selectOne(namespace+"searchNewChat", member_no);
 	}
+
+	@Override
+	public int deleteChatRoom(String room_no) {
+		return session.delete(namespace+"deleteChatRoom", room_no);
+	}
 }
