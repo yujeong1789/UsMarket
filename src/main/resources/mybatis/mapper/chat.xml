@@ -66,4 +66,9 @@
 		 WHERE chat_to = #{member_no} AND chat_read = 'N'
 	</select>
 	
+	<delete id="deleteChatRoom" parameterType="string">
+		DELETE FROM chat_room
+		WHERE room_no = #{room_no}
+	</delete>
+	
 </mapper>
