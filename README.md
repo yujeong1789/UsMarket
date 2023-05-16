@@ -36,6 +36,11 @@
 
 <br>
 
+### Blog
+- [Oracle Cloud에 프로젝트 배포](https://velog.io/@yujeong1789/M1-mac-Oracle-Cloud에-Spring-Project-배포하기-1-인스턴스-생성)
+
+<br>
+
 ### 주요 화면
 <img style="object-fit=contain;width:49%;" src="https://github.com/yujeong1789/usMarket/assets/73736082/04da4195-9eb8-43e4-872c-f7f1924e3344">
 <img style="object-fit=contain;width:49%" src="https://github.com/yujeong1789/usMarket/assets/73736082/a7a6aceb-bda7-465f-95c0-24eda05309fd">
