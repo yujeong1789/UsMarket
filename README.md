@@ -46,7 +46,7 @@
 <br><br>
 <img style="object-fit=contain;width:49%" src="https://github.com/yujeong1789/usMarket/assets/73736082/031c62d0-df8f-48ab-abf3-23b0a4da4dd2">
 
-<br>
+<br><br>
 
 ### 구현 기능
 - **비회원**
