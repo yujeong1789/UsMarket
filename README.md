@@ -49,7 +49,7 @@
 <br>
 
 ### Blog
-- [Oracle Cloud에 프로젝트 배포](https://velog.io/@yujeong1789/M1-mac-Oracle-Cloud에-Spring-Project-배포하기-1-인스턴스-생성)
+- [Oracle Cloud에 프로젝트 배포](https://velog.io/@yujeong1789/m1-mac-Oracle-Cloud에-Spring-Project-배포하기-3-war파일-배포-DB-연동)
 
 <br>
 
