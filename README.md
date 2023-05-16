@@ -1,5 +1,7 @@
 # usMarket
-<img src="https://github.com/yujeong1789/usMarket/assets/73736082/07f6eea0-7b17-492e-acc7-d52f07d9ee2e"/>
+<div align="center">
+  <img src="https://github.com/yujeong1789/usMarket/assets/73736082/07f6eea0-7b17-492e-acc7-d52f07d9ee2e"/>
+</div>
 
 >개발기간: 2022.12 ~ 2023.04 
 
@@ -35,20 +37,14 @@
 <br>
 
 ### 주요 화면
-<div style="display=flex;flex-wrap=wrap;justify-content=space-between">
-  <img style="object-fit=contain;width:49%;" src="https://github.com/yujeong1789/usMarket/assets/73736082/04da4195-9eb8-43e4-872c-f7f1924e3344">
-  <img style="object-fit=contain;width:49%" src="https://github.com/yujeong1789/usMarket/assets/73736082/a7a6aceb-bda7-465f-95c0-24eda05309fd">
+<img style="object-fit=contain;width:49%;" src="https://github.com/yujeong1789/usMarket/assets/73736082/04da4195-9eb8-43e4-872c-f7f1924e3344">
+<img style="object-fit=contain;width:49%" src="https://github.com/yujeong1789/usMarket/assets/73736082/a7a6aceb-bda7-465f-95c0-24eda05309fd">
 </div>
 <br><br>
-<div style="display=flex;flex-wrap=wrap;justify-content=space-between">
-  <img style="object-fit=contain;width:49%" src="https://github.com/yujeong1789/usMarket/assets/73736082/410ab75c-7ad0-4dad-9544-540dfdfd6f84">
-  <img style="object-fit=contain;width:49%" src="https://github.com/yujeong1789/usMarket/assets/73736082/e9900291-d9b8-41bd-94ae-c0ce83148702">
-  
-</div>
+<img style="object-fit=contain;width:49%" src="https://github.com/yujeong1789/usMarket/assets/73736082/410ab75c-7ad0-4dad-9544-540dfdfd6f84">
+<img style="object-fit=contain;width:49%" src="https://github.com/yujeong1789/usMarket/assets/73736082/e9900291-d9b8-41bd-94ae-c0ce83148702">
 <br><br>
-<div style="display=flex;flex-wrap=wrap;justify-content=space-between">
-  <img style="object-fit=contain;width:49%" src="https://github.com/yujeong1789/usMarket/assets/73736082/031c62d0-df8f-48ab-abf3-23b0a4da4dd2">
-</div>
+<img style="object-fit=contain;width:49%" src="https://github.com/yujeong1789/usMarket/assets/73736082/031c62d0-df8f-48ab-abf3-23b0a4da4dd2">
 
 <br>
 
