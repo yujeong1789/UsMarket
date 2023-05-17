@@ -13,8 +13,7 @@
 2. [프로젝트 목표](#프로젝트-목표)
 3. [기술스택](#기술스택)
 4. [Blog](#blog)
-5. [주요 화면](#주요-화면)
-6. [구현 기능](#구현-기능)  
+5. [구현 기능](#구현-기능)  
 
 <br>
 
@@ -51,17 +50,6 @@
 ### Blog
 - [Oracle Cloud에 프로젝트 배포](https://velog.io/@yujeong1789/m1-mac-Oracle-Cloud에-Spring-Project-배포하기-3-war파일-배포-DB-연동)
 - [AWS S3 연동해 파일 업로드하기](https://velog.io/@yujeong1789/Spring-AWS-S3-연동해-파일-업로드하기-2-연동-사진-업로드하기)
-<br>
-
-### 주요 화면
-<img style="object-fit=contain;width:49%;" src="https://github.com/yujeong1789/usMarket/assets/73736082/04da4195-9eb8-43e4-872c-f7f1924e3344">
-<img style="object-fit=contain;width:49%" src="https://github.com/yujeong1789/usMarket/assets/73736082/a7a6aceb-bda7-465f-95c0-24eda05309fd">
-</div>
-<br><br>
-<img style="object-fit=contain;width:49%" src="https://github.com/yujeong1789/usMarket/assets/73736082/410ab75c-7ad0-4dad-9544-540dfdfd6f84">
-<img style="object-fit=contain;width:49%" src="https://github.com/yujeong1789/usMarket/assets/73736082/e9900291-d9b8-41bd-94ae-c0ce83148702">
-<br><br>
-<img style="object-fit=contain;width:49%" src="https://github.com/yujeong1789/usMarket/assets/73736082/031c62d0-df8f-48ab-abf3-23b0a4da4dd2">
 
 <br><br>
 
