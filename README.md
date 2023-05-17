@@ -50,7 +50,7 @@
 
 ### Blog
 - [Oracle Cloud에 프로젝트 배포](https://velog.io/@yujeong1789/m1-mac-Oracle-Cloud에-Spring-Project-배포하기-3-war파일-배포-DB-연동)
-- [AWS S3 연동해 파일 업로드하기](https://velog.io/@yujeong1789/Spring-AWS-S3-사용해-사진-저장하기)
+- [AWS S3 연동해 파일 업로드하기](https://velog.io/@yujeong1789/Spring-AWS-S3-연동해-파일-업로드하기-2-연동-사진-업로드하기)
 <br>
 
 ### 주요 화면
