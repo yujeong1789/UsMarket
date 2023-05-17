@@ -1,4 +1,6 @@
 # usMarket
+[![Hits](https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=https%3A%2F%2Fgithub.com%2Fgjbae1212%2Fhit-counter&count_bg=%2316A7F1&title_bg=%23808080&icon=&icon_color=%23E7E7E7&title=hits&edge_flat=true)](https://hits.seeyoufarm.com)
+
 <div align="center">
   <img src="https://github.com/yujeong1789/usMarket/assets/73736082/07f6eea0-7b17-492e-acc7-d52f07d9ee2e"/>
 </div>
