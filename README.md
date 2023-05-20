@@ -52,7 +52,7 @@
 ### Blog
 - [Oracle Cloud에 프로젝트 배포](https://velog.io/@yujeong1789/m1-mac-Oracle-Cloud에-Spring-Project-배포하기-3-war파일-배포-DB-연동)
 - [AWS S3 연동해 파일 업로드하기](https://velog.io/@yujeong1789/Spring-AWS-S3-연동해-파일-업로드하기-2-연동-사진-업로드하기)
-
+- [조회수 중복 방지 구현하기](https://velog.io/@yujeong1789/조회수-중복-방지-구현하기)
 <br><br>
 
 ### 구현 기능
