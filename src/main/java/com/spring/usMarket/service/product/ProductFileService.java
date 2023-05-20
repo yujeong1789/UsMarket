@@ -34,8 +34,6 @@ public class ProductFileService {
 	@Value("${cloud.aws.s3.bucket}")
 	private String bucket;
 	
-	@Value("${cloud.aws.region}")
-	private String region;
 	
 	public String getPath() {
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd/");
@@ -43,7 +41,7 @@ public class ProductFileService {
 		return sdf.format(date);
 	}
 	
-	public String getUUID(String originFileName) {
+	public String getUUID() {
 		return UUID.randomUUID().toString(); 
 	}
 	
@@ -70,7 +68,7 @@ public class ProductFileService {
 			byte[] bytes = IOUtils.toByteArray(multipartFile.getInputStream());
 			
 			String originalName = multipartFile.getOriginalFilename();
-			String uuid = getUUID(originalName);
+			String uuid = getUUID();
 
 			
 			ObjectMetadata objectMetadata = new ObjectMetadata();
