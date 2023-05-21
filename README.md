@@ -5,7 +5,7 @@
   <img src="https://github.com/yujeong1789/usMarket/assets/73736082/07f6eea0-7b17-492e-acc7-d52f07d9ee2e"/>
 </div>
 
-- 개발기간: 2022.12 ~ 2023.04 
+- 개발기간: 2022.11 ~ 2023.04 
 > 🔗 [어스마켓](http://64.110.76.236/usMarket/) (테스트 계정: testuser1 / testuser1@@)<br>
 > 🔗 [어스마켓 관리자 페이지](http://64.110.76.236/usMarket/admin/home) (테스트 계정: admin1 / admin1)
 <br>
