@@ -5,17 +5,26 @@
   <img src="https://github.com/yujeong1789/usMarket/assets/73736082/07f6eea0-7b17-492e-acc7-d52f07d9ee2e"/>
 </div>
 
-- 개발기간: 2022.11 ~ 2023.04 
+- 개발기간: 2022.11 ~ 2023.04
+- 개발인원: 박유정, 김동현
+
+<br>
+
+> <h3>어스마켓 바로가기</h3>
+> 
 > 🔗 [어스마켓](http://64.110.76.236/usMarket/) (테스트 계정: testuser1 / testuser1@@)<br>
-> 🔗 [어스마켓 관리자 페이지](http://64.110.76.236/usMarket/admin/home) (테스트 계정: admin1 / admin1)
+> 🔗 [어스마켓 관리자 페이지](http://64.110.76.236/usMarket/admin/home) (테스트 계정: admin1 / admin1)<br>
+
 <br>
 
 ### 목차
 1. [프로젝트 소개](#프로젝트-소개)
 2. [프로젝트 목표](#프로젝트-목표)
 3. [기술스택](#기술스택)
-4. [With Blog](#with-blog)
-5. [구현 기능](#구현-기능)  
+4. [라이브러리 & API](#라이브러리--api)
+5. [With Blog](#with-blog)
+6. [구현 기능](#구현-기능)  
+7. [DB구조](#db구조)
 
 <br>
 
@@ -51,11 +60,21 @@
 
 <br>
 
+### 라이브러리 & API
+- **Spring Security** | 사용자 개인정보 암호화
+- **Chart JS** | 회원, 결제 통계 차트화
+- **Iamport** | 상품 결제
+- **Sock JS** | WebSocket 통신 구현 
+- **Tiles** | 공통 레이아웃 적용
+
+<br>
+
 ### With Blog
 - [Oracle Cloud에 프로젝트 배포](https://velog.io/@yujeong1789/m1-mac-Oracle-Cloud에-Spring-Project-배포하기-3-war파일-배포-DB-연동)
 - [AWS S3 연동해 파일 업로드하기](https://velog.io/@yujeong1789/Spring-AWS-S3-연동해-파일-업로드하기-2-연동-사진-업로드하기)
 - [조회수 중복 방지 구현하기](https://velog.io/@yujeong1789/조회수-중복-방지-구현하기)
-<br><br>
+
+<br>
 
 ### 구현 기능
 <details>
@@ -119,3 +138,9 @@
     
 </div>  
 </details>
+
+<br>
+
+### DB구조
+<img width="1345" alt="marketdb" src="https://github.com/yujeong1789/usMarket/assets/73736082/b5b4bbed-c4a8-4d78-a74d-2778d48e8947">
+
